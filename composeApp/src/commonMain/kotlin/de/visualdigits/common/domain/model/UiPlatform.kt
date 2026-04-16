@@ -1,0 +1,19 @@
+package de.visualdigits.common.domain.model
+
+enum class UiPlatform {
+
+    UI_MODE_TYPE_MASK,
+    UI_MODE_TYPE_UNDEFINED,
+    UI_MODE_TYPE_NORMAL,
+    UI_MODE_TYPE_DESK,
+    UI_MODE_TYPE_CAR,
+    UI_MODE_TYPE_TELEVISION,
+    UI_MODE_TYPE_APPLIANCE,
+    UI_MODE_TYPE_WATCH,
+    UI_MODE_TYPE_VR_HEADSET,
+    UI_MODE_NIGHT_MASK,
+    UI_MODE_NIGHT_UNDEFINED,
+    UI_MODE_NIGHT_NO,
+    UI_MODE_NIGHT_YES,
+    NONE
+}

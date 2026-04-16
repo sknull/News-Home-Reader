@@ -1,0 +1,1252 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rdf:RDF xmlns="http://purl.org/rss/1.0/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:dcterms="http://purl.org/dc/terms/">
+  <channel rdf:about="https://www.ndr.de/nachrichten/hamburg">
+    <title>Nachrichten aus Hamburg</title>
+    <link>https://www.ndr.de/nachrichten/hamburg</link>
+    <description>Die aktuellen Beiträge der Seite https://www.ndr.de/nachrichten/hamburg</description>
+    <language>de</language>
+    <copyright>Copyright 2025 ndr.de</copyright>
+    <lastBuildDate>Wed, 12 Nov 2025 09:46:00 +0100</lastBuildDate>
+    <pubDate>Wed, 12 Nov 2025 09:46:00 +0100</pubDate>
+    <ttl>90</ttl>
+    <image rdf:resource="https://images.ndr.de/image/796c1944-bd46-42bf-abe3-7cf5bb76602c/AAABkXg15IM/AAABmgWnBPY/original/nachrichtenhh100.jpg"/>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:language>de</dc:language>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:date>2025-11-11T11:49:56+00:00</dc:date>
+    <dc:source>ndr.de</dc:source>
+    <sy:updatePeriod>hourly</sy:updatePeriod>
+    <sy:updateFrequency>1</sy:updateFrequency>
+    <sy:updateBase>2025-11-12T08:46:00+00:00</sy:updateBase>
+    <items>
+      <rdf:Seq>
+        <rdf:li rdf:resource="34e1d7a8-cd8e-486e-a371-0c5ed65cb00e"/>
+        <rdf:li rdf:resource="11413670-a52e-4174-999a-35ccc3c05800"/>
+        <rdf:li rdf:resource="bfb68742-23c3-462a-88e2-90babe7d007f"/>
+        <rdf:li rdf:resource="8f2775eb-21ae-4132-84ab-3a67c147d8bc"/>
+        <rdf:li rdf:resource="53ff6152-34d6-400b-886c-553aa6804c34"/>
+        <rdf:li rdf:resource="f66b902d-ca79-4095-b9a8-88b0dc4c72d2"/>
+        <rdf:li rdf:resource="4f5daa50-ca37-434b-a3ab-554fc54d4f5f"/>
+        <rdf:li rdf:resource="295d30c3-6e76-4d20-920e-4311d1574a7e"/>
+        <rdf:li rdf:resource="8d4c702b-a64d-4bc2-beb9-3fc4469891e4"/>
+        <rdf:li rdf:resource="f9f20c67-fbd7-46fe-b6fd-16da7d3f1db2"/>
+        <rdf:li rdf:resource="e980c7f6-0de2-47a6-8ae4-8b1892534512"/>
+        <rdf:li rdf:resource="529b0247-3628-40f8-97db-8ac37205f729"/>
+        <rdf:li rdf:resource="42363a51-f791-4b41-9a86-48b79e37ef57"/>
+        <rdf:li rdf:resource="CED5975EBF2711F0739FD4F5EF77FA60"/>
+        <rdf:li rdf:resource="679D3460BAF011F078E1D4F5EF77FA60"/>
+        <rdf:li rdf:resource="1384611d-d01c-4c45-b8fa-fa19ac13ae4a"/>
+        <rdf:li rdf:resource="02ca47f3-d2f5-46bc-a761-7e8fde150051"/>
+        <rdf:li rdf:resource="43BCE502BBBF11F07956D4F5EF77FA60"/>
+        <rdf:li rdf:resource="B8AEAFF8BBE711F07525D4F5EF77FA60"/>
+        <rdf:li rdf:resource="PODCAST-00028"/>
+        <rdf:li rdf:resource="ae14c5fc-d446-480e-b2ad-b5dbaaa9d93f"/>
+        <rdf:li rdf:resource="ee3bf4c7-b8a5-4ced-ac3f-4b58db5b69c1"/>
+        <rdf:li rdf:resource="2c43519b-f716-4ebe-a53d-a784d18d1a1c"/>
+        <rdf:li rdf:resource="97d34cae-5e86-4b3f-b5bb-adfe90aa1551"/>
+        <rdf:li rdf:resource="581311fe-507d-4602-b930-d7a85981d403"/>
+        <rdf:li rdf:resource="6f4e6110-5efa-4742-8356-37e84267432a"/>
+        <rdf:li rdf:resource="2c370159-ec27-4aa6-a2e1-1bff42aa3303"/>
+        <rdf:li rdf:resource="8156eaf8-bed5-490b-9ffe-ba8969017c39"/>
+        <rdf:li rdf:resource="6784872b-db06-44c5-b268-db997d9c33d1"/>
+        <rdf:li rdf:resource="7ab33ea5-7110-4377-bca7-d5e61d55f2ce"/>
+        <rdf:li rdf:resource="7dd6bfc9-07ca-4764-8080-b9793f837c51"/>
+        <rdf:li rdf:resource="a9ed4b82-771a-4339-87b5-3c7133bb8d8f"/>
+        <rdf:li rdf:resource="4ea528e3-f685-4fe1-bbe2-eb54e5db91ef"/>
+        <rdf:li rdf:resource="3d26677c-bc17-4853-afa4-2506d3bc4555"/>
+        <rdf:li rdf:resource="1b75fa67-4015-465f-b567-5b271d7bd50c"/>
+        <rdf:li rdf:resource="e4200938-1695-4ee2-bfe6-1fa0fd185e3e"/>
+        <rdf:li rdf:resource="a5baa5c2-5169-47a5-bde1-8ab928350c11"/>
+        <rdf:li rdf:resource="b6b2b733-ed58-4679-8a0f-88cf8c913310"/>
+        <rdf:li rdf:resource="722dfc03-d64e-4b2e-92d4-c17b353011bd"/>
+        <rdf:li rdf:resource="69fe63f3-508e-4142-bf21-df37014d92fb"/>
+        <rdf:li rdf:resource="f1ab6ce2-8a22-4874-8e94-b2babf5d21b8"/>
+        <rdf:li rdf:resource="76e18333-76cc-4fd0-85ef-26561904a70f"/>
+        <rdf:li rdf:resource="f66b902d-ca79-4095-b9a8-88b0dc4c72d2"/>
+        <rdf:li rdf:resource="4da9b47b-e45d-4dd9-9ed7-d37436ccee2d"/>
+        <rdf:li rdf:resource="eaf47d54-7e36-4e4d-bc09-deedb49f4616"/>
+        <rdf:li rdf:resource="3c0a67bc-9447-44c2-b6c5-ab218b8f3fc7"/>
+        <rdf:li rdf:resource="75e5a2e7-dafa-401a-8055-ab5d626b2e98"/>
+        <rdf:li rdf:resource="4c72f81c-56cb-4d8a-bb48-59f0d97c804b"/>
+        <rdf:li rdf:resource="38a53641-668e-464d-b2da-65582b663c72"/>
+        <rdf:li rdf:resource="66508f5c-4de2-4e97-92a3-e4e979641747"/>
+        <rdf:li rdf:resource="be8fb6de-9597-4ce2-8833-161a4cdf9c25"/>
+        <rdf:li rdf:resource="73a59185-e587-47cf-a07e-bbeab52e6dc2"/>
+        <rdf:li rdf:resource="23cc98ff-30bf-4c4d-bec3-d07bac410062"/>
+        <rdf:li rdf:resource="2396bde7-29b0-42c8-b1af-473a7384cc64"/>
+        <rdf:li rdf:resource="bec54fa5-6ab5-4e15-8bce-78c3a98cf7f7"/>
+        <rdf:li rdf:resource="27224968-5cd7-4c45-93e8-7ff2f4cd1abc"/>
+        <rdf:li rdf:resource="211f5d0f-d7c7-4135-8dc7-a75d89f543f3"/>
+        <rdf:li rdf:resource="a5304dd7-1d6f-40c1-9475-d16cb675f1e9"/>
+        <rdf:li rdf:resource="f275c151-297b-4557-aded-5826f46c73f8"/>
+        <rdf:li rdf:resource="79f2cb84-03cc-4b6e-8777-9d68f1f952c7"/>
+        <rdf:li rdf:resource="9cfcf5bf-3d39-40d2-83d3-8557b7f981e3"/>
+        <rdf:li rdf:resource="c26e730e-cce2-4f9e-8abb-6b5460900b63"/>
+        <rdf:li rdf:resource="3a5eb3c6-42ed-40c0-90d6-4d00c421ea93"/>
+        <rdf:li rdf:resource="0d162bc6-7f8a-4b9c-be05-fc34be506823"/>
+        <rdf:li rdf:resource="55ff12e8-2743-4b1d-a4b4-593bafba685b"/>
+        <rdf:li rdf:resource="7f15b024-8e46-44f6-a3d3-504acc997de3"/>
+        <rdf:li rdf:resource="87229629-c9ea-4739-b36f-c140c86baeaf"/>
+        <rdf:li rdf:resource="19a9ddd3-df05-46bc-9f15-2840e32135e4"/>
+      </rdf:Seq>
+    </items>
+  </channel>
+  <image/>
+  <item rdf:about="34e1d7a8-cd8e-486e-a371-0c5ed65cb00e">
+    <title>Hamburger Zukunftsentscheid: Welche Konsequenzen die Grünen planen</title>
+    <link>https://www.ndr.de/nachrichten/hamburg/hamburger-zukunftsentscheid-welche-konsequenzen-die-gruenen-planen,zukunftsentscheid-144.html</link>
+    <description>Ein städtischer Anbieter für Wärmepumpen? Ein Sozialtarif für Mieter? Auf einem Parteitag wollen die Grünen Maßnahmen beschließen.</description>
+    <pubDate>Wed, 12 Nov 2025 06:30:10 +0100</pubDate>
+    <guid>34e1d7a8-cd8e-486e-a371-0c5ed65cb00e</guid>
+    <dc:date>2025-11-12T05:30:10Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/nachrichten/hamburg/hamburger-zukunftsentscheid-welche-konsequenzen-die-gruenen-planen,zukunftsentscheid-144.html"><img src="https://images.ndr.de/image/8dca7eee-2503-4e10-96d1-879b300bf1cb/AAABmnRQJi0/AAABmgWmh8Q/16x9-big/fegebank-118.jpg?width=1920" alt="Katharina Fegebank | Christian Charisius" /></a> <br/> <br/>Ein städtischer Anbieter für Wärmepumpen? Ein Sozialtarif für Mieter? Auf einem Parteitag wollen die Grünen Maßnahmen beschließen.[<a href="https://www.ndr.de/nachrichten/hamburg/hamburger-zukunftsentscheid-welche-konsequenzen-die-gruenen-planen,zukunftsentscheid-144.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>zukunftsentscheid-144</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/zukunftsentscheid-144~rss2.xml"/>
+  </item>
+  <item rdf:about="11413670-a52e-4174-999a-35ccc3c05800">
+    <title>Hamburger Sportvereine haben bundesweit größten Zuwachs</title>
+    <link>https://www.ndr.de/nachrichten/hamburg/hamburger-sportvereine-melden-bundesweit-groessten-zuwachs,sportvereine-102.html</link>
+    <description>In Deutschland sind mehr Menschen in Sportvereinen aktiv als jemals zuvor. Das dickste Plus gibt es in Hamburg.</description>
+    <pubDate>Wed, 12 Nov 2025 05:55:55 +0100</pubDate>
+    <guid>11413670-a52e-4174-999a-35ccc3c05800</guid>
+    <dc:date>2025-11-12T04:55:55Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/nachrichten/hamburg/hamburger-sportvereine-melden-bundesweit-groessten-zuwachs,sportvereine-102.html"><img src="https://images.ndr.de/image/e3d29607-9fe3-44fb-adbc-b6b1cc0190c1/AAABmnZkr_c/AAABmgWmh8Q/16x9-big/hanteln102.jpg?width=1920" alt="Hanteln im Fitnessstudio. | Jan Woitas" /></a> <br/> <br/>In Deutschland sind mehr Menschen in Sportvereinen aktiv als jemals zuvor. Das dickste Plus gibt es in Hamburg.[<a href="https://www.ndr.de/nachrichten/hamburg/hamburger-sportvereine-melden-bundesweit-groessten-zuwachs,sportvereine-102.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>sportvereine-102</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/sportvereine-102~rss2.xml"/>
+  </item>
+  <item rdf:about="bfb68742-23c3-462a-88e2-90babe7d007f">
+    <title>ZDF-Silvestershow in Hamburg: Was in der Hafencity geplant ist</title>
+    <link>https://www.ndr.de/nachrichten/hamburg/zdf-silvestershow-in-hamburg-was-in-der-hafencity-geplant-ist,silvester-282.html</link>
+    <description>Die ZDF-Silvestersause steigt in diesem Jahr auf einer schwimmenden Bühne am Westfield-Center. Jetzt wurden weitere Details bekannt. Es gibt auch Kritik.</description>
+    <pubDate>Wed, 12 Nov 2025 06:22:59 +0100</pubDate>
+    <guid>bfb68742-23c3-462a-88e2-90babe7d007f</guid>
+    <dc:date>2025-11-12T05:22:59Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/nachrichten/hamburg/zdf-silvestershow-in-hamburg-was-in-der-hafencity-geplant-ist,silvester-282.html"><img src="https://images.ndr.de/image/8ab650ea-96da-482d-9b58-9b9745c98f13/AAABmcJ_Bx8/AAABmgWmh8Q/16x9-big/silvester1596.jpg?width=1920" alt="Zahlreiche Menschen feiern mit Feuerwerk den Jahreswechsel an den Landungsbrücken im Hamburger Hafen. | picture alliance/dpa | Marcus Brandt, Marcus Brandt" /></a> <br/> <br/>Die ZDF-Silvestersause steigt in diesem Jahr auf einer schwimmenden Bühne am Westfield-Center. Jetzt wurden weitere Details bekannt. Es gibt auch Kritik.[<a href="https://www.ndr.de/nachrichten/hamburg/zdf-silvestershow-in-hamburg-was-in-der-hafencity-geplant-ist,silvester-282.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>silvester-282</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/silvester-282~rss2.xml"/>
+  </item>
+  <item rdf:about="8f2775eb-21ae-4132-84ab-3a67c147d8bc">
+    <title>Gänsemarkt: Frau mit Rollator stürzt vor U-Bahn und stirbt</title>
+    <link>https://www.ndr.de/nachrichten/hamburg/gaensemarkt-frau-mit-rollator-stuerzt-vor-u-bahn-und-stirbt,ubahn-unfall-100.html</link>
+    <description>Eine 85 Jahre alte Frau kam ums Leben. Zwei Angehörige bekamen den Unfall mit.</description>
+    <pubDate>Wed, 12 Nov 2025 09:30:39 +0100</pubDate>
+    <guid>8f2775eb-21ae-4132-84ab-3a67c147d8bc</guid>
+    <dc:date>2025-11-12T08:30:39Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/nachrichten/hamburg/gaensemarkt-frau-mit-rollator-stuerzt-vor-u-bahn-und-stirbt,ubahn-unfall-100.html"><img src="https://images.ndr.de/image/8967cb57-a73e-4518-ac74-01500d664011/AAABmnckX7Y/AAABmgWmh8Q/16x9-big/unfall-1082.jpg?width=1920" alt="Einsatzkräfte nach einem Unfall an der U-Bahnstation Gänsemarkt. | Screenshot" /></a> <br/> <br/>Eine 85 Jahre alte Frau kam ums Leben. Zwei Angehörige bekamen den Unfall mit.[<a href="https://www.ndr.de/nachrichten/hamburg/gaensemarkt-frau-mit-rollator-stuerzt-vor-u-bahn-und-stirbt,ubahn-unfall-100.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>ubahn-unfall-100</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/ubahn-unfall-100~rss2.xml"/>
+  </item>
+  <item rdf:about="53ff6152-34d6-400b-886c-553aa6804c34">
+    <title>Bürgerschaft debattiert über Pflegeausbildung in Hamburg</title>
+    <link>https://www.ndr.de/nachrichten/hamburg/buergerschaft-debattiert-ueber-pflegeausbildung-in-hamburg,buergerschaft-132.html</link>
+    <description>Hamburg müsse mehr tun, um Pflegefachkräfte auszubilden, fordert die CDU. Unter anderem müssten mehr Lehrkräfte zugelassen werden.</description>
+    <pubDate>Wed, 12 Nov 2025 08:53:56 +0100</pubDate>
+    <guid>53ff6152-34d6-400b-886c-553aa6804c34</guid>
+    <dc:date>2025-11-12T07:53:56Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/nachrichten/hamburg/buergerschaft-debattiert-ueber-pflegeausbildung-in-hamburg,buergerschaft-132.html"><img src="https://images.ndr.de/image/79f7d106-3fc6-4667-88fe-c3332dda8942/AAABmXw_4Os/AAABmgWmh8Q/16x9-big/buergerschaft-106.jpg?width=1920" alt="Blick in die Hamburgische Bürgerschaft bei einer Sitzung. | dpa/Marcus Brandt" /></a> <br/> <br/>Hamburg müsse mehr tun, um Pflegefachkräfte auszubilden, fordert die CDU. Unter anderem müssten mehr Lehrkräfte zugelassen werden.[<a href="https://www.ndr.de/nachrichten/hamburg/buergerschaft-debattiert-ueber-pflegeausbildung-in-hamburg,buergerschaft-132.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>buergerschaft-132</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/buergerschaft-132~rss2.xml"/>
+  </item>
+  <item rdf:about="f66b902d-ca79-4095-b9a8-88b0dc4c72d2">
+    <title>Ausflugsschiff der "Mein Schiff 1" in der Karibik verunglückt</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/hamburg_journal_1800/Hamburg-Journal-1800,hamj-5096.html</link>
+    <description>In der Dominikanischen Republik ist am Sonnabend ein Ausflugskatamaran mit Gästen des Kreuzfahrtschiffs "Mein Schiff 1" verunglückt. 55 Passagiere wurden aus dem Wasser gerettet.</description>
+    <pubDate>Tue, 11 Nov 2025 19:24:49 +0100</pubDate>
+    <guid>f66b902d-ca79-4095-b9a8-88b0dc4c72d2</guid>
+    <dc:date>2025-11-11T18:24:49Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal_1800/Hamburg-Journal-1800,hamj-5096.html"><img src="https://images.ndr.de/image/9e363f97-ee98-42d5-bec8-28f5b58c5c5a/AAABmnQCoe4/AAABmgWmh8Q/16x9-big/screenshot-78128.jpg?width=1920" alt="Das Kreutfahrtschiff "Mein Schiff 1". | Screenshot" /></a> <br/> <br/>In der Dominikanischen Republik ist am Sonnabend ein Ausflugskatamaran mit Gästen des Kreuzfahrtschiffs "Mein Schiff 1" verunglückt. 55 Passagiere wurden aus dem Wasser gerettet.[<a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal_1800/Hamburg-Journal-1800,hamj-5096.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>hamj-5096</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/hamburg_journal_1800/hamj-5096~rss2.xml"/>
+  </item>
+  <item rdf:about="4f5daa50-ca37-434b-a3ab-554fc54d4f5f">
+    <title>Spatenstich im Wilhelmsburger Rathausviertel</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/hamburg_journal/Hamburg-Journal,hamj-5120.html</link>
+    <description>Damit beginnt zwölf Jahre nach Abschluss der Internationalen Bauausstellung die zweite große Entwicklungsphase der Elbinsel.</description>
+    <pubDate>Tue, 11 Nov 2025 20:24:50 +0100</pubDate>
+    <guid>4f5daa50-ca37-434b-a3ab-554fc54d4f5f</guid>
+    <dc:date>2025-11-11T19:24:50Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/Hamburg-Journal,hamj-5120.html"><img src="https://images.ndr.de/image/2c922a17-e9b8-464a-93c7-448d61853406/AAABmnQ_lHg/AAABmgWmh8Q/16x9-big/screenshot-78192.jpg?width=1920" alt="Arbeiten auf der Baustelle in Wilhelmsburg. | Screenshot" /></a> <br/> <br/>Damit beginnt zwölf Jahre nach Abschluss der Internationalen Bauausstellung die zweite große Entwicklungsphase der Elbinsel.[<a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/Hamburg-Journal,hamj-5120.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>hamj-5120</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/hamj-5120~rss2.xml"/>
+  </item>
+  <item rdf:about="295d30c3-6e76-4d20-920e-4311d1574a7e">
+    <title>Interview auf Kampnagel mit Vize-Kanzler Klingbeil (SPD)</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/hamburg_journal/interview-auf-kampnagel-mit-vize-kanzler-klingenbeil-spd,hamj-5110.html</link>
+    <description>Im Interview mit der "Zeit" zog er selbstkritisch Resümee nach seinen ersten sechs Monaten im Amt.</description>
+    <pubDate>Tue, 11 Nov 2025 19:58:00 +0100</pubDate>
+    <guid>295d30c3-6e76-4d20-920e-4311d1574a7e</guid>
+    <dc:date>2025-11-11T18:58:00Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/interview-auf-kampnagel-mit-vize-kanzler-klingenbeil-spd,hamj-5110.html"><img src="https://images.ndr.de/image/85bdc59b-54c6-4234-bca9-57fe10218646/AAABmnRE55o/AAABmgWmh8Q/16x9-big/screenshot-78224.jpg?width=1920" alt="Lars Klingbeil im Zeit-Gespräch auf Kampnagel. | Screenshot" /></a> <br/> <br/>Im Interview mit der "Zeit" zog er selbstkritisch Resümee nach seinen ersten sechs Monaten im Amt.[<a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/interview-auf-kampnagel-mit-vize-kanzler-klingenbeil-spd,hamj-5110.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>hamj-5110</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/hamj-5110~rss2.xml"/>
+  </item>
+  <item rdf:about="8d4c702b-a64d-4bc2-beb9-3fc4469891e4">
+    <title>Silvester-Party in der Hafencity: Was sagen die Hamburger?</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/hamburg_journal/silvester-party-in-der-hafencity-was-sagen-die-hamburger,hamj-5106.html</link>
+    <description>Am Chicagokai, direkt hinter dem Westfield-Einkaufszentrum, soll die Party steigen. Die Reaktionen sind gemischt.</description>
+    <pubDate>Tue, 11 Nov 2025 19:47:03 +0100</pubDate>
+    <guid>8d4c702b-a64d-4bc2-beb9-3fc4469891e4</guid>
+    <dc:date>2025-11-11T18:47:03Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/silvester-party-in-der-hafencity-was-sagen-die-hamburger,hamj-5106.html"><img src="https://images.ndr.de/image/244838e8-7243-444b-8285-b6362bf2a346/AAABmnQ647s/AAABmgWmh8Q/16x9-big/screenshot-78178.jpg?width=1920" alt="Der Chicagokai in der Hafen-City. | Screenshot" /></a> <br/> <br/>Am Chicagokai, direkt hinter dem Westfield-Einkaufszentrum, soll die Party steigen. Die Reaktionen sind gemischt.[<a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/silvester-party-in-der-hafencity-was-sagen-die-hamburger,hamj-5106.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>hamj-5106</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/hamj-5106~rss2.xml"/>
+  </item>
+  <item rdf:about="f9f20c67-fbd7-46fe-b6fd-16da7d3f1db2">
+    <title>Neue Mitte Altona: Anwohner klagen über anhaltenden Zuglärm</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/hamburg_journal/neuen-mitte-altona-anwohner-klagen-ueber-anhaltenden-zuglaerm,hamj-5108.html</link>
+    <description>Gegen den Lärm sind Schutzwände geplant. Allerdings erst mit dem Umzug des Fernbahnhofs nach Diebsteich - und der verzögert sich.</description>
+    <pubDate>Tue, 11 Nov 2025 19:53:33 +0100</pubDate>
+    <guid>f9f20c67-fbd7-46fe-b6fd-16da7d3f1db2</guid>
+    <dc:date>2025-11-11T18:53:33Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/neuen-mitte-altona-anwohner-klagen-ueber-anhaltenden-zuglaerm,hamj-5108.html"><img src="https://images.ndr.de/image/dea61182-0d4d-4a42-ad49-bbd02c2abe0d/AAABmnRA2Dg/AAABmgWmh8Q/16x9-big/screenshot-78206.jpg?width=1920" alt="Die Bahn färhrt dicht an den Häusern vorbei. | Screenshot" /></a> <br/> <br/>Gegen den Lärm sind Schutzwände geplant. Allerdings erst mit dem Umzug des Fernbahnhofs nach Diebsteich - und der verzögert sich.[<a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/neuen-mitte-altona-anwohner-klagen-ueber-anhaltenden-zuglaerm,hamj-5108.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>hamj-5108</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/hamj-5108~rss2.xml"/>
+  </item>
+  <item rdf:about="e980c7f6-0de2-47a6-8ae4-8b1892534512">
+    <title>Frau bei Reinigung von Stolpersteinen angegriffen</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/hamburg_journal/frau-bei-reinigung-von-stolpersteinen-angegriffen,hamj-5104.html</link>
+    <description>Am 9. November wollte Iris Dreßler Stolpersteine putzen. Ein Mann soll sie zunächst beschimpft, dann geschlagen und gewürgt haben.</description>
+    <pubDate>Tue, 11 Nov 2025 19:45:45 +0100</pubDate>
+    <guid>e980c7f6-0de2-47a6-8ae4-8b1892534512</guid>
+    <dc:date>2025-11-11T18:45:45Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/frau-bei-reinigung-von-stolpersteinen-angegriffen,hamj-5104.html"><img src="https://images.ndr.de/image/da6f3840-7e95-4326-9e7c-86019b325b9a/AAABmnQ5z7E/AAABmgWmh8Q/16x9-big/screenshot-78164.jpg?width=1920" alt="Ein Grablicht steht vor einem Stolperstein. | Screenshot" /></a> <br/> <br/>Am 9. November wollte Iris Dreßler Stolpersteine putzen. Ein Mann soll sie zunächst beschimpft, dann geschlagen und gewürgt haben.[<a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/frau-bei-reinigung-von-stolpersteinen-angegriffen,hamj-5104.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>hamj-5104</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/hamj-5104~rss2.xml"/>
+  </item>
+  <item rdf:about="529b0247-3628-40f8-97db-8ac37205f729">
+    <title>Dampf-Eisbrecher "Stettin" in Norderwerft eingedockt</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/hamburg_journal/dampfeisbrecher-stettin-in-norderwerft-eingedockt,hamj-5112.html</link>
+    <description>Langsam wurde das 1.200-Tonnen-Traditionsschiff in Dock 3 geschoben - ein Kraftakt für Crew und Schlepper.</description>
+    <pubDate>Tue, 11 Nov 2025 19:59:14 +0100</pubDate>
+    <guid>529b0247-3628-40f8-97db-8ac37205f729</guid>
+    <dc:date>2025-11-11T18:59:14Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/dampfeisbrecher-stettin-in-norderwerft-eingedockt,hamj-5112.html"><img src="https://images.ndr.de/image/e26c7dc1-93fa-4f05-821b-9201ebfdc6eb/AAABmnRF9Ck/AAABmgWmh8Q/16x9-big/screenshot-78236.jpg?width=1920" alt="Die Stettin wird ins Dock geschleppt. | Screenshot" /></a> <br/> <br/>Langsam wurde das 1.200-Tonnen-Traditionsschiff in Dock 3 geschoben - ein Kraftakt für Crew und Schlepper.[<a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/dampfeisbrecher-stettin-in-norderwerft-eingedockt,hamj-5112.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>hamj-5112</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/hamj-5112~rss2.xml"/>
+  </item>
+  <item rdf:about="42363a51-f791-4b41-9a86-48b79e37ef57">
+    <title>Stadt will Start-ups im Bereich Deep Tech stärker fördern</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/hamburg_journal_1800/Hamburg-Journal-1800,hamj-5094.html</link>
+    <description>Schon 2024 hat die landeseigene Förderbank Wirtschatfssenatorin Leonhard zufolge fast 80 Neugründungen mit mehr als 31 Millionen Euro finanziell unterstützt.</description>
+    <pubDate>Tue, 11 Nov 2025 19:19:29 +0100</pubDate>
+    <guid>42363a51-f791-4b41-9a86-48b79e37ef57</guid>
+    <dc:date>2025-11-11T18:19:29Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal_1800/Hamburg-Journal-1800,hamj-5094.html"><img src="https://images.ndr.de/image/63d5c408-c7a3-430d-8d2e-a22a2d047d60/AAABmnQBups/AAABmgWmh8Q/16x9-big/screenshot-78118.jpg?width=1920" alt="Eine Maschine portioniert eine Flüssigkeit. | Screenshot" /></a> <br/> <br/>Schon 2024 hat die landeseigene Förderbank Wirtschatfssenatorin Leonhard zufolge fast 80 Neugründungen mit mehr als 31 Millionen Euro finanziell unterstützt.[<a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal_1800/Hamburg-Journal-1800,hamj-5094.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>hamj-5094</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/hamburg_journal_1800/hamj-5094~rss2.xml"/>
+  </item>
+  <item rdf:about="CED5975EBF2711F0739FD4F5EF77FA60">
+    <title>Hamburg Heute: Warum hat die Richterin Christina Block mit Haftbefehl gedroht?</title>
+    <link>https://www.ndr.de/903/warum-hat-die-richterin-christina-block-mit-haftbefehl-gedroht,audio-327094.html</link>
+    <description>Moin, kaum waren wir fertig mit der Podcast-Aufnahme zum Block-Prozess, da sorgte die Richterin noch für eine Schlagzeile: Sie drohte der Angeklagten Christina Block mit einem Haftbefehl. Da wurde dann ein schnelles Update fällig. Außerdem geht es um die Pläne für die große ZDF-Silvesterparty in Hamburg. Viel Spaß beim Hören wünscht Ole -------------------------------------------------------------------------------------------------------- Was war heute in Hamburg los? Maiken Nielsen und Ole Wackermann werfen im wöchentlichen Wechsel zum Tagesende einen Blick auf die News und das aktuelle Stadtgeschehen. Das sind die Nachrichten und Themen mit Ole Wackermann am Dienstag, 11. November 2025: +++Block-Prozess wird bis mindestens Sommer 2026 fortgesetzt+++ Der Prozess gegen die Hamburger Unternehmerin Christina Block und sechs weitere Angeklagte wird sich noch über ein halbes Jahr hinziehen. Das Landgericht hat weitere Termine bis Ende Juni 2026 festgesetzt. Mehr dazu: https://www.ndr.de/block-228.html +++ ZDF-Silvestershow in Hamburg: Welche Künstler auftreten sollen+++ Das ZDF sendet seine Silvesterparty in diesem Jahr nicht aus Berlin, sondern aus der Hamburger Hafencity. Jetzt wurde bekannt, welche Künstlerinnen und Künstler am Westfield-Center singen sollen. Mehr dazu: https://www.ndr.de/silvester-282.html Du hast Feedback zur Folge oder Wünsche für Recherchen? Unsere Podcast-Hosts erreichst du über den Messenger in der NDR Hamburg App, in den Social-Media-Kanälen von NDR Hamburg und via E-Mail an hamburgheute@ndr.de. Alle Folgen des Podcasts findet ihr unter www.ndr.de/hamburgheute</description>
+    <pubDate>Tue, 11 Nov 2025 18:06:52 +0100</pubDate>
+    <guid>CED5975EBF2711F0739FD4F5EF77FA60</guid>
+    <dc:date>2025-11-11T17:06:52Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/903/warum-hat-die-richterin-christina-block-mit-haftbefehl-gedroht,audio-327094.html"><img src="https://images.ndr.de/image/19def423-fca9-419f-97ae-bbf4ccba7cab/AAABlPOlElw/AAABmgWmh8Q/16x9-big/podcast5698.jpg?width=1920" alt="Ole Wackermann und Maiken Nielsen stehen vor einem Hintergrund, der den Hamburger Hafen und die Elphilharmonie am Abend zeigt, und lächeln in die Kamera. | NDR; picture alliance / Westend61 | Willing-Holtz, Arman Ahmadi" /></a> <br/> <br/>Ganz am Ende des heutigen Prozesstages hat die Richterin die Warnung in Richtung der Angeklagten ausgesprochen. Außerdem: Johannes Oerding und Wanda treten bei der ZDF Silvestershow in Hamburg auf, der  Vorverkauf startet[<a href="https://www.ndr.de/903/warum-hat-die-richterin-christina-block-mit-haftbefehl-gedroht,audio-327094.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>audio-327094</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/903/audio-327094~rss2.xml"/>
+  </item>
+  <item rdf:about="679D3460BAF011F078E1D4F5EF77FA60">
+    <title>"Feel Hamburg" mit Marek Erhardt</title>
+    <link>https://www.ndr.de/903/podcasts/marek-erhardt-vom-hsv-stadionsprecher-zum-true-crime-host,audio-323066.html</link>
+    <description>Marek Erhardt ist Schauspieler, Moderator, Synchronsprecher, Ehrenkommissar der Hamburger Polizei und Host des Podcasts True Crime Hamburg. Der Enkel des legendären Komikers Heinz Erhardt gehört seit Jahrzehnten zu den bekannten Stimmen und Gesichtern Deutschlands. In seiner Laufbahn hat er vieles ausprobiert – vom TV-Set über das Radiostudio bis zum Fußballstadion. Heute steht für ihn das Erzählen echter Geschichten im Mittelpunkt. Seine Begeisterung für Polizeiarbeit begleitet ihn schon lange. 2012 wurde er zum Ehrenkommissar der Hamburger Polizei ernannt und engagiert sich seitdem für Präventionsarbeit, vor allem gegen sogenannte Schockanrufe. Im Podcast True Crime Hamburg, den er gemeinsam mit dem ehemaligen Polizeipräsidenten Ralf Martin Meyer produziert, verbindet er seine mediale Erfahrung mit echtem Interesse an Aufklärung. Dabei geht es ihm nicht um Sensation, sondern um Verständnis: um die Menschen hinter den Fällen und um die Frage, was Täter und Opfer bewegt. Hamburg ist dabei der feste Ankerpunkt in seinem Leben. Hier ist Marek Erhardt aufgewachsen, hier lebt er bis heute. Auch wenn er beruflich viel gereist ist, bleibt die Stadt für ihn ein Ort mit Charakter, Wasserblick und klarer Sprache. Sie prägt seinen Ton, seinen Humor und seine Haltung. Zugleich beobachtet er gesellschaftliche Themen mit wachem Blick – von Verkehr und Zusammenleben bis zum respektvollen Umgang in einer vielfältigen Stadt. Der Name Erhardt begleitet ihn seit seiner Kindheit. Den berühmten Großvater hat er nur krank erlebt, doch dessen Sprachgefühl und Musikalität haben Spuren hinterlassen. Trotzdem wollte Marek Erhardt immer eigene Wege gehen. Nach der Schule ging er nach New York, studierte Schauspiel und arbeitete sich Schritt für Schritt in der Branche nach oben. Sein Durchbruch kam mit der ZDF-Serie Freunde fürs Leben, später folgten zahlreiche TV-Produktionen, Radiomoderationen und Werbesprechertätigkeiten. Heute beschreibt Marek Erhardt sich als dankbaren, neugierigen Menschen, der gern neue Perspektiven einnimmt. Ob als Schauspieler, Podcaster oder Ehrenkommissar – er sucht die Geschichten, die etwas bewegen. True Crime Hamburg ist für ihn kein Wechsel des Genres, sondern eine Fortsetzung seines roten Fadens: Menschen zuzuhören, Erlebtes zu erzählen und dabei Haltung zu zeigen. Marek Erhardt verbindet Unterhaltung mit Verantwortung – und bleibt dabei ganz er selbst. Hier geht es direkt zu Marek Erhardts Podcast "True Crime Hamburg" in der ARD-Audiothek: https://1.ard.de/truecrimehh?cp=feelhh</description>
+    <pubDate>Wed, 12 Nov 2025 05:00:05 +0100</pubDate>
+    <guid>679D3460BAF011F078E1D4F5EF77FA60</guid>
+    <dc:date>2025-11-12T04:00:05Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/903/podcasts/marek-erhardt-vom-hsv-stadionsprecher-zum-true-crime-host,audio-323066.html"><img src="https://images.ndr.de/image/d3e971d8-363f-4ad8-8b0f-4f9a3e8064fb/AAABmnKz8mA/AAABmgWmh8Q/16x9-big/erhardt-104.jpg?width=1920" alt="Der Schauspieler Marek Erhardt steht vor einer weißen Wand. | NDR" /></a> <br/> <br/>Er war TV-Star und HSV-Stadionsprecher - jetzt erzählt Marek Erhardt in seinem True-Crime-Podcast echte Kriminalfälle.[<a href="https://www.ndr.de/903/podcasts/marek-erhardt-vom-hsv-stadionsprecher-zum-true-crime-host,audio-323066.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>audio-323066</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/903/podcasts/audio-323066~rss2.xml"/>
+  </item>
+  <item rdf:about="1384611d-d01c-4c45-b8fa-fa19ac13ae4a">
+    <title>Gerichtssaal 237: Einbetoniert - die Leiche im Restaurant</title>
+    <link>https://www.ardaudiothek.de/episode/urn:ard:episode:d836b3b445a68394/</link>
+    <description>Gerichtssaal 237: Einbetoniert - die Leiche im Restaurant</description>
+    <pubDate>Wed, 05 Nov 2025 13:40:58 +0100</pubDate>
+    <guid>1384611d-d01c-4c45-b8fa-fa19ac13ae4a</guid>
+    <dc:date>2025-11-05T12:40:58Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ardaudiothek.de/episode/urn:ard:episode:d836b3b445a68394/"><img src="https://images.ndr.de/image/86b1a04f-2c43-4e1a-b4e3-34c3a0b738e9/AAABkWzREgs/AAABmgWmh8Q/16x9-big/gerichtssaalzweidreisieben100.jpg?width=1920" alt="Elke Spanner lehnt an einen Tisch vor dem Richterpult. Anna Rüter sitzt im Schneidersitz auf dem Tisch. Beide schauen in die Kamera. | NDR, Arman Ahmadi" /></a> <br/> <br/>[<a href="https://www.ardaudiothek.de/episode/urn:ard:episode:d836b3b445a68394/">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>podcast5920</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/podcast5920~rss2.xml"/>
+  </item>
+  <item rdf:about="02ca47f3-d2f5-46bc-a761-7e8fde150051">
+    <title>"True Crime Hamburg": Die erstochene Edelprostituierte</title>
+    <link>https://www.ardaudiothek.de/episode/urn:ard:episode:6588d8ccee157f32/</link>
+    <description>"True Crime Hamburg": Hamburgs Polizeipräsident a.D. Ralf Martin Meyer und Schauspieler und Ehrenkommissar Marek Erhardt erklären die Arbeit der Polizei.</description>
+    <pubDate>Tue, 04 Nov 2025 13:04:28 +0100</pubDate>
+    <guid>02ca47f3-d2f5-46bc-a761-7e8fde150051</guid>
+    <dc:date>2025-11-04T12:04:28Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ardaudiothek.de/episode/urn:ard:episode:6588d8ccee157f32/"><img src="https://images.ndr.de/image/6ef0d9d8-0efd-426a-aa76-f0b4bba35f92/AAABmUkaIz8/AAABmgWmh8Q/16x9-big/audiothek-sendereihe-5117-100.jpg?width=1920" alt="Zwei Männer stehen nebeneinander vor unscharfem nächtlichem Stadthintergrund mit Polizeiauto. | NDR | Christian Spielmann" /></a> <br/> <br/>"True Crime Hamburg": Hamburgs Polizeipräsident a.D. Ralf Martin Meyer und Schauspieler und Ehrenkommissar Marek Erhardt erklären die Arbeit der Polizei. [<a href="https://www.ardaudiothek.de/episode/urn:ard:episode:6588d8ccee157f32/">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>podcasttruecrime-104</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/geschichte/podcasttruecrime-104~rss2.xml"/>
+  </item>
+  <item rdf:about="43BCE502BBBF11F07956D4F5EF77FA60">
+    <title>Hafenkonzert: Legendäre Schiffe - von der "Argo" bis zur "Wapen von Hamburg"</title>
+    <link>https://www.ndr.de/903/legendaere-schiffe-von-der-argo-bis-zur-wapen-von-hamburg,audio-324150.html</link>
+    <description>Im Hafenkonzert-Podcast geht es dieses Mal um Schiffe, die Geschichte geschrieben haben – von den ersten Weltumseglern über sagenhafte Geisterschiffe bis hin zu Forschungsschiffen unserer Zeit. Wir erzählen von der "Victoria", dem ersten Schiff, das die Erde umrundete, von der "TS Hamburg", die einst als „schönste Hamburgerin“ die Weltmeere bereiste, und von der Polarstern, die als schwimmendes Labor den Klimawandel erforscht. Dazu kommen Mythen wie der „Fliegende Holländer“, der in Opern und Filmen weiterlebt, und die Geschichte der Hamburger "Wapen von Hamburg" – eines von jenen Schiffen, die einst Piraten abschreckten. ⸻ Die Themen im Einzelnen: ⛵ Die „Victoria“ – Das erste Schiff, das um die Welt segelte Wie Ferdinand Magellans Flotte vor über 500 Jahren in See stach – und nur die „Victoria“ zurückkehrte. 🛳️ TS Hamburg – Die „schönste Hamburgerin“ Ein Kreuzfahrtschiff schreibt Nachkriegsgeschichte: Erinnerungen von Stewardessen, Besatzung und Passagieren. ⚓ U96 – das Boot, das zum Mythos wurde Vom Kriegsalltag unter Wasser bis zur legendären Filmgeschichte: die wahre Geschichte hinter „Das Boot“. 🚢 Die „Argo“ – Das Heldenschiff aus der Antike Mythos trifft Seefahrt: Jason und die Argonauten auf der Suche nach dem Goldenen Vlies. 🌊 Der Fliegende Holländer – Legende eines Geisterschiffs Von Seemannsgeschichten bis zu Richard Wagners Oper – das ewige Schiff zwischen Mythos und Musikgeschichte. 🏴‍☠️ Die „Wapen von Hamburg“ – Hamburgs wehrhafte Konvoischiffe Wie die Hansestadt ihre Handelsschiffe im 17. Jahrhundert gegen Piraten schützte – mit schwimmenden Palästen. ⚙️ Hilfskreuzer „Wolf“ – Piraten des Kaisers Im Ersten Weltkrieg geht die „Wolf“ auf geheime Kaperfahrt rund um den Globus – und wird zur Legende. ❄️ „Polarstern“ – ein Schiff im Dienste der Wissenschaft Wie Forscherinnen und Forscher mit dem deutschen Eisbrecher die Arktis erkunden – und den Klimawandel erforschen. Jetzt den Hafenkonzert-Podcast abonnieren! Mehr Informationen zum Hamburger Hafenkonzert unter ndr.de/hafenkonzert</description>
+    <pubDate>Fri, 07 Nov 2025 17:00:03 +0100</pubDate>
+    <guid>43BCE502BBBF11F07956D4F5EF77FA60</guid>
+    <dc:date>2025-11-07T16:00:03Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/903/legendaere-schiffe-von-der-argo-bis-zur-wapen-von-hamburg,audio-324150.html"><img src="https://images.ndr.de/image/e56b0e28-65c9-46fa-b628-943e9d2e5c3c/AAABml4WQPw/AAABmgWmh8Q/16x9-big/tshamburg-100.jpg?width=1920" alt="20251107 TS Hamburg Schiff | picture alliance/United Archives | kpa Keystone" /></a> <br/> <br/>Im Hafenkonzert-Podcast geht es dieses Mal um legendäre Schiffe, große Entdecker, maritime Mythen und moderne Forschung.[<a href="https://www.ndr.de/903/legendaere-schiffe-von-der-argo-bis-zur-wapen-von-hamburg,audio-324150.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>audio-324150</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/903/audio-324150~rss2.xml"/>
+  </item>
+  <item rdf:about="B8AEAFF8BBE711F07525D4F5EF77FA60">
+    <title>Wi snackt Platt: Op de Bökermess, Literaturpries un Ohnsorg</title>
+    <link>https://www.ndr.de/903/wi-snackt-platt-op-de-boekermess-literaturpries-un-ohnsorg,audio-325102.html</link>
+    <description>Dütmal sünd wi op de Plattdüütsche Bökermess in'n Lichtwarksaal vun'e Carl-Topefer-Stiften in'e Neanderstraat to Besöök. Mehr as veertig Verlagen präsenteert dor düt Weken plattdüütsche Literatur – un ok sünst gifft dat dor allerhand to beleven! Denn stellt wi Jo ok noch Susanne Bliemel vör. De plattdüütsche Autorin un NDR-Kollegin ut Mäkelborg-Vörpommern hett an’n Freedagavend den renomeerten Literaturpries vun’e Stadt Kappeln kregen – un wi vertellt Jo mehr över dat ne’e Stück in’t Ohnsorg-Theater: siet verleden Sünndag is dor de Kummedie “Wi sünd de Ne’en” to beleven.</description>
+    <pubDate>Sun, 09 Nov 2025 00:44:19 +0100</pubDate>
+    <guid>B8AEAFF8BBE711F07525D4F5EF77FA60</guid>
+    <dc:date>2025-11-08T23:44:19Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/903/wi-snackt-platt-op-de-boekermess-literaturpries-un-ohnsorg,audio-325102.html"><img src="https://images.ndr.de/image/7749a7c9-fc3e-4c48-8d4b-f3cf8441ee01/AAABml54iDM/AAABmgWmh8Q/16x9-big/ohnsorg-106.jpg?width=1920" alt="Ein Frau reißt die Hände hoch und bittet mit einem schild um Ruhe | Sinje Hasheider - Ohnsorg-Theater" /></a> <br/> <br/>Wi sünd op de Plattdüütsche Bökermess to Besöök, dat geiht üm den Kappelner Literaturpries un üm dat ne'e Stück bi Ohnsorgs.[<a href="https://www.ndr.de/903/wi-snackt-platt-op-de-boekermess-literaturpries-un-ohnsorg,audio-325102.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>audio-325102</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/903/audio-325102~rss2.xml"/>
+  </item>
+  <item rdf:about="PODCAST-00028">
+    <title>Narichten op Platt - Plattdeutsche Nachrichten</title>
+    <link>https://www.ndr.de/903/narichten-op-platt-plattdeutsche-nachrichten,podcast3070.html</link>
+    <description>Ut Hamborg un de wiede Welt - vun maandaags bet sünnavends: Die aktuellen Nachrichten auf Plattdeutsch.</description>
+    <pubDate>Wed, 12 Nov 2025 09:46:00 +0100</pubDate>
+    <guid>PODCAST-00028</guid>
+    <dc:date>2025-11-12T08:46:00Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/903/narichten-op-platt-plattdeutsche-nachrichten,podcast3070.html"><img src="https://images.ndr.de/image/992f49a4-4da5-4ddf-97b0-34459066fbd9/AAABltYfEbY/AAABmgWmh8Q/16x9-big/mediathekbild166.jpg?width=1920" alt="Elbe Landungsbrücken Hamburg | fotolia, dietwalther" /></a> <br/> <br/>Ut Hamborg un de wiede Welt - vun maandaags bet sünnavends: Die aktuellen Nachrichten auf Plattdeutsch.[<a href="https://www.ndr.de/903/narichten-op-platt-plattdeutsche-nachrichten,podcast3070.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>podcast3070</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/903/podcast3070~rss2.xml"/>
+  </item>
+  <item rdf:about="ae14c5fc-d446-480e-b2ad-b5dbaaa9d93f">
+    <title>Landgericht droht Christina Block mit Haftbefehl</title>
+    <link>https://www.ndr.de/nachrichten/hamburg/landgericht-droht-christina-block-mit-haftbefehl,block-228.html</link>
+    <description>Es gebe Hinweise, dass die Hamburger Unternehmerin Druck auf Zeugen ausgeübt habe. Gleichzeitig beantragte die Verteidigung die Aussetzung des Hauptverfahrens.</description>
+    <pubDate>Tue, 11 Nov 2025 18:03:16 +0100</pubDate>
+    <guid>ae14c5fc-d446-480e-b2ad-b5dbaaa9d93f</guid>
+    <dc:date>2025-11-11T17:03:16Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/nachrichten/hamburg/landgericht-droht-christina-block-mit-haftbefehl,block-228.html"><img src="https://images.ndr.de/image/ead39913-116d-45b4-9bfe-59447d11d6f2/AAABmnNWUNY/AAABmgWmh8Q/16x9-big/block-232.jpg?width=1920" alt="Christina Block, deutsche Gastronomin und Unternehmerin, kommt am 11. November zum Hamburger Landgericht | Georg Wendt/dpa" /></a> <br/> <br/>Es gebe Hinweise, dass die Hamburger Unternehmerin Druck auf Zeugen ausgeübt habe. Gleichzeitig beantragte die Verteidigung die Aussetzung des Hauptverfahrens.[<a href="https://www.ndr.de/nachrichten/hamburg/landgericht-droht-christina-block-mit-haftbefehl,block-228.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>block-228</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/block-228~rss2.xml"/>
+  </item>
+  <item rdf:about="ee3bf4c7-b8a5-4ced-ac3f-4b58db5b69c1">
+    <title>Podcast "Feel Hamburg" mit dem Schauspieler Marek Erhardt</title>
+    <link>https://www.ndr.de/903/podcasts/podcast-feel-hamburg-mit-dem-schauspieler-marek-erhardt,podcastfeelhamburg-118.html</link>
+    <description>Er war TV-Star und HSV-Stadionsprecher - jetzt erzählt Marek Erhardt von echten Kriminalfällen und seine Beziehung zur Polizei.</description>
+    <pubDate>Wed, 12 Nov 2025 05:00:03 +0100</pubDate>
+    <guid>ee3bf4c7-b8a5-4ced-ac3f-4b58db5b69c1</guid>
+    <dc:date>2025-11-12T04:00:03Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/903/podcasts/podcast-feel-hamburg-mit-dem-schauspieler-marek-erhardt,podcastfeelhamburg-118.html"><img src="https://images.ndr.de/image/316d7a51-02d5-4f7e-9fee-810f14a6bfe9/AAABmlkXYqc/AAABmgWmh8Q/16x9-big/erhardt-106.jpg?width=1920" alt=" Marek Erhardt und Daniel Kaiser stehen vor einem Bildschirm. | NDR" /></a> <br/> <br/>Er war TV-Star und HSV-Stadionsprecher - jetzt erzählt Marek Erhardt von echten Kriminalfällen und seine Beziehung zur Polizei.[<a href="https://www.ndr.de/903/podcasts/podcast-feel-hamburg-mit-dem-schauspieler-marek-erhardt,podcastfeelhamburg-118.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>podcastfeelhamburg-118</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/903/podcasts/podcastfeelhamburg-118~rss2.xml"/>
+  </item>
+  <item rdf:about="2c43519b-f716-4ebe-a53d-a784d18d1a1c">
+    <title>Ausflugsboot gesunken: 55 "Mein Schiff"-Passagiere in Karibik gerettet</title>
+    <link>https://www.ndr.de/nachrichten/hamburg/ausflugsboot-gesunken-55-mein-schiff-passagiere-in-der-karibik-gerettet,meinschiff-102.html</link>
+    <description>Einige der Geretteten erlitten kleinere Verletzungen oder Schocks. Die "Mein Schiff 1" gehört zur Hamburger Kreuzfahrtreederei TUI Cruises.</description>
+    <pubDate>Tue, 11 Nov 2025 12:26:26 +0100</pubDate>
+    <guid>2c43519b-f716-4ebe-a53d-a784d18d1a1c</guid>
+    <dc:date>2025-11-11T11:26:26Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/nachrichten/hamburg/ausflugsboot-gesunken-55-mein-schiff-passagiere-in-der-karibik-gerettet,meinschiff-102.html"><img src="https://images.ndr.de/image/afdfe4f7-3d74-48b4-8f8a-396e769c6b51/AAABkYtHeD4/AAABmgWmh8Q/16x9-big/meinschiff430.jpg?width=1920" alt="Das Schiff "Mein Schiff 1" | NDR, Steffen Baxalary" /></a> <br/> <br/>Einige der Geretteten erlitten kleinere Verletzungen oder Schocks. Die "Mein Schiff 1" gehört zur Hamburger Kreuzfahrtreederei TUI Cruises.[<a href="https://www.ndr.de/nachrichten/hamburg/ausflugsboot-gesunken-55-mein-schiff-passagiere-in-der-karibik-gerettet,meinschiff-102.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>meinschiff-102</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/meinschiff-102~rss2.xml"/>
+  </item>
+  <item rdf:about="97d34cae-5e86-4b3f-b5bb-adfe90aa1551">
+    <title>Fast 2.000 Wohnungen: Spatenstich für das Wilhelmsburger Rathausviertel</title>
+    <link>https://www.ndr.de/nachrichten/hamburg/fast-2000-wohnungen-spatenstich-fuer-wilhelmsburger-rathausviertel,wilhelmsburg-116.html</link>
+    <description>Auch der Damm der ehemaligen Wilhelmsburger Reichsstraße, der den Hamburger Stadtteil bisher zerschnitten hat, wird nun abgetragen.</description>
+    <pubDate>Tue, 11 Nov 2025 16:35:06 +0100</pubDate>
+    <guid>97d34cae-5e86-4b3f-b5bb-adfe90aa1551</guid>
+    <dc:date>2025-11-11T15:35:06Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/nachrichten/hamburg/fast-2000-wohnungen-spatenstich-fuer-wilhelmsburger-rathausviertel,wilhelmsburg-116.html"><img src="https://images.ndr.de/image/c727a129-9d58-47e9-b6b1-d3977ba4bc6f/AAABkXhpRpM/AAABmgWmh8Q/16x9-big/rathausviertel106.jpg?width=1920" alt="Eine Visualisierung des Siegerentwurfs für das Rathausviertel in Wilhelmsburg. | Behnisch Architekten" /></a> <br/> <br/>Auch der Damm der ehemaligen Wilhelmsburger Reichsstraße, der den Hamburger Stadtteil bisher zerschnitten hat, wird nun abgetragen.[<a href="https://www.ndr.de/nachrichten/hamburg/fast-2000-wohnungen-spatenstich-fuer-wilhelmsburger-rathausviertel,wilhelmsburg-116.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>wilhelmsburg-116</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/wilhelmsburg-116~rss2.xml"/>
+  </item>
+  <item rdf:about="581311fe-507d-4602-b930-d7a85981d403">
+    <title>Bahnhof Hamburg-Bergedorf behält Fernverkehrsanschluss</title>
+    <link>https://www.ndr.de/nachrichten/hamburg/bahnhof-hamburg-bergedorf-behaelt-fernverkehrsanschluss,bergedorf-102.html</link>
+    <description>Die Deutsche Bahn will ab Mai kommenden Jahres zumindest ein tägliches Zugpaar nach Berlin anbieten.</description>
+    <pubDate>Tue, 11 Nov 2025 12:49:00 +0100</pubDate>
+    <guid>581311fe-507d-4602-b930-d7a85981d403</guid>
+    <dc:date>2025-11-11T11:49:00Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/nachrichten/hamburg/bahnhof-hamburg-bergedorf-behaelt-fernverkehrsanschluss,bergedorf-102.html"><img src="https://images.ndr.de/image/790e8ea8-d315-4ece-b44f-fbf5598e7388/AAABmnLBh1s/AAABmgWmh8Q/16x9-big/bergedorf576.jpg?width=1920" alt="Der Eingangsbereich vom Hamburger Bahnhof Bergedorf. | Christian Ohde" /></a> <br/> <br/>Die Deutsche Bahn will ab Mai kommenden Jahres zumindest ein tägliches Zugpaar nach Berlin anbieten.[<a href="https://www.ndr.de/nachrichten/hamburg/bahnhof-hamburg-bergedorf-behaelt-fernverkehrsanschluss,bergedorf-102.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>bergedorf-102</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/bergedorf-102~rss2.xml"/>
+  </item>
+  <item rdf:about="6f4e6110-5efa-4742-8356-37e84267432a">
+    <title>Neue Start-up-Förderung im Deep-Tech-Bereich in Hamburg</title>
+    <link>https://www.ndr.de/nachrichten/hamburg/neue-start-up-foerderung-im-deep-tech-bereich-in-hamburg,startup-126.html</link>
+    <description>Hamburg soll laut Wirtschaftssenatorin Leonhard ein führender Gründer-Standort für Deep-Tech-Unternehmen in Europa werden. Helfen soll dabei ein neues, gemeinnütziges Unternehmen.</description>
+    <pubDate>Tue, 11 Nov 2025 16:49:00 +0100</pubDate>
+    <guid>6f4e6110-5efa-4742-8356-37e84267432a</guid>
+    <dc:date>2025-11-11T15:49:00Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/nachrichten/hamburg/neue-start-up-foerderung-im-deep-tech-bereich-in-hamburg,startup-126.html"><img src="https://images.ndr.de/image/0d96f389-2633-4c48-8940-382d4ddd8316/AAABmnOLBj0/AAABmgWmh8Q/16x9-big/leonhard-112.jpg?width=1920" alt="Hamburgs Wirtschaftssenatorin Melanie Leonhard (SPD). | picture alliance/dpa, Marcus Brandt" /></a> <br/> <br/>Hamburg soll laut Wirtschaftssenatorin Leonhard ein führender Gründer-Standort für Deep-Tech-Unternehmen in Europa werden. Helfen soll dabei ein neues, gemeinnütziges Unternehmen.[<a href="https://www.ndr.de/nachrichten/hamburg/neue-start-up-foerderung-im-deep-tech-bereich-in-hamburg,startup-126.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>startup-126</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/startup-126~rss2.xml"/>
+  </item>
+  <item rdf:about="2c370159-ec27-4aa6-a2e1-1bff42aa3303">
+    <title>Vogelgrippe: So ist der Stand in Hamburg</title>
+    <link>https://www.ndr.de/nachrichten/hamburg/vogelgrippe-so-ist-der-stand-in-hamburg,vogelgrippe-312.html</link>
+    <description>In Hamburg wurden zuletzt 50 Fälle von Vogelgrippe bei Wildvögeln nachgewiesen. In den Ställen gab es bislang keinen Ausbruch.</description>
+    <pubDate>Tue, 11 Nov 2025 06:08:26 +0100</pubDate>
+    <guid>2c370159-ec27-4aa6-a2e1-1bff42aa3303</guid>
+    <dc:date>2025-11-11T05:08:26Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/nachrichten/hamburg/vogelgrippe-so-ist-der-stand-in-hamburg,vogelgrippe-312.html"><img src="https://images.ndr.de/image/cdd8ec8b-637e-4110-a58c-e4c3375eedca/AAABmnFNfkI/AAABmgWmh8Q/16x9-big/kranich-118.jpg?width=1920" alt="Ein toter Kranich liegt auf einem Feld. | picture alliance/dpa, Heiko Rebsch" /></a> <br/> <br/>In Hamburg wurden zuletzt 50 Fälle von Vogelgrippe bei Wildvögeln nachgewiesen. In den Ställen gab es bislang keinen Ausbruch.[<a href="https://www.ndr.de/nachrichten/hamburg/vogelgrippe-so-ist-der-stand-in-hamburg,vogelgrippe-312.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>vogelgrippe-312</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/vogelgrippe-312~rss2.xml"/>
+  </item>
+  <item rdf:about="8156eaf8-bed5-490b-9ffe-ba8969017c39">
+    <title>Zverev fordert bei ATP Finals Sinner: "Kann eine Chance haben"</title>
+    <link>https://www.ndr.de/sport/mehr_sport/fantastisches-match-zverev-startet-erfolgreich-in-die-atp-finals,zverev-970.html</link>
+    <description>Nach seinem starken Auftakt trifft Alexander Zverev bei den ATP Finals im zweiten Match auf Jannik Sinner. Gelingt die Überraschung gegen den besten Hallen-Spieler der Welt?</description>
+    <pubDate>Wed, 12 Nov 2025 08:33:22 +0100</pubDate>
+    <guid>8156eaf8-bed5-490b-9ffe-ba8969017c39</guid>
+    <dc:date>2025-11-12T07:33:22Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/sport/mehr_sport/fantastisches-match-zverev-startet-erfolgreich-in-die-atp-finals,zverev-970.html"><img src="https://images.ndr.de/image/c355118e-eb69-4191-a1b3-7bb15280e44c/AAABmnJbrvk/AAABmgWmh8Q/16x9-big/zverev-966.jpg?width=1920" alt="Alexander Zverev schlägt eine Rückhand. | IMAGO/Independent Photo Agency I" /></a> <br/> <br/>Nach seinem starken Auftakt trifft Alexander Zverev bei den ATP Finals im zweiten Match auf Jannik Sinner. Gelingt die Überraschung gegen den besten Hallen-Spieler der Welt?[<a href="https://www.ndr.de/sport/mehr_sport/fantastisches-match-zverev-startet-erfolgreich-in-die-atp-finals,zverev-970.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>zverev-970</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/sport/mehr_sport/zverev-970~rss2.xml"/>
+  </item>
+  <item rdf:about="6784872b-db06-44c5-b268-db997d9c33d1">
+    <title>Frau bei Reinigung von Stolpersteinen in Hamburg angegriffen</title>
+    <link>https://www.ndr.de/nachrichten/hamburg/frau-bei-reinigung-von-stolpersteinen-in-hamburg-angegriffen,antisemitischervorfall-100.html</link>
+    <description>Ein 71-Jähriger soll die Frau am Gedenktag der Reichspogromnacht attackiert haben. Der Staatsschutz ermittelt wegen eines mutmaßlich antisemitischen Motivs.</description>
+    <pubDate>Mon, 10 Nov 2025 16:29:27 +0100</pubDate>
+    <guid>6784872b-db06-44c5-b268-db997d9c33d1</guid>
+    <dc:date>2025-11-10T15:29:27Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/nachrichten/hamburg/frau-bei-reinigung-von-stolpersteinen-in-hamburg-angegriffen,antisemitischervorfall-100.html"><img src="https://images.ndr.de/image/83328b4b-6c91-448a-a962-1e6fe676b814/AAABmm5b6SY/AAABmgWmh8Q/16x9-big/stolpersteine-160.jpg?width=1920" alt="Stolpersteine die an ein jüdisches Ehepaar erinnern in Hamburg-Eimsbüttel. | picture alliance/dpa | Benjamin Haller" /></a> <br/> <br/>Ein 71-Jähriger soll die Frau am Gedenktag der Reichspogromnacht attackiert haben. Der Staatsschutz ermittelt wegen eines mutmaßlich antisemitischen Motivs.[<a href="https://www.ndr.de/nachrichten/hamburg/frau-bei-reinigung-von-stolpersteinen-in-hamburg-angegriffen,antisemitischervorfall-100.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>antisemitischervorfall-100</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/antisemitischervorfall-100~rss2.xml"/>
+  </item>
+  <item rdf:about="7ab33ea5-7110-4377-bca7-d5e61d55f2ce">
+    <title>12. November 1955: Gründung der Bundeswehr</title>
+    <link>https://www.ndr.de/geschichte/chronologie/vor-70-jahren-wird-die-bundeswehr-gegruendet,bundeswehr2404.html</link>
+    <description>Die deutsche Wiederbewaffnung wird in den 50ern zur Streitfrage. Am 12. November 1955 erhalten die ersten 101 Freiwilligen ihre Ernennungsurkunden als Soldaten.</description>
+    <pubDate>Wed, 12 Nov 2025 09:00:00 +0100</pubDate>
+    <guid>7ab33ea5-7110-4377-bca7-d5e61d55f2ce</guid>
+    <dc:date>2025-11-12T08:00:00Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/geschichte/chronologie/vor-70-jahren-wird-die-bundeswehr-gegruendet,bundeswehr2404.html"><img src="https://images.ndr.de/image/e75f4053-97e1-426f-bfe4-0b33857f15bb/AAABmm48ZG4/AAABmgWmh8Q/16x9-big/soldaten-162.jpg?width=1920" alt="Ernennung der ersten 100 freiwilligen Soldaten - Bonn, 12. November 1955 | picture alliance / akg-images | akg-images" /></a> <br/> <br/>Die deutsche Wiederbewaffnung wird in den 50ern zur Streitfrage. Am 12. November 1955 erhalten die ersten 101 Freiwilligen ihre Ernennungsurkunden als Soldaten.[<a href="https://www.ndr.de/geschichte/chronologie/vor-70-jahren-wird-die-bundeswehr-gegruendet,bundeswehr2404.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>bundeswehr2404</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/geschichte/chronologie/bundeswehr2404~rss2.xml"/>
+  </item>
+  <item rdf:about="7dd6bfc9-07ca-4764-8080-b9793f837c51">
+    <title>Seit 1918 dürfen Frauen in Deutschland wählen</title>
+    <link>https://www.ndr.de/geschichte/chronologie/frauenwahlrecht-in-deutschland-geburtsstunde-war-im-jahr-1918,frauenwahlrecht110.html</link>
+    <description>Am 12. November 1918 erfüllt sich eine zentrale Forderung der deutschen Frauenbewegung - das freie Wahlrecht. Ein historischer Schritt.</description>
+    <pubDate>Wed, 12 Nov 2025 05:00:00 +0100</pubDate>
+    <guid>7dd6bfc9-07ca-4764-8080-b9793f837c51</guid>
+    <dc:date>2025-11-12T04:00:00Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/geschichte/chronologie/frauenwahlrecht-in-deutschland-geburtsstunde-war-im-jahr-1918,frauenwahlrecht110.html"><img src="https://images.ndr.de/image/5f75c534-958d-4bde-9a74-71d0b89fd1d6/AAABkYpfDsg/AAABmgWmh8Q/16x9-big/frauenwahlrecht136.jpg?width=1920" alt="Vornehmlich Frauen stehen am 19. Januar 1919 für die Wahl der Deutschen Nationalversammlung in einer Schlange vor einem Wahllokal. | AdsD/Friedrich-Ebert-Stiftung/dpa " /></a> <br/> <br/>Am 12. November 1918 erfüllt sich eine zentrale Forderung der deutschen Frauenbewegung - das freie Wahlrecht. Ein historischer Schritt.[<a href="https://www.ndr.de/geschichte/chronologie/frauenwahlrecht-in-deutschland-geburtsstunde-war-im-jahr-1918,frauenwahlrecht110.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>frauenwahlrecht110</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/geschichte/chronologie/frauenwahlrecht110~rss2.xml"/>
+  </item>
+  <item rdf:about="a9ed4b82-771a-4339-87b5-3c7133bb8d8f">
+    <title>Meistgeklickt: Beliebte Artikel und Videos in Hamburg</title>
+    <link>https://www.ndr.de/nachrichten/hamburg/Meistgeklickt-Beliebte-Artikel-und-Videos-in-Hamburg,meistgelesen110.html</link>
+    <description>Hier finden Sie die meistgelesenen Artikel des letzten Tages und die meistgesehenen Videos der letzten sieben Tage für Hamburg.</description>
+    <pubDate>Wed, 12 Nov 2025 07:17:38 +0100</pubDate>
+    <guid>a9ed4b82-771a-4339-87b5-3c7133bb8d8f</guid>
+    <dc:date>2025-11-12T06:17:38Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/nachrichten/hamburg/Meistgeklickt-Beliebte-Artikel-und-Videos-in-Hamburg,meistgelesen110.html"><img src="https://images.ndr.de/image/bee156d4-bd08-4631-9e21-f6a71b590a8b/AAABkW0oueQ/AAABmgWmh8Q/16x9-big/ndrhhapp122.jpg?width=1920" alt="Eine Hand Hält ein Smartphone mit der NDR Hamburg App. | Unsplash / Yura Fresh" /></a> <br/> <br/>Hier finden Sie die meistgelesenen Artikel des letzten Tages und die meistgesehenen Videos der letzten sieben Tage für Hamburg.[<a href="https://www.ndr.de/nachrichten/hamburg/Meistgeklickt-Beliebte-Artikel-und-Videos-in-Hamburg,meistgelesen110.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>meistgelesen110</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/meistgelesen110~rss2.xml"/>
+  </item>
+  <item rdf:about="4ea528e3-f685-4fe1-bbe2-eb54e5db91ef">
+    <title>EuroCup: Hamburg Towers bleiben sieglos</title>
+    <link>https://www.ndr.de/nachrichten/hamburg/eurocup-hamburg-towers-bleiben-sieglos,kurzehh-1546.html</link>
+    <description>EuroCup: Hamburg Towers bleiben sieglos</description>
+    <pubDate>Wed, 12 Nov 2025 06:05:56 +0100</pubDate>
+    <guid>4ea528e3-f685-4fe1-bbe2-eb54e5db91ef</guid>
+    <dc:date>2025-11-12T05:05:56Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/nachrichten/hamburg/eurocup-hamburg-towers-bleiben-sieglos,kurzehh-1546.html"><img src="https://images.ndr.de/image/aaf80ffd-abea-4071-ba1b-f605610cc0f0/AAABkXCH6uI/AAABmgWmh8Q/16x9-big/kurznachrichten106.jpg?width=1920" alt="Blick auf den Hamburger Hafen | Fotolia, Marco2811" /></a> <br/> <br/>[<a href="https://www.ndr.de/nachrichten/hamburg/eurocup-hamburg-towers-bleiben-sieglos,kurzehh-1546.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>kurzehh-1546</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/kurzehh-1546~rss2.xml"/>
+  </item>
+  <item rdf:about="3d26677c-bc17-4853-afa4-2506d3bc4555">
+    <title>Überfall auf einen Handyladen in Hamburg-Altona</title>
+    <link>https://www.ndr.de/nachrichten/hamburg/ueberfall-auf-einen-handyladen-in-hamburg-altona,kurzehh-1542.html</link>
+    <description>Überfall auf einen Handyladen in Hamburg-Altona</description>
+    <pubDate>Tue, 11 Nov 2025 16:53:44 +0100</pubDate>
+    <guid>3d26677c-bc17-4853-afa4-2506d3bc4555</guid>
+    <dc:date>2025-11-11T15:53:44Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/nachrichten/hamburg/ueberfall-auf-einen-handyladen-in-hamburg-altona,kurzehh-1542.html"><img src="https://images.ndr.de/image/aaf80ffd-abea-4071-ba1b-f605610cc0f0/AAABkXCH6uI/AAABmgWmh8Q/16x9-big/kurznachrichten106.jpg?width=1920" alt="Blick auf den Hamburger Hafen | Fotolia, Marco2811" /></a> <br/> <br/>[<a href="https://www.ndr.de/nachrichten/hamburg/ueberfall-auf-einen-handyladen-in-hamburg-altona,kurzehh-1542.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>kurzehh-1542</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/kurzehh-1542~rss2.xml"/>
+  </item>
+  <item rdf:about="1b75fa67-4015-465f-b567-5b271d7bd50c">
+    <title>Vier Verletzte bei Brand in Eidelstedter Wohnheim</title>
+    <link>https://www.ndr.de/nachrichten/hamburg/vier-verletzte-bei-brand-in-eidelstedter-wohnheim,kurzehh-1540.html</link>
+    <description>Vier Verletzte bei Brand in Eidelstedter Wohnheim</description>
+    <pubDate>Tue, 11 Nov 2025 07:24:07 +0100</pubDate>
+    <guid>1b75fa67-4015-465f-b567-5b271d7bd50c</guid>
+    <dc:date>2025-11-11T06:24:07Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/nachrichten/hamburg/vier-verletzte-bei-brand-in-eidelstedter-wohnheim,kurzehh-1540.html"><img src="https://images.ndr.de/image/aaf80ffd-abea-4071-ba1b-f605610cc0f0/AAABkXCH6uI/AAABmgWmh8Q/16x9-big/kurznachrichten106.jpg?width=1920" alt="Blick auf den Hamburger Hafen | Fotolia, Marco2811" /></a> <br/> <br/>[<a href="https://www.ndr.de/nachrichten/hamburg/vier-verletzte-bei-brand-in-eidelstedter-wohnheim,kurzehh-1540.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>kurzehh-1540</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/kurzehh-1540~rss2.xml"/>
+  </item>
+  <item rdf:about="e4200938-1695-4ee2-bfe6-1fa0fd185e3e">
+    <title>Kinder-Uni in Hamburg gestartet</title>
+    <link>https://www.ndr.de/nachrichten/hamburg/kinder-uni-in-hamburg-gestartet,kurzehh-1538.html</link>
+    <description>Kinder-Uni in Hamburg gestartet</description>
+    <pubDate>Mon, 10 Nov 2025 20:45:54 +0100</pubDate>
+    <guid>e4200938-1695-4ee2-bfe6-1fa0fd185e3e</guid>
+    <dc:date>2025-11-10T19:45:54Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/nachrichten/hamburg/kinder-uni-in-hamburg-gestartet,kurzehh-1538.html"><img src="https://images.ndr.de/image/aaf80ffd-abea-4071-ba1b-f605610cc0f0/AAABkXCH6uI/AAABmgWmh8Q/16x9-big/kurznachrichten106.jpg?width=1920" alt="Blick auf den Hamburger Hafen | Fotolia, Marco2811" /></a> <br/> <br/>[<a href="https://www.ndr.de/nachrichten/hamburg/kinder-uni-in-hamburg-gestartet,kurzehh-1538.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>kurzehh-1538</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/kurzehh-1538~rss2.xml"/>
+  </item>
+  <item rdf:about="a5baa5c2-5169-47a5-bde1-8ab928350c11">
+    <title>Verein erhält mit 15.000 Euro dotierten Holger-Cassens-Preis</title>
+    <link>https://www.ndr.de/nachrichten/hamburg/verein-erhaelt-mit-15000-euro-dotierten-holger-cassens-preis,kurzehh-1536.html</link>
+    <description>Verein erhält mit 15.000 Euro dotierten Holger-Cassens-Preis</description>
+    <pubDate>Mon, 10 Nov 2025 18:01:03 +0100</pubDate>
+    <guid>a5baa5c2-5169-47a5-bde1-8ab928350c11</guid>
+    <dc:date>2025-11-10T17:01:03Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/nachrichten/hamburg/verein-erhaelt-mit-15000-euro-dotierten-holger-cassens-preis,kurzehh-1536.html"><img src="https://images.ndr.de/image/aaf80ffd-abea-4071-ba1b-f605610cc0f0/AAABkXCH6uI/AAABmgWmh8Q/16x9-big/kurznachrichten106.jpg?width=1920" alt="Blick auf den Hamburger Hafen | Fotolia, Marco2811" /></a> <br/> <br/>[<a href="https://www.ndr.de/nachrichten/hamburg/verein-erhaelt-mit-15000-euro-dotierten-holger-cassens-preis,kurzehh-1536.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>kurzehh-1536</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/kurzehh-1536~rss2.xml"/>
+  </item>
+  <item rdf:about="b6b2b733-ed58-4679-8a0f-88cf8c913310">
+    <title>1872 löst die Berufsfeuerwehr die "Wittkittel" in Hamburg ab</title>
+    <link>https://www.ndr.de/geschichte/chronologie/Feuerwehr-Hamburg-Vom-Wittkittel-zur-Berufsfeuerwehr-,feuerwehrhamburg104.html</link>
+    <description>Nach dem "Großen Brand" 1842 sollte die Brandbekämpfung in öffentliche Hand. Am 12. November 1872 nahm die Berufsfeuerwehr Hamburg ihren Dienst auf.</description>
+    <pubDate>Wed, 12 Nov 2025 05:00:00 +0100</pubDate>
+    <guid>b6b2b733-ed58-4679-8a0f-88cf8c913310</guid>
+    <dc:date>2025-11-12T04:00:00Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/geschichte/chronologie/Feuerwehr-Hamburg-Vom-Wittkittel-zur-Berufsfeuerwehr-,feuerwehrhamburg104.html"><img src="https://images.ndr.de/image/5a042d8e-404c-4346-be0b-b867b5360d87/AAABkXtq12k/AAABmgWmh8Q/16x9-big/loeschwagen100.jpg?width=1920" alt="Pferde-Löschwagen vor der Feuerwache an der Spitalerstraße 1872 | Feuerwehr Hamburg" /></a> <br/> <br/>Nach dem "Großen Brand" 1842 sollte die Brandbekämpfung in öffentliche Hand. Am 12. November 1872 nahm die Berufsfeuerwehr Hamburg ihren Dienst auf.[<a href="https://www.ndr.de/geschichte/chronologie/Feuerwehr-Hamburg-Vom-Wittkittel-zur-Berufsfeuerwehr-,feuerwehrhamburg104.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>feuerwehrhamburg104</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/geschichte/chronologie/feuerwehrhamburg104~rss2.xml"/>
+  </item>
+  <item rdf:about="722dfc03-d64e-4b2e-92d4-c17b353011bd">
+    <title>Gerichtsprozess: Christina Block richtet Worte an ihre Kinder</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/hamburg_journal/gerichtsprozess-christina-block-richtet-worte-an-ihre-kinder,hamj-4956.html</link>
+    <description>Die Verhandlung vor dem Hamburger Landgericht wurde überschattet von der Entscheidung eines dänischen Gerichts zum Sorgerechtsstreit.</description>
+    <pubDate>Thu, 06 Nov 2025 20:16:58 +0100</pubDate>
+    <guid>722dfc03-d64e-4b2e-92d4-c17b353011bd</guid>
+    <dc:date>2025-11-06T19:16:58Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/gerichtsprozess-christina-block-richtet-worte-an-ihre-kinder,hamj-4956.html"><img src="https://images.ndr.de/image/5ba9212f-717f-479c-8423-38e1fee39b54/AAABmlp8dzo/AAABmgWmh8Q/16x9-big/screenshot-75526.jpg?width=1920" alt="Christina Block | Screenshot" /></a> <br/> <br/>Die Verhandlung vor dem Hamburger Landgericht wurde überschattet von der Entscheidung eines dänischen Gerichts zum Sorgerechtsstreit.[<a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/gerichtsprozess-christina-block-richtet-worte-an-ihre-kinder,hamj-4956.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>hamj-4956</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/hamj-4956~rss2.xml"/>
+  </item>
+  <item rdf:about="69fe63f3-508e-4142-bf21-df37014d92fb">
+    <title>Zaho de Sagazan: Der französische Popstar in Hamburg</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/hamburg_journal/Zaho-de-Sagazan-Der-franzoesische-Popstar-in-Hamburg,hamj156640.html</link>
+    <description>Mit einer ungewöhnlichen Mischung aus Chansons und harter Elektronik wurde die 25-Jährige in kürzester Zeit zum Star.</description>
+    <pubDate>Tue, 04 Mar 2025 20:04:17 +0100</pubDate>
+    <guid>69fe63f3-508e-4142-bf21-df37014d92fb</guid>
+    <dc:date>2025-03-04T19:04:17Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/Zaho-de-Sagazan-Der-franzoesische-Popstar-in-Hamburg,hamj156640.html"><img src="https://images.ndr.de/image/b5dac0c9-2339-432b-b8ba-0bb0ceb8099d/AAABlWKKtkI/AAABmgWmh8Q/16x9-big/screenshot1901310.jpg?width=1920" alt="Zaho de Sagazan | Screenshot" /></a> <br/> <br/>Mit einer ungewöhnlichen Mischung aus Chansons und harter Elektronik wurde die 25-Jährige in kürzester Zeit zum Star.[<a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/Zaho-de-Sagazan-Der-franzoesische-Popstar-in-Hamburg,hamj156640.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>hamj156640</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/hamj156640~rss2.xml"/>
+  </item>
+  <item rdf:about="f1ab6ce2-8a22-4874-8e94-b2babf5d21b8">
+    <title>Johannes Oerding spielt gemeinsames Konzert mit der NDR Bigband</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/hamburg_journal/johannes-oerding-spielt-gemeinsames-konzert-mit-der-ndr-bigband,hamj-4988.html</link>
+    <description>Fans dürfen sich freuen: Nach seinem großen Auftritt im Volksparkstadion können sie Oerding live erleben.</description>
+    <pubDate>Fri, 07 Nov 2025 19:51:59 +0100</pubDate>
+    <guid>f1ab6ce2-8a22-4874-8e94-b2babf5d21b8</guid>
+    <dc:date>2025-11-07T18:51:59Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/johannes-oerding-spielt-gemeinsames-konzert-mit-der-ndr-bigband,hamj-4988.html"><img src="https://images.ndr.de/image/a638f8f9-0de5-493e-b638-6595f569480d/AAABml-leYg/AAABmgWmh8Q/16x9-big/screenshot-76142.jpg?width=1920" alt="Musiker Johannes Oerding im Smoking mit Hut am Klavier, im Profil zu sehen. Er zeigt mit seinem Zeigefinger aus dem Bild hinaus. | Screenshot" /></a> <br/> <br/>Fans dürfen sich freuen: Nach seinem großen Auftritt im Volksparkstadion können sie Oerding live erleben.[<a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/johannes-oerding-spielt-gemeinsames-konzert-mit-der-ndr-bigband,hamj-4988.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>hamj-4988</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/hamj-4988~rss2.xml"/>
+  </item>
+  <item rdf:about="76e18333-76cc-4fd0-85ef-26561904a70f">
+    <title>Hamburg damals: Ex-Kanzler Helmut Schmidt stirbt</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/hamburg_journal/hamburg-damals-ex-kanzler-helmut-schmidt-stirbt,hamj-5036.html</link>
+    <description>Die Zigarette und seine "Schmidt-Schnauze" sind seine Markenzeichen. Aus dem Hamburger Jung wird 1974 der fünfte Bundeskanzler der BRD.</description>
+    <pubDate>Sun, 09 Nov 2025 19:53:47 +0100</pubDate>
+    <guid>76e18333-76cc-4fd0-85ef-26561904a70f</guid>
+    <dc:date>2025-11-09T18:53:47Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/hamburg-damals-ex-kanzler-helmut-schmidt-stirbt,hamj-5036.html"><img src="https://images.ndr.de/image/9d685c23-cc10-469d-9bb8-5a77921efd1b/AAABmmnwXNE/AAABmgWmh8Q/16x9-big/screenshot-76980.jpg?width=1920" alt="Helmut Schmidts Sarg. | Screenshot" /></a> <br/> <br/>Die Zigarette und seine "Schmidt-Schnauze" sind seine Markenzeichen. Aus dem Hamburger Jung wird 1974 der fünfte Bundeskanzler der BRD.[<a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/hamburg-damals-ex-kanzler-helmut-schmidt-stirbt,hamj-5036.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>hamj-5036</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/hamj-5036~rss2.xml"/>
+  </item>
+  <item rdf:about="f66b902d-ca79-4095-b9a8-88b0dc4c72d2">
+    <title>Ausflugsschiff der "Mein Schiff 1" in der Karibik verunglückt</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/hamburg_journal_1800/Hamburg-Journal-1800,hamj-5096.html</link>
+    <description>In der Dominikanischen Republik ist am Sonnabend ein Ausflugskatamaran mit Gästen des Kreuzfahrtschiffs "Mein Schiff 1" verunglückt. 55 Passagiere wurden aus dem Wasser gerettet.</description>
+    <pubDate>Tue, 11 Nov 2025 19:24:49 +0100</pubDate>
+    <guid>f66b902d-ca79-4095-b9a8-88b0dc4c72d2</guid>
+    <dc:date>2025-11-11T18:24:49Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal_1800/Hamburg-Journal-1800,hamj-5096.html"><img src="https://images.ndr.de/image/9e363f97-ee98-42d5-bec8-28f5b58c5c5a/AAABmnQCoe4/AAABmgWmh8Q/16x9-big/screenshot-78128.jpg?width=1920" alt="Das Kreutfahrtschiff "Mein Schiff 1". | Screenshot" /></a> <br/> <br/>In der Dominikanischen Republik ist am Sonnabend ein Ausflugskatamaran mit Gästen des Kreuzfahrtschiffs "Mein Schiff 1" verunglückt. 55 Passagiere wurden aus dem Wasser gerettet.[<a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal_1800/Hamburg-Journal-1800,hamj-5096.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>hamj-5096</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/hamburg_journal_1800/hamj-5096~rss2.xml"/>
+  </item>
+  <item rdf:about="4da9b47b-e45d-4dd9-9ed7-d37436ccee2d">
+    <title>Bauarbeiten an der Hohenfelder Bucht beendet</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/hamburg_journal/bauarbeiten-an-der-hohenfelder-bucht-beendet,hamj-4986.html</link>
+    <description>Mehr als fünf Jahre wurde an der östlichen Außenalster gebaut - nun herrscht Erleichterung bei den Anwohnenden.</description>
+    <pubDate>Fri, 07 Nov 2025 21:08:15 +0100</pubDate>
+    <guid>4da9b47b-e45d-4dd9-9ed7-d37436ccee2d</guid>
+    <dc:date>2025-11-07T20:08:15Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/bauarbeiten-an-der-hohenfelder-bucht-beendet,hamj-4986.html"><img src="https://images.ndr.de/image/cd6ef307-6bec-4728-8f80-b0119794b1c3/AAABml-eMp8/AAABmgWmh8Q/16x9-big/screenshot-76104.jpg?width=1920" alt="Die nun fertiggestellte Kreuzung an der Hohenfelder Bucht, östliche Seite der Außenalster. | Screenshot" /></a> <br/> <br/>Mehr als fünf Jahre wurde an der östlichen Außenalster gebaut - nun herrscht Erleichterung bei den Anwohnenden.[<a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/bauarbeiten-an-der-hohenfelder-bucht-beendet,hamj-4986.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>hamj-4986</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/hamj-4986~rss2.xml"/>
+  </item>
+  <item rdf:about="eaf47d54-7e36-4e4d-bc09-deedb49f4616">
+    <title>Christina Block darf zwei ihrer Kinder weiterhin nicht sehen</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/hamburg_journal_1800/christina-block-darf-zwei-ihrer-kinder-weiterhin-nicht-sehen,hamj-4826.html</link>
+    <description>Blocks Ex-Mann Stephan Hensel hat weiterhin das alleinige Sorgerecht für die beiden jüngsten Kinder.</description>
+    <pubDate>Tue, 04 Nov 2025 09:47:47 +0100</pubDate>
+    <guid>eaf47d54-7e36-4e4d-bc09-deedb49f4616</guid>
+    <dc:date>2025-11-04T08:47:47Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal_1800/christina-block-darf-zwei-ihrer-kinder-weiterhin-nicht-sehen,hamj-4826.html"><img src="https://images.ndr.de/image/464fef06-2dd1-4fd6-bff9-18f5e7ae3abe/AAABmkqy7h4/AAABmgWmh8Q/16x9-big/screenshot-73392.jpg?width=1920" alt="Christina Block | Screenshot" /></a> <br/> <br/>Blocks Ex-Mann Stephan Hensel hat weiterhin das alleinige Sorgerecht für die beiden jüngsten Kinder.[<a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal_1800/christina-block-darf-zwei-ihrer-kinder-weiterhin-nicht-sehen,hamj-4826.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>hamj-4826</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/hamburg_journal_1800/hamj-4826~rss2.xml"/>
+  </item>
+  <item rdf:about="3c0a67bc-9447-44c2-b6c5-ab218b8f3fc7">
+    <title>Schwebende Bahngleise: U5-Baustellenbesuch in der City Nord</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/hamburg_journal/schwebende-bahngleise-u5-baustellenbesuch-in-der-city-nord,hamj-4838.html</link>
+    <description>Während an der Sengelmannstarße in einer Baugrube gearbeitet wird, läuft der U1-Betrieb darüber einfach weiter.</description>
+    <pubDate>Tue, 04 Nov 2025 09:42:17 +0100</pubDate>
+    <guid>3c0a67bc-9447-44c2-b6c5-ab218b8f3fc7</guid>
+    <dc:date>2025-11-04T08:42:17Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/schwebende-bahngleise-u5-baustellenbesuch-in-der-city-nord,hamj-4838.html"><img src="https://images.ndr.de/image/fe49bc4d-5ee1-40fe-a3e7-9d66dfbd763b/AAABmksElP4/AAABmgWmh8Q/16x9-big/screenshot-73454.jpg?width=1920" alt="Ein große U-Bahn Baustelle aus der Vogelperspektive. | Screenshot" /></a> <br/> <br/>Während an der Sengelmannstarße in einer Baugrube gearbeitet wird, läuft der U1-Betrieb darüber einfach weiter.[<a href="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/schwebende-bahngleise-u5-baustellenbesuch-in-der-city-nord,hamj-4838.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>hamj-4838</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/hamburg_journal/hamj-4838~rss2.xml"/>
+  </item>
+  <item rdf:about="75e5a2e7-dafa-401a-8055-ab5d626b2e98">
+    <title>Der Trucker-Kiez in Hamburg</title>
+    <link>https://www.ardmediathek.de/video/Y3JpZDovL25kci5kZS9wcm9wbGFuXzE5NjMzNzQ3M19nYW56ZVNlbmR1bmc</link>
+    <description>Reifenhändler, Werkstätten, Abschleppdienste: Das Hamburger Truckerviertel sichert die Existenz einer ganzen Branche.</description>
+    <pubDate>Fri, 07 Nov 2025 00:02:55 +0100</pubDate>
+    <guid>75e5a2e7-dafa-401a-8055-ab5d626b2e98</guid>
+    <dc:date>2025-11-06T23:02:55Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/die_nordreportage/Der-Trucker-Kiez-in-Hamburg,dienordreportage2528.html"><img src="https://images.ndr.de/image/4f98806c-aa3e-4c9b-835e-5ca354d1ffb4/AAABmZmTMl8/AAABmgWmh8Q/16x9-big/sendungsbild110138.jpg?width=1920" alt="Vor-Ort-Pannenservice für XXL-Fahrzeuge. | NDR/ECO-Media" /></a> <br/> <br/>Reifenhändler, Werkstätten, Abschleppdienste: Das Hamburger Truckerviertel sichert die Existenz einer ganzen Branche.[<a href="https://www.ndr.de/fernsehen/sendungen/die_nordreportage/Der-Trucker-Kiez-in-Hamburg,dienordreportage2528.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>dienordreportage2528</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/die_nordreportage/dienordreportage2528~rss2.xml"/>
+  </item>
+  <item rdf:about="4c72f81c-56cb-4d8a-bb48-59f0d97c804b">
+    <title>Das Geschäft mit der Umwelt</title>
+    <link>https://www.ardmediathek.de/video/Y3JpZDovL25kci5kZS9wcm9wbGFuXzE5NjMxODI1N19nYW56ZVNlbmR1bmc</link>
+    <description>Drei Start-ups aus Norddeutschland wollen mit ihren Firmen Geld verdienen und gleichzeitig nachhaltig sein.</description>
+    <pubDate>Wed, 05 Nov 2025 00:02:24 +0100</pubDate>
+    <guid>4c72f81c-56cb-4d8a-bb48-59f0d97c804b</guid>
+    <dc:date>2025-11-04T23:02:24Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/die_nordreportage/Das-Geschaeft-mit-der-Umwelt,dienordreportage1530.html"><img src="https://images.ndr.de/image/d9f1f7ce-d8f3-4b6b-9d6a-740b61eb631f/AAABmYBhRE0/AAABmgWmh8Q/16x9-big/sendungsbild95116.jpg?width=1920" alt="Um ihren weißen Sneakern einen Farbklecks zu geben, fährt Sabine Moormann mehrmals im Jahr zu einem Rettungswestenhersteller. Dort darf sie den Verschnitt der Rettungswesten einsammeln und wiederverwerten. | NDR/Isabelle Vidos" /></a> <br/> <br/>Drei Start-ups aus Norddeutschland wollen mit ihren Firmen Geld verdienen und gleichzeitig nachhaltig sein.[<a href="https://www.ndr.de/fernsehen/sendungen/die_nordreportage/Das-Geschaeft-mit-der-Umwelt,dienordreportage1530.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>dienordreportage1530</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/die_nordreportage/dienordreportage1530~rss2.xml"/>
+  </item>
+  <item rdf:about="38a53641-668e-464d-b2da-65582b663c72">
+    <title>Tauben in der Großstadt – Vertreiben oder füttern?</title>
+    <link>https://www.ardmediathek.de/video/Y3JpZDovL25kci5kZS9wcm9wbGFuXzE5NjM1MzE4MF9nYW56ZVNlbmR1bmc</link>
+    <description>Über kaum ein anderes Tier gehen die Meinungen so weit auseinander. Bedeutet Tierschutz, Tauben zu füttern – oder eben nicht?</description>
+    <pubDate>Mon, 03 Nov 2025 14:09:38 +0100</pubDate>
+    <guid>38a53641-668e-464d-b2da-65582b663c72</guid>
+    <dc:date>2025-11-03T13:09:38Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/die_nordreportage/tauben-in-der-grossstadt-vertreiben-oder-fuettern,dienordreportage-292.html"><img src="https://images.ndr.de/image/bbd1f7f1-2418-43be-99c1-70b6a0c0c24e/AAABmaUzXqY/AAABmgWmh8Q/16x9-big/sendungsbild-1619466.jpg?width=1920" alt="Taube am Hamburger Hauptbahnhof. | NDR/MG Film" /></a> <br/> <br/>Über kaum ein anderes Tier gehen die Meinungen so weit auseinander. Bedeutet Tierschutz, Tauben zu füttern – oder eben nicht?[<a href="https://www.ndr.de/fernsehen/sendungen/die_nordreportage/tauben-in-der-grossstadt-vertreiben-oder-fuettern,dienordreportage-292.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>dienordreportage-292</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/die_nordreportage/dienordreportage-292~rss2.xml"/>
+  </item>
+  <item rdf:about="66508f5c-4de2-4e97-92a3-e4e979641747">
+    <title>Fischfeinkost mit langer Tradition</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/fischfeinkost-mit-langer-tradition,rundumdenmichel-224.html</link>
+    <description>Auf dem Hamburger Fischmarkt an der großen Elbstraße 133 wird nachts gearbeitet. Fischfeinkost Werner Lauenroth gibt es seit 1968.</description>
+    <pubDate>Sun, 09 Nov 2025 18:00:34 +0100</pubDate>
+    <guid>66508f5c-4de2-4e97-92a3-e4e979641747</guid>
+    <dc:date>2025-11-09T17:00:34Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/fischfeinkost-mit-langer-tradition,rundumdenmichel-224.html"><img src="https://images.ndr.de/image/8f16914a-24dd-4640-98f2-95e54a22322d/AAABmmlE3PE/AAABmgWmh8Q/16x9-big/screenshot-76846.jpg?width=1920" alt="Lachs liegt auf einem Tisch zur Weiterverarbeitung. | Screenshot" /></a> <br/> <br/>Auf dem Hamburger Fischmarkt an der großen Elbstraße 133 wird nachts gearbeitet. Fischfeinkost Werner Lauenroth gibt es seit 1968.[<a href="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/fischfeinkost-mit-langer-tradition,rundumdenmichel-224.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>rundumdenmichel-224</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/rundumdenmichel-224~rss2.xml"/>
+  </item>
+  <item rdf:about="be8fb6de-9597-4ce2-8833-161a4cdf9c25">
+    <title>Myco - Pilze als Baustoff</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/myco-pilze-als-baustoff,rundumdenmichel-228.html</link>
+    <description>Designerin Martha Starke will Kunststoff durch Pilze ersetzen. Kein anderes Baumittel wird so schnell und so kostengünstig hergestellt.</description>
+    <pubDate>Sun, 09 Nov 2025 18:00:20 +0100</pubDate>
+    <guid>be8fb6de-9597-4ce2-8833-161a4cdf9c25</guid>
+    <dc:date>2025-11-09T17:00:20Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/myco-pilze-als-baustoff,rundumdenmichel-228.html"><img src="https://images.ndr.de/image/8daef274-9c81-4c5c-8b83-cebff9e16ea5/AAABmmlK3PQ/AAABmgWmh8Q/16x9-big/screenshot-76864.jpg?width=1920" alt="Martha Strake sammelt Pilze von einem Baum. | Screenshot" /></a> <br/> <br/>Designerin Martha Starke will Kunststoff durch Pilze ersetzen. Kein anderes Baumittel wird so schnell und so kostengünstig hergestellt.[<a href="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/myco-pilze-als-baustoff,rundumdenmichel-228.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>rundumdenmichel-228</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/rundumdenmichel-228~rss2.xml"/>
+  </item>
+  <item rdf:about="73a59185-e587-47cf-a07e-bbeab52e6dc2">
+    <title>Junge Segler reparieren Carbonsegel im Verein</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/junge-segler-reparieren-carbonsegel-im-verein,rundumdenmichel-232.html</link>
+    <description>Die Crews des Hamburgischen Vereins für Seefahrt prüfen ihre Hochleistungssegel auf Schäden. Schon kleine Risse sind gefährlich.</description>
+    <pubDate>Sun, 09 Nov 2025 18:00:20 +0100</pubDate>
+    <guid>73a59185-e587-47cf-a07e-bbeab52e6dc2</guid>
+    <dc:date>2025-11-09T17:00:20Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/junge-segler-reparieren-carbonsegel-im-verein,rundumdenmichel-232.html"><img src="https://images.ndr.de/image/0863658e-6bdb-41c0-9310-77d6ac91d017/AAABmmlRMYE/AAABmgWmh8Q/16x9-big/screenshot-76878.jpg?width=1920" alt="Junge Segler:innen reparieren ein Carbonsegel. | Screenshot" /></a> <br/> <br/>Die Crews des Hamburgischen Vereins für Seefahrt prüfen ihre Hochleistungssegel auf Schäden. Schon kleine Risse sind gefährlich.[<a href="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/junge-segler-reparieren-carbonsegel-im-verein,rundumdenmichel-232.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>rundumdenmichel-232</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/rundumdenmichel-232~rss2.xml"/>
+  </item>
+  <item rdf:about="23cc98ff-30bf-4c4d-bec3-d07bac410062">
+    <title>Labskaus und Pannfisch am südlichsten Punkt von Wilhelmsburg</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/labskaus-und-pannfisch-am-suedlichsten-punkt-von-wilhelmsburg,rundumdenmichel-230.html</link>
+    <description>Die Bunthäuser Spitze auf der Elbinsel ist der südlichste Punkt des Stadtteils. Wer mag, kann im Restaurant "Der Stackmeister" einkehren.</description>
+    <pubDate>Sun, 09 Nov 2025 18:00:40 +0100</pubDate>
+    <guid>23cc98ff-30bf-4c4d-bec3-d07bac410062</guid>
+    <dc:date>2025-11-09T17:00:40Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/labskaus-und-pannfisch-am-suedlichsten-punkt-von-wilhelmsburg,rundumdenmichel-230.html"><img src="https://images.ndr.de/image/60a78da4-bc3e-4178-88f6-f54f9d94b15b/AAABmmlQMvw/AAABmgWmh8Q/16x9-big/screenshot-76872.jpg?width=1920" alt="Labskaus wird aufgetischt. | Screenshot" /></a> <br/> <br/>Die Bunthäuser Spitze auf der Elbinsel ist der südlichste Punkt des Stadtteils. Wer mag, kann im Restaurant "Der Stackmeister" einkehren.[<a href="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/labskaus-und-pannfisch-am-suedlichsten-punkt-von-wilhelmsburg,rundumdenmichel-230.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>rundumdenmichel-230</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/rundumdenmichel-230~rss2.xml"/>
+  </item>
+  <item rdf:about="2396bde7-29b0-42c8-b1af-473a7384cc64">
+    <title>Internationales Maritimes Museum Hamburg</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/internationales-maritimes-museum-hamburg,rundumdenmichel-218.html</link>
+    <description>Mehr als 100.000 Exponate lassen hier die Besucherinnen und Besucher die Welt und Geschichte der Seefahrt hautnah erleben.</description>
+    <pubDate>Sun, 09 Nov 2025 18:01:00 +0100</pubDate>
+    <guid>2396bde7-29b0-42c8-b1af-473a7384cc64</guid>
+    <dc:date>2025-11-09T17:01:00Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/internationales-maritimes-museum-hamburg,rundumdenmichel-218.html"><img src="https://images.ndr.de/image/e7dce513-ba6d-422c-8962-46d5b99a13ce/AAABmmk83Zk/AAABmgWmh8Q/16x9-big/screenshot-76818.jpg?width=1920" alt="Ein Model eines alten Segelschiffes ist im Maritimen Museum Hamburgs zu bestaunen. | Screenshot" /></a> <br/> <br/>Mehr als 100.000 Exponate lassen hier die Besucherinnen und Besucher die Welt und Geschichte der Seefahrt hautnah erleben.[<a href="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/internationales-maritimes-museum-hamburg,rundumdenmichel-218.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>rundumdenmichel-218</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/rundumdenmichel-218~rss2.xml"/>
+  </item>
+  <item rdf:about="bec54fa5-6ab5-4e15-8bce-78c3a98cf7f7">
+    <title>Ringelnatz auf der "Schaarhörn" - kulinarische Lesungen</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/ringelnatz-auf-der-schaarhoern-kulinarische-lesungen,rundumdenmichel-220.html</link>
+    <description>Der berühmte Dichter und Lyriker galt nicht nur als leidenschaftlicher Seefahrer, er hatte auch eine besondere Verbindung zu dem Dampfschiff.</description>
+    <pubDate>Sun, 09 Nov 2025 18:00:53 +0100</pubDate>
+    <guid>bec54fa5-6ab5-4e15-8bce-78c3a98cf7f7</guid>
+    <dc:date>2025-11-09T17:00:53Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/ringelnatz-auf-der-schaarhoern-kulinarische-lesungen,rundumdenmichel-220.html"><img src="https://images.ndr.de/image/36bc72ef-33dc-4af0-a0f0-c0e7dd01b709/AAABmmk9w6s/AAABmgWmh8Q/16x9-big/screenshot-76834.jpg?width=1920" alt="Gäste auf der Schaarhörn lauschen der Dichtkunst von Ringelnatz. | Screenshot" /></a> <br/> <br/>Der berühmte Dichter und Lyriker galt nicht nur als leidenschaftlicher Seefahrer, er hatte auch eine besondere Verbindung zu dem Dampfschiff.[<a href="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/ringelnatz-auf-der-schaarhoern-kulinarische-lesungen,rundumdenmichel-220.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>rundumdenmichel-220</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/rundumdenmichel-220~rss2.xml"/>
+  </item>
+  <item rdf:about="27224968-5cd7-4c45-93e8-7ff2f4cd1abc">
+    <title>Hamburg am Wasser - Maritimes und mehr</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/Rund-um-den-Michel,rundumdenmichel-216.html</link>
+    <description>Hamburg ist Leben am Wasser. Elbe und Alster locken zur Erholung und zum Sporttreiben, aber Hamburg bietet noch mehr.</description>
+    <pubDate>Sun, 09 Nov 2025 18:02:07 +0100</pubDate>
+    <guid>27224968-5cd7-4c45-93e8-7ff2f4cd1abc</guid>
+    <dc:date>2025-11-09T17:02:07Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/Rund-um-den-Michel,rundumdenmichel-216.html"><img src="https://images.ndr.de/image/80e5eaf0-3d9f-4643-90e0-5421663a0291/AAABmmk3X-E/AAABmgWmh8Q/16x9-big/screenshot-76812.jpg?width=1920" alt="Merlin van Rissenbeck | Screenshot" /></a> <br/> <br/>Hamburg ist Leben am Wasser. Elbe und Alster locken zur Erholung und zum Sporttreiben, aber Hamburg bietet noch mehr.[<a href="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/Rund-um-den-Michel,rundumdenmichel-216.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>rundumdenmichel-216</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/rundumdenmichel-216~rss2.xml"/>
+  </item>
+  <item rdf:about="211f5d0f-d7c7-4135-8dc7-a75d89f543f3">
+    <title>Kaltehofe: Das grüne Wasserparadies</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/kaltehofe-das-gruene-wasserparadies,rundumdenmichel-222.html</link>
+    <description>Seit 1893 versorgte die Elbinsel Hamburg mit gefiltertem Wasser, heute ist sie ein Naherholungsgebiet mit Park, Naturpfad und Museum.</description>
+    <pubDate>Sun, 09 Nov 2025 20:35:26 +0100</pubDate>
+    <guid>211f5d0f-d7c7-4135-8dc7-a75d89f543f3</guid>
+    <dc:date>2025-11-09T19:35:26Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/kaltehofe-das-gruene-wasserparadies,rundumdenmichel-222.html"><img src="https://images.ndr.de/image/b1ddbf92-08b3-46ee-8ac6-fc438117740f/AAABmmlESaM/AAABmgWmh8Q/16x9-big/screenshot-76838.jpg?width=1920" alt="Im Wasser spiegelt sich ein Turm der Wasserkunst Elbinsel Kaltehofe. | Screenshot" /></a> <br/> <br/>Seit 1893 versorgte die Elbinsel Hamburg mit gefiltertem Wasser, heute ist sie ein Naherholungsgebiet mit Park, Naturpfad und Museum. [<a href="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/kaltehofe-das-gruene-wasserparadies,rundumdenmichel-222.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>rundumdenmichel-222</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/rundumdenmichel-222~rss2.xml"/>
+  </item>
+  <item rdf:about="a5304dd7-1d6f-40c1-9475-d16cb675f1e9">
+    <title>Die Freiluftmalerin Agnea Sandner</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/die-freiluftmalerin-agnea-sandner,rundumdenmichel-226.html</link>
+    <description>Die Künstlerin findet in Blankenese und an anderen Orten Hamburgs ihre maritimen Motive. Ein Besuch bei einer Mal-Session.</description>
+    <pubDate>Sun, 09 Nov 2025 20:36:53 +0100</pubDate>
+    <guid>a5304dd7-1d6f-40c1-9475-d16cb675f1e9</guid>
+    <dc:date>2025-11-09T19:36:53Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/die-freiluftmalerin-agnea-sandner,rundumdenmichel-226.html"><img src="https://images.ndr.de/image/dfa01086-d625-4bd8-a98d-65b613f63ec6/AAABmmlKL_I/AAABmgWmh8Q/16x9-big/screenshot-76848.jpg?width=1920" alt="Freiluftmalerin Agnea Sandner malt ein Gemälde mit Blick auf den Hamburger Hafen. | Screenshot" /></a> <br/> <br/>Die Künstlerin findet in Blankenese und an anderen Orten Hamburgs ihre maritimen Motive. Ein Besuch bei einer Mal-Session.[<a href="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/die-freiluftmalerin-agnea-sandner,rundumdenmichel-226.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>rundumdenmichel-226</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/rundumdenmichel-226~rss2.xml"/>
+  </item>
+  <item rdf:about="f275c151-297b-4557-aded-5826f46c73f8">
+    <title>Fermentation: Der urgesunde Trend</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/fermentation-der-urgesunde-trend,rundumdenmichel-234.html</link>
+    <description>Beim Fermentationsworkshop erklärt Katsu Lask die Hintergründe - in gemütlicher Atmosphäre auf dem Hof Eggers in Kirchwerder.</description>
+    <pubDate>Sun, 09 Nov 2025 20:41:37 +0100</pubDate>
+    <guid>f275c151-297b-4557-aded-5826f46c73f8</guid>
+    <dc:date>2025-11-09T19:41:37Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/fermentation-der-urgesunde-trend,rundumdenmichel-234.html"><img src="https://images.ndr.de/image/3a3df8f0-c913-4e78-b7e7-9d6e247ba38d/AAABmmlXphk/AAABmgWmh8Q/16x9-big/screenshot-76892.jpg?width=1920" alt="Zwei Frauen prosten sich mit fermentiertem Gemüse in Gläsern zu. | Screenshot" /></a> <br/> <br/>Beim Fermentationsworkshop erklärt Katsu Lask die Hintergründe - in gemütlicher Atmosphäre auf dem Hof Eggers in Kirchwerder.[<a href="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/fermentation-der-urgesunde-trend,rundumdenmichel-234.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>rundumdenmichel-234</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/rund_um_den_michel/rundumdenmichel-234~rss2.xml"/>
+  </item>
+  <item rdf:about="79f2cb84-03cc-4b6e-8777-9d68f1f952c7">
+    <title>Mehr Entdecken in der Hamburger Elbmeile</title>
+    <link>https://www.ndr.de/fernsehen/sendungen/nordtour/mehr-entdecken-in-der-hamburger-elbmeile,nordtour-626.html</link>
+    <description>Der Fischmarkt zieht viele Touristen an. Quartiersmanager Boie Baumann möchte, dass sie auch die Gegend drumherum entdecken.</description>
+    <pubDate>Sat, 01 Nov 2025 20:34:21 +0100</pubDate>
+    <guid>79f2cb84-03cc-4b6e-8777-9d68f1f952c7</guid>
+    <dc:date>2025-11-01T19:34:21Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/nordtour/mehr-entdecken-in-der-hamburger-elbmeile,nordtour-626.html"><img src="https://images.ndr.de/image/de66cf4f-87ab-4974-9585-18e935fd8bbf/AAABmj-tT6Q/AAABmgWmh8Q/16x9-big/screenshot-72818.jpg?width=1920" alt="Die Hamburger Elbmeile aus Vogelperspektive.  | Screenshot" /></a> <br/> <br/>Der Fischmarkt zieht viele Touristen an. Quartiersmanager Boie Baumann möchte, dass sie auch die Gegend drumherum entdecken.[<a href="https://www.ndr.de/fernsehen/sendungen/nordtour/mehr-entdecken-in-der-hamburger-elbmeile,nordtour-626.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>nordtour-626</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/nordtour/nordtour-626~rss2.xml"/>
+  </item>
+  <item rdf:about="9cfcf5bf-3d39-40d2-83d3-8557b7f981e3">
+    <title>Knochenjob und Tradition</title>
+    <link>https://www.ardmediathek.de/video/Y3JpZDovL25kci5kZS9wcm9wbGFuXzE5NjM0NDc3MV9nYW56ZVNlbmR1bmc</link>
+    <description>Was bedeutet traditionelles Hafenhandwerk heutzutage? Und welche Zukunftsträume haben junge Menschen in den alten Berufen?</description>
+    <pubDate>Thu, 09 Oct 2025 11:06:11 +0200</pubDate>
+    <guid>9cfcf5bf-3d39-40d2-83d3-8557b7f981e3</guid>
+    <dc:date>2025-10-09T09:06:11Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/die_nordreportage/Knochenjob-und-Tradition,nordreportage1006.html"><img src="https://images.ndr.de/image/25e5a0aa-5bb1-4b08-aa73-0c13cbd9f8ea/AAABmcg2GYM/AAABmgWmh8Q/16x9-big/sendungsbild115076.jpg?width=1920" alt="Seiler-Profi und Juniorchef in 6. Generation Tom Lippmann umarmt ein Seil. | NDR/Ecomedia TV" /></a> <br/> <br/>Was bedeutet traditionelles Hafenhandwerk heutzutage? Und welche Zukunftsträume haben junge Menschen in den alten Berufen?[<a href="https://www.ndr.de/fernsehen/sendungen/die_nordreportage/Knochenjob-und-Tradition,nordreportage1006.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>nordreportage1006</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/die_nordreportage/nordreportage1006~rss2.xml"/>
+  </item>
+  <item rdf:about="c26e730e-cce2-4f9e-8abb-6b5460900b63">
+    <title>"Blue Port" lässt Hamburger Hafen blau erstrahlen</title>
+    <link>https://www.ardmediathek.de/video/Y3JpZDovL25kci5kZS9wcm9wbGFuXzE5NjM1MzE4NF9nYW56ZVNlbmR1bmc</link>
+    <description>Zum zehnten Mal tauchen Michael Batz und sein Team den Hamburger Hafen in leuchtendes Blau. Ein faszinierendes Lichtspektakel.</description>
+    <pubDate>Thu, 18 Sep 2025 10:46:51 +0200</pubDate>
+    <guid>c26e730e-cce2-4f9e-8abb-6b5460900b63</guid>
+    <dc:date>2025-09-18T08:46:51Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/die_nordreportage/die-nordreportage-hamburg-erstrahlt-blau-12000-leuchten-fuer-magische-momente,dienordreportage-232.html"><img src="https://images.ndr.de/image/ca831e7a-ba56-4b03-9bdb-da26d3b68082/AAABmVa1SZg/AAABmgWmh8Q/16x9-big/sendungsbild-1597634.jpg?width=1920" alt="Ein blau beleuchtetes Gerüst wird von einem Kranwagen gehoben. | NDR/ADAMFilm" /></a> <br/> <br/>Zum zehnten Mal tauchen Michael Batz und sein Team den Hamburger Hafen in leuchtendes Blau. Ein faszinierendes Lichtspektakel.[<a href="https://www.ndr.de/fernsehen/sendungen/die_nordreportage/die-nordreportage-hamburg-erstrahlt-blau-12000-leuchten-fuer-magische-momente,dienordreportage-232.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>dienordreportage-232</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/die_nordreportage/dienordreportage-232~rss2.xml"/>
+  </item>
+  <item rdf:about="3a5eb3c6-42ed-40c0-90d6-4d00c421ea93">
+    <title>Per Windjammer von Kiel nach Hamburg</title>
+    <link>https://www.ardmediathek.de/video/Y3JpZDovL25kci5kZS8xMzE4XzIwMjItMTAtMjQtMTgtMTU</link>
+    <description>Auf der "Sea Cloud Spirit" sollen sich 100 Kreuzfahrtpassagiere wohlfühlen. Dazu tragen viele Personen bei.</description>
+    <pubDate>Fri, 22 Aug 2025 23:23:17 +0200</pubDate>
+    <guid>3a5eb3c6-42ed-40c0-90d6-4d00c421ea93</guid>
+    <dc:date>2025-08-22T21:23:17Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/fernsehen/sendungen/die_nordreportage/Luxus-unter-Segeln-Per-Windjammer-von-Kiel-nach-Hamburg,dienordreportage2284.html"><img src="https://images.ndr.de/image/33fae495-62ff-4317-b5cb-ad17244e7772/AAABmHWApo0/AAABmgWmh8Q/16x9-big/luxusuntersegeln102.jpg?width=1920" alt="Zwei Tage war die "Sea Cloud Spirit" auf dem Törn von Kiel nach Sylt unter vollen Segeln unterwegs, die restliche Strecke mit Motorkraft. | NDR/Joker Pictures/Mario Göhring" /></a> <br/> <br/>Auf der "Sea Cloud Spirit" sollen sich 100 Kreuzfahrtpassagiere wohlfühlen. Dazu tragen viele Personen bei.[<a href="https://www.ndr.de/fernsehen/sendungen/die_nordreportage/Luxus-unter-Segeln-Per-Windjammer-von-Kiel-nach-Hamburg,dienordreportage2284.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>dienordreportage2284</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/fernsehen/sendungen/die_nordreportage/dienordreportage2284~rss2.xml"/>
+  </item>
+  <item rdf:about="0d162bc6-7f8a-4b9c-be05-fc34be506823">
+    <title>Hamburger Dom: Ticket-Pakete für Winterdom gewinnen</title>
+    <link>https://www.ndr.de/nachrichten/hamburg/Hamburger-Dom-Ticket-Pakete-fuer-Winterdom-gewinnen,appverlosungdom-100.html</link>
+    <description>NDR 90,3 und das Hamburg Journal verlosen bis 13. November fünf Ticket-Pakete für den Winterdom in Hamburg.</description>
+    <pubDate>Fri, 07 Nov 2025 16:08:21 +0100</pubDate>
+    <guid>0d162bc6-7f8a-4b9c-be05-fc34be506823</guid>
+    <dc:date>2025-11-07T15:08:21Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/nachrichten/hamburg/Hamburger-Dom-Ticket-Pakete-fuer-Winterdom-gewinnen,appverlosungdom-100.html"><img src="https://images.ndr.de/image/bc5e20c0-67f6-4200-86e5-70a5a523c979/AAABkXopVho/AAABmgWmh8Q/16x9-big/dom764.jpg?width=1920" alt="Das beleuchtete Riesenrad ist unter dem Eingangsbogen des Hamburger Doms zu sehen. | picture alliance / dpa" /></a> <br/> <br/>NDR 90,3 und das Hamburg Journal verlosen bis 13. November fünf Ticket-Pakete für den Winterdom in Hamburg.[<a href="https://www.ndr.de/nachrichten/hamburg/Hamburger-Dom-Ticket-Pakete-fuer-Winterdom-gewinnen,appverlosungdom-100.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>appverlosungdom-100</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/appverlosungdom-100~rss2.xml"/>
+  </item>
+  <item rdf:about="55ff12e8-2743-4b1d-a4b4-593bafba685b">
+    <title>Podcast "Feel Hamburg" mit dem Teehändler Jochen Spethmann</title>
+    <link>https://www.ndr.de/903/podcasts/podcast-feel-hamburg-mit-dem-teehaendler-jochen-spethmann,podcastfeelhamburg-116.html</link>
+    <description>Unternehmer Jochen Spethmann über Tee, Tugend und den hanseatischen Handschlag - ein ehrbarer Kaufmann mit Haltung.</description>
+    <pubDate>Tue, 04 Nov 2025 09:47:34 +0100</pubDate>
+    <guid>55ff12e8-2743-4b1d-a4b4-593bafba685b</guid>
+    <dc:date>2025-11-04T08:47:34Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/903/podcasts/podcast-feel-hamburg-mit-dem-teehaendler-jochen-spethmann,podcastfeelhamburg-116.html"><img src="https://images.ndr.de/image/5b855f88-f64b-4aac-a0d3-29e3a57aadc1/AAABmgrJCDc/AAABmgWmh8Q/16x9-big/spethmann-100.jpg?width=1920" alt="Der Unternehmer Jochen Spethann und Host Daniel Kaiser stehen nebeneinander. | NDR" /></a> <br/> <br/>Unternehmer Jochen Spethmann über Tee, Tugend und den hanseatischen Handschlag - ein ehrbarer Kaufmann mit Haltung.[<a href="https://www.ndr.de/903/podcasts/podcast-feel-hamburg-mit-dem-teehaendler-jochen-spethmann,podcastfeelhamburg-116.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>podcastfeelhamburg-116</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/903/podcasts/podcastfeelhamburg-116~rss2.xml"/>
+  </item>
+  <item rdf:about="7f15b024-8e46-44f6-a3d3-504acc997de3">
+    <title>"True Crime Hamburg": Der Polizei-Podcast in der ARD Audiothek</title>
+    <link>https://www.ardaudiothek.de/sendung/true-crime-hamburg-der-polizei-podcast/urn:ard:show:3c3311290ecbada3/</link>
+    <description>Hamburgs Polizeipräsident a.D. Ralf Martin Meyer und Schauspieler und Ehrenkommissar Marek Erhardt erklären im Podcast "True Crime Hamburg" die Arbeit der Polizei.</description>
+    <pubDate>Tue, 30 Sep 2025 11:25:55 +0200</pubDate>
+    <guid>7f15b024-8e46-44f6-a3d3-504acc997de3</guid>
+    <dc:date>2025-09-30T09:25:55Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ardaudiothek.de/sendung/true-crime-hamburg-der-polizei-podcast/urn:ard:show:3c3311290ecbada3/"><img src="https://images.ndr.de/image/6ef0d9d8-0efd-426a-aa76-f0b4bba35f92/AAABmUkaIz8/AAABmgWmh8Q/16x9-big/audiothek-sendereihe-5117-100.jpg?width=1920" alt="Zwei Männer stehen nebeneinander vor unscharfem nächtlichem Stadthintergrund mit Polizeiauto. | NDR | Christian Spielmann" /></a> <br/> <br/>Hamburgs Polizeipräsident a.D. Ralf Martin Meyer und Schauspieler und Ehrenkommissar Marek Erhardt erklären im Podcast "True Crime Hamburg" die Arbeit der Polizei. [<a href="https://www.ardaudiothek.de/sendung/true-crime-hamburg-der-polizei-podcast/urn:ard:show:3c3311290ecbada3/">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>podcasttruecrime-102</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/geschichte/podcasttruecrime-102~rss2.xml"/>
+  </item>
+  <item rdf:about="87229629-c9ea-4739-b36f-c140c86baeaf">
+    <title>Podcast: "Gerichtssaal 237. True Crime aus dem Strafgericht"</title>
+    <link>https://www.ndr.de/podcast/Podcast-Gerichtssaal-237-True-Crime-aus-dem-Strafgericht,gerichtssaalzweidreisieben104.html</link>
+    <description>Alle Informationen und Hintergründe zu den Fällen aus den Folgen des NDR Podcasts mit Elke Spanner und Anna Rüter.</description>
+    <pubDate>Wed, 24 Sep 2025 08:30:00 +0200</pubDate>
+    <guid>87229629-c9ea-4739-b36f-c140c86baeaf</guid>
+    <dc:date>2025-09-24T06:30:00Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/podcast/Podcast-Gerichtssaal-237-True-Crime-aus-dem-Strafgericht,gerichtssaalzweidreisieben104.html"><img src="https://images.ndr.de/image/86b1a04f-2c43-4e1a-b4e3-34c3a0b738e9/AAABkWzREgs/AAABmgWmh8Q/16x9-big/gerichtssaalzweidreisieben100.jpg?width=1920" alt="Elke Spanner lehnt an einen Tisch vor dem Richterpult. Anna Rüter sitzt im Schneidersitz auf dem Tisch. Beide schauen in die Kamera. | NDR, Arman Ahmadi" /></a> <br/> <br/>Alle Informationen und Hintergründe zu den Fällen aus den Folgen des NDR Podcasts mit Elke Spanner und Anna Rüter.[<a href="https://www.ndr.de/podcast/Podcast-Gerichtssaal-237-True-Crime-aus-dem-Strafgericht,gerichtssaalzweidreisieben104.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>gerichtssaalzweidreisieben104</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/podcast/gerichtssaalzweidreisieben104~rss2.xml"/>
+  </item>
+  <item rdf:about="19a9ddd3-df05-46bc-9f15-2840e32135e4">
+    <title>Das bietet die NDR Hamburg App</title>
+    <link>https://www.ndr.de/nachrichten/hamburg/Das-bietet-die-NDR-Hamburg-App,hhapplandingpage100.html</link>
+    <description>Nachrichten, Radio und Fernsehen - das bietet die NDR Hamburg App von NDR 90,3 und dem Hamburg Journal.</description>
+    <pubDate>Thu, 05 Jun 2025 09:58:00 +0200</pubDate>
+    <guid>19a9ddd3-df05-46bc-9f15-2840e32135e4</guid>
+    <dc:date>2025-06-05T07:58:00Z</dc:date>
+    <content:encoded><![CDATA[<p> <a href="https://www.ndr.de/nachrichten/hamburg/Das-bietet-die-NDR-Hamburg-App,hhapplandingpage100.html"><img src="https://images.ndr.de/image/8cdeefba-500d-45a5-a5f4-814da45661f1/AAABkW1SQ2g/AAABmgWmh8Q/16x9-big/ndrhhapp116.jpg?width=1920" alt="Ein Smartphone mit der NDR Hamburg App | Unsplash / abillion" /></a> <br/> <br/>Nachrichten, Radio und Fernsehen - das bietet die NDR Hamburg App von NDR 90,3 und dem Hamburg Journal.[<a href="https://www.ndr.de/nachrichten/hamburg/Das-bietet-die-NDR-Hamburg-App,hhapplandingpage100.html">mehr</a>]</p>]]></content:encoded>
+    <dc:format>text/xml</dc:format>
+    <dc:rights>Copyright 2025 ndr.de</dc:rights>
+    <dc:language>de</dc:language>
+    <dc:publisher>ndr.de</dc:publisher>
+    <dc:identifier>hhapplandingpage100</dc:identifier>
+    <dc:subjects></dc:subjects>
+    <dcterms:audience>all</dcterms:audience>
+    <dcterms:isFormatOf rdf:resource="https://www.ndr.de/nachrichten/hamburg/hhapplandingpage100~rss2.xml"/>
+  </item>
+</rdf:RDF>

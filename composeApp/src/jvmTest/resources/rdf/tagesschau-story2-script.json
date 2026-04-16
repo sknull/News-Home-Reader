@@ -1,0 +1,40 @@
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Nordhausen: LKA verhaftet 65\u2011jährigen Iraker wegen IS\u2011Verdachts",
+  "description": "In Nordhausen ist ein mutmaßliches früheres Mitglied der Terrorgruppe \"Islamischer Staat\" (IS) festgenommen worden. Der 65 Jahre alte Iraker sitzt in Untersuchungshaft.",
+  "datePublished": "2025-12-11T14:56:34+01:00",
+  "dateModified": "2025-12-11T14:56:34+01:00",
+  "mainEntityOfPage": "https://www.mdr.de/nachrichten/thueringen/nord-thueringen/nordhausen/is-festnahme-terror-verdacht-100.html",
+  "publisher": {
+    "@type": "Organization",
+    "name": "MDR",
+    "alternateName": "Mitteldeutscher Rundfunk",
+    "url": "https://www.mdr.de/",
+    "sameAs": [
+      "https://www.facebook.com/mdr/",
+      "https://twitter.com/mdrde",
+      "https://www.youtube.com/c/mdr",
+      "https://de.wikipedia.org/wiki/Mitteldeutscher_Rundfunk"
+    ],
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/resources/global/img/base/mdr_logo_amp.png",
+      "height": 60,
+      "width": 162
+    }
+  },
+  "isAccessibleForFree": true,
+  "image": {
+    "@type": "ImageObject",
+    "url": [
+      "https://www.mdr.de/investigativ/rueckblick/exakt/flagge-islamischer-staat-100_v-variantBig16x9_w-1280_zc-b903ef86.jpg?version=18307",
+      "https://www.mdr.de/investigativ/rueckblick/exakt/flagge-islamischer-staat-100_v-variantBig1x1_w-1280_zc-3061602c.jpg?version=18307"
+    ]
+  },
+  "author": {
+    "@type": "Person",
+    "name": "MDR THÜRINGEN",
+    "url": "https://www.mdr.de/nachrichten/thueringen/thueringen-nachrichtenfeed-100.html"
+  }
+}

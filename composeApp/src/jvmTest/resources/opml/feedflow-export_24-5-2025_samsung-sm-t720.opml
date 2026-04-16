@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<opml version="1.0">
+  <head>
+    <title>Subscriptions from FeedFlow</title>
+  </head>
+  <body>
+    <outline text="IT" title="IT">
+      <outline type="rss" text="heise online News" title="heise online News" xmlUrl="https://www.heise.de/rss/heise-atom.xml" />
+      <outline type="rss" text="t3n.de - News" title="t3n.de - News" xmlUrl="https://t3n.de/rss.xml" />
+    </outline>
+    <outline text="News" title="News">
+      <outline type="rss" text="n-tv.de - Startseite" title="n-tv.de - Startseite" xmlUrl="https://www.n-tv.de/rss" />
+      <outline type="rss" text="tagesschau.de - Die Nachrichten der ARD" title="tagesschau.de - Die Nachrichten der ARD" xmlUrl="https://www.tagesschau.de/xml/rss2" />
+    </outline>
+    <outline text="Lokales" title="Lokales">
+      <outline type="rss" text="Nachrichten aus Hamburg" title="Nachrichten aus Hamburg" xmlUrl="https://www.ndr.de/nachrichten/hamburg/index-rss.xml" />
+      <outline type="rss" text="Ruhrgebiet - WDR.de" title="Ruhrgebiet - WDR.de" xmlUrl="https://www1.wdr.de/nachrichten/ruhrgebiet/uebersicht-ruhrgebiet-100.feed" />
+    </outline>
+  </body>
+</opml>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.1" xmlns:feeder="https://nononsenseapps.com/feeder">
+  <head>
+    <title>
+      Feeder
+    </title>
+  </head>
+  <body>
+    <outline title="IT" text="IT">
+      <outline feeder:notify="false" feeder:imageUrl="https://www.heise.de/icons/ho/touch-icons/apple-touch-icon-180x180.png" feeder:fullTextByDefault="false" feeder:openArticlesWith="" feeder:alternateId="false" title="heise online News" text="heise online News" type="rss" xmlUrl="https://www.heise.de/rss/heise-atom.xml"/>
+      <outline feeder:notify="false" feeder:imageUrl="https://cdn.t3n.de/global/images/icons/t3n-rss-feed-600x600.png?class=default" feeder:fullTextByDefault="false" feeder:openArticlesWith="" feeder:alternateId="false" title="t3n.de - News" text="t3n.de - News" type="rss" xmlUrl="https://t3n.de/rss.xml"/>
+    </outline>
+    <outline title="Lokales" text="Lokales">
+      <outline feeder:notify="false" feeder:imageUrl="https://www.ndr.de/apple-touch-icon-57x57.png" feeder:fullTextByDefault="false" feeder:openArticlesWith="" feeder:alternateId="false" title="Nachrichten aus Hamburg" text="Nachrichten aus Hamburg" type="rss" xmlUrl="https://www.ndr.de/nachrichten/hamburg/index~rdf.xml"/>
+      <outline feeder:notify="false" feeder:imageUrl="https://www1.wdr.de/resources-v5.163.2/img/favicon/apple-touch-icon.png" feeder:fullTextByDefault="false" feeder:openArticlesWith="" feeder:alternateId="false" title="Ruhrgebiet - WDR.de" text="Ruhrgebiet - WDR.de" type="rss" xmlUrl="https://www1.wdr.de/nachrichten/ruhrgebiet/uebersicht-ruhrgebiet-100.feed"/>
+    </outline>
+    <outline title="News" text="News">
+      <outline feeder:notify="false" feeder:imageUrl="https://www.n-tv.de/stat/rss/head_logo.png" feeder:fullTextByDefault="false" feeder:openArticlesWith="" feeder:alternateId="false" title="n-tv.de - Startseite" text="n-tv.de - Startseite" type="rss" xmlUrl="https://www.n-tv.de/rss"/>
+      <outline feeder:notify="false" feeder:imageUrl="https://www.tagesschau.de/resources/assets/image/favicon/apple-icon-57x57.png" feeder:fullTextByDefault="false" feeder:openArticlesWith="" feeder:alternateId="false" title="tagesschau.de - Die Nachrichten der ARD" text="tagesschau.de - Die Nachrichten der ARD" type="rss" xmlUrl="https://www.tagesschau.de/infoservices/alle-meldungen-100~rss2.xml"/>
+    </outline>
+    <feeder:settings>
+      <feeder:setting key="pref_max_lines" value="10"/>
+      <feeder:setting key="prefs_filter_recently_read" value="true"/>
+      <feeder:setting key="pref_open_adjacent" value="false"/>
+      <feeder:setting key="pref_sync_on_resume" value="true"/>
+      <feeder:setting key="pref_feed_item_style" value="CARD"/>
+      <feeder:setting key="pref_added_feeder_news" value="true"/>
+      <feeder:setting key="prefs_filter_read" value="false"/>
+      <feeder:blocked pattern="heise+"/>
+      <feeder:blocked pattern="heise-angebot"/>
+    </feeder:settings>
+  </body>
+</opml>

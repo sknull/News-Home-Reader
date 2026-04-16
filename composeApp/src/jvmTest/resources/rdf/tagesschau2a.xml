@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>tagesschau.de - Die Nachrichten der ARD</title>
+        <link>https://www.tagesschau.de/infoservices/alle-meldungen-100.html</link>
+        <description>Die aktuellen Beiträge der Seite https://www.tagesschau.de/infoservices/alle-meldungen-100.html</description>
+        <language>de</language>
+        <copyright>ARD-aktuell / tagesschau.de</copyright>
+        <lastBuildDate>Thu, 11 Dec 2025 16:53:41 +0100</lastBuildDate>
+        <pubDate>Thu, 11 Dec 2025 16:53:41 +0100</pubDate>
+        <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+        <ttl>90</ttl>
+        <dc:publisher>tagesschau.de</dc:publisher>
+        <dc:language>de</dc:language>
+        <dc:rights>ARD-aktuell / tagesschau.de</dc:rights>
+        <dc:date>2023-04-14T07:19:20Z</dc:date>
+        <dc:source>tagesschau.de</dc:source>
+        <item>
+            <title>Mutmaßliches früheres IS-Mitglied in Nordhausen verhaftet</title>
+            <link>https://www.tagesschau.de/inland/regional/thueringen/is-festnahme-nordhausen-100.html</link>
+            <description>In Nordhausen ist ein mutmaßliches früheres Mitglied der IS-Terrormiliz festgenommen worden. Die Generalstaatsanwaltschaft Thüringen beschuldigt den 65‑jährigen Iraker, für die IS-Propaganda gearbeitet und als Kämpfer agiert zu haben.</description>
+            <pubDate>Thu, 11 Dec 2025 14:30:07 +0100</pubDate>
+            <guid>c8eb6f1a-99bd-4e81-b7e9-d8c7febb47ba</guid>
+            <dc:date>2025-12-11T13:30:07Z</dc:date>
+            <content:encoded><![CDATA[<p> <a href="https://www.tagesschau.de/inland/regional/thueringen/is-festnahme-nordhausen-100.html"><img src="https://images.tagesschau.de/image/6a20764a-45d6-498a-9cd9-bac730c15dd8/AAABldorGrk/AAABmt42H9g/16x9-big/flatterband-polizeiabsperrung-100.jpg?width=1920" alt="Die Polizei hat einen Einsatzort mit Flatterband abgesperrt. | dpa" /></a> <br/> <br/>In Nordhausen ist ein mutmaßliches früheres Mitglied der IS-Terrormiliz festgenommen worden. Die Generalstaatsanwaltschaft Thüringen beschuldigt den 65‑jährigen Iraker, für die IS-Propaganda gearbeitet und als Kämpfer agiert zu haben.[<a href="https://www.tagesschau.de/inland/regional/thueringen/is-festnahme-nordhausen-100.html">mehr</a>]</p>]]></content:encoded>
+        </item>
+    </channel>
+</rss>

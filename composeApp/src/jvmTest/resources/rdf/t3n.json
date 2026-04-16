@@ -1,0 +1,152 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "OpinionNewsArticle",
+      "@id": "https://t3n.de/news/renten-rechenzentren-zukunft-regierung-1716889/#article",
+      "isPartOf": {
+        "@id": "https://t3n.de/news/renten-rechenzentren-zukunft-regierung-1716889/"
+      },
+      "author": {
+        "name": "Ingmar Höhmann",
+        "@id": "https://t3n.de/redaktion/ingmar-hoehmann#person"
+      },
+      "headline": "Renten statt Rechenzentren – wie die Regierung unsere digitale Zukunft verspielt",
+      "datePublished": "2025-11-14T12:30:07+00:00",
+      "mainEntityOfPage": {
+        "@id": "https://t3n.de/news/renten-rechenzentren-zukunft-regierung-1716889/"
+      },
+      "wordCount": 887,
+      "commentCount": 0,
+      "publisher": {
+        "@id": "https://t3n.de/news/#organization"
+      },
+      "image": {
+        "@id": "https://cdn.t3n.de/news/wp-content/uploads/2025/11/558312290.jpg?class=structuredData-large"
+      },
+      "thumbnailUrl": "https://cdn.t3n.de/news/wp-content/uploads/2025/11/558312290.jpg?class=structuredData-large",
+      "articleSection": "Startups & Economy",
+      "inLanguage": "de",
+      "potentialAction": [
+        {
+          "@type": "CommentAction",
+          "name": "Comment",
+          "target": [
+            "https://t3n.de/news/renten-rechenzentren-zukunft-regierung-1716889/#respond"
+          ]
+        }
+      ],
+      "copyrightYear": "2025",
+      "copyrightHolder": {
+        "@id": "https://t3n.de/news/#organization"
+      },
+      "articleBody": "Während andere Staaten ihr Geld in KI, Quantencomputing und grüne Technologien investieren, steckt Deutschland Hunderte Milliarden in die Rente. Der neue Haushalt zeigt: Die Bundesregierung fördert nicht die Zukunft, sondern den Besitzstand – ein gefährliches Signal für den Standort Deutschland.\r\n\r\n\r\n\r\nMit dem jetzt vorgestellten Haushalt verabschiedet sich die Bundesregierung vom Anspruch, Deutschland fit für die Zukunft zu machen. Statt Geld in digitale Technologien zu lenken, fließt es vor allem in die Renten. Nach einer Analyse der Prognos AG im Auftrag der Initiative Neue Soziale Marktwirtschaft (INSM) werden die Rentenpläne den Bundeshaushalt bis 2050 mit fast 480 Milliarden Euro belasten. Schon jetzt kommt mehr als jeder fünfte Euro des Haushalts der gesetzlichen Rentenversicherung zugute. Arbeitgeberpräsident Rainer Dulger nennt das Rentenpaket II gar das „teuerste Sozialgesetz des Jahrhunderts“.\r\n\r\nDulger und die INSM sind Wirtschaftslobbyisten – es gehört also zu ihrem Job, Sozialausgaben kritisch zu sehen. Trotzdem haben sie in diesem Punkt recht. Die Regierung steckt viel Geld in die Rente statt in Zukunftsprojekte. Das Thema Altersarmut ist zwar wichtig, aber wenn so große Summen in die Rente fließen, bleibt für andere wichtige Bereiche kaum Geld. Während andere Länder in Digitalisierung investieren, kümmert sich Deutschland vor allem um den demografischen Wandel – und das geht zulasten der jungen Generation und der Wettbewerbsfähigkeit.\r\nDie USA investieren 500 Milliarden in KI, Deutschland in die Rente\r\nDabei wäre der Handlungsbedarf enorm. In Bereichen wie Künstliche Intelligenz, Quantencomputing und erneuerbare Energien entwickelt sich die Welt in rasantem Tempo weiter. Unternehmen wie Nvidia und SpaceX sind heute auch dank staatlicher Unterstützung zu globalen Innovationsführern aufgestiegen. Schon unter US-Präsident Joe Biden stand die Technologieförderung im Fokus. \r\n\r\nÜber den CHIPS and Science Act und den Inflation Reduction Act wurden hunderte Milliarden Dollar in Halbleiterfertigung, neue Technologien und KI-Forschung investiert. Donald Trump legte nach: Während die deutsche Regierung 500 Milliarden in die Rente steckt, verkündete der US-Präsident gleich zu Beginn seiner Amtszeit ein 500-Milliarden-Dollar-Investitionspaket für die amerikanische KI-Infrastruktur.\r\n\r\n[crosslinks]\r\n\r\nChina setzt ähnliche Prioritäten: In Technologiebereichen wie Elektromobilität und Künstliche Intelligenz gehören chinesische Firmen inzwischen dank üppiger staatlicher Förderung zur Weltspitze. Und nicht nur da: Allein 2024 flossen rund 290 Milliarden US-Dollar in grüne Technologien. Dank der vorausschauenden Industriepolitik hat es das Land geschafft, sich von der US-Techbranche unabhängig zu machen. Deutschland und Europa werden hingegen immer abhängiger - mit der Folge, dass die digitale Wertschöpfung hierzulande meist an US-Firmen geht.\r\n\r\nAnfangs hatte die Digitalwirtschaft sich von der deutschen Regierung Unterstützung erhofft. Die wird jetzt enttäuscht: Das neue Digitalministerium von Karsten Wildberger bekommt einen Etat von gerade einmal 1,36 Milliarden Euro. Dabei handelt es sich zum großen Teil jedoch nicht um zusätzliches Geld, sondern um Umschichtungen – andere Ressorts geben ihre Digitalprojekte ab. Zudem muss das Ministerium eigene Strukturen aufbauen, was heißt: Das Geld fließt in die Verwaltung.\r\nNötig wären Investitionen in die digitale Infrastruktur\r\nEs kommt noch schlimmer: Statt neue Förderprogramme für Zukunftstechnologien aufzulegen, könnte die Regierung bestehende Programme sogar streichen. Weil sich in den nächsten Jahren zig Milliarden an Haushaltslöchern auftun, wollen die Koalitionsparteien rund um den Jahreswechsel weitere Kürzungen vorschlagen. Dabei wäre gerade das digitale Fundament – von einer wettbewerbsfähigen Infrastruktur über Glasfasernetze, Cloud- und Rechenzentren hin zu echter Start-up-Förderung – entscheidend, um Standorte und Unternehmen zukunftsfähig zu machen.\r\n\r\nAuch die 500 Milliarden Euro aus dem Sondervermögen für Transformation und Klimaschutz werden zum überwiegenden Teil zweckentfremdet, um Haushaltslöcher zu stopfen. Laut des aktuellen Jahresgutachtens der Wirtschaftsweisen werden bis 2030 weniger als die Hälfte der Ausgaben tatsächlich in zusätzliche Investitionen für Infrastruktur und Klimaneutralität fließen. Das Wirtschaftswachstum werde dadurch nur gering steigen. Gleichzeitig erhöhe die Regierung die Investitionsquote im Kernhaushalt \"künstlich\", sagt das Gremiumsmitglied Martin Werding - sie fasse den Investitionsbegriff \"zu weit\".\r\nStartups wandern ab oder werden übernommen\r\nTaschenspielertricks statt echte Investitionen. Das Ergebnis dieser Politik zeigt sich überall: Ganze Branchen verlieren derzeit den Anschluss an die Weltspitze, etwa die Automobilindustrie. Startups wandern ab, weil sie im Ausland bessere Finanzierungs- und Standortbedingungen finden. Oder sie werden übernommen, wie jüngst das Düsseldorfer Unternehmen Cognigy, das agentische KI entwickelt, durch die US-Firma Nice.\r\n\r\nDie Präsidentin der Rentenversicherung ist im Übrigen sehr zufrieden mit der Bundesregierung. \"Aktuell ist die Rentenversicherung finanziell sehr gut aufgestellt\", sagte Gundula Roßbach der \"BamS\". Während die Regierung also die Bilanz von Frau Roßbach aufhübscht, sieht es für die digitale und wirtschaftliche Bilanz Deutschlands düster aus.\r\n\r\nWer in einer Zeit globaler Umbrüche auf Kosten der Innovationskraft spart, riskiert nicht nur, technologisch und ökonomisch abgehängt zu werden. Wenn Unternehmen abwandern und junge Menschen keine Arbeitsplätze mehr finden, sinken nämlich letztlich auch die Steuereinnahmen und Beiträge zu den Sozialversicherungen. Deutschland braucht kein Rentenpaket II – es braucht ein Digitalpaket I. Sonst ist es nicht nur die Altersvorsorge, die unbezahlbar wird, sondern die Zukunft selbst.\r\n\r\nWie kann Europa seine digitale Souveränität zurückgewinnen? t3n-Chefredakteur Marcel Romahn spricht dazu mit Jan Philipp Albrecht, dem Architekten der DSGVO, auf dem t3n Virtual Summit am 5. Dezember. Hier könnt ihr euch kostenlos anmelden.",
+      "isAccessibleForFree": true,
+      "about": [
+        {
+          "@type": "Thing",
+          "@id": "https://t3n.de/tag/quantencomputer/",
+          "name": "Quantencomputer"
+        }
+      ],
+      "description": "Während andere Staaten ihr Geld in KI, Quantencomputing und grüne Technologien investieren, steckt Deutschland Hunderte Milliarden in die Rente. Der neue Haushalt zeigt: Die Bundesregierung fördert nicht die Zukunft, sondern den Besitzstand – ein gefährliches Signal für den Standort Deutschland.",
+      "timeRequired": "PT4M"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://t3n.de/news/renten-rechenzentren-zukunft-regierung-1716889/",
+      "url": "https://t3n.de/news/renten-rechenzentren-zukunft-regierung-1716889/",
+      "name": "Renten statt Rechenzentren – wie die Regierung unsere digitale Zukunft verspielt | t3n",
+      "isPartOf": {
+        "@id": "https://t3n.de/news/#website"
+      },
+      "primaryImageOfPage": {
+        "@id": "https://cdn.t3n.de/news/wp-content/uploads/2025/11/558312290.jpg?class=structuredData-large"
+      },
+      "image": {
+        "@id": "https://cdn.t3n.de/news/wp-content/uploads/2025/11/558312290.jpg?class=structuredData-large"
+      },
+      "thumbnailUrl": "https://cdn.t3n.de/news/wp-content/uploads/2025/11/558312290.jpg?class=structuredData-large",
+      "datePublished": "2025-11-14T12:30:07+00:00",
+      "inLanguage": "de",
+      "potentialAction": [
+        {
+          "@type": "ReadAction",
+          "target": [
+            "https://t3n.de/news/renten-rechenzentren-zukunft-regierung-1716889/"
+          ]
+        }
+      ],
+      "relatedLink": [
+        "https://t3n.de/news/renten-rechenzentren-zukunft-regierung-1716889/"
+      ]
+    },
+    {
+      "@type": "ImageObject",
+      "inLanguage": "de",
+      "@id": "https://cdn.t3n.de/news/wp-content/uploads/2025/11/558312290.jpg?class=structuredData-large",
+      "url": "https://cdn.t3n.de/news/wp-content/uploads/2025/11/558312290.jpg?class=structuredData-large",
+      "contentUrl": "https://cdn.t3n.de/news/wp-content/uploads/2025/11/558312290.jpg?class=structuredData-large",
+      "width": 1200,
+      "caption": "Taschenspielertricks statt Investitionen: Der Sitzungsraum des Haushaltsausschusses zum Bundeshaushalt 2026 von außen. (picture alliance/dpa | Elisa Schu)"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://t3n.de/news/#website",
+      "url": "https://t3n.de/news/",
+      "name": "t3n",
+      "description": "",
+      "publisher": {
+        "@id": "https://t3n.de/news/#organization"
+      },
+      "potentialAction": [
+        {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://t3n.de/news/?s={search_term_string}"
+          },
+          "query-input": {
+            "@type": "PropertyValueSpecification",
+            "valueRequired": true,
+            "valueName": "search_term_string"
+          }
+        }
+      ],
+      "inLanguage": "de"
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://t3n.de/news/#organization",
+      "name": "t3n Magazin",
+      "url": "https://t3n.de/",
+      "logo": {
+        "@type": "ImageObject",
+        "inLanguage": "de",
+        "@id": "https://t3n.de/news/#/schema/logo/image/",
+        "url": "https://assets.t3n.de/t3n-de/assets/t3n/2018/images/t3n-og-1200x630.png",
+        "contentUrl": "https://assets.t3n.de/t3n-de/assets/t3n/2018/images/t3n-og-1200x630.png",
+        "width": 1000,
+        "height": 1000,
+        "caption": "t3n"
+      },
+      "image": {
+        "@id": "https://t3n.de/news/#/schema/logo/image/"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://t3n.de/redaktion/ingmar-hoehmann#person",
+      "name": "Ingmar Höhmann",
+      "image": {
+        "@type": "ImageObject",
+        "inLanguage": "de",
+        "@id": "https://t3n.de/news/#/schema/person/image/",
+        "url": "https://cdn.t3n.de/strapi/Ingmar_3f1d6fb680/Ingmar_3f1d6fb680.png?class=avatar-large",
+        "contentUrl": "https://cdn.t3n.de/strapi/Ingmar_3f1d6fb680/Ingmar_3f1d6fb680.png?class=avatar-large",
+        "caption": "Ingmar Höhmann"
+      },
+      "jobTitle": "Chef vom Dienst t3n Magazin und Online"
+    }
+  ]
+}

@@ -1,0 +1,3539 @@
+{
+  "name": "Yodas Home",
+  "groups": [
+    {
+      "label": "All",
+      "scenes": []
+    },
+    {
+      "label": "All",
+      "scenes": [
+        {
+          "label": "Red",
+          "colors": [
+            "#ff0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Red"
+        },
+        {
+          "label": "Dark Red",
+          "colors": [
+            "#4d0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Dark Red"
+        },
+        {
+          "label": "Green",
+          "colors": [
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Green"
+        },
+        {
+          "label": "Dark Green",
+          "colors": [
+            "#004d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Dark Green"
+        },
+        {
+          "label": "Blue",
+          "colors": [
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Blue"
+        },
+        {
+          "label": "Dark Blue",
+          "colors": [
+            "#00004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Dark Blue"
+        },
+        {
+          "label": "Yellow",
+          "colors": [
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Yellow"
+        },
+        {
+          "label": "Dark Yellow",
+          "colors": [
+            "#4d4d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Dark Yellow"
+        },
+        {
+          "label": "Cyan",
+          "colors": [
+            "#00ffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Cyan"
+        },
+        {
+          "label": "Dark Cyan",
+          "colors": [
+            "#004d4d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Dark Cyan"
+        },
+        {
+          "label": "Magenta",
+          "colors": [
+            "#ff00ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Magenta"
+        },
+        {
+          "label": "Dark Magenta",
+          "colors": [
+            "#4d004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Dark Magenta"
+        },
+        {
+          "label": "Orange",
+          "colors": [
+            "#ff8000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Orange"
+        },
+        {
+          "label": "Dark Orange",
+          "colors": [
+            "#4d2600"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Dark Orange"
+        },
+        {
+          "label": "Purple",
+          "colors": [
+            "#8000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Purple"
+        },
+        {
+          "label": "Dark Purple",
+          "colors": [
+            "#26004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Dark Purple"
+        },
+        {
+          "label": "Teal",
+          "colors": [
+            "#2388ad"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Teal"
+        },
+        {
+          "label": "Dark Teal",
+          "colors": [
+            "#0b2934"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Dark Teal"
+        },
+        {
+          "label": "White",
+          "colors": [
+            "#ffffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=White"
+        },
+        {
+          "label": "Warm White",
+          "colors": [
+            "#b8ab37"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Warm White"
+        },
+        {
+          "label": "Cold White",
+          "colors": [
+            "#aaccff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Cold White"
+        },
+        {
+          "label": "Black",
+          "colors": [
+            "#000000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=All&scene=Black"
+        }
+      ]
+    },
+    {
+      "label": "Duotone",
+      "scenes": [
+        {
+          "label": "Red Blue",
+          "colors": [
+            "#0000ff",
+            "#0000ff",
+            "#ff0000",
+            "#ff0000",
+            "#ff0000",
+            "#ff0000",
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Red Blue"
+        },
+        {
+          "label": "Dark Red Blue",
+          "colors": [
+            "#00004d",
+            "#00004d",
+            "#4d0000",
+            "#4d0000",
+            "#4d0000",
+            "#4d0000",
+            "#00004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Red Blue"
+        },
+        {
+          "label": "Blue Red",
+          "colors": [
+            "#ff0000",
+            "#ff0000",
+            "#0000ff",
+            "#0000ff",
+            "#0000ff",
+            "#0000ff",
+            "#ff0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Blue Red"
+        },
+        {
+          "label": "Dark Blue Red",
+          "colors": [
+            "#4d0000",
+            "#4d0000",
+            "#00004d",
+            "#00004d",
+            "#00004d",
+            "#00004d",
+            "#4d0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Blue Red"
+        },
+        {
+          "label": "Green Red",
+          "colors": [
+            "#ff0000",
+            "#ff0000",
+            "#00ff00",
+            "#00ff00",
+            "#00ff00",
+            "#00ff00",
+            "#ff0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Green Red"
+        },
+        {
+          "label": "Dark Green Red",
+          "colors": [
+            "#4d0000",
+            "#4d0000",
+            "#004d00",
+            "#004d00",
+            "#004d00",
+            "#004d00",
+            "#4d0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Green Red"
+        },
+        {
+          "label": "Red Green",
+          "colors": [
+            "#00ff00",
+            "#00ff00",
+            "#ff0000",
+            "#ff0000",
+            "#ff0000",
+            "#ff0000",
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Red Green"
+        },
+        {
+          "label": "Dark Red Green",
+          "colors": [
+            "#004d00",
+            "#004d00",
+            "#4d0000",
+            "#4d0000",
+            "#4d0000",
+            "#4d0000",
+            "#004d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Red Green"
+        },
+        {
+          "label": "Green Blue",
+          "colors": [
+            "#0000ff",
+            "#0000ff",
+            "#00ff00",
+            "#00ff00",
+            "#00ff00",
+            "#00ff00",
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Green Blue"
+        },
+        {
+          "label": "Dark Green Blue",
+          "colors": [
+            "#00004d",
+            "#00004d",
+            "#004d00",
+            "#004d00",
+            "#004d00",
+            "#004d00",
+            "#00004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Green Blue"
+        },
+        {
+          "label": "Blue Green",
+          "colors": [
+            "#00ff00",
+            "#00ff00",
+            "#0000ff",
+            "#0000ff",
+            "#0000ff",
+            "#0000ff",
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Blue Green"
+        },
+        {
+          "label": "Dark Blue Green",
+          "colors": [
+            "#004d00",
+            "#004d00",
+            "#00004d",
+            "#00004d",
+            "#00004d",
+            "#00004d",
+            "#004d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Blue Green"
+        },
+        {
+          "label": "Blue Cyan",
+          "colors": [
+            "#00ffff",
+            "#00ffff",
+            "#0000ff",
+            "#0000ff",
+            "#0000ff",
+            "#0000ff",
+            "#00ffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Blue Cyan"
+        },
+        {
+          "label": "Dark Blue Cyan",
+          "colors": [
+            "#004d4d",
+            "#004d4d",
+            "#00004d",
+            "#00004d",
+            "#00004d",
+            "#00004d",
+            "#004d4d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Blue Cyan"
+        },
+        {
+          "label": "Green Magenta",
+          "colors": [
+            "#ff00ff",
+            "#ff00ff",
+            "#00ff00",
+            "#00ff00",
+            "#00ff00",
+            "#00ff00",
+            "#ff00ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Green Magenta"
+        },
+        {
+          "label": "Dark Green Magenta",
+          "colors": [
+            "#4d004d",
+            "#4d004d",
+            "#004d00",
+            "#004d00",
+            "#004d00",
+            "#004d00",
+            "#4d004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Green Magenta"
+        },
+        {
+          "label": "Magenta Green",
+          "colors": [
+            "#00ff00",
+            "#00ff00",
+            "#ff00ff",
+            "#ff00ff",
+            "#ff00ff",
+            "#ff00ff",
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Magenta Green"
+        },
+        {
+          "label": "Dark Magenta Green",
+          "colors": [
+            "#004d00",
+            "#004d00",
+            "#4d004d",
+            "#4d004d",
+            "#4d004d",
+            "#4d004d",
+            "#004d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Magenta Green"
+        },
+        {
+          "label": "Green Yellow",
+          "colors": [
+            "#ffff00",
+            "#ffff00",
+            "#00ff00",
+            "#00ff00",
+            "#00ff00",
+            "#00ff00",
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Green Yellow"
+        },
+        {
+          "label": "Dark Green Yellow",
+          "colors": [
+            "#4d4d00",
+            "#4d4d00",
+            "#004d00",
+            "#004d00",
+            "#004d00",
+            "#004d00",
+            "#4d4d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Green Yellow"
+        },
+        {
+          "label": "Yellow Green",
+          "colors": [
+            "#00ff00",
+            "#00ff00",
+            "#ffff00",
+            "#ffff00",
+            "#ffff00",
+            "#ffff00",
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Yellow Green"
+        },
+        {
+          "label": "Dark Yellow Green",
+          "colors": [
+            "#004d00",
+            "#004d00",
+            "#4d4d00",
+            "#4d4d00",
+            "#4d4d00",
+            "#4d4d00",
+            "#004d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Yellow Green"
+        },
+        {
+          "label": "Cyan Blue",
+          "colors": [
+            "#0000ff",
+            "#0000ff",
+            "#00ffff",
+            "#00ffff",
+            "#00ffff",
+            "#00ffff",
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Cyan Blue"
+        },
+        {
+          "label": "Dark Cyan Blue",
+          "colors": [
+            "#00004d",
+            "#00004d",
+            "#004d4d",
+            "#004d4d",
+            "#004d4d",
+            "#004d4d",
+            "#00004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Cyan Blue"
+        },
+        {
+          "label": "Orange Teal",
+          "colors": [
+            "#2388ad",
+            "#2388ad",
+            "#ff8000",
+            "#ff8000",
+            "#ff8000",
+            "#ff8000",
+            "#2388ad"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Orange Teal"
+        },
+        {
+          "label": "Dark Orange Teal",
+          "colors": [
+            "#0b2934",
+            "#0b2934",
+            "#4d2600",
+            "#4d2600",
+            "#4d2600",
+            "#4d2600",
+            "#0b2934"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Orange Teal"
+        },
+        {
+          "label": "Teal Orange",
+          "colors": [
+            "#ff8000",
+            "#ff8000",
+            "#2388ad",
+            "#2388ad",
+            "#2388ad",
+            "#2388ad",
+            "#ff8000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Teal Orange"
+        },
+        {
+          "label": "Dark Teal Orange",
+          "colors": [
+            "#4d2600",
+            "#4d2600",
+            "#0b2934",
+            "#0b2934",
+            "#0b2934",
+            "#0b2934",
+            "#4d2600"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Teal Orange"
+        },
+        {
+          "label": "Orange Purple",
+          "colors": [
+            "#8000ff",
+            "#8000ff",
+            "#ff8000",
+            "#ff8000",
+            "#ff8000",
+            "#ff8000",
+            "#8000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Orange Purple"
+        },
+        {
+          "label": "Dark Orange Purple",
+          "colors": [
+            "#26004d",
+            "#26004d",
+            "#4d2600",
+            "#4d2600",
+            "#4d2600",
+            "#4d2600",
+            "#26004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Orange Purple"
+        },
+        {
+          "label": "Purple Orange",
+          "colors": [
+            "#ff8000",
+            "#ff8000",
+            "#8000ff",
+            "#8000ff",
+            "#8000ff",
+            "#8000ff",
+            "#ff8000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Purple Orange"
+        },
+        {
+          "label": "Dark Purple Orange",
+          "colors": [
+            "#4d2600",
+            "#4d2600",
+            "#26004d",
+            "#26004d",
+            "#26004d",
+            "#26004d",
+            "#4d2600"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Purple Orange"
+        },
+        {
+          "label": "Yellow Purple",
+          "colors": [
+            "#8000ff",
+            "#8000ff",
+            "#ffff00",
+            "#ffff00",
+            "#ffff00",
+            "#ffff00",
+            "#8000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Yellow Purple"
+        },
+        {
+          "label": "Dark Yellow Purple",
+          "colors": [
+            "#26004d",
+            "#26004d",
+            "#4d4d00",
+            "#4d4d00",
+            "#4d4d00",
+            "#4d4d00",
+            "#26004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Yellow Purple"
+        },
+        {
+          "label": "Purple Yellow",
+          "colors": [
+            "#ffff00",
+            "#ffff00",
+            "#8000ff",
+            "#8000ff",
+            "#8000ff",
+            "#8000ff",
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Purple Yellow"
+        },
+        {
+          "label": "Dark Purple Yellow",
+          "colors": [
+            "#4d4d00",
+            "#4d4d00",
+            "#26004d",
+            "#26004d",
+            "#26004d",
+            "#26004d",
+            "#4d4d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Purple Yellow"
+        },
+        {
+          "label": "Yellow Magenta",
+          "colors": [
+            "#ff00ff",
+            "#ff00ff",
+            "#ffff00",
+            "#ffff00",
+            "#ffff00",
+            "#ffff00",
+            "#ff00ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Yellow Magenta"
+        },
+        {
+          "label": "Dark Yellow Magenta",
+          "colors": [
+            "#4d004d",
+            "#4d004d",
+            "#4d4d00",
+            "#4d4d00",
+            "#4d4d00",
+            "#4d4d00",
+            "#4d004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Yellow Magenta"
+        },
+        {
+          "label": "Magenta Yellow",
+          "colors": [
+            "#ffff00",
+            "#ffff00",
+            "#ff00ff",
+            "#ff00ff",
+            "#ff00ff",
+            "#ff00ff",
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Magenta Yellow"
+        },
+        {
+          "label": "Dark Magenta Yellow",
+          "colors": [
+            "#4d4d00",
+            "#4d4d00",
+            "#4d004d",
+            "#4d004d",
+            "#4d004d",
+            "#4d004d",
+            "#4d4d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Magenta Yellow"
+        },
+        {
+          "label": "Purple Magenta",
+          "colors": [
+            "#ff00ff",
+            "#ff00ff",
+            "#8000ff",
+            "#8000ff",
+            "#8000ff",
+            "#8000ff",
+            "#ff00ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Purple Magenta"
+        },
+        {
+          "label": "Dark Purple Magenta",
+          "colors": [
+            "#4d004d",
+            "#4d004d",
+            "#26004d",
+            "#26004d",
+            "#26004d",
+            "#26004d",
+            "#4d004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Purple Magenta"
+        },
+        {
+          "label": "Magenta Purple",
+          "colors": [
+            "#8000ff",
+            "#8000ff",
+            "#ff00ff",
+            "#ff00ff",
+            "#ff00ff",
+            "#ff00ff",
+            "#8000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Magenta Purple"
+        },
+        {
+          "label": "Dark Magenta Purple",
+          "colors": [
+            "#26004d",
+            "#26004d",
+            "#4d004d",
+            "#4d004d",
+            "#4d004d",
+            "#4d004d",
+            "#26004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Magenta Purple"
+        },
+        {
+          "label": "White Blue",
+          "colors": [
+            "#0000ff",
+            "#0000ff",
+            "#ffffff",
+            "#ffffff",
+            "#ffffff",
+            "#ffffff",
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=White Blue"
+        },
+        {
+          "label": "Dark White Blue",
+          "colors": [
+            "#00004d",
+            "#00004d",
+            "#4d4d4d",
+            "#4d4d4d",
+            "#4d4d4d",
+            "#4d4d4d",
+            "#00004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark White Blue"
+        },
+        {
+          "label": "Blue White",
+          "colors": [
+            "#ffffff",
+            "#ffffff",
+            "#0000ff",
+            "#0000ff",
+            "#0000ff",
+            "#0000ff",
+            "#ffffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Blue White"
+        },
+        {
+          "label": "Dark Blue White",
+          "colors": [
+            "#4d4d4d",
+            "#4d4d4d",
+            "#00004d",
+            "#00004d",
+            "#00004d",
+            "#00004d",
+            "#4d4d4d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Blue White"
+        },
+        {
+          "label": "Red White",
+          "colors": [
+            "#ffffff",
+            "#ffffff",
+            "#ff0000",
+            "#ff0000",
+            "#ff0000",
+            "#ff0000",
+            "#ffffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Red White"
+        },
+        {
+          "label": "Dark Red White",
+          "colors": [
+            "#4d4d4d",
+            "#4d4d4d",
+            "#4d0000",
+            "#4d0000",
+            "#4d0000",
+            "#4d0000",
+            "#4d4d4d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark Red White"
+        },
+        {
+          "label": "White Red",
+          "colors": [
+            "#ff0000",
+            "#ff0000",
+            "#ffffff",
+            "#ffffff",
+            "#ffffff",
+            "#ffffff",
+            "#ff0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=White Red"
+        },
+        {
+          "label": "Dark White Red",
+          "colors": [
+            "#4d0000",
+            "#4d0000",
+            "#4d4d4d",
+            "#4d4d4d",
+            "#4d4d4d",
+            "#4d4d4d",
+            "#4d0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Duotone&scene=Dark White Red"
+        }
+      ]
+    },
+    {
+      "label": "Odd Even",
+      "scenes": [
+        {
+          "label": "Purple Green",
+          "colors": [
+            "#8000ff",
+            "#00ff00",
+            "#8000ff",
+            "#00ff00",
+            "#8000ff",
+            "#00ff00",
+            "#8000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Purple Green"
+        },
+        {
+          "label": "Dark Purple Green",
+          "colors": [
+            "#26004d",
+            "#004d00",
+            "#26004d",
+            "#004d00",
+            "#26004d",
+            "#004d00",
+            "#26004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Purple Green"
+        },
+        {
+          "label": "Green Purple",
+          "colors": [
+            "#00ff00",
+            "#8000ff",
+            "#00ff00",
+            "#8000ff",
+            "#00ff00",
+            "#8000ff",
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Green Purple"
+        },
+        {
+          "label": "Dark Green Purple",
+          "colors": [
+            "#004d00",
+            "#26004d",
+            "#004d00",
+            "#26004d",
+            "#004d00",
+            "#26004d",
+            "#004d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Green Purple"
+        },
+        {
+          "label": "Blue Green",
+          "colors": [
+            "#0000ff",
+            "#00ff00",
+            "#0000ff",
+            "#00ff00",
+            "#0000ff",
+            "#00ff00",
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Blue Green"
+        },
+        {
+          "label": "Dark Blue Green",
+          "colors": [
+            "#00004d",
+            "#004d00",
+            "#00004d",
+            "#004d00",
+            "#00004d",
+            "#004d00",
+            "#00004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Blue Green"
+        },
+        {
+          "label": "Green Blue",
+          "colors": [
+            "#00ff00",
+            "#0000ff",
+            "#00ff00",
+            "#0000ff",
+            "#00ff00",
+            "#0000ff",
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Green Blue"
+        },
+        {
+          "label": "Dark Green Blue",
+          "colors": [
+            "#004d00",
+            "#00004d",
+            "#004d00",
+            "#00004d",
+            "#004d00",
+            "#00004d",
+            "#004d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Green Blue"
+        },
+        {
+          "label": "Red Green",
+          "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ff0000",
+            "#00ff00",
+            "#ff0000",
+            "#00ff00",
+            "#ff0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Red Green"
+        },
+        {
+          "label": "Dark Red Green",
+          "colors": [
+            "#4d0000",
+            "#004d00",
+            "#4d0000",
+            "#004d00",
+            "#4d0000",
+            "#004d00",
+            "#4d0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Red Green"
+        },
+        {
+          "label": "Green Red",
+          "colors": [
+            "#00ff00",
+            "#ff0000",
+            "#00ff00",
+            "#ff0000",
+            "#00ff00",
+            "#ff0000",
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Green Red"
+        },
+        {
+          "label": "Dark Green Red",
+          "colors": [
+            "#004d00",
+            "#4d0000",
+            "#004d00",
+            "#4d0000",
+            "#004d00",
+            "#4d0000",
+            "#004d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Green Red"
+        },
+        {
+          "label": "Blue Cyan",
+          "colors": [
+            "#0000ff",
+            "#00ffff",
+            "#0000ff",
+            "#00ffff",
+            "#0000ff",
+            "#00ffff",
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Blue Cyan"
+        },
+        {
+          "label": "Dark Blue Cyan",
+          "colors": [
+            "#00004d",
+            "#004d4d",
+            "#00004d",
+            "#004d4d",
+            "#00004d",
+            "#004d4d",
+            "#00004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Blue Cyan"
+        },
+        {
+          "label": "Cyan Blue",
+          "colors": [
+            "#00ffff",
+            "#0000ff",
+            "#00ffff",
+            "#0000ff",
+            "#00ffff",
+            "#0000ff",
+            "#00ffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Cyan Blue"
+        },
+        {
+          "label": "Dark Cyan Blue",
+          "colors": [
+            "#004d4d",
+            "#00004d",
+            "#004d4d",
+            "#00004d",
+            "#004d4d",
+            "#00004d",
+            "#004d4d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Cyan Blue"
+        },
+        {
+          "label": "Blue Yellow",
+          "colors": [
+            "#0000ff",
+            "#ffff00",
+            "#0000ff",
+            "#ffff00",
+            "#0000ff",
+            "#ffff00",
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Blue Yellow"
+        },
+        {
+          "label": "Dark Blue Yellow",
+          "colors": [
+            "#00004d",
+            "#4d4d00",
+            "#00004d",
+            "#4d4d00",
+            "#00004d",
+            "#4d4d00",
+            "#00004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Blue Yellow"
+        },
+        {
+          "label": "Yellow Blue",
+          "colors": [
+            "#ffff00",
+            "#0000ff",
+            "#ffff00",
+            "#0000ff",
+            "#ffff00",
+            "#0000ff",
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Yellow Blue"
+        },
+        {
+          "label": "Dark Yellow Blue",
+          "colors": [
+            "#4d4d00",
+            "#00004d",
+            "#4d4d00",
+            "#00004d",
+            "#4d4d00",
+            "#00004d",
+            "#4d4d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Yellow Blue"
+        },
+        {
+          "label": "Blue White",
+          "colors": [
+            "#0000ff",
+            "#ffffff",
+            "#0000ff",
+            "#ffffff",
+            "#0000ff",
+            "#ffffff",
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Blue White"
+        },
+        {
+          "label": "Dark Blue White",
+          "colors": [
+            "#00004d",
+            "#4d4d4d",
+            "#00004d",
+            "#4d4d4d",
+            "#00004d",
+            "#4d4d4d",
+            "#00004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Blue White"
+        },
+        {
+          "label": "White Blue",
+          "colors": [
+            "#ffffff",
+            "#0000ff",
+            "#ffffff",
+            "#0000ff",
+            "#ffffff",
+            "#0000ff",
+            "#ffffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=White Blue"
+        },
+        {
+          "label": "Dark White Blue",
+          "colors": [
+            "#4d4d4d",
+            "#00004d",
+            "#4d4d4d",
+            "#00004d",
+            "#4d4d4d",
+            "#00004d",
+            "#4d4d4d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark White Blue"
+        },
+        {
+          "label": "Green Yellow",
+          "colors": [
+            "#00ff00",
+            "#ffff00",
+            "#00ff00",
+            "#ffff00",
+            "#00ff00",
+            "#ffff00",
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Green Yellow"
+        },
+        {
+          "label": "Dark Green Yellow",
+          "colors": [
+            "#004d00",
+            "#4d4d00",
+            "#004d00",
+            "#4d4d00",
+            "#004d00",
+            "#4d4d00",
+            "#004d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Green Yellow"
+        },
+        {
+          "label": "Yellow Green",
+          "colors": [
+            "#ffff00",
+            "#00ff00",
+            "#ffff00",
+            "#00ff00",
+            "#ffff00",
+            "#00ff00",
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Yellow Green"
+        },
+        {
+          "label": "Dark Yellow Green",
+          "colors": [
+            "#4d4d00",
+            "#004d00",
+            "#4d4d00",
+            "#004d00",
+            "#4d4d00",
+            "#004d00",
+            "#4d4d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Yellow Green"
+        },
+        {
+          "label": "Purple Yellow",
+          "colors": [
+            "#8000ff",
+            "#ffff00",
+            "#8000ff",
+            "#ffff00",
+            "#8000ff",
+            "#ffff00",
+            "#8000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Purple Yellow"
+        },
+        {
+          "label": "Dark Purple Yellow",
+          "colors": [
+            "#26004d",
+            "#4d4d00",
+            "#26004d",
+            "#4d4d00",
+            "#26004d",
+            "#4d4d00",
+            "#26004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Purple Yellow"
+        },
+        {
+          "label": "Yellow Purple",
+          "colors": [
+            "#ffff00",
+            "#8000ff",
+            "#ffff00",
+            "#8000ff",
+            "#ffff00",
+            "#8000ff",
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Yellow Purple"
+        },
+        {
+          "label": "Dark Yellow Purple",
+          "colors": [
+            "#4d4d00",
+            "#26004d",
+            "#4d4d00",
+            "#26004d",
+            "#4d4d00",
+            "#26004d",
+            "#4d4d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Yellow Purple"
+        },
+        {
+          "label": "Yellow Magenta",
+          "colors": [
+            "#ffff00",
+            "#ff00ff",
+            "#ffff00",
+            "#ff00ff",
+            "#ffff00",
+            "#ff00ff",
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Yellow Magenta"
+        },
+        {
+          "label": "Dark Yellow Magenta",
+          "colors": [
+            "#4d4d00",
+            "#4d004d",
+            "#4d4d00",
+            "#4d004d",
+            "#4d4d00",
+            "#4d004d",
+            "#4d4d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Yellow Magenta"
+        },
+        {
+          "label": "Magenta Yellow",
+          "colors": [
+            "#ff00ff",
+            "#ffff00",
+            "#ff00ff",
+            "#ffff00",
+            "#ff00ff",
+            "#ffff00",
+            "#ff00ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Magenta Yellow"
+        },
+        {
+          "label": "Dark Magenta Yellow",
+          "colors": [
+            "#4d004d",
+            "#4d4d00",
+            "#4d004d",
+            "#4d4d00",
+            "#4d004d",
+            "#4d4d00",
+            "#4d004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Magenta Yellow"
+        },
+        {
+          "label": "Purple Orange",
+          "colors": [
+            "#8000ff",
+            "#ff8000",
+            "#8000ff",
+            "#ff8000",
+            "#8000ff",
+            "#ff8000",
+            "#8000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Purple Orange"
+        },
+        {
+          "label": "Dark Purple Orange",
+          "colors": [
+            "#26004d",
+            "#4d2600",
+            "#26004d",
+            "#4d2600",
+            "#26004d",
+            "#4d2600",
+            "#26004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Purple Orange"
+        },
+        {
+          "label": "Orange Purple",
+          "colors": [
+            "#ff8000",
+            "#8000ff",
+            "#ff8000",
+            "#8000ff",
+            "#ff8000",
+            "#8000ff",
+            "#ff8000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Orange Purple"
+        },
+        {
+          "label": "Dark Orange Purple",
+          "colors": [
+            "#4d2600",
+            "#26004d",
+            "#4d2600",
+            "#26004d",
+            "#4d2600",
+            "#26004d",
+            "#4d2600"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Orange Purple"
+        },
+        {
+          "label": "Red Orange",
+          "colors": [
+            "#ff0000",
+            "#ff8000",
+            "#ff0000",
+            "#ff8000",
+            "#ff0000",
+            "#ff8000",
+            "#ff0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Red Orange"
+        },
+        {
+          "label": "Dark Red Orange",
+          "colors": [
+            "#4d0000",
+            "#4d2600",
+            "#4d0000",
+            "#4d2600",
+            "#4d0000",
+            "#4d2600",
+            "#4d0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Red Orange"
+        },
+        {
+          "label": "Orange Red",
+          "colors": [
+            "#ff8000",
+            "#ff0000",
+            "#ff8000",
+            "#ff0000",
+            "#ff8000",
+            "#ff0000",
+            "#ff8000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Orange Red"
+        },
+        {
+          "label": "Dark Orange Red",
+          "colors": [
+            "#4d2600",
+            "#4d0000",
+            "#4d2600",
+            "#4d0000",
+            "#4d2600",
+            "#4d0000",
+            "#4d2600"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Orange Red"
+        },
+        {
+          "label": "Yellow Orange",
+          "colors": [
+            "#ffff00",
+            "#ff8000",
+            "#ffff00",
+            "#ff8000",
+            "#ffff00",
+            "#ff8000",
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Yellow Orange"
+        },
+        {
+          "label": "Dark Yellow Orange",
+          "colors": [
+            "#4d4d00",
+            "#4d2600",
+            "#4d4d00",
+            "#4d2600",
+            "#4d4d00",
+            "#4d2600",
+            "#4d4d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Yellow Orange"
+        },
+        {
+          "label": "Orange Yellow",
+          "colors": [
+            "#ff8000",
+            "#ffff00",
+            "#ff8000",
+            "#ffff00",
+            "#ff8000",
+            "#ffff00",
+            "#ff8000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Orange Yellow"
+        },
+        {
+          "label": "Dark Orange Yellow",
+          "colors": [
+            "#4d2600",
+            "#4d4d00",
+            "#4d2600",
+            "#4d4d00",
+            "#4d2600",
+            "#4d4d00",
+            "#4d2600"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Orange Yellow"
+        },
+        {
+          "label": "Red Blue",
+          "colors": [
+            "#ff0000",
+            "#0000ff",
+            "#ff0000",
+            "#0000ff",
+            "#ff0000",
+            "#0000ff",
+            "#ff0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Red Blue"
+        },
+        {
+          "label": "Dark Red Blue",
+          "colors": [
+            "#4d0000",
+            "#00004d",
+            "#4d0000",
+            "#00004d",
+            "#4d0000",
+            "#00004d",
+            "#4d0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Red Blue"
+        },
+        {
+          "label": "Blue Red",
+          "colors": [
+            "#0000ff",
+            "#ff0000",
+            "#0000ff",
+            "#ff0000",
+            "#0000ff",
+            "#ff0000",
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Blue Red"
+        },
+        {
+          "label": "Dark Blue Red",
+          "colors": [
+            "#00004d",
+            "#4d0000",
+            "#00004d",
+            "#4d0000",
+            "#00004d",
+            "#4d0000",
+            "#00004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Blue Red"
+        },
+        {
+          "label": "Green Orange",
+          "colors": [
+            "#00ff00",
+            "#ff8000",
+            "#00ff00",
+            "#ff8000",
+            "#00ff00",
+            "#ff8000",
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Green Orange"
+        },
+        {
+          "label": "Dark Green Orange",
+          "colors": [
+            "#004d00",
+            "#4d2600",
+            "#004d00",
+            "#4d2600",
+            "#004d00",
+            "#4d2600",
+            "#004d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Green Orange"
+        },
+        {
+          "label": "Orange Green",
+          "colors": [
+            "#ff8000",
+            "#00ff00",
+            "#ff8000",
+            "#00ff00",
+            "#ff8000",
+            "#00ff00",
+            "#ff8000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Orange Green"
+        },
+        {
+          "label": "Dark Orange Green",
+          "colors": [
+            "#4d2600",
+            "#004d00",
+            "#4d2600",
+            "#004d00",
+            "#4d2600",
+            "#004d00",
+            "#4d2600"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=OddEven&scene=Dark Orange Green"
+        }
+      ]
+    },
+    {
+      "label": "Gradient",
+      "scenes": [
+        {
+          "label": "Red Blue",
+          "colors": [
+            "#ff0000",
+            "#d5002b",
+            "#aa0055",
+            "#800080",
+            "#5500aa",
+            "#2b00d4",
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Red Blue"
+        },
+        {
+          "label": "Dark Red Blue",
+          "colors": [
+            "#4d0000",
+            "#40000d",
+            "#33001a",
+            "#270027",
+            "#1a0033",
+            "#0d0040",
+            "#00004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Dark Red Blue"
+        },
+        {
+          "label": "Blue Red",
+          "colors": [
+            "#0000ff",
+            "#2b00d5",
+            "#5500aa",
+            "#800080",
+            "#aa0055",
+            "#d4002b",
+            "#ff0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Blue Red"
+        },
+        {
+          "label": "Dark Blue Red",
+          "colors": [
+            "#00004d",
+            "#0d0040",
+            "#1a0033",
+            "#270027",
+            "#33001a",
+            "#40000d",
+            "#4d0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Dark Blue Red"
+        },
+        {
+          "label": "Green Blue",
+          "colors": [
+            "#00ff00",
+            "#00d52b",
+            "#00aa55",
+            "#008080",
+            "#0055aa",
+            "#002bd4",
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Green Blue"
+        },
+        {
+          "label": "Dark Green Blue",
+          "colors": [
+            "#004d00",
+            "#00400d",
+            "#00331a",
+            "#002727",
+            "#001a33",
+            "#000d40",
+            "#00004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Dark Green Blue"
+        },
+        {
+          "label": "Blue Green",
+          "colors": [
+            "#0000ff",
+            "#002bd5",
+            "#0055aa",
+            "#008080",
+            "#00aa55",
+            "#00d42b",
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Blue Green"
+        },
+        {
+          "label": "Dark Blue Green",
+          "colors": [
+            "#00004d",
+            "#000d40",
+            "#001a33",
+            "#002727",
+            "#00331a",
+            "#00400d",
+            "#004d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Dark Blue Green"
+        },
+        {
+          "label": "Cyan Blue",
+          "colors": [
+            "#00ffff",
+            "#00d5ff",
+            "#00aaff",
+            "#0080ff",
+            "#0055ff",
+            "#002bff",
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Cyan Blue"
+        },
+        {
+          "label": "Dark Cyan Blue",
+          "colors": [
+            "#004d4d",
+            "#00404d",
+            "#00334d",
+            "#00274d",
+            "#001a4d",
+            "#000d4d",
+            "#00004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Dark Cyan Blue"
+        },
+        {
+          "label": "Blue Cyan",
+          "colors": [
+            "#0000ff",
+            "#002bff",
+            "#0055ff",
+            "#0080ff",
+            "#00aaff",
+            "#00d4ff",
+            "#00ffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Blue Cyan"
+        },
+        {
+          "label": "Dark Blue Cyan",
+          "colors": [
+            "#00004d",
+            "#000d4d",
+            "#001a4d",
+            "#00274d",
+            "#00334d",
+            "#00404d",
+            "#004d4d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Dark Blue Cyan"
+        },
+        {
+          "label": "Cyan Green",
+          "colors": [
+            "#00ffff",
+            "#00ffd5",
+            "#00ffaa",
+            "#00ff80",
+            "#00ff55",
+            "#00ff2b",
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Cyan Green"
+        },
+        {
+          "label": "Dark Cyan Green",
+          "colors": [
+            "#004d4d",
+            "#004d40",
+            "#004d33",
+            "#004d27",
+            "#004d1a",
+            "#004d0d",
+            "#004d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Dark Cyan Green"
+        },
+        {
+          "label": "Green Cyan",
+          "colors": [
+            "#00ff00",
+            "#00ff2b",
+            "#00ff55",
+            "#00ff80",
+            "#00ffaa",
+            "#00ffd4",
+            "#00ffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Green Cyan"
+        },
+        {
+          "label": "Dark Green Cyan",
+          "colors": [
+            "#004d00",
+            "#004d0d",
+            "#004d1a",
+            "#004d27",
+            "#004d33",
+            "#004d40",
+            "#004d4d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Dark Green Cyan"
+        },
+        {
+          "label": "Green Red",
+          "colors": [
+            "#00ff00",
+            "#2bd500",
+            "#55aa00",
+            "#808000",
+            "#aa5500",
+            "#d42b00",
+            "#ff0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Green Red"
+        },
+        {
+          "label": "Dark Green Red",
+          "colors": [
+            "#004d00",
+            "#0d4000",
+            "#1a3300",
+            "#272700",
+            "#331a00",
+            "#400d00",
+            "#4d0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Dark Green Red"
+        },
+        {
+          "label": "Red Green",
+          "colors": [
+            "#ff0000",
+            "#d52b00",
+            "#aa5500",
+            "#808000",
+            "#55aa00",
+            "#2bd400",
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Red Green"
+        },
+        {
+          "label": "Dark Red Green",
+          "colors": [
+            "#4d0000",
+            "#400d00",
+            "#331a00",
+            "#272700",
+            "#1a3300",
+            "#0d4000",
+            "#004d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Dark Red Green"
+        },
+        {
+          "label": "Green Purple",
+          "colors": [
+            "#00ff00",
+            "#15d52b",
+            "#2baa55",
+            "#408080",
+            "#5555aa",
+            "#6b2bd4",
+            "#8000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Green Purple"
+        },
+        {
+          "label": "Dark Green Purple",
+          "colors": [
+            "#004d00",
+            "#06400d",
+            "#0d331a",
+            "#132727",
+            "#191a33",
+            "#200d40",
+            "#26004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Dark Green Purple"
+        },
+        {
+          "label": "Purple Green",
+          "colors": [
+            "#8000ff",
+            "#6b2bd5",
+            "#5555aa",
+            "#408080",
+            "#2baa55",
+            "#15d42b",
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Purple Green"
+        },
+        {
+          "label": "Dark Purple Green",
+          "colors": [
+            "#26004d",
+            "#200d40",
+            "#191a33",
+            "#132727",
+            "#0d331a",
+            "#06400d",
+            "#004d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Dark Purple Green"
+        },
+        {
+          "label": "Orange Purple",
+          "colors": [
+            "#ff8000",
+            "#ea6b2b",
+            "#d55555",
+            "#c04080",
+            "#aa2baa",
+            "#9515d4",
+            "#8000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Orange Purple"
+        },
+        {
+          "label": "Dark Orange Purple",
+          "colors": [
+            "#4d2600",
+            "#47200d",
+            "#40191a",
+            "#3a1327",
+            "#330d33",
+            "#2d0640",
+            "#26004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Dark Orange Purple"
+        },
+        {
+          "label": "Purple Orange",
+          "colors": [
+            "#8000ff",
+            "#9515d5",
+            "#aa2baa",
+            "#c04080",
+            "#d55555",
+            "#ea6b2b",
+            "#ff8000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Purple Orange"
+        },
+        {
+          "label": "Dark Purple Orange",
+          "colors": [
+            "#26004d",
+            "#2d0640",
+            "#330d33",
+            "#3a1327",
+            "#40191a",
+            "#47200d",
+            "#4d2600"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Dark Purple Orange"
+        },
+        {
+          "label": "Yellow Purple",
+          "colors": [
+            "#ffff00",
+            "#ead52b",
+            "#d5aa55",
+            "#c08080",
+            "#aa55aa",
+            "#952bd4",
+            "#8000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Yellow Purple"
+        },
+        {
+          "label": "Dark Yellow Purple",
+          "colors": [
+            "#4d4d00",
+            "#47400d",
+            "#40331a",
+            "#3a2727",
+            "#331a33",
+            "#2d0d40",
+            "#26004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Dark Yellow Purple"
+        },
+        {
+          "label": "Purple Yellow",
+          "colors": [
+            "#8000ff",
+            "#952bd5",
+            "#aa55aa",
+            "#c08080",
+            "#d5aa55",
+            "#ead42b",
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Purple Yellow"
+        },
+        {
+          "label": "Dark Purple Yellow",
+          "colors": [
+            "#26004d",
+            "#2d0d40",
+            "#331a33",
+            "#3a2727",
+            "#40331a",
+            "#47400d",
+            "#4d4d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Dark Purple Yellow"
+        },
+        {
+          "label": "Yellow Magenta",
+          "colors": [
+            "#ffff00",
+            "#ffd52b",
+            "#ffaa55",
+            "#ff8080",
+            "#ff55aa",
+            "#ff2bd4",
+            "#ff00ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Yellow Magenta"
+        },
+        {
+          "label": "Dark Yellow Magenta",
+          "colors": [
+            "#4d4d00",
+            "#4d400d",
+            "#4d331a",
+            "#4d2727",
+            "#4d1a33",
+            "#4d0d40",
+            "#4d004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Dark Yellow Magenta"
+        },
+        {
+          "label": "Magenta Yellow",
+          "colors": [
+            "#ff00ff",
+            "#ff2bd5",
+            "#ff55aa",
+            "#ff8080",
+            "#ffaa55",
+            "#ffd42b",
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Magenta Yellow"
+        },
+        {
+          "label": "Dark Magenta Yellow",
+          "colors": [
+            "#4d004d",
+            "#4d0d40",
+            "#4d1a33",
+            "#4d2727",
+            "#4d331a",
+            "#4d400d",
+            "#4d4d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Gradient&scene=Dark Magenta Yellow"
+        }
+      ]
+    },
+    {
+      "label": "Special",
+      "scenes": [
+        {
+          "label": "Rainbow Blue Red",
+          "colors": [
+            "#0000ff",
+            "#00ffff",
+            "#00ff00",
+            "#80ff00",
+            "#ffff00",
+            "#ff3000",
+            "#ff0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Special&scene=Rainbow Blue Red"
+        },
+        {
+          "label": "Dark Rainbow Blue Red",
+          "colors": [
+            "#00004d",
+            "#004d4d",
+            "#004d00",
+            "#264d00",
+            "#4d4d00",
+            "#4d0e00",
+            "#4d0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Special&scene=Dark Rainbow Blue Red"
+        },
+        {
+          "label": "Rainbow Red Blue",
+          "colors": [
+            "#ff0000",
+            "#ff3000",
+            "#ffff00",
+            "#80ff00",
+            "#00ff00",
+            "#00ffff",
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Special&scene=Rainbow Red Blue"
+        },
+        {
+          "label": "Dark Rainbow Red Blue",
+          "colors": [
+            "#4d0000",
+            "#4d0e00",
+            "#4d4d00",
+            "#264d00",
+            "#004d00",
+            "#004d4d",
+            "#00004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Special&scene=Dark Rainbow Red Blue"
+        },
+        {
+          "label": "Enterprise E",
+          "colors": [
+            "#000088",
+            "#000088",
+            "#ffff80",
+            "#000088",
+            "#000088",
+            "#000088",
+            "#000088"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Special&scene=Enterprise E"
+        },
+        {
+          "label": "LightBlue",
+          "colors": [
+            "#7777ff",
+            "#aaaaff",
+            "#7777ff",
+            "#aaaaff",
+            "#7777ff",
+            "#aaaaff",
+            "#7777ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Special&scene=LightBlue"
+        },
+        {
+          "label": "Christmas",
+          "colors": [
+            "#990000",
+            "#009900",
+            "#990000",
+            "#009900",
+            "#990000",
+            "#009900",
+            "#990000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Special&scene=Christmas"
+        },
+        {
+          "label": "Licht TV Conditional",
+          "colors": [
+            "#fffad5"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Special&scene=Licht TV Conditional"
+        },
+        {
+          "label": "Licht TV",
+          "colors": [
+            "#fffad5"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Special&scene=Licht TV"
+        },
+        {
+          "label": "TV Licht Aus",
+          "colors": [
+            "#000000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Special&scene=TV Licht Aus"
+        },
+        {
+          "label": "Licht Kino",
+          "colors": [
+            "#000000",
+            "#000088",
+            "#ffff80",
+            "#000088",
+            "#000088",
+            "#aaaaff",
+            "#000088"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Special&scene=Licht Kino"
+        },
+        {
+          "label": "Licht Kino Kurz",
+          "colors": [
+            "#000044",
+            "#000044",
+            "#880000",
+            "#880000",
+            "#880000",
+            "#880000",
+            "#000044"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Special&scene=Licht Kino Kurz"
+        },
+        {
+          "label": "Sleeptime",
+          "colors": [
+            "#1100ff",
+            "#000088"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Special&scene=Sleeptime"
+        },
+        {
+          "label": "Sleeptime Off",
+          "colors": [
+            "#000000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Special&scene=Sleeptime Off"
+        }
+      ]
+    },
+    {
+      "label": "Custom",
+      "scenes": [
+        {
+          "label": "Reds",
+          "colors": [
+            "#360000",
+            "#c20000",
+            "#360000",
+            "#c20000",
+            "#360000",
+            "#c20000",
+            "#360000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Custom&scene=Reds"
+        },
+        {
+          "label": "Mare Blu",
+          "colors": [
+            "#1b0088",
+            "#004d08",
+            "#00034f",
+            "#005252",
+            "#00034f",
+            "#005252",
+            "#256100"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Custom&scene=Mare Blu"
+        },
+        {
+          "label": "Sunset",
+          "colors": [
+            "#400c02",
+            "#612b08",
+            "#7d4023",
+            "#7d5b24",
+            "#7d4023",
+            "#7d5b24",
+            "#470a03"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Custom&scene=Sunset"
+        },
+        {
+          "label": "Irish",
+          "colors": [
+            "#148700",
+            "#7bb000",
+            "#148700",
+            "#7bb000",
+            "#148700",
+            "#7bb000",
+            "#148700"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Custom&scene=Custom Irish"
+        },
+        {
+          "label": "TRON",
+          "colors": [
+            "#083157",
+            "#630c00",
+            "#004057",
+            "#631c00",
+            "#004057",
+            "#631c00",
+            "#004057"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Custom&scene=Custom TRON"
+        },
+        {
+          "label": "Aqua",
+          "colors": [
+            "#004f80",
+            "#00376e",
+            "#001580",
+            "#00376e",
+            "#001580",
+            "#00376e",
+            "#0a0480"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Custom&scene=Custom Aqua"
+        }
+      ]
+    },
+    {
+      "label": "Deko",
+      "scenes": [
+        {
+          "label": "Red",
+          "colors": [
+            "#ff0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Red"
+        },
+        {
+          "label": "Dark Red",
+          "colors": [
+            "#4d0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Dark Red"
+        },
+        {
+          "label": "Green",
+          "colors": [
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Green"
+        },
+        {
+          "label": "Dark Green",
+          "colors": [
+            "#004d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Dark Green"
+        },
+        {
+          "label": "Blue",
+          "colors": [
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Blue"
+        },
+        {
+          "label": "Dark Blue",
+          "colors": [
+            "#00004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Dark Blue"
+        },
+        {
+          "label": "Yellow",
+          "colors": [
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Yellow"
+        },
+        {
+          "label": "Dark Yellow",
+          "colors": [
+            "#4d4d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Dark Yellow"
+        },
+        {
+          "label": "Cyan",
+          "colors": [
+            "#00ffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Cyan"
+        },
+        {
+          "label": "Dark Cyan",
+          "colors": [
+            "#004d4d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Dark Cyan"
+        },
+        {
+          "label": "Magenta",
+          "colors": [
+            "#ff00ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Magenta"
+        },
+        {
+          "label": "Dark Magenta",
+          "colors": [
+            "#4d004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Dark Magenta"
+        },
+        {
+          "label": "Orange",
+          "colors": [
+            "#ff8000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Orange"
+        },
+        {
+          "label": "Dark Orange",
+          "colors": [
+            "#4d2600"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Dark Orange"
+        },
+        {
+          "label": "Purple",
+          "colors": [
+            "#8000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Purple"
+        },
+        {
+          "label": "Dark Purple",
+          "colors": [
+            "#26004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Dark Purple"
+        },
+        {
+          "label": "Teal",
+          "colors": [
+            "#2388ad"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Teal"
+        },
+        {
+          "label": "Dark Teal",
+          "colors": [
+            "#0b2934"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Dark Teal"
+        },
+        {
+          "label": "White",
+          "colors": [
+            "#ffffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=White"
+        },
+        {
+          "label": "Warm White",
+          "colors": [
+            "#b8ab37"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Warm White"
+        },
+        {
+          "label": "Cold White",
+          "colors": [
+            "#aaccff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Cold White"
+        },
+        {
+          "label": "Black",
+          "colors": [
+            "#000000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Deko&scene=Black"
+        }
+      ]
+    },
+    {
+      "label": "Star Wars",
+      "scenes": [
+        {
+          "label": "Red",
+          "colors": [
+            "#ff0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Red"
+        },
+        {
+          "label": "Dark Red",
+          "colors": [
+            "#4d0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Dark Red"
+        },
+        {
+          "label": "Green",
+          "colors": [
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Green"
+        },
+        {
+          "label": "Dark Green",
+          "colors": [
+            "#004d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Dark Green"
+        },
+        {
+          "label": "Blue",
+          "colors": [
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Blue"
+        },
+        {
+          "label": "Dark Blue",
+          "colors": [
+            "#00004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Dark Blue"
+        },
+        {
+          "label": "Yellow",
+          "colors": [
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Yellow"
+        },
+        {
+          "label": "Dark Yellow",
+          "colors": [
+            "#4d4d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Dark Yellow"
+        },
+        {
+          "label": "Cyan",
+          "colors": [
+            "#00ffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Cyan"
+        },
+        {
+          "label": "Dark Cyan",
+          "colors": [
+            "#004d4d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Dark Cyan"
+        },
+        {
+          "label": "Magenta",
+          "colors": [
+            "#ff00ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Magenta"
+        },
+        {
+          "label": "Dark Magenta",
+          "colors": [
+            "#4d004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Dark Magenta"
+        },
+        {
+          "label": "Orange",
+          "colors": [
+            "#ff8000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Orange"
+        },
+        {
+          "label": "Dark Orange",
+          "colors": [
+            "#4d2600"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Dark Orange"
+        },
+        {
+          "label": "Purple",
+          "colors": [
+            "#8000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Purple"
+        },
+        {
+          "label": "Dark Purple",
+          "colors": [
+            "#26004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Dark Purple"
+        },
+        {
+          "label": "Teal",
+          "colors": [
+            "#2388ad"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Teal"
+        },
+        {
+          "label": "Dark Teal",
+          "colors": [
+            "#0b2934"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Dark Teal"
+        },
+        {
+          "label": "White",
+          "colors": [
+            "#ffffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=White"
+        },
+        {
+          "label": "Warm White",
+          "colors": [
+            "#b8ab37"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Warm White"
+        },
+        {
+          "label": "Cold White",
+          "colors": [
+            "#aaccff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Cold White"
+        },
+        {
+          "label": "Black",
+          "colors": [
+            "#000000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Starwars&scene=Black"
+        }
+      ]
+    },
+    {
+      "label": "Rgbw",
+      "scenes": [
+        {
+          "label": "Red",
+          "colors": [
+            "#ff0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Red"
+        },
+        {
+          "label": "Dark Red",
+          "colors": [
+            "#4d0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Dark Red"
+        },
+        {
+          "label": "Green",
+          "colors": [
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Green"
+        },
+        {
+          "label": "Dark Green",
+          "colors": [
+            "#004d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Dark Green"
+        },
+        {
+          "label": "Blue",
+          "colors": [
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Blue"
+        },
+        {
+          "label": "Dark Blue",
+          "colors": [
+            "#00004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Dark Blue"
+        },
+        {
+          "label": "Yellow",
+          "colors": [
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Yellow"
+        },
+        {
+          "label": "Dark Yellow",
+          "colors": [
+            "#4d4d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Dark Yellow"
+        },
+        {
+          "label": "Cyan",
+          "colors": [
+            "#00ffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Cyan"
+        },
+        {
+          "label": "Dark Cyan",
+          "colors": [
+            "#004d4d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Dark Cyan"
+        },
+        {
+          "label": "Magenta",
+          "colors": [
+            "#ff00ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Magenta"
+        },
+        {
+          "label": "Dark Magenta",
+          "colors": [
+            "#4d004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Dark Magenta"
+        },
+        {
+          "label": "Orange",
+          "colors": [
+            "#ff8000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Orange"
+        },
+        {
+          "label": "Dark Orange",
+          "colors": [
+            "#4d2600"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Dark Orange"
+        },
+        {
+          "label": "Purple",
+          "colors": [
+            "#8000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Purple"
+        },
+        {
+          "label": "Dark Purple",
+          "colors": [
+            "#26004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Dark Purple"
+        },
+        {
+          "label": "Teal",
+          "colors": [
+            "#2388ad"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Teal"
+        },
+        {
+          "label": "Dark Teal",
+          "colors": [
+            "#0b2934"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Dark Teal"
+        },
+        {
+          "label": "White",
+          "colors": [
+            "#ffffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=White"
+        },
+        {
+          "label": "Warm White",
+          "colors": [
+            "#b8ab37"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Warm White"
+        },
+        {
+          "label": "Cold White",
+          "colors": [
+            "#aaccff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Cold White"
+        },
+        {
+          "label": "Black",
+          "colors": [
+            "#000000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Rgbw&scene=Black"
+        }
+      ]
+    },
+    {
+      "label": "Grundig Rgbw",
+      "scenes": [
+        {
+          "label": "On",
+          "colors": [
+            "#ffffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=On"
+        },
+        {
+          "label": "Off",
+          "colors": [
+            "#000000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=Off"
+        },
+        {
+          "label": "Red",
+          "colors": [
+            "#ff0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=Red"
+        },
+        {
+          "label": "Green",
+          "colors": [
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=Green"
+        },
+        {
+          "label": "Blue",
+          "colors": [
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=Blue"
+        },
+        {
+          "label": "Orange",
+          "colors": [
+            "#ff8000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=Orange"
+        },
+        {
+          "label": "Green Light",
+          "colors": [
+            "#aaffaa"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=Green Light"
+        },
+        {
+          "label": "Blue Light",
+          "colors": [
+            "#aaaaff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=Blue Light"
+        },
+        {
+          "label": "Yellow",
+          "colors": [
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=Yellow"
+        },
+        {
+          "label": "Cyan",
+          "colors": [
+            "#00ffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=Cyan"
+        },
+        {
+          "label": "Purple",
+          "colors": [
+            "#8000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=Purple"
+        },
+        {
+          "label": "White",
+          "colors": [
+            "#ffffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=White"
+        },
+        {
+          "label": "Warm White",
+          "colors": [
+            "#b8ab37"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=Warm White"
+        },
+        {
+          "label": "Cold White",
+          "colors": [
+            "#aaccff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=Cold White"
+        },
+        {
+          "label": "CCT Colder",
+          "colors": [
+            "#777777",
+            "#aaccff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=CCT Colder"
+        },
+        {
+          "label": "CCT Warmer",
+          "colors": [
+            "#777777",
+            "#ffccaa"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=CCT Warmer"
+        },
+        {
+          "label": "Dim Up",
+          "colors": [
+            "#000000",
+            "#ffffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=Dim Up"
+        },
+        {
+          "label": "Dim Down",
+          "colors": [
+            "#ffffff",
+            "#000000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=Dim Down"
+        },
+        {
+          "label": "Speed Up",
+          "colors": [
+            "#cccccc"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=Speed Up"
+        },
+        {
+          "label": "Speed Down",
+          "colors": [
+            "#cccccc"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=Speed Down"
+        },
+        {
+          "label": "RGB Mode",
+          "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=RGB Mode"
+        },
+        {
+          "label": "Music Mode 1",
+          "colors": [
+            "#cccccc",
+            "#cccccc",
+            "#cccccc",
+            "#ff0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=Music Mode 1"
+        },
+        {
+          "label": "Music Mode 2",
+          "colors": [
+            "#cccccc",
+            "#cccccc",
+            "#cccccc",
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=Music Mode 2"
+        },
+        {
+          "label": "Music Mode 3",
+          "colors": [
+            "#cccccc",
+            "#cccccc",
+            "#cccccc",
+            "#0000aa"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=Music Mode 3"
+        },
+        {
+          "label": "Music Mode 4",
+          "colors": [
+            "#cccccc",
+            "#cccccc",
+            "#cccccc",
+            "#aa0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=GrundigRgbw&scene=Music Mode 4"
+        }
+      ]
+    },
+    {
+      "label": "Dmx",
+      "scenes": [
+        {
+          "label": "Red",
+          "colors": [
+            "#ff0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Red"
+        },
+        {
+          "label": "Dark Red",
+          "colors": [
+            "#4d0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Dark Red"
+        },
+        {
+          "label": "Green",
+          "colors": [
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Green"
+        },
+        {
+          "label": "Dark Green",
+          "colors": [
+            "#004d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Dark Green"
+        },
+        {
+          "label": "Blue",
+          "colors": [
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Blue"
+        },
+        {
+          "label": "Dark Blue",
+          "colors": [
+            "#00004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Dark Blue"
+        },
+        {
+          "label": "Yellow",
+          "colors": [
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Yellow"
+        },
+        {
+          "label": "Dark Yellow",
+          "colors": [
+            "#4d4d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Dark Yellow"
+        },
+        {
+          "label": "Cyan",
+          "colors": [
+            "#00ffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Cyan"
+        },
+        {
+          "label": "Dark Cyan",
+          "colors": [
+            "#004d4d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Dark Cyan"
+        },
+        {
+          "label": "Magenta",
+          "colors": [
+            "#ff00ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Magenta"
+        },
+        {
+          "label": "Dark Magenta",
+          "colors": [
+            "#4d004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Dark Magenta"
+        },
+        {
+          "label": "Orange",
+          "colors": [
+            "#ff8000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Orange"
+        },
+        {
+          "label": "Dark Orange",
+          "colors": [
+            "#4d2600"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Dark Orange"
+        },
+        {
+          "label": "Purple",
+          "colors": [
+            "#8000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Purple"
+        },
+        {
+          "label": "Dark Purple",
+          "colors": [
+            "#26004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Dark Purple"
+        },
+        {
+          "label": "Teal",
+          "colors": [
+            "#2388ad"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Teal"
+        },
+        {
+          "label": "Dark Teal",
+          "colors": [
+            "#0b2934"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Dark Teal"
+        },
+        {
+          "label": "White",
+          "colors": [
+            "#ffffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=White"
+        },
+        {
+          "label": "Warm White",
+          "colors": [
+            "#ffffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Warm White"
+        },
+        {
+          "label": "Cold White",
+          "colors": [
+            "#ffffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Cold White"
+        },
+        {
+          "label": "Black",
+          "colors": [
+            "#000000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Dmx&scene=Black"
+        }
+      ]
+    },
+    {
+      "label": "Bar",
+      "scenes": [
+        {
+          "label": "Red",
+          "colors": [
+            "#ff0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Red"
+        },
+        {
+          "label": "Dark Red",
+          "colors": [
+            "#4d0000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Dark Red"
+        },
+        {
+          "label": "Green",
+          "colors": [
+            "#00ff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Green"
+        },
+        {
+          "label": "Dark Green",
+          "colors": [
+            "#004d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Dark Green"
+        },
+        {
+          "label": "Blue",
+          "colors": [
+            "#0000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Blue"
+        },
+        {
+          "label": "Dark Blue",
+          "colors": [
+            "#00004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Dark Blue"
+        },
+        {
+          "label": "Yellow",
+          "colors": [
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Yellow"
+        },
+        {
+          "label": "Dark Yellow",
+          "colors": [
+            "#4d4d00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Dark Yellow"
+        },
+        {
+          "label": "Cyan",
+          "colors": [
+            "#00ffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Cyan"
+        },
+        {
+          "label": "Dark Cyan",
+          "colors": [
+            "#004d4d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Dark Cyan"
+        },
+        {
+          "label": "Magenta",
+          "colors": [
+            "#ff00ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Magenta"
+        },
+        {
+          "label": "Dark Magenta",
+          "colors": [
+            "#4d004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Dark Magenta"
+        },
+        {
+          "label": "Orange",
+          "colors": [
+            "#ff8000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Orange"
+        },
+        {
+          "label": "Dark Orange",
+          "colors": [
+            "#4d2600"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Dark Orange"
+        },
+        {
+          "label": "Purple",
+          "colors": [
+            "#8000ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Purple"
+        },
+        {
+          "label": "Dark Purple",
+          "colors": [
+            "#26004d"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Dark Purple"
+        },
+        {
+          "label": "Teal",
+          "colors": [
+            "#2388ad"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Teal"
+        },
+        {
+          "label": "Dark Teal",
+          "colors": [
+            "#0b2934"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Dark Teal"
+        },
+        {
+          "label": "White",
+          "colors": [
+            "#ffffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=White"
+        },
+        {
+          "label": "Warm White",
+          "colors": [
+            "#b8ab37"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Warm White"
+        },
+        {
+          "label": "Cold White",
+          "colors": [
+            "#aaccff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Cold White"
+        },
+        {
+          "label": "Black",
+          "colors": [
+            "#000000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Bar&scene=Black"
+        }
+      ]
+    },
+    {
+      "label": "Idual",
+      "scenes": [
+        {
+          "label": "On",
+          "colors": [
+            "#ffffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Idual&scene=On"
+        },
+        {
+          "label": "Off",
+          "colors": [
+            "#000000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Idual&scene=Off"
+        },
+        {
+          "label": "DayWhite",
+          "colors": [
+            "#ffffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Idual&scene=DayWhite"
+        },
+        {
+          "label": "ColdWhite",
+          "colors": [
+            "#d5f1ff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Idual&scene=ColdWhite"
+        },
+        {
+          "label": "WarmWhite",
+          "colors": [
+            "#fffad5"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Idual&scene=WarmWhite"
+        }
+      ]
+    },
+    {
+      "label": "Yamaha",
+      "scenes": [
+        {
+          "label": "Sci-Fi",
+          "colors": [
+            "#1100ff",
+            "#000088"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Yamaha&scene=Sci-Fi"
+        },
+        {
+          "label": "Spectacle",
+          "colors": [
+            "#ff1100",
+            "#880000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Yamaha&scene=Spectacle"
+        },
+        {
+          "label": "Adventure",
+          "colors": [
+            "#66ff00",
+            "#00aa00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Yamaha&scene=Adventure"
+        },
+        {
+          "label": "Drama",
+          "colors": [
+            "#66ff00",
+            "#00aa00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Yamaha&scene=Drama"
+        },
+        {
+          "label": "Mono Movie",
+          "colors": [
+            "#66ff00",
+            "#00aa00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Yamaha&scene=Mono Movie"
+        },
+        {
+          "label": "The Roxy Theatre",
+          "colors": [
+            "#ffcc00",
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Yamaha&scene=The Roxy Theatre"
+        },
+        {
+          "label": "The Bottom Line",
+          "colors": [
+            "#ffcc00",
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Yamaha&scene=The Bottom Line"
+        },
+        {
+          "label": "Cellar Club",
+          "colors": [
+            "#ffcc00",
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Yamaha&scene=Cellar Club"
+        },
+        {
+          "label": "Chamber",
+          "colors": [
+            "#ffcc00",
+            "#ffff00"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Yamaha&scene=Chamber"
+        },
+        {
+          "label": "Hall In Munich",
+          "colors": [
+            "#aa00ff",
+            "#3300aa"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Yamaha&scene=Hall In Munich"
+        },
+        {
+          "label": "Hall In Vienna",
+          "colors": [
+            "#aa00ff",
+            "#3300aa"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Yamaha&scene=Hall In Vienna"
+        },
+        {
+          "label": "Standard",
+          "colors": [
+            "#cccccc"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Yamaha&scene=Standard"
+        },
+        {
+          "label": "Sports",
+          "colors": [
+            "#cccccc"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Yamaha&scene=Sports"
+        },
+        {
+          "label": "Straight",
+          "colors": [
+            "#cccccc"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Yamaha&scene=Straight"
+        },
+        {
+          "label": "Pure Direct On",
+          "colors": [
+            "#cccccc"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Yamaha&scene=Pure Direct On"
+        },
+        {
+          "label": "Pure Direct Off",
+          "colors": [
+            "#cccccc"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Yamaha&scene=Pure Direct Off"
+        },
+        {
+          "label": "Surround Decoder",
+          "colors": [
+            "#cccccc"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Yamaha&scene=Surround Decoder"
+        },
+        {
+          "label": "2ch Stereo",
+          "colors": [
+            "#cccccc"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Yamaha&scene=2ch Stereo"
+        },
+        {
+          "label": "7ch Stereo",
+          "colors": [
+            "#cccccc"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Yamaha&scene=7ch Stereo"
+        }
+      ]
+    },
+    {
+      "label": "Shelly",
+      "scenes": [
+        {
+          "label": "Curtains On",
+          "colors": [
+            "#ffffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Shelly&scene=Curtains On"
+        },
+        {
+          "label": "Curtains Off",
+          "colors": [
+            "#000000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Shelly&scene=Curtains Off"
+        },
+        {
+          "label": "Lampen On",
+          "colors": [
+            "#ffffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Shelly&scene=Lampen On"
+        },
+        {
+          "label": "Lampen Off",
+          "colors": [
+            "#000000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Shelly&scene=Lampen Off"
+        },
+        {
+          "label": "Flur On",
+          "colors": [
+            "#ffffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Shelly&scene=Flur On"
+        },
+        {
+          "label": "Flur Off",
+          "colors": [
+            "#000000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Shelly&scene=Flur Off"
+        },
+        {
+          "label": "Schlafzimmer On",
+          "colors": [
+            "#ffffff"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Shelly&scene=Schlafzimmer On"
+        },
+        {
+          "label": "Schlafzimmer Off",
+          "colors": [
+            "#000000"
+          ],
+          "url": "http://localhost:8888/v1/scenes/json/control?group=Shelly&scene=Schlafzimmer Off"
+        }
+      ]
+    }
+  ]
+}

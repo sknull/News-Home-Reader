@@ -1,0 +1,269 @@
+import de.visualdigits.newshomereader.domain.model.applicationjson.AppJson;
+import de.visualdigits.newshomereader.domain.model.unified.MediaItem;
+import kotlin.Boolean;
+import kotlin.String;
+import kotlin.collections.List;
+
+
+--
+-- SETTINGS
+--
+CREATE TABLE SettingsEntity (
+    id INTEGER NOT NULL DEFAULT 0,
+    displayTheme TEXT NOT NULL,
+    language TEXT NOT NULL,
+    refreshInterval TEXT NOT NULL,
+    keepReadArticles TEXT NOT NULL DEFAULT 0,
+    keepUnreadArticles TEXT NOT NULL DEFAULT 0,
+    loadArticles INTEGER AS Boolean NOT NULL DEFAULT 0,
+    hideRead INTEGER AS Boolean NOT NULL DEFAULT 0
+);
+
+insertSettings:
+INSERT OR REPLACE INTO SettingsEntity (
+    displayTheme, language, refreshInterval, keepReadArticles,
+    keepUnreadArticles, loadArticles, hideRead
+)
+VALUES (?, ?, ?, ?, ?, ?, ?);
+
+getSettingsById:
+SELECT * FROM SettingsEntity WHERE id = :id;
+
+getAllSettings:
+SELECT * FROM SettingsEntity;
+
+updateSettingsEntity:
+UPDATE SettingsEntity
+SET displayTheme = :displayTheme,
+    language = :language,
+    refreshInterval = :refreshInterval,
+    keepReadArticles = :keepReadArticles,
+    keepUnreadArticles = :keepUnreadArticles,
+    loadArticles = :loadArticles,
+    hideRead = :hideRead
+WHERE id IS :id;
+
+deleteSettings:
+DELETE FROM SettingsEntity
+WHERE id IS :id;
+
+--
+-- NEWS FEED
+--
+CREATE TABLE NewsFeedEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    identifier TEXT NOT NULL,
+    feedName TEXT NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    link TEXT NOT NULL,
+    image TEXT NOT NULL,
+    imageTitle TEXT NOT NULL,
+    imageCaption TEXT NOT NULL,
+    updatedMillis INTEGER NOT NULL,
+    updatedZone TEXT NOT NULL,
+    rights TEXT NOT NULL,
+    language TEXT NOT NULL,
+    keywords TEXT AS List<String> NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS index_news_feed_feedname ON NewsFeedEntity(feedName);
+
+insertNewsFeed:
+INSERT INTO NewsFeedEntity (
+    identifier, feedName, title, description, link, image,
+    imageTitle, imageCaption, updatedMillis, updatedZone,
+    rights, language, keywords
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+getAllNewsFeeds:
+SELECT * FROM NewsFeedEntity;
+
+getNewsFeedById:
+SELECT * FROM NewsFeedEntity WHERE id = :id;
+
+getNewsFeedByFeedName:
+SELECT * FROM NewsFeedEntity WHERE feedName = :feedName;
+
+updateNewsFeed:
+UPDATE NewsFeedEntity
+SET title = :title,
+    identifier = :identifier,
+    description = :description,
+    link = :link,
+    image = :image,
+    imageTitle = :imageTitle,
+    imageCaption = :imageCaption,
+    updatedMillis = :updatedMillis,
+    updatedZone = :updatedZone,
+    rights = :rights,
+    language = :language,
+    keywords = :keywords
+WHERE feedName = :feedName;
+
+
+
+--
+-- NEWS ITEM
+--
+CREATE TABLE NewsItemEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    feedName  TEXT NOT NULL,
+    identifier  TEXT NOT NULL,
+    publishedMillis  INTEGER NOT NULL,
+    publishedZone TEXT NOT NULL,
+    updatedMillis INTEGER NOT NULL,
+    lastSeenMillis INTEGER NOT NULL,
+    updatedZone  TEXT NOT NULL,
+    link  TEXT NOT NULL,
+    title  TEXT NOT NULL,
+    summary  TEXT NOT NULL,
+    content  TEXT NOT NULL,
+    keywords  TEXT NOT NULL,
+    image  TEXT NOT NULL,
+    imageTitle  TEXT NOT NULL,
+    imageCaption  TEXT NOT NULL,
+    isRead INTEGER AS Boolean NOT NULL DEFAULT 0,
+    UNIQUE(feedName, identifier)
+);
+
+CREATE INDEX IF NOT EXISTS index_news_item_feedname ON NewsItemEntity(feedName);
+CREATE INDEX IF NOT EXISTS index_news_item_updated ON NewsItemEntity(updatedMillis);
+
+insertNewsItem:
+INSERT OR REPLACE INTO NewsItemEntity (
+    feedName, identifier, publishedMillis, publishedZone,
+    updatedMillis, lastSeenMillis, updatedZone, link, title, summary,
+    content, keywords, image, imageTitle, imageCaption, isRead
+)
+VALUES (
+    :feedName, :identifier, :publishedMillis, :publishedZone,
+    :updatedMillis, :lastSeenMillis, :updatedZone, :link, :title, :summary,
+    :content, :keywords, :image, :imageTitle, :imageCaption, :isRead
+);
+
+getAllNewsItems:
+SELECT * FROM NewsItemEntity;
+
+getNewsItemById:
+SELECT * FROM NewsItemEntity WHERE id = :id;
+
+getNewsItemByFeedNameAndIdentifier:
+SELECT * FROM NewsItemEntity WHERE feedName = :feedName AND identifier = :identifier;
+
+getAllNewsItemsByFeedName:
+SELECT * FROM NewsItemEntity WHERE feedName = :feedName
+ORDER BY updatedMillis DESC;
+
+updateNewsItem:
+UPDATE NewsItemEntity
+SET feedName = :feedName,
+    identifier = :identifier,
+    publishedMillis = :publishedMillis,
+    publishedZone = :publishedZone,
+    updatedMillis = :updatedMillis,
+    updatedZone = :updatedZone,
+    link = :link,
+    title = :title,
+    summary = :summary,
+    content = :content,
+    keywords = :keywords,
+    image = :image,
+    imageTitle = :imageTitle,
+    imageCaption = :imageCaption,
+    isRead = :isRead
+WHERE id = :id;
+
+markNewsItemsAsRead:
+UPDATE NewsItemEntity
+SET isRead = :isRead
+WHERE id IN :idList;
+
+cleanupOldReadNewsItems:
+DELETE FROM NewsItemEntity
+WHERE lastSeenMillis < :timeStamp AND isRead = 1;
+
+cleanupOldUnreadNewsItems:
+DELETE FROM NewsItemEntity
+WHERE lastSeenMillis < :timeStamp AND isRead = 0;
+
+
+
+
+--
+-- FULL ARTICLE
+--
+CREATE TABLE FullArticleEntity (
+    itemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    applicationJson TEXT AS List<AppJson> NOT NULL,
+    html TEXT NOT NULL,
+    imageItems TEXT AS List<MediaItem> NOT NULL,
+    videoItems TEXT AS List<MediaItem> NOT NULL,
+    audioItems TEXT AS List<MediaItem> NOT NULL,
+    articleImage TEXT,
+    discussionUrl TEXT,
+    commentCount INTEGER NOT NULL,
+    isFree INTEGER AS Boolean NOT NULL DEFAULT 1,
+    wordCount INTEGER NOT NULL,
+    readingTime INTEGER NOT NULL,
+    FOREIGN KEY(itemId) REFERENCES NewsItemEntity(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS index_full_article_itemid ON FullArticleEntity(itemId);
+
+insertFullArticle:
+INSERT OR REPLACE INTO FullArticleEntity (
+    itemId, applicationJson, html, imageItems, videoItems,
+    audioItems, articleImage, discussionUrl, commentCount, isFree, wordCount, readingTime
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+getFullArticleById:
+SELECT * FROM FullArticleEntity WHERE itemId = :itemId;
+
+updateFullArticle:
+UPDATE FullArticleEntity
+SET applicationJson = :applicationJson,
+    html = :html,
+    imageItems = :imageItems,
+    videoItems = :videoItems,
+    audioItems = :audioItems,
+    articleImage = :articleImage,
+    discussionUrl = :discussionUrl,
+    commentCount = :commentCount,
+    isFree = :isFree,
+    wordCount = :wordCount,
+    readingTime = :readingTime
+WHERE itemId = :itemId;
+
+
+
+--
+-- NEWS FEED CONFIGURATION
+--
+
+CREATE TABLE NewsFeedConfigurationBlob (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    jsonContent TEXT AS de.visualdigits.newshomereader.data.model.newsfeeds.NewsFeedConfigurationEntity
+);
+
+insertNewsFeedConfiguration:
+INSERT INTO NewsFeedConfigurationBlob (jsonContent)
+VALUES (:jsonContent);
+
+getAllNewsFeedConfigurations:
+SELECT * FROM NewsFeedConfigurationBlob;
+
+getNewsFeedConfigurationById:
+SELECT * FROM NewsFeedConfigurationBlob
+WHERE id = :id;
+
+updateNewsFeedConfiguration:
+UPDATE NewsFeedConfigurationBlob
+SET jsonContent = :jsonContent
+WHERE id = :id;
+
+deleteNewsFeedConfiguration:
+DELETE FROM NewsFeedConfigurationBlob
+WHERE id = :id;

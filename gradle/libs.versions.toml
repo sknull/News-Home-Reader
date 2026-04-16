@@ -1,0 +1,172 @@
+[versions]
+agp = "8.12.3"
+android-compileSdk = "36" # DO NOT UPGRADE FOR NOW
+android-minSdk = "26"
+android-targetSdk = "35" # DO NOT UPGRADE FOR NOW
+tvMaterial = "1.0.1"
+
+version-androidx-activityCompose = "1.12.4" # DO NOT UPGRADE FOR NOW
+version-androidx-lifecycle = "2.9.6" # DO NOT UPGRADE FOR NOW
+version-androidx-work = "2.11.2"
+version-coil3 = "3.4.0"
+version-colorpicker = "1.1.3"
+version-commons-text = "1.15.0"
+version-essence = "1.0.0-SNAPSHOT"
+version-flatlaf = "3.7.1"
+version-gradle-pdf = "4.0.5"
+version-html-converter = "1.1.0"
+version-jetbrains-kotlin = "1.10.3"
+version-jsoup = "1.22.1"
+version-junit = "6.0.3"
+version-kermit = "2.1.0"
+version-okhttp = "5.3.2" # used in build.gradle.kts - DO NOT REMOVE
+version-okio = "3.16.4" # used in build.gradle.kts - DO NOT REMOVE
+version-koin = "4.2.1"
+version-kotlin = "2.3.20"
+version-kotlin-reactor = "1.10.2"
+version-kotlin-xml-util = "0.91.3"
+version-kotlin-serialization-json-jvm = "1.11.0"
+version-kotlin-coroutines = "1.10.2"
+version-kotlinx-coroutines-swing="1.10.2"
+version-kotlinx-datetime = "0.7.1"
+version-kotlinx-io-core = "0.9.0"
+version-ktor = "3.4.2"
+version-material3 = "1.9.0"
+version-mediaplayer = "0.9.0"
+version-androidx-mediaplayer = "1.5.0.1"
+version-navigation-compose = "2.9.2" # DO NOT UPGRADE FOR NOW
+version-proguardGradle = "7.9.1"
+version-skikoAwtRuntimeWindowsX64 = "0.9.47" # DO NOT UPGRADE FOR NOW
+version-spring-restdocs-mockmvc = "4.0.0"
+
+version-sqldelight = "2.3.2"
+version-sqlite = "2.6.2" # DO NOT UPGRADE FOR NOW
+version-tika = "3.3.0"
+
+
+[libraries]
+androidx-tv-material = { group = "androidx.tv", name = "tv-material", version.ref = "tvMaterial" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "version-kotlin" }
+kotlin-xml-util = { module = "io.github.pdvrieze.xmlutil:core", version.ref = "version-kotlin-xml-util" }
+kotlin-xml-serialization = { module = "io.github.pdvrieze.xmlutil:serialization", version.ref = "version-kotlin-xml-util" }
+kotlin-serialization-json-jvm = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm", version.ref = "version-kotlin-serialization-json-jvm" }
+kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "version-kotlinx-coroutines-swing" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "version-kotlinx-datetime" }
+kotlinx-io-core = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "version-kotlinx-io-core" }
+kotlinx-io-core-jvm = { module = "org.jetbrains.kotlinx:kotlinx-io-core-jvm", version.ref = "version-kotlinx-io-core" }
+
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "version-androidx-activityCompose" }
+androidx-lifecycle-runtime-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "version-androidx-lifecycle" }
+androidx-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "version-androidx-lifecycle" }
+androidx-work = { module = "androidx.work:work-runtime-ktx", version.ref = "version-androidx-work" }
+
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "version-coil3" }
+coil-mp = { module = "io.coil-kt.coil3:coil", version.ref = "version-coil3" }
+coil-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "version-coil3" }
+coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "version-coil3" }
+
+compose-components = { module = "org.jetbrains.compose.components:components-resources", version.ref = "version-jetbrains-kotlin" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "version-jetbrains-kotlin" }
+compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "version-material3" }
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "version-jetbrains-kotlin" }
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "version-jetbrains-kotlin" }
+compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "version-jetbrains-kotlin" }
+
+jetbrains-compose-navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref= "version-navigation-compose" }
+
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "version-junit" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "version-junit" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "version-junit" }
+
+kermit = { module = "co.touchlab:kermit", version.ref = "version-kermit" }
+
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "version-koin" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "version-koin" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "version-koin" }
+koin-test = { module = "io.insert-koin:koin-test-junit5", version.ref = "version-koin" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "version-koin" }
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "version-koin" }
+koin-androidx-workmanager = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "version-koin" }
+
+flatlaf = { module = "com.formdev:flatlaf", version.ref = "version-flatlaf" }
+
+ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "version-ktor" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "version-ktor" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "version-ktor" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "version-ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "version-ktor" }
+ktor-client-java = { module = "io.ktor:ktor-client-java", version.ref = "version-ktor" }
+ktor-client-encoding = { module = "io.ktor:ktor-client-encoding", version.ref = "version-ktor" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "version-ktor" }
+
+proguardGradle = { module = "com.guardsquare:proguard-gradle", version.ref = "version-proguardGradle" }
+skiko-awt-runtime-windows-x64 = { module = "org.jetbrains.skiko:skiko-awt-runtime-windows-x64", version.ref = "version-skikoAwtRuntimeWindowsX64" }
+html-converter = { module = "be.digitalia.compose.htmlconverter:htmlconverter", version.ref="version-html-converter"}
+
+sqldelight-android = { module = "app.cash.sqldelight:android-driver", version.ref = "version-sqldelight" }
+sqldelight-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "version-sqldelight" }
+sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "version-sqldelight" }
+sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "version-sqlite" }
+
+mediaplayer = { module = "io.github.kdroidfilter:composemediaplayer", version.ref = "version-mediaplayer" }
+androidx-mediaplayer = { module = "com.tidal.androidx.media3:media3-exoplayer-hls", version.ref = "version-androidx-mediaplayer" }
+compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "version-colorpicker" }
+
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "version-kotlin" }
+kotlin-reactor = { module = "io.projectreactor.kotlin:reactor-kotlin-extensions", version.ref = "version-kotlin-reactor" }
+kotlin-reactor-coroutrines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor", version.ref = "version-kotlin-reactor" }
+
+jsoup = { module = "org.jsoup:jsoup", version.ref = "version-jsoup" }
+essence = { module = "de.visualdigits:essence", version.ref = "version-essence" }
+commons-text = { module = "org.apache.commons:commons-text", version.ref = "version-commons-text" }
+tika-core = { module = "org.apache.tika:tika-core", version.ref = "version-tika" }
+
+kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref = "version-kotlin" }
+kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "version-kotlin-coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "version-kotlin-coroutines" }
+spring-restdocs-mockmvc = { module = "org.springframework.restdocs:spring-restdocs-mockmvc", version.ref = "version-spring-restdocs-mockmvc" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "version-kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "version-kotlin" }
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "version-kotlin" }
+jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "version-jetbrains-kotlin" }
+gradle-pdf = { id = "org.asciidoctor.jvm.pdf", version.ref = "version-gradle-pdf" }
+sqlDelight = { id = "app.cash.sqldelight", version.ref = "version-sqldelight" }
+
+[bundles]
+compose = [
+    "compose-components",
+    "compose-foundation",
+    "compose-material3",
+    "compose-runtime",
+    "compose-ui",
+    "compose-ui-tooling"
+]
+
+koin = [
+    "koin-compose",
+    "koin-compose-viewmodel",
+    "koin-core"
+]
+
+ktor = [
+    "ktor-client-auth",
+    "ktor-client-content-negotiation",
+    "ktor-client-core",
+    "ktor-client-logging",
+    "ktor-client-okhttp",
+    "ktor-client-java",
+    "ktor-client-encoding",
+    "ktor-serialization-kotlinx-json"
+]
+
+coil = [
+    "coil-compose",
+    "coil-mp",
+    "coil-network",
+    "coil-network-ktor3"
+]

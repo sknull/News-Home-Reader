@@ -1,0 +1,23 @@
+package de.visualdigits.newshomereader.presentation.screen.page
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import de.visualdigits.common.presentation.components.StudioClock
+
+@Composable
+fun StudioClockTab() {
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        StudioClock(
+            modifier = Modifier
+                .fillMaxSize(),
+        )
+    }
+}

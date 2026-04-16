@@ -1,0 +1,135 @@
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "about": [
+    {
+      "@id": "https://www.heise.de/thema/Cybercrime",
+      "@type": "Thing",
+      "name": "Cybercrime"
+    },
+    {
+      "@id": "https://www.heise.de/thema/Cybersecurity",
+      "@type": "Thing",
+      "name": "Cybersecurity"
+    },
+    {
+      "@id": "https://www.heise.de/thema/Hacking",
+      "@type": "Thing",
+      "name": "Hacking"
+    },
+    {
+      "@id": "https://www.heise.de/thema/IT",
+      "@type": "Thing",
+      "name": "IT"
+    },
+    {
+      "@id": "https://www.heise.de/thema/Penetration-Testing",
+      "@type": "Thing",
+      "name": "Penetration Testing"
+    },
+    {
+      "@id": "https://www.heise.de/thema/Security",
+      "@type": "Thing",
+      "name": "Security"
+    },
+    {
+      "@id": "https://www.heise.de/thema/Test",
+      "@type": "Thing",
+      "name": "Test"
+    }
+  ],
+  "alternativeHeadline": "Proaktive IT-Security mit Pentesting: Ethical Hacking für Admins",
+  "articleSection": "IT",
+  "author": [
+    {
+      "@id": "2736343",
+      "@type": "Person",
+      "name": "Christoph Böttcher"
+    }
+  ],
+  "commentCount": "0",
+  "copyrightHolder": {
+    "@id": "https://www.heise.de",
+    "@type": "Organization",
+    "name": "Heise Medien"
+  },
+  "copyrightYear": "2025",
+  "dateModified": "2025-11-12T10:00:00+01:00",
+  "datePublished": "2025-11-12T10:00:00+01:00",
+  "description": "In fünf Terminen lernen Admins und Security-Verantwortliche ab dem 3. Februar 2026, wie sie mit Ethical Hacking Systeme absichern und Schwachstellen aufdecken.",
+  "discussionUrl": "/forum/heise-online/Kommentare/Proaktive-IT-Security-mit-Pentesting-Ethical-Hacking-fuer-Admins/forum-571964/comment/",
+  "headline": "Proaktive IT-Security mit Pentesting: Ethical Hacking für Admins",
+  "identifier": 4973700,
+  "image": [
+    "https://heise.cloudimg.io/v7/_www-heise-de_/imgs/18/4/9/7/3/7/0/0/Ethical-Hacking-Ticker-Header-16-9-6c98ae74fd7f22d1.png?force_format=avif%2Cwebp%2Cjpeg&org_if_sml=1&q=30&width=1920"
+  ],
+  "inLanguage": "de",
+  "isAccessibleForFree": true,
+  "isFamilyFriendly": true,
+  "isPartOf": {
+    "@type": [
+      "Product"
+    ],
+    "name": "heise online",
+    "productID": "heise.de:basic"
+  },
+  "keywords": "Hacking, IT, Penetration Testing, Security, heise Academy",
+  "mainEntityOfPage": {
+    "@id": "https://www.heise.de/news/Proaktive-IT-Security-mit-Pentesting-Ethical-Hacking-fuer-Admins-11070849.html",
+    "@type": "WebPage",
+    "breadcrumb": {
+      "@context": "http://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "item": {
+            "@id": "https://www.heise.de/",
+            "@type": "WebPage",
+            "name": "heise online"
+          },
+          "position": 1
+        },
+        {
+          "@type": "ListItem",
+          "item": {
+            "@id": "https://www.heise.de/thema/Security",
+            "@type": "WebPage",
+            "name": "Security"
+          },
+          "position": 2
+        },
+        {
+          "@type": "ListItem",
+          "item": {
+            "@id": "https://www.heise.de/news/Proaktive-IT-Security-mit-Pentesting-Ethical-Hacking-fuer-Admins-11070849.html",
+            "@type": "WebPage",
+            "name": "Proaktive IT-Security mit Pentesting: Ethical Hacking für Admins"
+          },
+          "position": 3
+        }
+      ]
+    }
+  },
+  "provider": "",
+  "publisher": {
+    "@type": "Organization",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.heise.de/icons/ho/opengraph/opengraph.png"
+    },
+    "name": "heise online",
+    "url": "https://www.heise.de"
+  },
+  "sourceOrganization": {
+    "@id": "https://www.heise.de/",
+    "@type": "Organization",
+    "identifier": "ho",
+    "name": "heise academy"
+  },
+  "thumbnailUrl": "https://heise.cloudimg.io/v7/_www-heise-de_/imgs/18/4/9/7/3/7/0/0/Ethical-Hacking-Ticker-Header-16-9-6c98ae74fd7f22d1.png?force_format=avif%2Cwebp%2Cjpeg&org_if_sml=1&q=30&width=1920",
+  "timeRequired": "PT3M",
+  "url": "https://www.heise.de/news/Proaktive-IT-Security-mit-Pentesting-Ethical-Hacking-fuer-Admins-11070849.html",
+  "version": "",
+  "wordCount": 426
+}

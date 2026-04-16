@@ -1,0 +1,61 @@
+Hinzufügen
+Hinzufügen...
+BESCHÄFTIGT...
+Abbrechen
+Verzeichnis auswählen
+Datei auswählen
+Schließen
+Löschen
+Bearbeiten
+Bearbeiten...
+Die Festplatte ist voll.
+Datei nicht gefunden.
+Ergebnis konnte nicht analysiert werden.
+Bei einem lokalen Vorgang ist ein unbekannter Fehler aufgetreten.
+Internetverbindung unterbrochen.
+Die Anfrage ist abgelaufen.
+Ergebnis konnte nicht analysiert werden.
+Bei einem Remote-Vorgang ist ein unbekannter Fehler aufgetreten.
+Feld in der Konfiguration unbekannt.
+Falsch.
+
+New Szene
+Konfiguration
+Szene löschen
+Gelesene Verstecken
+Host URL
+Sprache
+Artikel vorladen
+Aktualisierungsintervall
+Szenen Name
+Deutsch
+Englisch
+Über
+Hilfe
+Ok
+Suchen
+Suchen...
+Details anzeigen...
+Fehlerausgabe
+Ausgabe
+Nachrichten
+Shelly Status
+Studio Uhr
+Element löschen
+Info
+Neue Szene...
+Zurück
+Szene löschen...
+Verstecke gelesene artikel in der Nachrichtenliste
+Die URL des Synchronisations servers
+Oberflächensprache
+Beim Laden des Feeds werden auch alle Artikeltexte von der Webseite gelesen
+Chat in externem Browser öffnen
+Artikel in externem Browser öffnen
+Zeitabstand in Minuten, in dem die Feeds aktualisiert werden
+News Feed neu laden.
+Szene zurücksetzen
+True
+Möchtest Du diesen Eintrag wirklich löschen?
+Deine Konfiguration wurde auf die neueste Version migriert. # Eine Rückkehr zu einer älteren Version ist mit der neuen Konfiguration nicht möglich. # Von der alten Konfiguration wurde ein Backup angelegt.
+Keine Projekte.

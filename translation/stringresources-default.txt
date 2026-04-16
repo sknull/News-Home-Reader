@@ -1,0 +1,61 @@
+Add
+Add...
+BUSY...
+Cancel
+Select directory
+Select file
+Close
+Delete
+Edit
+Edit...
+The hard drive is full.
+File not found.
+Result could not be analyzed.
+An unknown error occurred during a local operation.
+Internet connection interrupted.
+The request has timed out.
+Result could not be analyzed.
+An unknown error occurred during a remote operation.
+Field unknown in configuration.
+False
+Field is not defined.
+Add scene
+Configuration
+Delete Scene
+Hide Read items
+Host URL
+Language
+Prefetch Articles
+Refresh Interval
+Scene name
+German
+English
+About
+Help
+OK
+Search
+Search...
+Show Details...
+Error Output
+Output
+News
+Shelly Status
+Studio Clock
+Delete Element
+Info
+Add scene...
+Back
+Delete Scene...
+Hide read articles in the news list
+The URL of the synch server
+UI Language
+When refreshing feeds also all articles will be read from the website
+Open chat page in external browser
+Open article page in external browser
+Interval to refresh all feeds
+Refresh News Feed
+Reset Scene...
+True
+Do you really want to delete this entry?
+Your configuration has been migrated to the latest version. # It is not possible to revert to an older version with the new configuration. # A backup of the old configuration has been created.
+No projects.
