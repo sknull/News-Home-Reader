@@ -1,6 +1,7 @@
 package de.visualdigits.newshomereader.data.model.applicationjson
 
 
+import androidx.compose.runtime.Immutable
 import de.visualdigits.newshomereader.data.serializer.ListSerializer
 import de.visualdigits.newshomereader.data.serializer.OffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.SerialName
@@ -9,6 +10,7 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import java.time.OffsetDateTime
 
 @Serializable
+@Immutable
 data class ImageDto(
     @SerialName("@id") val id: String? = null,
     @SerialName("@type") val type: String? = null,

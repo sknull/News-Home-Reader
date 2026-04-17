@@ -14,11 +14,11 @@ actual class FeedScheduler(
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private var job: Job? = null
 
-    actual fun scheduleEvery(minutes: Long) {
+    actual fun scheduleEvery(minutes: Long, maxImageSize: Int) {
         job?.cancel()
         job = scope.launch {
             while (isActive) {
-                newsFeedWorker.execute()
+                newsFeedWorker.execute(maxImageSize)
                 delay(minutes * 60 * 1000)
             }
         }

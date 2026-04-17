@@ -1,6 +1,7 @@
 package de.visualdigits.newshomereader.data.model.applicationjson
 
 
+import androidx.compose.runtime.Immutable
 import de.visualdigits.newshomereader.data.serializer.ListSerializer
 import de.visualdigits.newshomereader.data.serializer.MainEntityOfPageSerializer
 import de.visualdigits.newshomereader.data.serializer.OffsetDateTimeHeuristicDeserializer
@@ -14,6 +15,7 @@ import java.io.File
 import java.time.OffsetDateTime
 
 @Serializable
+@Immutable
 data class AppJsonDto(
     @SerialName("@id") val id: String? = null,
     @SerialName("@type") val type: String? = null,

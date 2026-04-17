@@ -1,5 +1,6 @@
 import de.visualdigits.newshomereader.domain.model.applicationjson.AppJson;
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem;
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfiguration;
 import kotlin.Boolean;
 import kotlin.String;
 import kotlin.collections.List;
@@ -13,6 +14,8 @@ CREATE TABLE SettingsEntity (
     displayTheme TEXT NOT NULL,
     language TEXT NOT NULL,
     refreshInterval TEXT NOT NULL,
+    refreshWifiOnly INTEGER AS Boolean NOT NULL DEFAULT 0,
+    lastMaxImageSize INTEGER NOT NULL,
     keepReadArticles TEXT NOT NULL DEFAULT 0,
     keepUnreadArticles TEXT NOT NULL DEFAULT 0,
     loadArticles INTEGER AS Boolean NOT NULL DEFAULT 0,
@@ -21,10 +24,10 @@ CREATE TABLE SettingsEntity (
 
 insertSettings:
 INSERT OR REPLACE INTO SettingsEntity (
-    displayTheme, language, refreshInterval, keepReadArticles,
+    displayTheme, language, refreshInterval, refreshWifiOnly, lastMaxImageSize, keepReadArticles,
     keepUnreadArticles, loadArticles, hideRead
 )
-VALUES (?, ?, ?, ?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 getSettingsById:
 SELECT * FROM SettingsEntity WHERE id = :id;
@@ -37,6 +40,8 @@ UPDATE SettingsEntity
 SET displayTheme = :displayTheme,
     language = :language,
     refreshInterval = :refreshInterval,
+    refreshWifiOnly = :refreshWifiOnly,
+    lastMaxImageSize = :lastMaxImageSize,
     keepReadArticles = :keepReadArticles,
     keepUnreadArticles = :keepUnreadArticles,
     loadArticles = :loadArticles,
@@ -243,27 +248,35 @@ WHERE itemId = :itemId;
 -- NEWS FEED CONFIGURATION
 --
 
-CREATE TABLE NewsFeedConfigurationBlob (
+CREATE TABLE NewsFeedGroupEntity (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    jsonContent TEXT AS de.visualdigits.newshomereader.data.model.newsfeeds.NewsFeedConfigurationEntity
+    name TEXT NOT NULL,
+    newsFeeds TEXT AS List<NewsFeedConfiguration> NOT NULL
 );
 
-insertNewsFeedConfiguration:
-INSERT INTO NewsFeedConfigurationBlob (jsonContent)
-VALUES (:jsonContent);
+insertNewsFeedGroupEntity:
+INSERT OR REPLACE INTO NewsFeedGroupEntity (
+    name, newsFeeds
+)
+VALUES (?, ?);
 
-getAllNewsFeedConfigurations:
-SELECT * FROM NewsFeedConfigurationBlob;
+getAllNewsFeedGroupEntities:
+SELECT * FROM NewsFeedGroupEntity;
 
-getNewsFeedConfigurationById:
-SELECT * FROM NewsFeedConfigurationBlob
+getNewsFeedGroupEntityById:
+SELECT * FROM NewsFeedGroupEntity
 WHERE id = :id;
 
-updateNewsFeedConfiguration:
-UPDATE NewsFeedConfigurationBlob
-SET jsonContent = :jsonContent
+getNewsFeedGroupEntityByName:
+SELECT * FROM NewsFeedGroupEntity
+WHERE name = :name;
+
+updateNewsFeedGroupEntity:
+UPDATE NewsFeedGroupEntity
+SET name = :name,
+    newsFeeds = :newsFeeds
 WHERE id = :id;
 
-deleteNewsFeedConfiguration:
-DELETE FROM NewsFeedConfigurationBlob
+deleteNewsFeedGroupEntity:
+DELETE FROM NewsFeedGroupEntity
 WHERE id = :id;

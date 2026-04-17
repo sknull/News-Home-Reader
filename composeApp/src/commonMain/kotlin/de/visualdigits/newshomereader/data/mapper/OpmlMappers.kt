@@ -1,27 +1,38 @@
 package de.visualdigits.newshomereader.data.mapper
 
-import de.visualdigits.newshomereader.data.model.newsfeeds.NewsFeedConfigurationEntity
-import de.visualdigits.newshomereader.data.model.newsfeeds.NodeType
 import de.visualdigits.newshomereader.data.model.opml.Opml
 import de.visualdigits.newshomereader.data.model.opml.Outline
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfiguration
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 
-fun Outline.toNewsFeedConfiguration(parent: NewsFeedConfigurationEntity? = null): NewsFeedConfigurationEntity {
-    val node = NewsFeedConfigurationEntity(
-        name = title?.replace("\n", "")?.trim()?:"",
-        type = if (outlines.isNotEmpty()) NodeType.folder else NodeType.leaf,
-        parent = parent,
-        imageUrl = imageUrl,
-        url = xmlUrl?:""
-    )
-    node.children = outlines.map { o -> o.toNewsFeedConfiguration(node) }
-
-    return node
+fun Opml.toNewsFeedConfiguration(): List<NewsFeedGroup> {
+    return body?.outlines
+        ?.flatMap { outline ->
+            outline.toNewsFeedConfiguration(null)
+        }
+        ?: listOf()
 }
 
-fun Opml.toNewsFeedConfiguration(): NewsFeedConfigurationEntity {
-    return NewsFeedConfigurationEntity(
-        name = head?.title?.replace("\n", "")?.trim()?:"",
-        type = NodeType.folder,
-        children = body?.outlines?.map { o -> o.toNewsFeedConfiguration() } ?: listOf(),
-    )
+fun Outline.toNewsFeedConfiguration(parent: Outline? = null, newsFeedGroups: MutableMap<String, NewsFeedGroup> = mutableMapOf()): List<NewsFeedGroup> {
+    val name = title?.replace("\n", "")?.trim() ?: ""
+    if (outlines.isEmpty()) {
+        val parentName = parent?.title?.replace("\n", "")?.trim() ?: ""
+        val group = newsFeedGroups[parentName]
+        if (group != null) {
+            val node = NewsFeedConfiguration(
+                name = name,
+                groupName = parentName,
+                imageUrl = imageUrl,
+                url = xmlUrl?:""
+            )
+            newsFeedGroups[parentName] = group.copy(
+                newsFeeds = group.newsFeeds + node
+            )
+        }
+    } else {
+        newsFeedGroups.computeIfAbsent(name) { NewsFeedGroup(name = name) }
+        outlines.forEach { o -> o.toNewsFeedConfiguration(this, newsFeedGroups) }
+    }
+
+    return newsFeedGroups.values.toList()
 }

@@ -1,7 +1,6 @@
 package de.visualdigits.newshomereader
 
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
@@ -9,21 +8,21 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.touchlab.kermit.Logger
-import com.formdev.flatlaf.FlatDarculaLaf
-import com.formdev.flatlaf.FlatLightLaf
 import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.common.domain.service.getPlatformLogWriters
 import de.visualdigits.newshomereader.data.repository.FeedScheduler
 import de.visualdigits.newshomereader.di.initKoin
+import de.visualdigits.newshomereader.domain.model.platform.PlatformType
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -39,11 +38,18 @@ fun main() {
     val scheduler: FeedScheduler = koinApp.koin.get()
 
     CoroutineScope(Dispatchers.Default).launch {
-        viewModel.state
-            .map { it.settings?.get<RefreshIntervalEnum>(SK.refreshInterval)?.longValue }
-            .distinctUntilChanged()
-            .collect { interval ->
-            scheduler.scheduleEvery(interval?:60)
+        combine(
+            viewModel.state
+                .map { it.settings?.get<RefreshIntervalEnum>(SK.refreshInterval)?.longValue }
+                .distinctUntilChanged(),
+            viewModel.state
+                .map { it.maxImageSize }
+                .distinctUntilChanged() // Verhindert unnötige Trigger bei gleichem Wert
+                .filterNotNull()
+        ) { interval, maxImageSize ->
+            interval to maxImageSize
+        }.collect { (interval, maxImageSize) ->
+            scheduler.scheduleEvery(interval ?: 60, maxImageSize)
         }
     }
 
@@ -88,7 +94,7 @@ fun main() {
 //            icon = painterResource(Res.drawable.Msfs2024Tools),
             state = state
         ) {
-            App()
+            App(PlatformType.jvm)
         }
     }
 }

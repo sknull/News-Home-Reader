@@ -8,14 +8,15 @@ import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.KeepArticlesEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.RefreshIntervalEnum
-import de.visualdigits.newshomereader.data.model.newsfeeds.NewsFeedConfigurationEntity
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.errorhandling.onError
 import de.visualdigits.newshomereader.domain.model.errorhandling.onSuccess
 import de.visualdigits.newshomereader.domain.model.errorhandling.toUiText
+import de.visualdigits.newshomereader.domain.model.platform.PlatformType
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
@@ -23,7 +24,6 @@ import de.visualdigits.newshomereader.domain.repository.NewsFeedConfigurationRep
 import de.visualdigits.newshomereader.domain.repository.SettingsRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
@@ -49,8 +49,7 @@ class NewsHomeReaderViewModel(
 ) : ViewModel() {
 
     val scrollPosition: MutableMap<String, Int> = mutableMapOf()
-
-    private var newsObservationJob: Job? = null
+    var platformType: PlatformType = PlatformType.unknown
 
     private val _state = MutableStateFlow(NewsHomeReaderState())
     val state = _state.asStateFlow()
@@ -147,6 +146,18 @@ class NewsHomeReaderViewModel(
 
             is NewsHomeReaderAction.OnOpmlImport -> {
                 importOpml(action.ins)
+            }
+
+            is NewsHomeReaderAction.UpdateMaxImageSize -> {
+                action.settings?.also { settings ->
+                    settings.set(SK.maxImageSize, action.maxImageSize)
+                    saveSettings(settings)
+                }
+                _state.update {
+                    it.copy(
+                        maxImageSize = action.maxImageSize
+                    )
+                }
             }
 
             //
@@ -263,21 +274,25 @@ class NewsHomeReaderViewModel(
                 isLoading = true,
             )
         }
+        val wifiOnly = state.value.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
         val loadArticles = state.value.settings?.get<BooleanEnum>(SK.loadArticles)?.booleanValue?:false
         val keepReadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue?:30
         val keepUnreadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepUnreadArticles)?.longValue?:30
+        val maxImageSize = state.value.settings?.get<Int>(SK.maxImageSize)?:1200
         val result = newsFeedConfigurationRepository.setNewsFeeds(ins)
         if (result is Result.Success) {
-            val newsFeedConfiguration = result.data
-            val newsFeeds = newsFeedConfiguration.getNewsFeeds()
+            val newsFeedGroups = result.data
+            val newsFeeds = newsFeedGroups.flatMap { nfg -> nfg.newsFeeds }
             Logger.i("Found newsfeeds: ${newsFeeds.joinToString(", ") { it.name }}")
             newsFeeds.forEach { newsFeed ->
                 Logger.i("Refreshing newsfeed from opml '${newsFeed.name}'...")
                 feedRepository.refreshNewsFeed(
                     feedName = newsFeed.name,
                     url = newsFeed.url,
+                    wifiOnly = wifiOnly,
                     keepReadArticlesInDays = keepReadArticles,
                     keepUnreadArticlesInDays = keepUnreadArticles,
+                    maxImageSize = maxImageSize,
                     loadArticles = loadArticles
                 ) { p ->
                     viewModelScope.launch {
@@ -298,7 +313,7 @@ class NewsHomeReaderViewModel(
                     isLoading = false,
                     currentProgress = 0.0f,
                     isEditingSettings = false,
-                    newsFeeds = newsFeedConfiguration
+                    newsFeedGroups = newsFeedGroups
                 )
             }
         } else if (result is Result.Error){
@@ -331,6 +346,8 @@ class NewsHomeReaderViewModel(
                 newSettings.set(SK.displayTheme, DisplayThemeEnum.LIGHT)
                 newSettings.set(SK.language, Language.EN)
                 newSettings.set(SK.refreshInterval, RefreshIntervalEnum.MINUTES_60)
+                newSettings.set(SK.refreshWifiOnly, BooleanEnum.TRUE)
+                newSettings.set(SK.maxImageSize, 1200)
                 newSettings.set(SK.loadArticles, BooleanEnum.FALSE)
                 newSettings.set(SK.hideRead, BooleanEnum.TRUE)
                 newSettings.set(SK.keepReadArticles, KeepArticlesEnum.DAYS_3)
@@ -368,7 +385,7 @@ class NewsHomeReaderViewModel(
             .onSuccess { newsFeedConfiguration ->
                 _state.update {
                     it.copy(
-                        newsFeeds = newsFeedConfiguration,
+                        newsFeedGroups = newsFeedConfiguration,
                         isLoading = false,
                         uiMessage = null,
                         uiMessageSeverity = null
@@ -379,11 +396,9 @@ class NewsHomeReaderViewModel(
 
     private fun loadFeedItems(
         feedName: String,
-        currentFeedConfiguration: NewsFeedConfigurationEntity
+        currentFeedConfiguration: NewsFeedConfiguration
     ) = viewModelScope.launch {
         _state.update {
-            Logger.i("currentFeeditems: ${it.currentNewsItems}")
-            Logger.i("visibleNewsItems: ${it.visibleNewsItems}")
             it.copy(
                 currentFeedName = feedName,
                 currentFeedConfiguration = currentFeedConfiguration,
@@ -404,16 +419,20 @@ class NewsHomeReaderViewModel(
                 isLoading = true,
             )
         }
+        val wifiOnly = state.value.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
         val loadArticles = state.value.settings?.get<BooleanEnum>(SK.loadArticles)?.booleanValue?:false
         val keepReadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue?:30
         val keepUnreadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepUnreadArticles)?.longValue?:30
+        val maxImageSize = state.value.settings?.get<Int>(SK.maxImageSize)?:1200
         feedName?.also { fn ->
             url?.also { u ->
                 val feedResult = feedRepository.refreshNewsFeed(
                     feedName = fn,
                     url = u,
+                    wifiOnly = wifiOnly,
                     keepReadArticlesInDays = keepReadArticles,
                     keepUnreadArticlesInDays = keepUnreadArticles,
+                    maxImageSize = maxImageSize,
                     loadArticles = loadArticles
                 ) { p ->
                     viewModelScope.launch {
@@ -527,12 +546,6 @@ class NewsHomeReaderViewModel(
         }
     }
 
-    private fun calculateVisibleNewsItems(newsItems: List<NewsItem>, hideRead: Boolean): List<NewsItem> {
-        return newsItems
-            .filter { item -> !hideRead || !item.isRead }
-            .sortedByDescending { item -> item.updated }
-    }
-
     private fun saveSettings(
         settings: Settings,
     ) = viewModelScope.launch {
@@ -547,6 +560,7 @@ class NewsHomeReaderViewModel(
                 _state.update {
                     it.copy(
                         settings = settings.copy(),
+                        visibleNewsItems = calculateVisibleNewsItems(it.currentNewsItems, it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false),
                         isLoading = false,
                         isEditingSettings = false,
                         uiMessage = null,
@@ -564,5 +578,12 @@ class NewsHomeReaderViewModel(
                     )
                 }
             }
+    }
+
+    private fun calculateVisibleNewsItems(newsItems: List<NewsItem>, hideRead: Boolean): List<NewsItem> {
+        val sortedByDescending = newsItems
+            .filter { item -> !hideRead || !item.isRead }
+            .sortedByDescending { item -> item.updated }
+        return sortedByDescending
     }
 }

@@ -17,6 +17,8 @@ fun Settings.toSettingsEntity(): SettingsEntity {
         hideRead = get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
         loadArticles = get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false,
         refreshInterval = get<RefreshIntervalEnum>(SK.refreshInterval)?.name ?: "MINUTES_60",
+        refreshWifiOnly = get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false,
+        lastMaxImageSize = get<Int>(SK.maxImageSize)?.toLong() ?: 1200L,
         keepReadArticles = get<KeepArticlesEnum>(SK.keepReadArticles)?.name ?: "DAYS_30",
         keepUnreadArticles = get<KeepArticlesEnum>(SK.keepUnreadArticles)?.name ?: "DAYS_30",
     )
@@ -31,6 +33,8 @@ fun SettingsEntity.toSettings(): Settings {
     settings.set(SK.hideRead, hideRead)
     settings.set(SK.loadArticles, loadArticles)
     settings.set(SK.refreshInterval, refreshInterval)
+    settings.set(SK.refreshWifiOnly, refreshWifiOnly)
+    settings.set(SK.maxImageSize, 1200)
     settings.set(SK.keepReadArticles, keepReadArticles)
     settings.set(SK.keepUnreadArticles, keepUnreadArticles)
 

@@ -50,9 +50,7 @@ fun NewsFeedsNavigation(
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                state.newsFeeds?.children?.forEach { nf ->
-                    NewsFeedNavigationNodes(true, nf, onAction)
-                }
+                NewsFeedNavigationNodes(true, state.newsFeedGroups, onAction)
 
                 Spacer(Modifier.weight(1f))
 
@@ -81,9 +79,7 @@ fun NewsFeedsNavigation(
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                state.newsFeeds?.children?.forEach { nf ->
-                    NewsFeedNavigationNodes(false, nf, onAction)
-                }
+                NewsFeedNavigationNodes(false, state.newsFeedGroups, onAction)
             }
         }
     }

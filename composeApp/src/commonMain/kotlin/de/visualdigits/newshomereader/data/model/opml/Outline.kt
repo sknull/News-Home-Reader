@@ -1,11 +1,13 @@
 package de.visualdigits.newshomereader.data.model.opml
 
+import androidx.compose.runtime.Immutable
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 
 @Serializable
+@Immutable
 data class Outline(
     @XmlElement(false) val title: String? = null,
     @XmlElement(false) val text: String? = null,

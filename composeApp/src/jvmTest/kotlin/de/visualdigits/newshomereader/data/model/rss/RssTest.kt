@@ -56,8 +56,10 @@ class RssTest : KoinTest {
             feedService.refreshNewsFeed(
                 feedName = "test",
                 url = "https://t3n.de/rss.xml",
+                wifiOnly = false,
                 keepReadArticlesInDays = 30,
                 keepUnreadArticlesInDays = 30,
+                1200,
                 loadArticles = false
             ) {}
                 .onSuccess { newsFeed ->

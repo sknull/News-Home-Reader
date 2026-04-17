@@ -1,5 +1,6 @@
 package de.visualdigits.newshomereader.data.model.rss
 
+import androidx.compose.runtime.Immutable
 import de.visualdigits.newshomereader.data.serializer.OffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
@@ -7,6 +8,7 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import java.time.OffsetDateTime
 
 @Serializable
+@Immutable
 data class Channel(
     @XmlElement(false) val version: String? = null,
     @XmlElement(true) val title: String? = null,

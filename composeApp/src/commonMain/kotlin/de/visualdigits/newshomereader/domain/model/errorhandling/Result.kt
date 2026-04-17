@@ -1,7 +1,11 @@
 package de.visualdigits.newshomereader.domain.model.errorhandling
 
+import androidx.compose.runtime.Immutable
+
 sealed interface Result<out D, out E: AppError> {
+    @Immutable
     data class Success<out D>(val data: D): Result<D, Nothing>
+    @Immutable
     data class Error<out E: AppError>(val error: E, val throwable: Throwable? = null): Result<Nothing, E>
 }
 

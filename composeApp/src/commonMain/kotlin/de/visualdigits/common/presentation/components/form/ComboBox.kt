@@ -30,9 +30,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.KeyValue
-import de.visualdigits.common.domain.model.color
 import de.visualdigits.common.domain.model.configuration.Field
 import de.visualdigits.common.presentation.components.PlatformToolTip
 import de.visualdigits.common.presentation.components.util.minimizedLabelHalfHeight

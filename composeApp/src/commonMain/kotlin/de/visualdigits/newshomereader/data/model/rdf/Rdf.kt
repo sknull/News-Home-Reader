@@ -1,11 +1,13 @@
 package de.visualdigits.newshomereader.data.model.rdf
 
+import androidx.compose.runtime.Immutable
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName("RDF")
+@Immutable
 data class Rdf(
     @XmlElement(true) @XmlSerialName("channel") val channel: Channel? = null,
     @XmlElement(true) @XmlSerialName("image")val image: Image? = null,

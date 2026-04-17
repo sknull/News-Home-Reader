@@ -15,23 +15,26 @@ class NewsFeedWorker(
     private val newsFeedConfigurationRepository: NewsFeedConfigurationRepository,
     private val settingsRepository: SettingsRepository,
 ) {
-    suspend fun execute() {
+    suspend fun execute(maxImageSize: Int) {
         val settingsResult = settingsRepository.getSettings()
         if (settingsResult is Result.Success) {
             val settings = settingsResult.data
+            val wifiOnly = settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
             val loadArticles = settings?.get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false
             val keepReadArticles = settings?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue ?: 30
             val keepUnreadArticles = settings?.get<KeepArticlesEnum>(SK.keepUnreadArticles)?.longValue ?: 30
             val feedConfigurationResult = newsFeedConfigurationRepository.getNewsFeeds()
             if (feedConfigurationResult is Result.Success) {
-                val newsFeedConfiguration = feedConfigurationResult.data
-                val configurations = newsFeedConfiguration?.getNewsFeeds() ?: listOf()
-                for (newsFeedConfiguration in configurations) {
+                val newsFeedGroups = feedConfigurationResult.data
+                val newsFeeds = newsFeedGroups.flatMap { nfg -> nfg.newsFeeds }
+                for (newsFeedConfiguration in newsFeeds) {
                     feedRepository.refreshNewsFeed(
                         feedName = newsFeedConfiguration.name,
                         url = newsFeedConfiguration.url,
+                        wifiOnly = wifiOnly,
                         keepReadArticlesInDays = keepReadArticles,
                         keepUnreadArticlesInDays = keepUnreadArticles,
+                        maxImageSize = maxImageSize,
                         loadArticles = loadArticles
                     ) { _ -> }.onError { remote, throwable ->
                         Logger.e(

@@ -9,7 +9,7 @@ actual class FeedScheduler(
     private val context: Context
 ) {
 
-    actual fun scheduleEvery(minutes: Long) {
+    actual fun scheduleEvery(minutes: Long, maxImageSize: Int) {
         val workRequest = PeriodicWorkRequestBuilder<FeedUpdateWorker>(
             repeatInterval = minutes,
             repeatIntervalTimeUnit = TimeUnit.MINUTES

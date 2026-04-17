@@ -41,7 +41,6 @@ import java.time.Duration
 import java.time.OffsetDateTime
 import java.time.temporal.ChronoUnit
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.collections.map
 
 class DefaultFeedRepository(
     private val httpClient: HttpClient? = null,
@@ -114,14 +113,16 @@ class DefaultFeedRepository(
     override suspend fun refreshNewsFeed(
         feedName: String,
         url: String,
+        wifiOnly: Boolean,
         keepReadArticlesInDays: Long,
         keepUnreadArticlesInDays: Long,
+        maxImageSize: Int,
         loadArticles: Boolean,
         progress: (Float) -> Unit
     ): Result<NewsFeed?, DataError.Remote> = withContext(Dispatchers.IO) {
         Logger.i("Refreshing newsfeed '$feedName', loadArticles=$loadArticles...")
         try {
-            val updated = if (connectivityManager.isInternetAvailable()) {
+            val updated = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                 val response = httpClient?.get(urlString = url)
                 val xml = response?.bodyAsText()
                 val newsFeed = readFromString(feedName, xml)

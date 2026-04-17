@@ -6,6 +6,7 @@ Select directory
 Select file
 Close
 Delete
+Choose OPML File
 Edit
 Edit...
 The hard drive is full.
@@ -19,15 +20,36 @@ An unknown error occurred during a remote operation.
 Field unknown in configuration.
 False
 Field is not defined.
-Add scene
+10 Minutes
+14 Days
+15 Minutes
+1 Day
+30 Days
+30 Minutes
+3 Days
+45 Minutes
+5 Minutes
+60 Days
+60 Minutes
+7 Days
+
 Configuration
 Delete Scene
+Display Theme
+Feed Name
 Hide Read items
 Host URL
+Image URL
+Import OPML
+Keep Read Articles
+Keep Unread Articles
 Language
 Prefetch Articles
 Refresh Interval
+Refresh Wifi Only.
 Scene name
+Stop Words
+Feed URL
 German
 English
 About
@@ -43,18 +65,30 @@ Shelly Status
 Studio Clock
 Delete Element
 Info
+Settings
 Add scene...
 Back
 Delete Scene...
+Defines the look and feel of the UI
+Feed Name. Should be one short word which is used as the internal key
 Hide read articles in the news list
 The URL of the synch server
+URL pointing to an icon for this feed
+Days to keep read articles before deleting from the cache database
+Days to keep unread articles before deleting from the cache database
 UI Language
 When refreshing feeds also all articles will be read from the website
+Marks all items as read
+Marks all items as read which are older than one day
+Marks all items as read which are older than two days
 Open chat page in external browser
 Open article page in external browser
 Interval to refresh all feeds
 Refresh News Feed
+Refresh feeds only when a free of charge connection is available.
 Reset Scene...
+News Items containing one of these words will not be shown
+The URL pointing to the actual newsfeed. # Currently supported feeds are atom, rdf, rss
 True
 Do you really want to delete this entry?
 Your configuration has been migrated to the latest version. # It is not possible to revert to an older version with the new configuration. # A backup of the old configuration has been created.

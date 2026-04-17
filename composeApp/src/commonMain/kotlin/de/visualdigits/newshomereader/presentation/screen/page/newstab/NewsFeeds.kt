@@ -8,18 +8,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import co.touchlab.kermit.Logger
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import de.visualdigits.newshomereader.data.repository.ConnectivityManager
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.style.gap
 
 @Composable
 fun NewsFeeds(
-    isLandscape: Boolean,
+    maxWidth: Dp,
+    maxHeight: Dp,
     onAction: (NewsHomeReaderAction) -> Unit,
     connectivityManager: ConnectivityManager
 ) {
-    if (isLandscape) {
+    if (maxWidth > 600.dp) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
@@ -30,6 +32,8 @@ fun NewsFeeds(
 
             NewsItemsList(
                 isLandscape = true,
+                maxWidth = maxWidth - 200.dp - MaterialTheme.shapes.gap * 2,
+                maxHeight = maxHeight,
                 onAction = onAction,
                 connectivityManager = connectivityManager
             )
@@ -45,6 +49,8 @@ fun NewsFeeds(
 
             NewsItemsList(
                 isLandscape = false,
+                maxWidth = maxWidth,
+                maxHeight = maxHeight - 400.dp,
                 onAction = onAction,
                 connectivityManager = connectivityManager
             )

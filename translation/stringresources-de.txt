@@ -6,6 +6,7 @@ Verzeichnis auswählen
 Datei auswählen
 Schließen
 Löschen
+OPML Datei Wählen
 Bearbeiten
 Bearbeiten...
 Die Festplatte ist voll.
@@ -18,16 +19,37 @@ Ergebnis konnte nicht analysiert werden.
 Bei einem Remote-Vorgang ist ein unbekannter Fehler aufgetreten.
 Feld in der Konfiguration unbekannt.
 Falsch.
-
+Field is not defined.
+10 Minuten
+14 Tage
+15 Minuten
+1 Tag
+30 Tage
+30 Minuten
+3 Tage
+45 Minuten
+5 Minuten
+60 Tage
+60 Minuten
+7 Tage
 New Szene
 Konfiguration
 Szene löschen
+Oberflächen Thema
+Feed Name
 Gelesene Verstecken
 Host URL
+Icon URL
+OPML Importieren
+Behalte gelesene Artikel
+Behalte ungelesene Artikel
 Sprache
 Artikel vorladen
 Aktualisierungsintervall
+Nur im Wlan aktualisieren.
 Szenen Name
+Stop Words
+Feed URL
 Deutsch
 Englisch
 Über
@@ -43,18 +65,30 @@ Shelly Status
 Studio Uhr
 Element löschen
 Info
+Einstellungen
 Neue Szene...
 Zurück
 Szene löschen...
+Definiert wie die Oberfläche angezeigt wird
+Feed Name. Sollte ein kurzes Wort sein. Es wird als interner Schlüssel verwendet
 Verstecke gelesene artikel in der Nachrichtenliste
 Die URL des Synchronisations servers
+URL eines Icons für diesen Feed
+Tage bevor gelesene Artikel aus dem Cache gelöscht werden
+Tage bevor ungelesene Artikel aus dem Cache gelöscht werden
 Oberflächensprache
 Beim Laden des Feeds werden auch alle Artikeltexte von der Webseite gelesen
+Markiert alle Artikel als gelesen
+Markiert alle Artikel als gelesen, die älter als einen Tag sind
+Markiert alle Artikel als gelesen, die älter als zwei Tage sind
 Chat in externem Browser öffnen
 Artikel in externem Browser öffnen
 Zeitabstand in Minuten, in dem die Feeds aktualisiert werden
 News Feed neu laden.
+Aktualisiere Feeds nur, wenn eine kostenfreie Verbindung verfügbar ist.
 Szene zurücksetzen
+News Items containing one of these words will not be shown
+Die URL des newsfeeds. # Zur Zeit werden folgende Feedtypen unterstützt: atom, rdf, rss
 True
 Möchtest Du diesen Eintrag wirklich löschen?
 Deine Konfiguration wurde auf die neueste Version migriert. # Eine Rückkehr zu einer älteren Version ist mit der neuen Konfiguration nicht möglich. # Von der alten Konfiguration wurde ein Backup angelegt.

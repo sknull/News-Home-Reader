@@ -1,5 +1,6 @@
 package de.visualdigits.newshomereader.data.model.rdf
 
+import androidx.compose.runtime.Immutable
 import de.visualdigits.newshomereader.data.serializer.OffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
@@ -8,6 +9,7 @@ import org.apache.commons.text.StringEscapeUtils
 import java.time.OffsetDateTime
 
 @Serializable
+@Immutable
 data class Item(
     @XmlElement(false) @XmlSerialName("about") val about: String? = null,
     @XmlElement(true) @XmlSerialName("title") val title: String? = null,

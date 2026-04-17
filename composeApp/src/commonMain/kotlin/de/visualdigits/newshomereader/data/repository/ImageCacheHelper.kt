@@ -6,6 +6,7 @@ import coil3.annotation.ExperimentalCoilApi
 import coil3.disk.DiskCache
 import coil3.network.ktor3.KtorNetworkFetcherFactory
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.UserAgent
 import io.ktor.client.plugins.compression.ContentEncoding
 import io.ktor.client.plugins.defaultRequest
@@ -16,7 +17,7 @@ import okio.Path
 fun createImageLoader(
     context: PlatformContext,
     cacheDirectory: Path // okio.Path
-): ImageLoader {
+): ImageLoader.Builder {
     return ImageLoader.Builder(context)
         .components {
             add(
@@ -24,6 +25,9 @@ fun createImageLoader(
                     httpClient = HttpClient {
                         install(UserAgent) {
                             agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0"
+                        }
+                        install(HttpTimeout) {
+                            requestTimeoutMillis = 10000
                         }
                         install(ContentEncoding) {
                             deflate(1.0F)
@@ -44,5 +48,4 @@ fun createImageLoader(
                 .maxSizeBytes(512L * 1024L * 1024L)
                 .build()
         }
-        .build()
 }

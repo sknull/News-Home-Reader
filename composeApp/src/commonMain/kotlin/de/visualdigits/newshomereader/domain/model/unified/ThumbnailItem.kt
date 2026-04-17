@@ -1,10 +1,12 @@
 package de.visualdigits.newshomereader.domain.model.unified
 
+import androidx.compose.runtime.Immutable
 import de.visualdigits.newshomereader.data.serializer.OffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.Serializable
 import java.time.OffsetDateTime
 
 @Serializable
+@Immutable
 data class ThumbnailItem(
     val url: List<String> = listOf(),
     val description: String? = null,

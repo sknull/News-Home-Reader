@@ -48,8 +48,10 @@ class MockFeedRepository : FeedRepository {
     override suspend fun refreshNewsFeed(
         feedName: String,
         url: String,
+        wifiOnly: Boolean,
         keepReadArticlesInDays: Long,
         keepUnreadArticlesInDays: Long,
+        maxImageSize: Int,
         loadArticles: Boolean,
         progress: (Float) -> Unit
     ): Result<NewsFeed?, DataError.Remote> {

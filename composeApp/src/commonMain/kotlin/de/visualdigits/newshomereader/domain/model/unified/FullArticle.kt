@@ -1,7 +1,9 @@
 package de.visualdigits.newshomereader.domain.model.unified
 
+import androidx.compose.runtime.Immutable
 import de.visualdigits.newshomereader.domain.model.applicationjson.AppJson
 
+@Immutable
 data class FullArticle(
     val itemId: Long,
     val applicationJson: List<AppJson> = listOf(),

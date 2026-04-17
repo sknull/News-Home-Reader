@@ -1,5 +1,7 @@
 package de.visualdigits.newshomereader.data.repository
 
+import de.visualdigits.newshomereader.domain.model.platform.ConnectivityMode
+
 expect class ConnectivityManager {
-    fun isInternetAvailable(): Boolean
+    fun connectivityMode(): ConnectivityMode
 }

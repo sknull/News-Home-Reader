@@ -1,5 +1,6 @@
 package de.visualdigits.newshomereader.data.model.atom
 
+import androidx.compose.runtime.Immutable
 import de.visualdigits.newshomereader.data.serializer.OffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
@@ -8,6 +9,7 @@ import java.time.OffsetDateTime
 
 
 @Serializable
+@Immutable
 data class Feed(
     @XmlElement(true) @XmlSerialName("title") val title: String? = null,
     @XmlElement(true) @XmlSerialName("subtitle") val subtitle: Text? = null,

@@ -5,6 +5,7 @@ import de.visualdigits.newshomereader.data.repository.ConnectivityManager
 import de.visualdigits.newshomereader.data.repository.FeedScheduler
 import de.visualdigits.newshomereader.data.repository.FeedUpdateWorker
 import de.visualdigits.newshomereader.data.repository.ImageCache
+import de.visualdigits.newshomereader.data.repository.NewsFeedWorker
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.okhttp.OkHttp
@@ -19,7 +20,19 @@ import org.koin.dsl.module
 
 actual val platformModule: Module
     get() = module {
-        single<HttpClientEngine> { OkHttp.create() }
+        // http engine
+        single<HttpClientEngine> {
+            OkHttp.create {
+                config {
+                    // limits parallel connections to avoid jam
+                    dispatcher(okhttp3.Dispatcher().apply {
+                        maxRequestsPerHost = 4
+                    })
+                }
+            }
+        }
+
+        // global http client for all other calls
         single {
             HttpClient(get<HttpClientEngine>()) {
                 install(HttpTimeout) {
@@ -29,12 +42,17 @@ actual val platformModule: Module
                 }
                 defaultRequest {
                     header(HttpHeaders.AcceptCharset, "utf-8")
+                    header(HttpHeaders.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0")
                 }
             }
         }
+
+        single { NewsFeedWorker(get(), get(), get()) }
+        worker { FeedUpdateWorker(get(), get(), get(), get()) }
         single { FeedScheduler(get()) }
-        worker { FeedUpdateWorker(get(), get(), get()) }
+
         single { DriverFactory(androidApplication()) }
         single { ConnectivityManager(get()) }
-        single { ImageCache(get()) }
+
+        single { ImageCache(get(), get()) }
 }

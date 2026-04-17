@@ -1,26 +1,20 @@
 package de.visualdigits.newshomereader.presentation.screen.page.newstab
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,20 +25,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbar
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_counter_1_24px
 import de.visualdigits.compose.resources.icon_counter_2_24px
 import de.visualdigits.compose.resources.icon_done_all_24px
-import de.visualdigits.compose.resources.icon_menu_24px
 import de.visualdigits.compose.resources.icon_refresh_24px
 import de.visualdigits.compose.resources.tooltip_mark_read_all
 import de.visualdigits.compose.resources.tooltip_mark_read_older_1
 import de.visualdigits.compose.resources.tooltip_mark_read_older_2
 import de.visualdigits.compose.resources.tooltip_refresh_newsfeed
 import de.visualdigits.newshomereader.data.repository.ConnectivityManager
+import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
@@ -58,6 +54,8 @@ import org.koin.compose.viewmodel.koinViewModel
 fun NewsItemsList(
     modifier: Modifier = Modifier,
     isLandscape: Boolean,
+    maxWidth: Dp,
+    maxHeight: Dp,
     onAction: (NewsHomeReaderAction) -> Unit,
     connectivityManager: ConnectivityManager
 ) {
@@ -83,6 +81,13 @@ fun NewsItemsList(
         )
 
         // scrollbar box
+        val chunks = if (maxWidth > 1000.dp) {
+            3
+        } else if (maxWidth > 500.dp) {
+            2
+        } else {
+            1
+        }
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -96,17 +101,25 @@ fun NewsItemsList(
                     .padding(end = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
             ) {
-                FlowRow(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
-                ) {
-                    state.visibleNewsItems
-                        .forEach { item ->
-                            NewsItemCard(newsItem = item, onAction = onAction)
+                state.visibleNewsItems
+                    .chunked(chunks)
+                    .forEach { row ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                        ) {
+                            row.forEach { item ->
+                                    NewsItemCard(
+                                        modifier = modifier.weight(1f),
+                                        maxWidth = maxWidth,
+                                        maxHeight = maxHeight,
+                                        newsItem = item,
+                                        onAction = onAction
+                                    )
+                                }
                         }
-                }
+                    }
             }
 
             PlatformVerticalScrollbar(
@@ -138,33 +151,6 @@ private fun NewsListMenuBar(
             .padding(5.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IndicatorButton(
-            modifier = Modifier,
-            width = 50.dp,
-            height = 50.dp,
-            padding = 2.dp,
-            leadingIcon = painterResource(Res.drawable.icon_menu_24px)
-        ) {
-            val isExpanded = state.collapsibleState["group_newsfeeds_navigation"] == true
-            onAction(NewsHomeReaderAction.OnCollapsibleStateChange("group_newsfeeds_navigation", !isExpanded))
-        }
-
-        if (state.currentProgress > 0.0f) {
-            val animatedProgress by animateFloatAsState(
-                targetValue = state.currentProgress,
-                animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec // Sorgt für sanftes Gleiten
-            )
-            CircularProgressIndicator(
-                progress = { animatedProgress },
-                modifier = Modifier
-                    .size(24.dp),
-                color = MaterialTheme.colorScheme.outlineVariant,
-                strokeWidth = ProgressIndicatorDefaults.CircularStrokeWidth,
-                trackColor = MaterialTheme.colorScheme.surfaceDim,
-                strokeCap = ProgressIndicatorDefaults.CircularDeterminateStrokeCap,
-            )
-        }
-
         if (state.currentFeedName != null) {
             IndicatorButton(
                 modifier = Modifier,
@@ -199,9 +185,10 @@ private fun NewsListMenuBar(
                 onAction(NewsHomeReaderAction.OnMarkReadClicked(0))
             }
 
+            val wifiOnly = state.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
             IndicatorButton(
                 modifier = Modifier,
-                enabled = connectivityManager.isInternetAvailable(),
+                enabled = !wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge,
                 width = 30.dp,
                 height = 30.dp,
                 padding = 2.dp,

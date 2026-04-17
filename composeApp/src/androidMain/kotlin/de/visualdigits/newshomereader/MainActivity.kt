@@ -1,6 +1,5 @@
 package de.visualdigits.newshomereader
 
-import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -14,9 +13,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.newshomereader.data.repository.FeedScheduler
+import de.visualdigits.newshomereader.domain.model.platform.PlatformType
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -54,17 +56,25 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+
         lifecycleScope.launch {
-            viewModel.state
-                .map { it.settings?.get<RefreshIntervalEnum>(SK.refreshInterval)?.longValue }
-                .distinctUntilChanged()
-                .collect { interval ->
-                scheduler.scheduleEvery(interval?:60)
+            combine(
+                viewModel.state
+                    .map { it.settings?.get<RefreshIntervalEnum>(SK.refreshInterval)?.longValue }
+                    .distinctUntilChanged(),
+                viewModel.state
+                    .map { it.maxImageSize }
+                    .distinctUntilChanged() // Verhindert unnötige Trigger bei gleichem Wert
+                    .filterNotNull()
+            ) { interval, maxImageSize ->
+                interval to maxImageSize
+            }.collect { (interval, maxImageSize) ->
+                scheduler.scheduleEvery(interval ?: 60, maxImageSize)
             }
         }
 
         setContent {
-            App()
+            App(PlatformType.android)
         }
     }
 }

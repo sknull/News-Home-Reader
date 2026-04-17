@@ -1,22 +1,25 @@
 package de.visualdigits.newshomereader.presentation.model
 
-import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.UiText
-import de.visualdigits.newshomereader.data.model.newsfeeds.NewsFeedConfigurationEntity
 import de.visualdigits.newshomereader.domain.model.errorhandling.LogMessage
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfiguration
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import org.jetbrains.compose.resources.StringResource
 
-@Immutable
+@Stable
 data class NewsHomeReaderState(
 
-    val newsFeeds: NewsFeedConfigurationEntity? = null,
+    val maxImageSize: Int? = null,
 
-    val currentFeedConfiguration: NewsFeedConfigurationEntity? = null,
+    val newsFeedGroups: List<NewsFeedGroup> = listOf(),
+
+    val currentFeedConfiguration: NewsFeedConfiguration? = null,
     val currentFeedName: String? = null,
     val currentNewsItems: List<NewsItem> = listOf(),
     val visibleNewsItems: List<NewsItem> = listOf(),

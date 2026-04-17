@@ -5,6 +5,7 @@ import de.visualdigits.common.domain.model.configuration.EnumFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.Field
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
+import de.visualdigits.common.domain.model.configuration.keyfactory.IntKeyFactory
 import de.visualdigits.common.domain.model.configuration.keyfactory.KeepArticlesEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.compose.resources.Res
@@ -15,6 +16,8 @@ import de.visualdigits.compose.resources.label_keep_unread_articles
 import de.visualdigits.compose.resources.label_language
 import de.visualdigits.compose.resources.label_load_articles
 import de.visualdigits.compose.resources.label_refresh_interval
+import de.visualdigits.compose.resources.label_refresh_wifi_only
+import de.visualdigits.compose.resources.ok
 import de.visualdigits.compose.resources.tooltip_displayTheme
 import de.visualdigits.compose.resources.tooltip_hide_read
 import de.visualdigits.compose.resources.tooltip_keep_read_articles
@@ -22,6 +25,7 @@ import de.visualdigits.compose.resources.tooltip_keep_unread_articles
 import de.visualdigits.compose.resources.tooltip_language
 import de.visualdigits.compose.resources.tooltip_load_articles
 import de.visualdigits.compose.resources.tooltip_refresh_interval
+import de.visualdigits.compose.resources.tooltip_refresh_wifi_only
 import de.visualdigits.newshomereader.domain.model.type.Language
 
 class Settings(
@@ -66,6 +70,19 @@ class Settings(
                     toolTip = Res.string.tooltip_refresh_interval,
                     options = { RefreshIntervalEnum.entries.map { e -> Triple(e.name, e.uiText, e.drawableResourceId) } },
                     keyFactory = RefreshIntervalEnum
+                ),
+                valid = { value -> value != null }
+            ),
+
+            /** Refresh only when connection is free of charge. */
+            Field(
+                descriptor = EnumFieldDescriptor(
+                    fieldClass = BooleanEnum::class,
+                    key = SK.refreshWifiOnly,
+                    label = Res.string.label_refresh_wifi_only,
+                    toolTip = Res.string.tooltip_refresh_wifi_only,
+                    options = { BooleanEnum.entries.map { e -> Triple(e.name, e.uiText, e.drawableResourceId) } },
+                    keyFactory = BooleanEnum
                 ),
                 valid = { value -> value != null }
             ),
@@ -118,6 +135,18 @@ class Settings(
                     toolTip = Res.string.tooltip_hide_read,
                     options = { BooleanEnum.entries.map { e -> Triple(e.name, e.uiText, e.drawableResourceId) } },
                     keyFactory = BooleanEnum
+                ),
+                valid = { value -> value != null }
+            ),
+
+            /** Hidden field for maxImageSize. */
+            Field(
+                descriptor = EnumFieldDescriptor(
+                    fieldClass = Int::class,
+                    visible = false,
+                    key = SK.maxImageSize,
+                    label = Res.string.ok,
+                    keyFactory = IntKeyFactory
                 ),
                 valid = { value -> value != null }
             ),

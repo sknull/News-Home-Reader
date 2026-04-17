@@ -2,9 +2,34 @@ package de.visualdigits.newshomereader.data.database
 
 import de.visualdigits.newshomereader.FullArticleEntity
 import de.visualdigits.newshomereader.NewsFeedEntity
+import de.visualdigits.newshomereader.NewsFeedGroupEntity
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.NewsItemEntity
 import de.visualdigits.newshomereader.SettingsEntity
+
+fun NewsHomeReaderDatabaseQueries.upsertNewsFeedGroup(newsFeedGroupEntity: NewsFeedGroupEntity) {
+    val entity = getNewsFeedGroupEntityById(newsFeedGroupEntity.id).executeAsOneOrNull()
+    if (entity != null) {
+        updateNewsFeedGroup(newsFeedGroupEntity)
+    } else {
+        insertNewsFeedGroup(newsFeedGroupEntity)
+    }
+}
+
+fun NewsHomeReaderDatabaseQueries.updateNewsFeedGroup(newsFeedGroupEntity: NewsFeedGroupEntity) {
+    updateNewsFeedGroupEntity(
+        name = newsFeedGroupEntity.name,
+        newsFeeds = newsFeedGroupEntity.newsFeeds,
+        id = newsFeedGroupEntity.id
+    )
+}
+
+fun NewsHomeReaderDatabaseQueries.insertNewsFeedGroup(newsFeedGroupEntity: NewsFeedGroupEntity) {
+    insertNewsFeedGroupEntity(
+        name = newsFeedGroupEntity.name,
+        newsFeeds = newsFeedGroupEntity.newsFeeds
+    )
+}
 
 fun NewsHomeReaderDatabaseQueries.upsertSettings(settingsEntity: SettingsEntity) {
     val entity = getSettingsById(settingsEntity.id).executeAsOneOrNull()
@@ -22,6 +47,8 @@ fun NewsHomeReaderDatabaseQueries.insertSettings(settingsEntity: SettingsEntity)
         hideRead = settingsEntity.hideRead,
         loadArticles = settingsEntity.loadArticles,
         refreshInterval = settingsEntity.refreshInterval,
+        refreshWifiOnly = settingsEntity.refreshWifiOnly,
+        lastMaxImageSize = settingsEntity.lastMaxImageSize,
         keepReadArticles = settingsEntity.keepReadArticles,
         keepUnreadArticles = settingsEntity.keepUnreadArticles
     )
@@ -34,6 +61,8 @@ fun NewsHomeReaderDatabaseQueries.updateSettings(settingsEntity: SettingsEntity)
         hideRead = settingsEntity.hideRead,
         loadArticles = settingsEntity.loadArticles,
         refreshInterval = settingsEntity.refreshInterval,
+        refreshWifiOnly = settingsEntity.refreshWifiOnly,
+        lastMaxImageSize = settingsEntity.lastMaxImageSize,
         keepReadArticles = settingsEntity.keepReadArticles,
         keepUnreadArticles = settingsEntity.keepUnreadArticles,
         id = settingsEntity.id

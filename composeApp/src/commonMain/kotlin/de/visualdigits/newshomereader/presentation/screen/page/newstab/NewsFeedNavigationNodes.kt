@@ -14,9 +14,9 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.common.presentation.components.container.VerticalCollapsibleBox
-import de.visualdigits.newshomereader.data.model.newsfeeds.NewsFeedConfigurationEntity
-import de.visualdigits.newshomereader.data.model.newsfeeds.NodeType
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.style.gap
 import org.koin.compose.viewmodel.koinViewModel
@@ -25,68 +25,73 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun NewsFeedNavigationNodes(
     isLandscape: Boolean,
-    node: NewsFeedConfigurationEntity,
+    newsFeedGroups: List<NewsFeedGroup>,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
     val viewModel: NewsHomeReaderViewModel = koinViewModel()
     val state by viewModel.state.collectAsState()
 
-    when (node.type) {
-        NodeType.folder -> {
-            VerticalCollapsibleBox(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                title = node.name,
-                focusedBorderColor = Color.Transparent,
-                unfocusedBorderColor = Color.Transparent,
-                backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                shape = RectangleShape,
-                containerPadding = 0.dp,
-                onStateChange = { state ->
-                    onAction(NewsHomeReaderAction.OnCollapsibleStateChange("group_${node.name}", state))
-                },
-                isExpanded = state.collapsibleState["group_${node.name}"] == true,
-                content = {
-                    if (isLandscape) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            node.children.forEach { child -> NewsFeedNavigationNodes(isLandscape, child, onAction) }
-                        }
-                    } else {
-                        FlowRow(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                        ) {
-                            node.children.forEach { child -> NewsFeedNavigationNodes(isLandscape, child, onAction) }
-                        }
+    newsFeedGroups.forEach { newsFeedGroup ->
+        VerticalCollapsibleBox(
+            modifier = Modifier
+                .fillMaxWidth(),
+            title = newsFeedGroup.name,
+            focusedBorderColor = Color.Transparent,
+            unfocusedBorderColor = Color.Transparent,
+            backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
+            shape = RectangleShape,
+            containerPadding = 0.dp,
+            onStateChange = { state ->
+                onAction(NewsHomeReaderAction.OnCollapsibleStateChange("group_${newsFeedGroup.name}", state))
+            },
+            isExpanded = state.collapsibleState["group_${newsFeedGroup.name}"] == true,
+            content = {
+                if (isLandscape) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        NewsFeedItems(newsFeedGroup, state, onAction)
+                    }
+                } else {
+                    FlowRow(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    ) {
+                        NewsFeedItems(newsFeedGroup, state, onAction)
                     }
                 }
-            )
-
-        }
-        NodeType.leaf -> {
-            IndicatorButton(
-                modifier = Modifier,
-                width = 200.dp - MaterialTheme.shapes.gap * 2,
-                height = if (isLandscape) 50.dp else 30.dp,
-                indicatorPosition = Alignment.CenterStart,
-                indicatorColor = MaterialTheme.colorScheme.primaryContainer,
-                text = node.name,
-                textStyle = MaterialTheme.typography.bodySmall,
-                buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
-                shape = MaterialTheme.shapes.extraSmall,
-                selected = state.currentFeedName == node.name
-            ) {
-                onAction(
-                    NewsHomeReaderAction.OnNewsFeedClicked(
-                        feedName = node.name,
-                        currentFeedConfiguration = node
-                    )
-                )
             }
+        )
+    }
+}
+
+@Composable
+private fun NewsFeedItems(
+    newsFeedGroup: NewsFeedGroup,
+    state: NewsHomeReaderState,
+    onAction: (NewsHomeReaderAction) -> Unit
+) {
+    newsFeedGroup.newsFeeds.forEach { newsFeedConfiguration ->
+        IndicatorButton(
+            modifier = Modifier,
+            width = 200.dp - MaterialTheme.shapes.gap * 2,
+            height = 50.dp,
+            indicatorPosition = Alignment.CenterStart,
+            indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+            text = newsFeedConfiguration.name,
+            textStyle = MaterialTheme.typography.bodySmall,
+            buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+            shape = MaterialTheme.shapes.extraSmall,
+            selected = state.currentFeedName == newsFeedConfiguration.name
+        ) {
+            onAction(
+                NewsHomeReaderAction.OnNewsFeedClicked(
+                    feedName = newsFeedConfiguration.name,
+                    currentFeedConfiguration = newsFeedConfiguration
+                )
+            )
         }
     }
 }

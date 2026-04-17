@@ -1,7 +1,6 @@
 package de.visualdigits.newshomereader.presentation.screen.page.newstab
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,10 +28,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import be.digitalia.compose.htmlconverter.HtmlStyle
 import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
@@ -43,6 +42,7 @@ import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import coil3.size.Size
+import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbar
 import de.visualdigits.common.presentation.components.button.IndicatorButton
@@ -76,7 +76,8 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun NewsArticleCard(
     modifier: Modifier = Modifier,
-    isLandscape: Boolean,
+    maxWidth: Dp,
+    maxHeight: Dp,
     uriHandler: UriHandler,
     newsItem: NewsItem,
     onAction: (NewsHomeReaderAction) -> Unit,
@@ -128,7 +129,7 @@ fun NewsArticleCard(
                     Text(
                         modifier = Modifier,
                         text = newsItem.title,
-                        style = if (isLandscape) MaterialTheme.typography.headlineLarge else MaterialTheme.typography.headlineMedium
+                        style = if (maxWidth > 600.dp) MaterialTheme.typography.headlineLarge else MaterialTheme.typography.headlineMedium
                     )
 
                     Text(
@@ -155,9 +156,10 @@ fun NewsArticleCard(
                         )
                     }
 
-                    ArticleImage(newsItem, newsArticle, modifier)
+                    ArticleImage(modifier, newsItem, newsArticle, maxImageSize = state.maxImageSize)
 
-                    if (connectivityManager.isInternetAvailable()) {
+                    val wifiOnly = state.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
+                    if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                         MediaItemButtons(
                             modifier = modifier,
                             mediaItems = (newsArticle?.videoItems?:listOf()) + (newsArticle?.audioItems?:listOf()),
@@ -221,9 +223,10 @@ fun NewsArticleCard(
 
 @Composable
 private fun ArticleImage(
+    modifier: Modifier,
     newsItem: NewsItem,
     newsArticle: FullArticle?,
-    modifier: Modifier
+    maxImageSize: Int?
 ) {
     if (newsArticle?.articleImage?.isNotEmpty() == true) {
         Column(
@@ -237,27 +240,25 @@ private fun ArticleImage(
                     style = MaterialTheme.typography.titleMedium
                 )
             }
+            val builder = ImageRequest
+                .Builder(LocalPlatformContext.current)
+                .data(newsArticle.articleImage)
+                .listener(
+                    onStart = {},
+                    onSuccess = { _, _ -> },
+                    onCancel = {},
+                    onError = { _, result -> Logger.e("Image load failed: $newsArticle.articleImage", result.throwable) }
+                )
+                .crossfade(true)
+                .diskCachePolicy(CachePolicy.ENABLED)
+                .memoryCachePolicy(CachePolicy.ENABLED)
+            maxImageSize
+                ?.also { maxImageSize -> builder.size(maxImageSize) }
+                ?: { builder.size(Size.ORIGINAL) }
             AsyncImage(
                 modifier = Modifier
                     .fillMaxWidth(),
-                model = ImageRequest.Builder(LocalPlatformContext.current)
-                    .data(newsArticle?.articleImage)
-                    .listener(
-                        onStart = {},
-                        onSuccess = { _, _ -> },
-                        onCancel = {},
-                        onError = { _, result ->
-                            Logger.e(
-                                "Image load failed: ${newsArticle.articleImage}",
-                                result.throwable
-                            )
-                        }
-                    )
-                    .size(Size.ORIGINAL)
-                    .crossfade(true)
-                    .diskCachePolicy(CachePolicy.ENABLED)
-                    .memoryCachePolicy(CachePolicy.ENABLED)
-                    .build(),
+                model = builder.build(),
                 fallback = painterResource(Res.drawable.icon_emergency_home_24px),
                 error = painterResource(Res.drawable.icon_emergency_home_24px),
                 contentDescription = newsItem.imageCaption,

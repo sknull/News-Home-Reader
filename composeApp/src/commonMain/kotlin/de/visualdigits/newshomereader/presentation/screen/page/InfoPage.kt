@@ -9,6 +9,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.UriHandler
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.unit.dp
@@ -27,6 +29,7 @@ import java.time.temporal.ChronoField
 
 @Composable
 fun InfoPage(
+    uriHandler: UriHandler,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
     Column(
@@ -42,12 +45,13 @@ fun InfoPage(
                         <h1>News Home Reader</h1>
                         <h3>Version ${AppVersion().version}</h3>
                         <br/>
-                        <div>© ${LocalDate.now().get(ChronoField.YEAR)} by Stephan Knull.<div>
+                        <div>© ${LocalDate.now().get(ChronoField.YEAR)} by <a href=\"mailto.s.knull@t-online.de\">Stephan Knull</a>.<div>
                         """.trimIndent(),
                 style = HtmlStyle(
                     textLinkStyles = TextLinkStyles(style = SpanStyle(color = linkColor)),
                     isTextColorEnabled = true
-                )
+                ),
+                linkInteractionListener = { linkAnnotation -> uriHandler.openUri((linkAnnotation as LinkAnnotation.Url).url) }
             )
         }
 

@@ -1,7 +1,9 @@
 package de.visualdigits.newshomereader.domain.model.unified
 
+import androidx.compose.runtime.Immutable
 import java.time.OffsetDateTime
 
+@Immutable
 data class NewsFeed(
     val id: Long = 0,
     val identifier: String,

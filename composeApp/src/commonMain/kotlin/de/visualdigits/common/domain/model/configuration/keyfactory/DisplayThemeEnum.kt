@@ -208,7 +208,7 @@ private fun myTypography(
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
-            lineHeight = 14.sp * 1.6,
+            lineHeight = 14.sp * 1.2,
             letterSpacing = 0.2.sp,
             color = textColor
         ),
@@ -216,7 +216,7 @@ private fun myTypography(
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight.Normal,
             fontSize = 18.sp,
-            lineHeight = 18.sp * 1.6,
+            lineHeight = 18.sp * 1.2,
             letterSpacing = 0.2.sp,
             color = textColor
         ),
@@ -224,7 +224,7 @@ private fun myTypography(
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight.Normal,
             fontSize = 24.sp,
-            lineHeight = 24.sp * 1.6,
+            lineHeight = 24.sp * 1.2,
             letterSpacing = 0.2.sp,
             color = textColor
         ),
@@ -233,7 +233,7 @@ private fun myTypography(
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
-            lineHeight = 14.sp * 1.6,
+            lineHeight = 14.sp * 1.2,
             letterSpacing = 0.2.sp,
             color = textColor
         ),
@@ -241,7 +241,7 @@ private fun myTypography(
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight.Normal,
             fontSize = 18.sp,
-            lineHeight = 18.sp * 1.6,
+            lineHeight = 18.sp * 1.2,
             letterSpacing = 0.2.sp,
             color = textColor
         ),
@@ -249,7 +249,7 @@ private fun myTypography(
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight.Normal,
             fontSize = 24.sp,
-            lineHeight = 24.sp * 1.6,
+            lineHeight = 24.sp * 1.2,
             letterSpacing = 0.2.sp,
             color = textColor
         ),
@@ -258,7 +258,7 @@ private fun myTypography(
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
-            lineHeight = 14.sp * 1.6,
+            lineHeight = 14.sp * 1.2,
             letterSpacing = 0.2.sp,
             color = textColor
         ),
@@ -266,7 +266,7 @@ private fun myTypography(
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp,
-            lineHeight = 18.sp * 1.6,
+            lineHeight = 18.sp * 1.2,
             letterSpacing = 0.2.sp,
             color = textColor
         ),
@@ -274,7 +274,7 @@ private fun myTypography(
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight.Bold,
             fontSize = 24.sp,
-            lineHeight = 24.sp * 1.6,
+            lineHeight = 24.sp * 1.2,
             letterSpacing = 0.2.sp,
             color = textColor
         )

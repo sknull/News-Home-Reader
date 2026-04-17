@@ -1,10 +1,12 @@
 package de.visualdigits.newshomereader.domain.model.unified
 
+import androidx.compose.runtime.Immutable
 import de.visualdigits.newshomereader.data.serializer.OffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.Serializable
 import java.time.OffsetDateTime
 
 @Serializable
+@Immutable
 data class MediaItem(
     val url: String? = null,
     val headline: String? = null,
@@ -14,10 +16,10 @@ data class MediaItem(
     @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) val uploadDate: OffsetDateTime = OffsetDateTime.now(),
     @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) val expires: OffsetDateTime = OffsetDateTime.now(),
     val keywords: List<String> = listOf(),
-    val thumbnails: List<ThumbnailItem> = listOf()
+    val thumbnails: List<ThumbnailItem> = listOf(),
+    val type: MediaType = MediaType.unknown
 ) {
 
-    var type: MediaType = MediaType.unknown
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

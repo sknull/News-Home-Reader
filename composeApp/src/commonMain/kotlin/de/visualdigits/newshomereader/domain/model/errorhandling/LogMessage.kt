@@ -1,8 +1,10 @@
 package de.visualdigits.newshomereader.domain.model.errorhandling
 
+import androidx.compose.runtime.Immutable
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 
+@Immutable
 data class LogMessage(
     val severity: Severity,
     val message: String,

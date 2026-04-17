@@ -1,12 +1,14 @@
 package de.visualdigits.common.domain.model
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
 
 sealed interface UiText {
 
+    @Immutable
     data class DynamicString(val value: String): UiText
 
     class StringResourceId(

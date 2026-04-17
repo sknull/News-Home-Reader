@@ -3,6 +3,7 @@ package de.visualdigits.common.presentation.components.colorfulslider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.rememberUpdatedState
@@ -19,6 +20,7 @@ import de.visualdigits.common.presentation.components.colorfulslider.ui.ThumbCol
  * Data class that contains color or/and brush property for drawing track section of
  * [ColorfulSlider]
  */
+@Immutable
 data class SliderBrushColor(
     val color: Color = Color.Unspecified,
     val brush: Brush? = null

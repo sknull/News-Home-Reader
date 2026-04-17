@@ -1,8 +1,10 @@
 package de.visualdigits.common.domain.model
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import kotlin.math.abs
 
+@Immutable
 data class HsvColor(
     val hue: Int,
     val saturation: Float,

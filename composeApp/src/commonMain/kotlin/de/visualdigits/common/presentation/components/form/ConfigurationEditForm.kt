@@ -21,8 +21,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,7 +65,7 @@ fun ConfigurationEditForm(
     buttonShape: Shape = MaterialTheme.shapes.extraSmall,
     buttonColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
     containerShape: Shape = MaterialTheme.shapes.small,
-    textStyle: TextStyle = MaterialTheme.typography.bodySmall,
+    textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     space: Dp = MaterialTheme.shapes.gap,
     onValueChange: (KeyValue) -> Unit,
     configuration: AbstractConfiguration<*,*>?,

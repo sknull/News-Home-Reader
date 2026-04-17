@@ -26,11 +26,12 @@ actual val platformModule: Module
                 }
                 defaultRequest {
                     header(HttpHeaders.AcceptCharset, "utf-8")
+                    header(HttpHeaders.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0")
                 }
             }
         }
         single { FeedScheduler(get()) }
         single { DriverFactory() }
         single { ConnectivityManager() }
-        single { ImageCache(coil3.PlatformContext.INSTANCE) }
+        single { ImageCache(coil3.PlatformContext.INSTANCE, get()) }
 }

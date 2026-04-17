@@ -7,6 +7,8 @@ enum class SK : FieldKey<SK> {
     displayTheme,
     language,
     refreshInterval,
+    refreshWifiOnly,
+    maxImageSize,
     loadArticles,
     hideRead,
     keepReadArticles,

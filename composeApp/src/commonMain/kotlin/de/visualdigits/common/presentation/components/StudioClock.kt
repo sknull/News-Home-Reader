@@ -50,7 +50,7 @@ fun StudioClock(
     colorSeconds: Color = Color(0xFFFF0040),
     colorTime: Color = Color(0xFFFF0040),
     colorDate: Color = Color(0xFF9E4F62),
-    colorBackground: Color = Color(0xAA000000),
+    colorBackground: Color = Color(0xdd000000),
     showSeconds: Boolean = true,
     showDate: Boolean = true
 ) {
