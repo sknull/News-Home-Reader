@@ -265,7 +265,7 @@ private fun SwitchBox(
             label = {
                 Text(
                     text = stringResource(field.descriptor.label),
-                    style = textStyle,
+                    style = MaterialTheme.typography.bodySmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

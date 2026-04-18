@@ -13,7 +13,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,17 +25,16 @@ import de.visualdigits.compose.resources.dialog_title_import_opml
 import de.visualdigits.compose.resources.label_import_opml
 import de.visualdigits.compose.resources.title_settings
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
-import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
 fun SettingsPage(
+    state: NewsHomeReaderState,
+    scrollPosition: MutableMap<String, Int>,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
-    val viewModel: NewsHomeReaderViewModel = koinViewModel()
-    val state by viewModel.state.collectAsState()
 
     Column(
         modifier = Modifier
@@ -85,6 +83,7 @@ fun SettingsPage(
         Spacer(Modifier.height(16.dp))
 
         ConfigurationEditForm(
+            scrollPosition = scrollPosition,
             title = stringResource(Res.string.title_settings),
             fieldHeight = 50.dp,
             onValueChange = { keyValue ->

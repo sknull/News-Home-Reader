@@ -13,7 +13,8 @@ import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayTheme
 import de.visualdigits.common.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.common.domain.service.getPlatformLogWriters
 import de.visualdigits.newshomereader.data.repository.FeedScheduler
-import de.visualdigits.newshomereader.di.initKoin
+import de.visualdigits.newshomereader.di.platformModule
+import de.visualdigits.newshomereader.di.sharedModule
 import de.visualdigits.newshomereader.domain.model.platform.PlatformType
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
@@ -26,14 +27,16 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.core.context.startKoin
 import java.awt.Window
 import javax.swing.SwingUtilities
 import javax.swing.UIManager
 
 fun main() {
 
-    val koinApp = initKoin()
-
+    val koinApp = startKoin {
+        modules(sharedModule, platformModule)
+    }
     val viewModel: NewsHomeReaderViewModel = koinApp.koin.get()
     val scheduler: FeedScheduler = koinApp.koin.get()
 

@@ -75,6 +75,8 @@ data class AppJsonDto(
 
         val mapper = Json {
             ignoreUnknownKeys = true
+            isLenient = true
+            coerceInputValues = true
             explicitNulls = false
             encodeDefaults = false
         }

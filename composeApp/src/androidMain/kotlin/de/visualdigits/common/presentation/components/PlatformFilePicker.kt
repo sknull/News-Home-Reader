@@ -27,6 +27,9 @@ actual fun PlatformFileChooser(
     onCancel: (() -> Unit)?,
     onOk: (InputStream) -> Unit
 ) {
+
+    val log = Logger.withTag("PlatformFileChooser")
+
     val context = LocalContext.current
 
     val launcher = rememberLauncherForActivityResult(
@@ -40,7 +43,7 @@ actual fun PlatformFileChooser(
                 }
             }
         } catch (e: Exception) {
-            Logger.e("Could not pick file", e)
+            log.e("Could not pick file", e)
         }
     }
 

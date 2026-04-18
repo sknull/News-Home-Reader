@@ -14,25 +14,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.presentation.components.StudioClock
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
-import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.gap
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun NewsFeedsNavigation(
+    state: NewsHomeReaderState,
     isLandscape: Boolean,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
-    val viewModel: NewsHomeReaderViewModel = koinViewModel()
-    val state by viewModel.state.collectAsState()
-
     if (isLandscape) {
         if (state.collapsibleState["group_newsfeeds_navigation"] == true) {
             Column(
@@ -50,7 +45,7 @@ fun NewsFeedsNavigation(
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                NewsFeedNavigationNodes(true, state.newsFeedGroups, onAction)
+                NewsFeedNavigationNodes(state, true, state.newsFeedGroups, onAction)
 
                 Spacer(Modifier.weight(1f))
 
@@ -79,7 +74,7 @@ fun NewsFeedsNavigation(
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                NewsFeedNavigationNodes(false, state.newsFeedGroups, onAction)
+                NewsFeedNavigationNodes(state, false, state.newsFeedGroups, onAction)
             }
         }
     }

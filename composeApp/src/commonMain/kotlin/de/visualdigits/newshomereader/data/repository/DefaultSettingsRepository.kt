@@ -1,12 +1,12 @@
 package de.visualdigits.newshomereader.data.repository
 
-import co.touchlab.kermit.Logger
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.data.database.upsertSettings
 import de.visualdigits.newshomereader.data.mapper.toSettings
 import de.visualdigits.newshomereader.data.mapper.toSettingsEntity
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
+import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.repository.SettingsRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -17,6 +17,8 @@ import kotlinx.coroutines.withContext
 class DefaultSettingsRepository(
     private val dao: NewsHomeReaderDatabaseQueries
 ): SettingsRepository {
+
+    private val log = kermitLogger()
 
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 
@@ -30,7 +32,7 @@ class DefaultSettingsRepository(
                         .let { s -> Result.Success(s) }
                 } ?: Result.Success(null)
         } catch (e: Exception) {
-            Logger.e("Could not load settings", e)
+            log.e("Could not load settings", e)
             Result.Error(DataError.Local.UNKNOWN)
         }
     }
@@ -41,7 +43,7 @@ class DefaultSettingsRepository(
             dao.upsertSettings(settingsEntity)
             Result.Success(Unit)
         } catch (e: Exception) {
-            Logger.e("Could not set settings", e)
+            log.e("Could not set settings", e)
             Result.Error(DataError.Local.UNKNOWN)
         }
     }

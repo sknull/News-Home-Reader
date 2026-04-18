@@ -2,9 +2,12 @@ package de.visualdigits.newshomereader
 
 import android.app.Application
 import androidx.work.Configuration
-import de.visualdigits.newshomereader.di.initKoin
+import de.visualdigits.newshomereader.di.platformModule
+import de.visualdigits.newshomereader.di.sharedModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.workmanager.factory.KoinWorkerFactory
+import org.koin.androidx.workmanager.koin.workManagerFactory
+import org.koin.core.context.GlobalContext.startKoin
 
 class NewsHomeReaderApplication: Application(), Configuration.Provider {
 
@@ -15,9 +18,10 @@ class NewsHomeReaderApplication: Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
-        initKoin {
+        startKoin {
             androidContext(this@NewsHomeReaderApplication)
-
+            workManagerFactory()
+            modules(sharedModule, platformModule)
         }
     }
 }

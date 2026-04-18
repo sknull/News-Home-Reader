@@ -1,11 +1,12 @@
 package de.visualdigits.newshomereader.domain.model.errorhandling
 
 import androidx.compose.runtime.Immutable
-import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
+import java.time.OffsetDateTime
 
 @Immutable
 data class LogMessage(
+    val timestamp: OffsetDateTime,
     val severity: Severity,
     val message: String,
     val throwable: Throwable?
@@ -23,20 +24,25 @@ data class LogMessage(
 
     @Suppress("NOTHING_TO_INLINE")
     companion object {
+
+        val log = kermitLogger()
+
         inline fun log(
             severity: Severity,
             message: String,
             throwable: Throwable? = null
-        ): LogMessage = LogMessage(severity, message, throwable)
+        ): LogMessage = LogMessage(OffsetDateTime.now(), severity, message, throwable)
 
-        inline fun log(logMessage: LogMessage) {
+        inline fun log(
+            logMessage: LogMessage
+        ) {
             when (logMessage.severity) {
-                Severity.Info -> Logger.i(logMessage.message, logMessage.throwable)
-                Severity.Warn -> Logger.w(logMessage.message, logMessage.throwable)
-                Severity.Error -> Logger.e(logMessage.message, logMessage.throwable)
-                Severity.Verbose -> Logger.v(logMessage.message, logMessage.throwable)
-                Severity.Debug -> Logger.d(logMessage.message, logMessage.throwable)
-                Severity.Assert -> Logger.a(logMessage.message, logMessage.throwable)
+                Severity.Info -> log.i(logMessage.message, logMessage.throwable)
+                Severity.Warn -> log.w(logMessage.message, logMessage.throwable)
+                Severity.Error -> log.e(logMessage.message, logMessage.throwable)
+                Severity.Verbose -> log.v(logMessage.message, logMessage.throwable)
+                Severity.Debug -> log.d(logMessage.message, logMessage.throwable)
+                Severity.Assert -> log.a(logMessage.message, logMessage.throwable)
             }
         }
     }

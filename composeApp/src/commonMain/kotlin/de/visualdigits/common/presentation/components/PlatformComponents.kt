@@ -17,6 +17,15 @@ import java.io.File
 import java.io.InputStream
 
 @Composable
+expect fun PlatformVerticalScrollbarBox(
+    boxModifier: Modifier = Modifier,
+    scrollbarModifier: Modifier = Modifier,
+    scrollState: ScrollState,
+    interactionSource: MutableInteractionSource,
+    rows: () -> List<Pair<String, @Composable () -> Unit>>
+)
+
+@Composable
 expect fun PlatformVerticalScrollbar(
     modifier: Modifier = Modifier,
     scrollState: ScrollState,

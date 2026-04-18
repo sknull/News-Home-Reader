@@ -46,16 +46,15 @@ import de.visualdigits.compose.resources.icon_cancel_24px
 import de.visualdigits.compose.resources.icon_check_small_24px
 import de.visualdigits.compose.resources.ok
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
-import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.style.gap
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConfigurationEditForm(
+    scrollPosition: MutableMap<String, Int>,
     title: String,
     modifier: Modifier = Modifier,
     fieldHeight: Dp = Dp.Unspecified,
@@ -74,10 +73,8 @@ fun ConfigurationEditForm(
     onAction: (NewsHomeReaderAction) -> Unit,
     deleteAllowed: (AbstractFieldDescriptor<*,*,*>, String) -> Boolean = { _,_ -> true }
 ) {
-    val viewModel: NewsHomeReaderViewModel = koinViewModel()
-
     val interactionSource = remember { MutableInteractionSource() }
-    val scrollState = rememberScrollState(viewModel.scrollPosition["configuration_form_$title"]?:0)
+    val scrollState = rememberScrollState(scrollPosition["configuration_form_$title"]?:0)
     LaunchedEffect(scrollState.value) {
         onAction(NewsHomeReaderAction.OnScrollPositionChange("configuration_form_$title", scrollState.value))
     }

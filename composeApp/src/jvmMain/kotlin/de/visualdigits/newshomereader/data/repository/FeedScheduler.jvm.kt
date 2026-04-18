@@ -1,5 +1,6 @@
 package de.visualdigits.newshomereader.data.repository
 
+import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -11,6 +12,9 @@ import kotlinx.coroutines.launch
 actual class FeedScheduler(
     private val newsFeedWorker: NewsFeedWorker,
 ) {
+
+    private val log = kermitLogger()
+
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private var job: Job? = null
 
@@ -18,6 +22,7 @@ actual class FeedScheduler(
         job?.cancel()
         job = scope.launch {
             while (isActive) {
+                log.i("Running scheduled newsfeed refresh...")
                 newsFeedWorker.execute(maxImageSize)
                 delay(minutes * 60 * 1000)
             }

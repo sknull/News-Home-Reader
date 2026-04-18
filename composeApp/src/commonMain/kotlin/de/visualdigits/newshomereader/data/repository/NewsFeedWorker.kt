@@ -1,9 +1,9 @@
 package de.visualdigits.newshomereader.data.repository
 
-import co.touchlab.kermit.Logger
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.KeepArticlesEnum
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
+import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.domain.model.errorhandling.onError
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
@@ -15,6 +15,9 @@ class NewsFeedWorker(
     private val newsFeedConfigurationRepository: NewsFeedConfigurationRepository,
     private val settingsRepository: SettingsRepository,
 ) {
+
+    private val log = kermitLogger()
+
     suspend fun execute(maxImageSize: Int) {
         val settingsResult = settingsRepository.getSettings()
         if (settingsResult is Result.Success) {
@@ -26,28 +29,22 @@ class NewsFeedWorker(
             val feedConfigurationResult = newsFeedConfigurationRepository.getNewsFeeds()
             if (feedConfigurationResult is Result.Success) {
                 val newsFeedGroups = feedConfigurationResult.data
-                val newsFeeds = newsFeedGroups.flatMap { nfg -> nfg.newsFeeds }
-                for (newsFeedConfiguration in newsFeeds) {
-                    feedRepository.refreshNewsFeed(
-                        feedName = newsFeedConfiguration.name,
-                        url = newsFeedConfiguration.url,
-                        wifiOnly = wifiOnly,
-                        keepReadArticlesInDays = keepReadArticles,
-                        keepUnreadArticlesInDays = keepUnreadArticles,
-                        maxImageSize = maxImageSize,
-                        loadArticles = loadArticles
-                    ) { _ -> }.onError { remote, throwable ->
-                        Logger.e(
-                            "Could not load feed '${newsFeedConfiguration.name}' from url '${newsFeedConfiguration.url}'",
-                            throwable
-                        )
-                    }
+                val newsFeedConfigurations = newsFeedGroups.flatMap { nfg -> nfg.newsFeeds }
+                feedRepository.refreshNewsFeeds(
+                    newsFeedConfigurations = newsFeedConfigurations,
+                    wifiOnly = wifiOnly,
+                    keepReadArticlesInDays = keepReadArticles,
+                    keepUnreadArticlesInDays = keepUnreadArticles,
+                    maxImageSize = maxImageSize,
+                    loadArticles = loadArticles
+                ) { _ -> }.onError { remote, throwable ->
+                    log.e("Could not load news feeds", throwable)
                 }
             } else if (feedConfigurationResult is Result.Error) {
-                Logger.e("Could not load feed configuration", feedConfigurationResult.throwable)
+                log.e("Could not load feed configuration", feedConfigurationResult.throwable)
             }
         } else if (settingsResult is Result.Error) {
-            Logger.e("Could not load settings", settingsResult.throwable)
+            log.e("Could not load settings", settingsResult.throwable)
         }
     }
 }

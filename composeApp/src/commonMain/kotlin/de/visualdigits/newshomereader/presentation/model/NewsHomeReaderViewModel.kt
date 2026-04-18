@@ -2,13 +2,13 @@ package de.visualdigits.newshomereader.presentation.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.KeepArticlesEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
+import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.domain.model.errorhandling.onError
 import de.visualdigits.newshomereader.domain.model.errorhandling.onSuccess
 import de.visualdigits.newshomereader.domain.model.errorhandling.toUiText
@@ -22,6 +22,7 @@ import de.visualdigits.newshomereader.domain.repository.ArticleRepository
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
 import de.visualdigits.newshomereader.domain.repository.NewsFeedConfigurationRepository
 import de.visualdigits.newshomereader.domain.repository.SettingsRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,6 +36,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.InputStream
 import java.time.OffsetDateTime
 import java.time.temporal.ChronoUnit
@@ -47,6 +49,8 @@ class NewsHomeReaderViewModel(
     val settingsRepository: SettingsRepository,
     val newsFeedConfigurationRepository: NewsFeedConfigurationRepository,
 ) : ViewModel() {
+
+    private val log = kermitLogger()
 
     val scrollPosition: MutableMap<String, Int> = mutableMapOf()
     var platformType: PlatformType = PlatformType.unknown
@@ -65,27 +69,34 @@ class NewsHomeReaderViewModel(
                     feedRepository.observeFeedItems(feedName)
                         .debounce(150)
                         .map { items ->
-                            items.map { newsItem ->
-                                val articleResult = articleRepository.getFullArticle(newsItem.id)
-                                if (articleResult is Result.Success) {
-                                    newsItem.copy(newsArticle = articleResult.data)
-                                } else {
-                                    newsItem
+                            // ALLES im Hintergrund vorbereiten
+                            withContext(Dispatchers.Default) {
+                                val enriched = items.map { newsItem ->
+                                    val articleResult = articleRepository.getFullArticle(newsItem.id)
+                                    if (articleResult is Result.Success) {
+                                        newsItem.copy(newsArticle = articleResult.data)
+                                    } else {
+                                        newsItem
+                                    }
                                 }
+
+                                // Auch das Filtern/Sichtbarkeit im Hintergrund berechnen
+                                val hideRead = _state.value.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
+                                val visible = calculateVisibleNewsItems(enriched, hideRead)
+
+                                // Paar aus beidem zurückgeben
+                                enriched to visible
                             }
                         }
                 } else {
-                    flowOf(emptyList())
+                    flowOf(emptyList<NewsItem>() to emptyList<NewsItem>())
                 }
             }
-            .onEach { enrichedItems ->
+            .onEach { (enriched, visible) ->
                 _state.update {
                     it.copy(
-                        currentNewsItems = enrichedItems,
-                        visibleNewsItems = calculateVisibleNewsItems(
-                            enrichedItems,
-                            it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
-                        )
+                        currentNewsItems = enriched,
+                        visibleNewsItems = visible
                     )
                 }
             }
@@ -165,6 +176,10 @@ class NewsHomeReaderViewModel(
             //
             is NewsHomeReaderAction.OnNewsFeedRefresh -> {
                 refreshFeed(action.feedName, action.url)
+            }
+
+            is NewsHomeReaderAction.OnNewsFeedsRefresh -> {
+                refreshNewsFeeds()
             }
 
             is NewsHomeReaderAction.OnNewsFeedClicked -> {
@@ -267,46 +282,28 @@ class NewsHomeReaderViewModel(
         }
     }
 
+    private fun refreshNewsFeeds() = viewModelScope.launch {
+        val result = newsFeedConfigurationRepository.getNewsFeeds()
+        if (result is Result.Success) {
+            val newsFeedGroups = result.data
+            val newsFeedConfigurations = newsFeedGroups.flatMap { nfg -> nfg.newsFeeds }
+            refreshNewsFeeds(newsFeedConfigurations)
+        }
+    }
+
     private fun importOpml(ins: InputStream) = viewModelScope.launch {
-        Logger.i("Importing opml...")
+        log.i("Importing opml...")
         _state.update {
             it.copy(
                 isLoading = true,
             )
         }
-        val wifiOnly = state.value.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
-        val loadArticles = state.value.settings?.get<BooleanEnum>(SK.loadArticles)?.booleanValue?:false
-        val keepReadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue?:30
-        val keepUnreadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepUnreadArticles)?.longValue?:30
-        val maxImageSize = state.value.settings?.get<Int>(SK.maxImageSize)?:1200
+
         val result = newsFeedConfigurationRepository.setNewsFeeds(ins)
         if (result is Result.Success) {
             val newsFeedGroups = result.data
-            val newsFeeds = newsFeedGroups.flatMap { nfg -> nfg.newsFeeds }
-            Logger.i("Found newsfeeds: ${newsFeeds.joinToString(", ") { it.name }}")
-            newsFeeds.forEach { newsFeed ->
-                Logger.i("Refreshing newsfeed from opml '${newsFeed.name}'...")
-                feedRepository.refreshNewsFeed(
-                    feedName = newsFeed.name,
-                    url = newsFeed.url,
-                    wifiOnly = wifiOnly,
-                    keepReadArticlesInDays = keepReadArticles,
-                    keepUnreadArticlesInDays = keepUnreadArticles,
-                    maxImageSize = maxImageSize,
-                    loadArticles = loadArticles
-                ) { p ->
-                    viewModelScope.launch {
-                        _state.update {
-                            it.copy(
-                                currentProgress = p,
-                            )
-                        }
-                    }
-                }
-                    .onError { _, throwable ->
-                    Logger.e("Could not refreshed feed '${newsFeed.name}'", throwable)
-                }
-            }
+            val newsFeedConfigurations = newsFeedGroups.flatMap { nfg -> nfg.newsFeeds }
+            refreshNewsFeeds(newsFeedConfigurations)
 
             _state.update {
                 it.copy(
@@ -317,7 +314,7 @@ class NewsHomeReaderViewModel(
                 )
             }
         } else if (result is Result.Error){
-            Logger.e("Could not import OPML", result.throwable)
+            log.e("Could not import OPML", result.throwable)
 
             _state.update {
                 it.copy(
@@ -330,84 +327,42 @@ class NewsHomeReaderViewModel(
         }
     }
 
-    private fun loadData() = viewModelScope.launch {
-        _state.update {
-            it.copy(
-                isLoading = true,
-            )
-        }
-        val result = settingsRepository.getSettings()
-        if (result is Result.Success) {
-            val settings = result.data
-            val finalSettings = if (settings != null) {
-                settings
-            } else {
-                val newSettings = Settings()
-                newSettings.set(SK.displayTheme, DisplayThemeEnum.LIGHT)
-                newSettings.set(SK.language, Language.EN)
-                newSettings.set(SK.refreshInterval, RefreshIntervalEnum.MINUTES_60)
-                newSettings.set(SK.refreshWifiOnly, BooleanEnum.TRUE)
-                newSettings.set(SK.maxImageSize, 1200)
-                newSettings.set(SK.loadArticles, BooleanEnum.FALSE)
-                newSettings.set(SK.hideRead, BooleanEnum.TRUE)
-                newSettings.set(SK.keepReadArticles, KeepArticlesEnum.DAYS_3)
-                newSettings.set(SK.keepUnreadArticles, KeepArticlesEnum.DAYS_7)
-                settingsRepository.setSettings(newSettings)
-                    .onError { _, throwable ->
-                        Logger.e("Could not safe initial settings", throwable)
+    private fun refreshNewsFeeds(newsFeedConfigurations: List<NewsFeedConfiguration>) = viewModelScope.launch {
+        val wifiOnly = state.value.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
+        val loadArticles = state.value.settings?.get<BooleanEnum>(SK.loadArticles)?.booleanValue?:false
+        val keepReadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue?:30
+        val keepUnreadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepUnreadArticles)?.longValue?:30
+        val maxImageSize = state.value.settings?.get<Int>(SK.maxImageSize)?:1200
+
+        feedRepository.refreshNewsFeeds(
+            newsFeedConfigurations = newsFeedConfigurations,
+            wifiOnly = wifiOnly,
+            keepReadArticlesInDays = keepReadArticles,
+            keepUnreadArticlesInDays = keepUnreadArticles,
+            maxImageSize = maxImageSize,
+            loadArticles = loadArticles,
+            progress =  { p ->
+                viewModelScope.launch {
+                    _state.update {
+                        it.copy(
+                            currentProgress = p,
+                        )
                     }
-                newSettings
+                }
             }
-
-            Locale.setDefault(finalSettings.get<Language>(SK.language)?.locale?: Language.EN.locale)
-
-            _state.update {
-                it.copy(
-                    settings = finalSettings,
-                    isLoading = false,
-                    uiMessage = null,
-                    uiMessageSeverity = null,
-                    collapsibleState = mapOf("group_newsfeeds_navigation" to true)
-                )
-            }
-        } else if (result is Result.Error) {
-            Logger.e("Could not load data", result.throwable)
-            _state.update {
-                it.copy(
-                    isLoading = false,
-                    uiMessage = result.error.toUiText(),
-                    uiMessageSeverity = Severity.Error
-                )
-            }
-        }
-
-        newsFeedConfigurationRepository.getNewsFeeds()
-            .onSuccess { newsFeedConfiguration ->
+        )
+            .onSuccess {
                 _state.update {
                     it.copy(
-                        newsFeedGroups = newsFeedConfiguration,
                         isLoading = false,
-                        uiMessage = null,
-                        uiMessageSeverity = null
+                        currentProgress = 0.0f,
+                        isEditingSettings = false,
                     )
                 }
             }
-    }
-
-    private fun loadFeedItems(
-        feedName: String,
-        currentFeedConfiguration: NewsFeedConfiguration
-    ) = viewModelScope.launch {
-        _state.update {
-            it.copy(
-                currentFeedName = feedName,
-                currentFeedConfiguration = currentFeedConfiguration,
-                currentNewsArticle = null,
-                isLoading = false,
-                uiMessage = null,
-                uiMessageSeverity = null
-            )
-        }
+            .onError { remote, throwable ->
+                log.e("Could not load news feeds", throwable)
+            }
     }
 
     private fun refreshFeed(
@@ -463,7 +418,7 @@ class NewsHomeReaderViewModel(
                         )
                     }
                 } else if (feedResult is Result.Error) {
-                    Logger.e("Could not load feed '$feedName'", feedResult.throwable)
+                    log.e("Could not load feed '$feedName'", feedResult.throwable)
                     _state.update {
                         it.copy(
                             isLoading = false,
@@ -474,6 +429,86 @@ class NewsHomeReaderViewModel(
                     }
                 }
             }
+        }
+    }
+
+    private fun loadData() = viewModelScope.launch {
+        _state.update {
+            it.copy(
+                isLoading = true,
+            )
+        }
+        val result = settingsRepository.getSettings()
+        if (result is Result.Success) {
+            val settings = result.data
+            val finalSettings = if (settings != null) {
+                settings
+            } else {
+                val newSettings = Settings()
+                newSettings.set(SK.displayTheme, DisplayThemeEnum.LIGHT)
+                newSettings.set(SK.language, Language.EN)
+                newSettings.set(SK.refreshInterval, RefreshIntervalEnum.MINUTES_60)
+                newSettings.set(SK.refreshWifiOnly, BooleanEnum.TRUE)
+                newSettings.set(SK.maxImageSize, 1200)
+                newSettings.set(SK.loadArticles, BooleanEnum.FALSE)
+                newSettings.set(SK.hideRead, BooleanEnum.TRUE)
+                newSettings.set(SK.keepReadArticles, KeepArticlesEnum.DAYS_3)
+                newSettings.set(SK.keepUnreadArticles, KeepArticlesEnum.DAYS_7)
+                settingsRepository.setSettings(newSettings)
+                    .onError { _, throwable ->
+                        log.e("Could not safe initial settings", throwable)
+                    }
+                newSettings
+            }
+
+            Locale.setDefault(finalSettings.get<Language>(SK.language)?.locale?: Language.EN.locale)
+
+            _state.update {
+                it.copy(
+                    settings = finalSettings,
+                    isLoading = false,
+                    uiMessage = null,
+                    uiMessageSeverity = null,
+                    collapsibleState = mapOf("group_newsfeeds_navigation" to true)
+                )
+            }
+        } else if (result is Result.Error) {
+            log.e("Could not load data", result.throwable)
+            _state.update {
+                it.copy(
+                    isLoading = false,
+                    uiMessage = result.error.toUiText(),
+                    uiMessageSeverity = Severity.Error
+                )
+            }
+        }
+
+        newsFeedConfigurationRepository.getNewsFeeds()
+            .onSuccess { newsFeedConfiguration ->
+                _state.update {
+                    it.copy(
+                        newsFeedGroups = newsFeedConfiguration,
+                        isLoading = false,
+                        uiMessage = null,
+                        uiMessageSeverity = null
+                    )
+                }
+            }
+    }
+
+    private fun loadFeedItems(
+        feedName: String,
+        currentFeedConfiguration: NewsFeedConfiguration
+    ) = viewModelScope.launch {
+        _state.update {
+            it.copy(
+                currentFeedName = feedName,
+                currentFeedConfiguration = currentFeedConfiguration,
+                currentNewsArticle = null,
+                isLoading = false,
+                uiMessage = null,
+                uiMessageSeverity = null
+            )
         }
     }
 
@@ -498,7 +533,7 @@ class NewsHomeReaderViewModel(
                 }
             }
             .onError { error, throwable ->
-                Logger.e("Could not load article", throwable)
+                log.e("Could not load article", throwable)
                 _state.update {
                     it.copy(
                         isLoading = false,
@@ -535,7 +570,7 @@ class NewsHomeReaderViewModel(
                 )
             }
         } else if (articleResult is Result.Error) {
-            Logger.e("Could not load article", articleResult.throwable)
+            log.e("Could not load article", articleResult.throwable)
             _state.update {
                 it.copy(
                     isLoading = false,
@@ -569,7 +604,7 @@ class NewsHomeReaderViewModel(
                 }
             }
             .onError { error, throwable ->
-                Logger.e("Could not save settings", throwable)
+                log.e("Could not save settings", throwable)
                 _state.update {
                     it.copy(
                         isLoading = false,

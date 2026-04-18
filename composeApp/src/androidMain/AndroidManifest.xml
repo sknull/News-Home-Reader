@@ -20,6 +20,11 @@
     android:supportsRtl="true"
     android:theme="@android:style/Theme.Material.Light.NoActionBar">
 
+    <meta-data
+      android:name="androidx.work.WorkManagerInitializer"
+      android:value="androidx.startup"
+      tools:node="remove" />
+
     <provider
       android:name="androidx.startup.InitializationProvider"
       android:authorities="${applicationId}.androidx-startup"

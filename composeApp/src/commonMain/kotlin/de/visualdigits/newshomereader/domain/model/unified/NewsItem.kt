@@ -19,6 +19,7 @@ data class NewsItem(
     val imageTitle: String,
     val imageCaption: String,
     val isRead: Boolean = false,
+    val newsFeed: NewsFeed? = null,
     val newsArticle: FullArticle? = null
 ): Comparable<NewsItem> {
 

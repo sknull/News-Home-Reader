@@ -7,6 +7,7 @@ import de.visualdigits.newshomereader.data.model.rss.Rss
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
 import de.visualdigits.newshomereader.domain.util.decodeFromString
@@ -43,6 +44,18 @@ class MockFeedRepository : FeedRepository {
 
     override suspend fun upsertNewsItem(newsItem: NewsItem, forceUpdate: Boolean): Result<Unit, DataError.Local> {
         return Result.Success(Unit)
+    }
+
+    override suspend fun refreshNewsFeeds(
+        newsFeedConfigurations: List<NewsFeedConfiguration>,
+        wifiOnly: Boolean,
+        keepReadArticlesInDays: Long,
+        keepUnreadArticlesInDays: Long,
+        maxImageSize: Int,
+        loadArticles: Boolean,
+        progress: (Float) -> Unit
+    ): Result<List<NewsFeed>, DataError.Remote> {
+        return Result.Success(listOf())
     }
 
     override suspend fun refreshNewsFeed(

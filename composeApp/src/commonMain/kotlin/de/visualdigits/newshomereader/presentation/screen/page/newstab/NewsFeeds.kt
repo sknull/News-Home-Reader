@@ -12,12 +12,15 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.visualdigits.newshomereader.data.repository.ConnectivityManager
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.gap
 
 @Composable
 fun NewsFeeds(
+    state: NewsHomeReaderState,
+    scrollPosition: MutableMap<String, Int>,
     maxWidth: Dp,
-    maxHeight: Dp,
+    maxImageSize: Int?,
     onAction: (NewsHomeReaderAction) -> Unit,
     connectivityManager: ConnectivityManager
 ) {
@@ -28,12 +31,14 @@ fun NewsFeeds(
                 .padding(MaterialTheme.shapes.gap),
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
         ) {
-            NewsFeedsNavigation(true, onAction)
+            NewsFeedsNavigation(state, true, onAction)
 
             NewsItemsList(
+                state = state,
+                scrollPosition = scrollPosition,
                 isLandscape = true,
                 maxWidth = maxWidth - 200.dp - MaterialTheme.shapes.gap * 2,
-                maxHeight = maxHeight,
+                maxImageSize = maxImageSize,
                 onAction = onAction,
                 connectivityManager = connectivityManager
             )
@@ -45,12 +50,14 @@ fun NewsFeeds(
                 .padding(MaterialTheme.shapes.gap),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
         ) {
-            NewsFeedsNavigation(false, onAction)
+            NewsFeedsNavigation(state, false, onAction)
 
             NewsItemsList(
+                state = state,
+                scrollPosition = scrollPosition,
                 isLandscape = false,
                 maxWidth = maxWidth,
-                maxHeight = maxHeight - 400.dp,
+                maxImageSize = maxImageSize,
                 onAction = onAction,
                 connectivityManager = connectivityManager
             )

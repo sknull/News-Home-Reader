@@ -3,6 +3,7 @@ package de.visualdigits.newshomereader.domain.repository
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import kotlinx.coroutines.flow.Flow
 import java.io.File
@@ -32,6 +33,16 @@ interface FeedRepository {
         newsItem: NewsItem,
         forceUpdate: Boolean = false
     ): Result<Unit, DataError.Local>
+
+    suspend fun refreshNewsFeeds(
+        newsFeedConfigurations: List<NewsFeedConfiguration>,
+        wifiOnly: Boolean,
+        keepReadArticlesInDays: Long,
+        keepUnreadArticlesInDays: Long,
+        maxImageSize: Int,
+        loadArticles: Boolean,
+        progress: (Float) -> Unit,
+    ): Result<List<NewsFeed>, DataError.Remote>
 
     suspend fun refreshNewsFeed(
         feedName: String,

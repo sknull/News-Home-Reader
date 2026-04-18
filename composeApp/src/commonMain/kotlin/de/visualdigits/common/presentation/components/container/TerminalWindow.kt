@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -89,10 +89,10 @@ fun TerminalWindow(
                         .padding(MaterialTheme.shapes.gap)
                         .fillMaxSize()
                 ) {
-                    itemsIndexed(
+                    items(
                         items = listData(),
-                        key =  { index, _ -> index }
-                    ) { _, log ->
+                        key =  { log -> log.timestamp }
+                    ) { log ->
                         Text(
                             text = log.toString(),
                             color = log.severity.color(),

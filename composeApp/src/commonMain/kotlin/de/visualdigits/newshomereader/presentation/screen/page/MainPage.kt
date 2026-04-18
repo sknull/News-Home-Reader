@@ -21,19 +21,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
+import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.common.presentation.components.container.ErrorCard
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_info_24px
 import de.visualdigits.compose.resources.icon_menu_24px
+import de.visualdigits.compose.resources.icon_refresh_24px
 import de.visualdigits.compose.resources.icon_settings_24px
+import de.visualdigits.compose.resources.tooltip_refresh_newsfeed
 import de.visualdigits.newshomereader.data.repository.ConnectivityManager
+import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.screen.page.newstab.NewsArticleCard
 import de.visualdigits.newshomereader.presentation.screen.page.newstab.NewsFeeds
 import de.visualdigits.newshomereader.presentation.style.gap
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -43,14 +48,15 @@ fun MainPage(
 ) {
     val viewModel: NewsHomeReaderViewModel = koinViewModel()
     val state by viewModel.state.collectAsState()
+    val maxImageSize = state.settings?.get<Int>(SK.maxImageSize) ?: 1200
 
     val uriHandler = LocalUriHandler.current
 
-    PageFrame(onAction) { maxWidth, maxHeight ->
+    PageFrame(state.settings, onAction) { maxWidth, maxHeight ->
         if (state.isShowInfos) {
             InfoPage(uriHandler, onAction)
         } else if (state.isEditingSettings) {
-            SettingsPage(onAction)
+            SettingsPage(state, viewModel.scrollPosition, onAction)
         } else {
             Column(
                 modifier = Modifier
@@ -94,6 +100,19 @@ fun MainPage(
                         )
                     }
 
+                    val wifiOnly = state.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
+                    IndicatorButton(
+                        modifier = Modifier,
+                        enabled = !wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge,
+                        width = 30.dp,
+                        height = 30.dp,
+                        padding = 2.dp,
+                        leadingIcon = painterResource(Res.drawable.icon_refresh_24px),
+                        toolTip = stringResource(Res.string.tooltip_refresh_newsfeed),
+                    ) {
+                        onAction(NewsHomeReaderAction.OnNewsFeedsRefresh())
+                    }
+
                     IndicatorButton(
                         modifier = Modifier,
                         width = 50.dp,
@@ -127,8 +146,11 @@ fun MainPage(
                     if (state.currentNewsArticle != null) {
                         state.currentNewsItem?.let { ni ->
                             NewsArticleCard(
+                                scrollPosition = viewModel.scrollPosition,
                                 maxWidth = maxWidth,
-                                maxHeight = maxHeight,
+                                maxImageSize = maxImageSize,
+                                newsArticle = state.currentNewsArticle,
+                                settings = state.settings,
                                 uriHandler = uriHandler,
                                 newsItem = ni,
                                 onAction = onAction,
@@ -137,8 +159,10 @@ fun MainPage(
                         }
                     } else {
                         NewsFeeds(
+                            state = state,
+                            scrollPosition = viewModel.scrollPosition,
                             maxWidth = maxWidth,
-                            maxHeight = maxHeight,
+                            maxImageSize = maxImageSize,
                             onAction = onAction,
                             connectivityManager = connectivityManager
                         )

@@ -3,7 +3,7 @@ package de.visualdigits.newshomereader.data.repository
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import co.touchlab.kermit.Logger
+import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.repository.SettingsRepository
 
@@ -17,6 +17,8 @@ class FeedUpdateWorker(
     private val settingsRepository: SettingsRepository
 ) : CoroutineWorker(context, workerParams) {
 
+    private val log = kermitLogger()
+
     override suspend fun doWork(): Result {
         return try {
             val settingsResult = settingsRepository.getSettings()
@@ -25,10 +27,11 @@ class FeedUpdateWorker(
             } else {
                 1200
             }
+            log.i("Running scheduled newsfeed refresh...")
             newsFeedWorker.execute(maxImageSize)
             Result.success()
         } catch(e: Exception) {
-            Logger.Companion.e("Could not refresh repositories", e)
+            log.e("Could not refresh repositories", e)
             Result.retry()
         }
     }

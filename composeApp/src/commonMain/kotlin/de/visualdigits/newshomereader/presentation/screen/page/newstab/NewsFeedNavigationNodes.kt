@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,20 +15,16 @@ import de.visualdigits.common.presentation.components.container.VerticalCollapsi
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
-import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.style.gap
-import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
 fun NewsFeedNavigationNodes(
+    state: NewsHomeReaderState,
     isLandscape: Boolean,
     newsFeedGroups: List<NewsFeedGroup>,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
-    val viewModel: NewsHomeReaderViewModel = koinViewModel()
-    val state by viewModel.state.collectAsState()
-
     newsFeedGroups.forEach { newsFeedGroup ->
         VerticalCollapsibleBox(
             modifier = Modifier

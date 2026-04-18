@@ -2,7 +2,6 @@ package de.visualdigits.newshomereader.data.repository
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
-import co.touchlab.kermit.Logger
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeed
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedEntity
@@ -16,7 +15,9 @@ import de.visualdigits.newshomereader.data.model.rdf.Rdf
 import de.visualdigits.newshomereader.data.model.rss.Rss
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
+import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
@@ -49,6 +50,8 @@ class DefaultFeedRepository(
     private val imageCache: ImageCache,
     val articleRepository: ArticleRepository,
 ) : FeedRepository {
+
+    private val log = kermitLogger()
 
     override suspend fun readFromFile(
         feedName: String,
@@ -110,6 +113,66 @@ class DefaultFeedRepository(
         }
     }
 
+    private val currentStep = AtomicInteger(0)
+
+    override suspend fun refreshNewsFeeds(
+        newsFeedConfigurations: List<NewsFeedConfiguration>,
+        wifiOnly: Boolean,
+        keepReadArticlesInDays: Long,
+        keepUnreadArticlesInDays: Long,
+        maxImageSize: Int,
+        loadArticles: Boolean,
+        progress: (Float) -> Unit
+    ): Result<List<NewsFeed>, DataError.Remote> = withContext(Dispatchers.IO) {
+        try {
+            val finalNewsFeeds = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
+                val newsFeeds = newsFeedConfigurations.mapNotNull { newsFeedConfiguration ->
+                    log.i("Refreshing newsfeed '${newsFeedConfiguration.name}', loadArticles=$loadArticles...")
+                    try {
+                        val response = httpClient?.get(urlString = newsFeedConfiguration.url)
+                        val xml = response?.bodyAsText()
+                        readFromString(newsFeedConfiguration.name, xml)
+                    } catch (e: Exception) {
+                        log.e("Could not load feed '${newsFeedConfiguration.name}'")
+                        null
+                    }
+                }
+
+                val newsItems = newsFeeds.flatMap { newsFeed -> newsFeed.items }
+                val totalSteps = newsFeeds.size + newsItems.size * (if (loadArticles) 2 else 1)
+                currentStep.set(0)
+
+                val persistedItems = dao.transactionWithResult {
+                    val newsItems = newsFeeds.flatMap { newsFeed -> persistNewsFeed(newsFeed, totalSteps, progress) }
+                    dao.cleanupOldReadNewsItems(OffsetDateTime.now().minus(Duration.of(keepReadArticlesInDays, ChronoUnit.DAYS)).toInstant().toEpochMilli())
+                    dao.cleanupOldUnreadNewsItems(OffsetDateTime.now().minus(Duration.of(keepUnreadArticlesInDays, ChronoUnit.DAYS)).toInstant().toEpochMilli())
+                    newsItems
+                }
+
+                imageCache.prefetchImages(persistedItems.map { item -> item.image }.filter { url -> url.isNotEmpty() })
+
+                val newsFeedsMap = newsFeeds
+                    .associate { nf -> Pair(nf.feedName, nf.copy(items = listOf())) }
+                    .toMutableMap()
+
+                loadArticles(loadArticles, persistedItems, totalSteps, progress).mapNotNull { item ->
+                    item.newsFeed?.let { nf ->
+                        val newsFeed = newsFeedsMap[nf.feedName]
+                        newsFeed
+                            ?.copy(items = newsFeed.items + item)
+                            ?.also { nf -> newsFeedsMap[nf.feedName] = nf }
+                    }
+                }
+            } else {
+                log.i("No free of charge internet connection available - fetching newsFeeds from database")
+                dao.getAllNewsFeeds().executeAsList().map { nf -> nf.toNewsFeed() }
+            }
+            Result.Success(finalNewsFeeds)
+        } catch (e: Exception) {
+            Result.Error(DataError.Remote.SERIALIZATION, e)
+        }
+    }
+
     override suspend fun refreshNewsFeed(
         feedName: String,
         url: String,
@@ -120,67 +183,27 @@ class DefaultFeedRepository(
         loadArticles: Boolean,
         progress: (Float) -> Unit
     ): Result<NewsFeed?, DataError.Remote> = withContext(Dispatchers.IO) {
-        Logger.i("Refreshing newsfeed '$feedName', loadArticles=$loadArticles...")
+        log.i("Refreshing newsfeed '$feedName', loadArticles=$loadArticles...")
         try {
             val updated = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                 val response = httpClient?.get(urlString = url)
                 val xml = response?.bodyAsText()
                 val newsFeed = readFromString(feedName, xml)
-                val totalItems = newsFeed.items.size
+
+                val totalItems = newsFeed.items.size + 1
                 val totalSteps = totalItems * (if (loadArticles) 2 else 1)
-                var currentStep = 0
-                val updatedItems = dao.transactionWithResult {
-                    dao.upsertNewsFeed(newsFeed.toNewsFeedEntity())
-                    val newsItems = newsFeed.items.mapIndexed { index, item ->
-                        val newsItemEntity = item.toNewsItemEntity()
-                        val item = dao.upsertNewsItem(newsItemEntity)
-                        currentStep++
-                        progress(currentStep.toFloat() / totalSteps)
-                        item
-                    }.map { newsItemEntity -> newsItemEntity.toNewsItem() }
+                currentStep.set(0)
+
+                val persistedItems = dao.transactionWithResult {
+                    val newsItems = persistNewsFeed(newsFeed, totalSteps, progress)
                     dao.cleanupOldReadNewsItems(OffsetDateTime.now().minus(Duration.of(keepReadArticlesInDays, ChronoUnit.DAYS)).toInstant().toEpochMilli())
                     dao.cleanupOldUnreadNewsItems(OffsetDateTime.now().minus(Duration.of(keepUnreadArticlesInDays, ChronoUnit.DAYS)).toInstant().toEpochMilli())
                     newsItems
                 }
 
-                imageCache.prefetchImages(updatedItems.map { item -> item.image }.filter { url -> url.isNotEmpty() })
+                imageCache.prefetchImages(persistedItems.map { item -> item.image }.filter { url -> url.isNotEmpty() })
 
-                val updatedUpdatedItems = if (loadArticles) {
-                    coroutineScope {
-                        val semaphore = Semaphore(5)
-                        val completedArticles = AtomicInteger(0)
-                        updatedItems.mapIndexed { index, newsItem ->
-                            async {
-                                try {
-                                    semaphore.withPermit {
-                                        val articleResult = articleRepository.readFullArticle(itemId = newsItem.id, url = newsItem.link)
-                                        val item = when (articleResult) {
-                                            is Result.Success -> {
-                                                newsItem.copy(newsArticle = articleResult.data)
-                                            }
-
-                                            is Result.Error -> {
-                                                Logger.e("Could not read article: ${newsItem.link}", articleResult.throwable)
-                                                newsItem
-                                            }
-                                        }
-
-                                        val done = completedArticles.incrementAndGet()
-                                        progress((totalItems + done).toFloat() / totalSteps)
-                                        item
-                                    }
-                                } catch (e: Exception) {
-                                    Logger.e("Could not fetch article", e)
-                                    newsItem
-                                }
-                            }
-                        }.awaitAll()
-                    }
-                } else {
-                    updatedItems
-                }
-
-                newsFeed.copy(items = updatedUpdatedItems)
+                newsFeed.copy(items = loadArticles(loadArticles, persistedItems, totalSteps, progress))
             } else {
                 dao.getNewsFeedByFeedName(feedName).executeAsOneOrNull()?.toNewsFeed()
             }
@@ -188,6 +211,67 @@ class DefaultFeedRepository(
             Result.Success(updated)
         } catch (e: Exception) {
             Result.Error(DataError.Remote.SERIALIZATION, e)
+        }
+    }
+
+    private fun persistNewsFeed(
+        newsFeed: NewsFeed,
+        totalSteps: Int,
+        progress: (Float) -> Unit
+    ): List<NewsItem> {
+        dao.upsertNewsFeed(newsFeed.toNewsFeedEntity())
+        val done = currentStep.incrementAndGet()
+        progress(done.toFloat() / totalSteps)
+        return newsFeed.items.map { newsItem ->
+            val insertedItem = dao.upsertNewsItem(newsItem.toNewsItemEntity())
+            val done = currentStep.incrementAndGet()
+            progress(done.toFloat() / totalSteps)
+            insertedItem.toNewsItem().copy(newsFeed = newsFeed)
+        }
+    }
+
+    private suspend fun loadArticles(
+        loadArticles: Boolean,
+        persistedItems: List<NewsItem>,
+        totalSteps: Int,
+        progress: (Float) -> Unit
+    ): List<NewsItem> {
+        return if (loadArticles) {
+            coroutineScope {
+                val semaphore = Semaphore(5)
+                persistedItems.map { newsItem ->
+                    async {
+                        try {
+                            semaphore.withPermit {
+                                val articleResult =
+                                    articleRepository.readFullArticle(itemId = newsItem.id, url = newsItem.link)
+                                val item = when (articleResult) {
+                                    is Result.Success -> {
+                                        newsItem.copy(newsArticle = articleResult.data)
+                                    }
+
+                                    is Result.Error -> {
+                                        log.e("Could not read article: ${newsItem.link}", articleResult.throwable)
+                                        newsItem
+                                    }
+                                }
+
+                                val done = currentStep.incrementAndGet()
+                                progress(done.toFloat() / totalSteps)
+                                item
+                            }
+                        } catch (e: Exception) {
+                            log.e(
+                                "Could not fetch article for newsItem [${newsItem.id}] ${newsItem.newsFeed?.feedName}/${newsItem.identifier}",
+                                e
+                            )
+                            newsItem
+                        }
+                    }
+                }.awaitAll()
+            }
+        } else {
+            persistedItems
         }
     }
 
