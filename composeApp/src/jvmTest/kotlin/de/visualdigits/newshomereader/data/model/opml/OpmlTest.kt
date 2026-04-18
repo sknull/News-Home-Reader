@@ -13,7 +13,7 @@ class OpmlTest {
 //        val opml3 = decodeValue<Opml>(File(ClassLoader.getSystemResource("opml/feedflow-export_24-5-2025_samsung-sm-t720.opml").toURI()))
 
         val opml = decodeValue<Opml>(File(ClassLoader.getSystemResource("opml/feeder-export-2025-11-28-42199.opml").toURI()))
-        val newsFeed = opml.toNewsFeedConfiguration()
+        opml.toNewsFeedConfiguration()
         println()
     }
 }

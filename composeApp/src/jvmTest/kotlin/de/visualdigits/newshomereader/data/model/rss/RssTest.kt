@@ -40,7 +40,7 @@ class RssTest : KoinTest {
     @Test
     fun testReadArticleUrl() {
         runBlocking {
-            val article = fullArticleService.readFullArticle(
+            fullArticleService.readFullArticle(
                 4711,
                 "https://www.heise.de/bestenlisten/testbericht/ecovacs-t90-pro-omni-im-test-saugroboter-saugt-stark-und-laedt-klug/j1tydeh?wt_mc=rss.red.ho.ho.atom.beitrag.beitrag"
             )

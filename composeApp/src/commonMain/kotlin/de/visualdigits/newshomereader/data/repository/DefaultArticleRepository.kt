@@ -14,7 +14,6 @@ import io.github.cdimascio.essence.Essence
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
-import io.ktor.http.charset
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
@@ -23,7 +22,7 @@ import java.io.File
 import kotlin.math.roundToLong
 
 class DefaultArticleRepository(
-    private val httpClient: HttpClient? = null,
+    private val httpClient: HttpClient,
     private val dao: NewsHomeReaderDatabaseQueries
 ) : ArticleRepository {
 
@@ -49,9 +48,8 @@ class DefaultArticleRepository(
         try {
             var fullArticle = dao.getFullArticleById(itemId).executeAsOneOrNull()?.toFullArticle()
             if (fullArticle == null) {
-                val response = httpClient?.get(urlString = url)
-                val serverCharset = response?.charset()
-                val rawHtml = response?.bodyAsText()
+                val response = httpClient.get(urlString = url)
+                val rawHtml = response.bodyAsText()
                 fullArticle = readFromString(itemId, rawHtml)
                 dao.upsertFullArticle(fullArticle.toFullArticleEntity())
             }

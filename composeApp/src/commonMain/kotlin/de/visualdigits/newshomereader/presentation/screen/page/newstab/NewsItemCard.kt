@@ -68,7 +68,7 @@ fun NewsItemCard(
                 image = newsItem.newsArticle?.articleImage?:""
             }
             if (image.isNotEmpty()) {
-                NewsItemImage(image, newsItem, maxImageSize)
+                NewsItemImage(url = image, contentDescription = newsItem.imageCaption, maxImageSize = maxImageSize)
             }
 
             Column(

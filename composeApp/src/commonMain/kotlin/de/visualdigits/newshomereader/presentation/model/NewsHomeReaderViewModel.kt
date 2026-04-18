@@ -351,12 +351,19 @@ class NewsHomeReaderViewModel(
                 }
             }
         )
-            .onSuccess {
+            .onSuccess { newsFeeds ->
                 _state.update {
+                    val currentNewsItems = newsFeeds.find { nf -> nf.feedName == it.currentFeedName }?.let { nf -> nf.items } ?: listOf()
                     it.copy(
                         isLoading = false,
                         currentProgress = 0.0f,
                         isEditingSettings = false,
+                        currentNewsItems = currentNewsItems,
+                        visibleNewsItems = calculateVisibleNewsItems(
+                            newsItems = currentNewsItems,
+                            hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
+                        )
+
                     )
                 }
             }
@@ -402,15 +409,14 @@ class NewsHomeReaderViewModel(
                     val newsFeed = feedResult.data
 
                     _state.update {
-                        val visibleNewsItems = calculateVisibleNewsItems(
-                            newsFeed?.items?:listOf(),
-                            it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
-                        )
                         it.copy(
                             currentFeedName = fn,
                             currentProgress = 0.0f,
                             currentNewsItems = newsFeed?.items?.toList()?:listOf(), // force repaint
-                            visibleNewsItems = visibleNewsItems,
+                            visibleNewsItems = calculateVisibleNewsItems(
+                                newsItems = newsFeed?.items ?: listOf(),
+                                hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
+                            ),
                             currentNewsArticle = null,
                             isLoading = false,
                             uiMessage = null,
@@ -528,7 +534,10 @@ class NewsHomeReaderViewModel(
                     it.copy(
                         isLoading = false,
                         currentNewsItems = newsItems,
-                        visibleNewsItems = calculateVisibleNewsItems(newsItems, it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false),
+                        visibleNewsItems = calculateVisibleNewsItems(
+                            newsItems = newsItems,
+                            hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false
+                        ),
                     )
                 }
             }
@@ -563,7 +572,10 @@ class NewsHomeReaderViewModel(
                     currentNewsItem = copy,
                     currentNewsArticle = articleResult.data,
                     currentNewsItems = currentNewsItems,
-                    visibleNewsItems = calculateVisibleNewsItems(currentNewsItems, it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false),
+                    visibleNewsItems = calculateVisibleNewsItems(
+                        newsItems = currentNewsItems,
+                        hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false
+                    ),
                     isLoading = false,
                     uiMessage = null,
                     uiMessageSeverity = null
@@ -595,7 +607,10 @@ class NewsHomeReaderViewModel(
                 _state.update {
                     it.copy(
                         settings = settings.copy(),
-                        visibleNewsItems = calculateVisibleNewsItems(it.currentNewsItems, it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false),
+                        visibleNewsItems = calculateVisibleNewsItems(
+                            newsItems = it.currentNewsItems,
+                            hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false
+                        ),
                         isLoading = false,
                         isEditingSettings = false,
                         uiMessage = null,

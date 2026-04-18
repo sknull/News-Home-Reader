@@ -74,6 +74,7 @@ fun NewsItemsList(
         )
 
         val chunks = when {
+            maxWidth > 1500.dp -> 4
             maxWidth > 1000.dp -> 3
             maxWidth > 500.dp -> 2
             else -> 1
@@ -96,7 +97,7 @@ fun NewsItemsList(
             scrollState = scrollState,
             interactionSource = interactionSource,
             rows = {
-                rowData.map { (key, rowItems) ->
+                rowData.map { (_, rowItems) ->
                         Pair(rowItems.joinToString("_") { item -> item.id.toString() }, @Composable {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),

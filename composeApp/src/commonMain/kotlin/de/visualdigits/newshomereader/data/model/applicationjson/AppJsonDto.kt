@@ -7,16 +7,18 @@ import de.visualdigits.newshomereader.data.serializer.MainEntityOfPageSerializer
 import de.visualdigits.newshomereader.data.serializer.OffsetDateTimeHeuristicDeserializer
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem
 import de.visualdigits.newshomereader.domain.model.unified.ThumbnailItem
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNames
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import java.io.File
 import java.time.OffsetDateTime
 
 @Serializable
 @Immutable
-data class AppJsonDto(
+data class AppJsonDto @OptIn(ExperimentalSerializationApi::class, ExperimentalSerializationApi::class) constructor(
     @SerialName("@id") val id: String? = null,
     @SerialName("@type") val type: String? = null,
     @SerialName("@context") val context: String? = null,
@@ -61,7 +63,7 @@ data class AppJsonDto(
     @Serializable(with = ListSerializer::class) val relatedLink: List<String> = listOf(),
     val sourceOrganization: SourceOrganizationDto? = null,
     val thumbnail: ImageWrapper? = null,
-    @Serializable(with = ListSerializer::class) val thumbnailUrl: List<String> = listOf(),
+    @JsonNames("thumbnailURL", "thumbnailUrl") @Serializable(with = ListSerializer::class) val thumbnailUrl: List<String> = listOf(),
     val timeRequired: String? = null,
     val transcript: String? = null,
     @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("uploadDate") val uploadDate: OffsetDateTime = OffsetDateTime.now(),
@@ -100,7 +102,7 @@ data class AppJsonDto(
             uploadDate = uploadDate,
             expires = expires,
             keywords = keywords,
-            thumbnails = image?.images?.map { io ->
+            thumbnails = ((image?.images?:listOf()) + (thumbnail?.images?:listOf()) + (primaryImageOfPage?.images?:listOf())).map { io ->
                 ThumbnailItem(
                     url = io.contentUrl?.let { cu -> listOf(cu) }?:io.url,
                     description = io.description,

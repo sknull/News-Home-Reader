@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import be.digitalia.compose.htmlconverter.HtmlStyle
 import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
@@ -80,7 +81,7 @@ fun NewsArticleCard(
 
     // scrollbar box
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(MaterialTheme.shapes.gap)
     ) {
@@ -138,13 +139,16 @@ fun NewsArticleCard(
                     }
                 }),
                 Pair("image", @Composable {
-                    ArticleImage(modifier, newsItem, newsArticle, maxImageSize)
+                    ArticleImage(
+                        newsItem = newsItem,
+                        newsArticle = newsArticle,
+                        maxImageSize = maxImageSize
+                    )
                 }),
                 Pair("mediaButtons", @Composable {
                     val wifiOnly = settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
                     if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                         MediaItemButtons(
-                            modifier = modifier,
                             mediaItems = (newsArticle?.videoItems?:listOf()) + (newsArticle?.audioItems?:listOf()),
                             uriHandler = uriHandler,
                             currentNewsItem = newsItem
@@ -167,9 +171,9 @@ fun NewsArticleCard(
                                     ).let { uriHandler.openUri(it) }
                                 }
                             ),
-                            style = MaterialTheme.typography.titleMedium
+                            style = MaterialTheme.typography.titleMedium.copy(lineHeight = 1.4.em)
                         )
-                        Spacer(modifier.height(16.dp))
+                        Spacer(Modifier.height(16.dp))
                     }
                 }),
                 Pair("text", @Composable {
@@ -187,7 +191,7 @@ fun NewsArticleCard(
                                 ).let { uriHandler.openUri(it) }
                             }
                         ),
-                        style = MaterialTheme.typography.bodySmall
+                        style = MaterialTheme.typography.bodySmall.copy(lineHeight = 1.5.em)
                     )
                 }),
             )
@@ -198,14 +202,14 @@ fun NewsArticleCard(
 
 @Composable
 private fun ArticleImage(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     newsItem: NewsItem,
     newsArticle: FullArticle?,
     maxImageSize: Int?
 ) {
     if (newsArticle?.articleImage?.isNotEmpty() == true) {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
         ) {
@@ -216,14 +220,20 @@ private fun ArticleImage(
                 )
             }
 
-            NewsItemImage(newsArticle.articleImage, newsItem, maxImageSize)
+            NewsItemImage(
+                modifier = Modifier
+                    .clip(MaterialTheme.shapes.small),
+                url = newsArticle.articleImage,
+                contentDescription = newsItem.imageCaption,
+                maxImageSize = maxImageSize
+            )
 
             if (newsItem.imageCaption.isNotEmpty()) {
                 Text(
                     text = newsItem.imageCaption,
                     style = MaterialTheme.typography.bodySmall
                 )
-                Spacer(modifier.height(16.dp))
+                Spacer(Modifier.height(16.dp))
             }
         }
     }
@@ -286,7 +296,7 @@ private fun NewsArticleMenuBar(
 
 @Composable
 private fun MediaItemButtons(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     mediaItems: List<MediaItem>,
     uriHandler: UriHandler,
     currentNewsItem: NewsItem
@@ -297,26 +307,79 @@ private fun MediaItemButtons(
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
     ) {
-        mediaItems.forEach { mediaItem ->
-            if (mediaItem.url?.isNotEmpty() == true) {
-                IndicatorButton(
-                    modifier = Modifier,
-                    text = mediaItem.headline,
-                    textStyle = MaterialTheme.typography.bodySmall,
-                    buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
-                    maxLines = Int.MAX_VALUE,
-                    toolTip = mediaItem.description,
-                    width = 200.dp,
-                    height = 100.dp,
-                            leadingIcon = if (mediaItem.type == MediaType.video) painterResource(Res.drawable.icon_videocam_24px) else  painterResource(Res.drawable.icon_speaker_2_24px)
-                ) {
-                    uriHandler.openUri(
-                        makeUrlAbsolute(
-                            currentNewsItem.link,
-                            mediaItem.url
+        mediaItems
+            .sortedByDescending { mi -> mi.uploadDate }
+            .forEach { mediaItem ->
+                if (mediaItem.url?.isNotEmpty() == true) {
+                    IndicatorButton(
+                        modifier = Modifier,
+                        textStyle = MaterialTheme.typography.bodySmall,
+                        buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+                        maxLines = Int.MAX_VALUE,
+                        width = 200.dp,
+                        height = 200.dp,
+                        leadingImage = {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                            ) {
+                                if (mediaItem.thumbnails.isNotEmpty()) {
+                                    val thumbnail = mediaItem.thumbnails
+                                        .minBy { ti -> ti.width ?: 0 }
+
+                                    val url = thumbnail.url.firstOrNull()
+                                    if (url != null) {
+                                        NewsItemImage(
+                                            modifier = Modifier
+                                                .clip(MaterialTheme.shapes.extraSmall),
+                                            url = url,
+                                            height = 90.dp,
+                                            contentDescription = thumbnail.description ?: "",
+                                            maxImageSize = thumbnail.width
+                                        )
+                                    }
+                                }
+
+                                Text(
+                                    text = "${mediaItem.uploadDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}",
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
+                                    verticalAlignment = Alignment.Top
+                                ) {
+                                    if (mediaItem.type == MediaType.video) {
+                                        Icon(
+                                            painter = painterResource(Res.drawable.icon_videocam_24px),
+                                            contentDescription = null,
+                                            tint = MaterialTheme.colorScheme.onSurface
+                                        )
+
+                                    } else {
+                                        Icon(
+                                            painter = painterResource(Res.drawable.icon_speaker_2_24px),
+                                            contentDescription = null,
+                                            tint = MaterialTheme.colorScheme.onSurface
+                                        )
+                                    }
+
+                                    Text(
+                                        text = mediaItem.headline ?: "",
+                                        style = MaterialTheme.typography.bodySmall
+                                    )
+                                }
+                            }
+                        }
+                    ) {
+                        uriHandler.openUri(
+                            makeUrlAbsolute(
+                                currentNewsItem.link,
+                                mediaItem.url
+                            )
                         )
-                    )
-                }
+                    }
             }
         }
     }

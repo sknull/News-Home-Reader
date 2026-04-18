@@ -11,7 +11,7 @@ actual class ConnectivityManager(
 ) {
     @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
     actual fun connectivityMode(): ConnectivityMode {
-        val connectivityManager = context.getSystemService(android.content.Context.CONNECTIVITY_SERVICE) as android.net.ConnectivityManager
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as android.net.ConnectivityManager
         return connectivityManager.activeNetwork?.let { network ->
             connectivityManager.getNetworkCapabilities(network)?.let { capabilities ->
                 when {

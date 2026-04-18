@@ -10,7 +10,11 @@ import java.time.OffsetDateTime
 data class MediaItem(
     val url: String? = null,
     val headline: String? = null,
+    val caption: String? = null,
     val description: String? = null,
+    val author: String? = null,
+    val width: Int? = null,
+    val height: Int? = null,
     @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) val datePublished: OffsetDateTime = OffsetDateTime.now(),
     @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) val dateModified: OffsetDateTime = OffsetDateTime.now(),
     @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) val uploadDate: OffsetDateTime = OffsetDateTime.now(),

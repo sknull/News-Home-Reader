@@ -5,6 +5,7 @@ import androidx.compose.runtime.Immutable
 import de.visualdigits.newshomereader.data.serializer.OffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import java.time.OffsetDateTime
 
@@ -55,7 +56,7 @@ data class AppJson(
     val relatedLink: List<String> = listOf(),
     val sourceOrganization: SourceOrganization? = null,
     val thumbnail: List<Image> = listOf(),
-    val thumbnailUrl: List<String> = listOf(),
+    @JsonNames("thumbnailURL", "thumbnailUrl") val thumbnailUrl: List<String> = listOf(),
     val timeRequired: String? = null,
     val transcript: String? = null,
     @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("uploadDate") val uploadDate: OffsetDateTime = OffsetDateTime.now(),

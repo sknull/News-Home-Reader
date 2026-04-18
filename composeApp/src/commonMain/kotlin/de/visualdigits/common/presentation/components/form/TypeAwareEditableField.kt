@@ -275,7 +275,7 @@ private fun SwitchBox(
             readOnly = true,
             state = textFieldState,
             leadingIcon = {
-                Row() {
+                Row {
                     Spacer(Modifier.width(MaterialTheme.shapes.gap * 2))
                     Switch(
                         checked = checked,

@@ -47,7 +47,7 @@ class DefaultNewsFeedConfigurationRepository(
 
     suspend fun addNewsFeedGroup(newsFeedGroup: NewsFeedGroup): Result<Unit, DataError.Local> = withContext(dispatcher) {
         try {
-            val entity = dao.updateNewsFeedGroup(newsFeedGroup.toNewsFeedGroupEntity())
+            dao.updateNewsFeedGroup(newsFeedGroup.toNewsFeedGroupEntity())
             Result.Success(Unit)
         } catch (e: Exception) {
             Result.Error(DataError.Local.SERIALIZATION, e)

@@ -13,7 +13,7 @@ actual class DriverFactory(
 
     actual fun createDriver(): SqlDriver {
         // todo - remember to remove this later
-//        context.deleteDatabase(dbName)
+        context.deleteDatabase(dbName)
 
         return AndroidSqliteDriver(
             schema = SettingsDatabase.Schema,

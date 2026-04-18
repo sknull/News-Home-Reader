@@ -59,7 +59,7 @@ sealed interface NewsHomeReaderAction {
     ) : NewsHomeReaderAction
 
     @Immutable
-    class OnNewsFeedsRefresh() : NewsHomeReaderAction
+    class OnNewsFeedsRefresh : NewsHomeReaderAction
 
     @Immutable
     data class OnNewsFeedClicked(
@@ -78,7 +78,7 @@ sealed interface NewsHomeReaderAction {
     ) : NewsHomeReaderAction
 
     @Immutable
-    class OnNewsItemBackClicked() : NewsHomeReaderAction
+    class OnNewsItemBackClicked : NewsHomeReaderAction
 
 
     //

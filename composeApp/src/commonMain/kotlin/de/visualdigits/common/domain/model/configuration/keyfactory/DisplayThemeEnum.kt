@@ -1,17 +1,12 @@
 package de.visualdigits.common.domain.model.configuration.keyfactory
 
 import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.sp
 import de.visualdigits.common.domain.model.StringResourceEnumerable
 import de.visualdigits.common.domain.model.UiText
 import org.jetbrains.compose.resources.DrawableResource
@@ -21,7 +16,7 @@ enum class DisplayThemeEnum(
     override val drawableResourceId: DrawableResource?,
     val colorScheme: ColorScheme,
     val textLinkStyles:TextLinkStyles,
-    val typography: Typography
+    val textColor: Color
 ) : StringResourceEnumerable<DisplayThemeEnum> {
 
     //
@@ -75,7 +70,7 @@ enum class DisplayThemeEnum(
                 textDecoration = TextDecoration.Underline
             )
         ),
-        typography = myTypography(Color.White)
+        textColor = Color(0xFFFFFFFF)
     ),
 
     LIGHT(
@@ -124,8 +119,8 @@ enum class DisplayThemeEnum(
                 textDecoration = TextDecoration.Underline
             )
         ),
-        typography = myTypography(Color.Black)
-    ),
+        textColor = Color(0xFF000000)
+    )
     ;
 
     override fun toString(): String = name.lowercase()
@@ -148,136 +143,4 @@ enum class DisplayThemeEnum(
             return (value as? DisplayThemeEnum)?.name?:value?.toString()
         }
     }
-}
-
-private fun myTypography(
-    textColor: Color
-): Typography {
-    return Typography(
-        headlineSmall = TextStyle(
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Black,
-            fontSize = 18.sp,
-            lineHeight = 18.sp * 1.1,
-            letterSpacing = 0.2.sp,
-            color = textColor
-        ),
-        headlineMedium = TextStyle(
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Black,
-            fontSize = 24.sp,
-            lineHeight = 24.sp * 1.1,
-            letterSpacing = 0.2.sp,
-            color = textColor
-        ),
-        headlineLarge = TextStyle(
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Black,
-            fontSize = 30.sp,
-            lineHeight = 30.sp * 1.1,
-            letterSpacing = 0.2.sp,
-            color = textColor
-        ),
-
-        titleSmall = TextStyle(
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Bold,
-            fontSize = 14.sp,
-            lineHeight = 14.sp * 1.2,
-            letterSpacing = 0.2.sp,
-            color = textColor
-        ),
-        titleMedium = TextStyle(
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
-            lineHeight = 18.sp * 1.2,
-            letterSpacing = 0.2.sp,
-            color = textColor
-        ),
-        titleLarge = TextStyle(
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Bold,
-            fontSize = 24.sp,
-            lineHeight = 24.sp * 1.2,
-            letterSpacing = 0.2.sp,
-            color = textColor
-        ),
-
-        bodySmall = TextStyle(
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Normal,
-            fontSize = 14.sp,
-            lineHeight = 14.sp * 1.2,
-            letterSpacing = 0.2.sp,
-            color = textColor
-        ),
-        bodyMedium = TextStyle(
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Normal,
-            fontSize = 18.sp,
-            lineHeight = 18.sp * 1.2,
-            letterSpacing = 0.2.sp,
-            color = textColor
-        ),
-        bodyLarge = TextStyle(
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Normal,
-            fontSize = 24.sp,
-            lineHeight = 24.sp * 1.2,
-            letterSpacing = 0.2.sp,
-            color = textColor
-        ),
-
-        displaySmall = TextStyle(
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Normal,
-            fontSize = 14.sp,
-            lineHeight = 14.sp * 1.2,
-            letterSpacing = 0.2.sp,
-            color = textColor
-        ),
-        displayMedium = TextStyle(
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Normal,
-            fontSize = 18.sp,
-            lineHeight = 18.sp * 1.2,
-            letterSpacing = 0.2.sp,
-            color = textColor
-        ),
-        displayLarge = TextStyle(
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Normal,
-            fontSize = 24.sp,
-            lineHeight = 24.sp * 1.2,
-            letterSpacing = 0.2.sp,
-            color = textColor
-        ),
-
-        labelSmall = TextStyle(
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Bold,
-            fontSize = 14.sp,
-            lineHeight = 14.sp * 1.2,
-            letterSpacing = 0.2.sp,
-            color = textColor
-        ),
-        labelMedium = TextStyle(
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
-            lineHeight = 18.sp * 1.2,
-            letterSpacing = 0.2.sp,
-            color = textColor
-        ),
-        labelLarge = TextStyle(
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Bold,
-            fontSize = 24.sp,
-            lineHeight = 24.sp * 1.2,
-            letterSpacing = 0.2.sp,
-            color = textColor
-        )
-
-    )
 }

@@ -34,4 +34,4 @@ actual val platformModule: Module
         single { DriverFactory() }
         single { ConnectivityManager() }
         single { ImageCache(coil3.PlatformContext.INSTANCE, get()) }
-}
+    }
