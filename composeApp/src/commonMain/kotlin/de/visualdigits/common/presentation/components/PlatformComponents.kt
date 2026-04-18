@@ -13,15 +13,20 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.FileMode
 import de.visualdigits.common.domain.model.UiPlatform
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import java.io.File
 import java.io.InputStream
+
+@Composable
+expect fun BindBackHandler(isEnabled: Boolean, onBack: () -> Unit)
 
 @Composable
 expect fun PlatformVerticalScrollbarBox(
     boxModifier: Modifier = Modifier,
     scrollbarModifier: Modifier = Modifier,
-    scrollState: ScrollState,
-    interactionSource: MutableInteractionSource,
+    scrollbarId: String,
+    scrollPosition: MutableMap<String, Pair<Int, Int?>>,
+    onAction: (NewsHomeReaderAction) -> Unit,
     rows: () -> List<Pair<String, @Composable () -> Unit>>
 )
 

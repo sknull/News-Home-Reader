@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -32,7 +33,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun SettingsPage(
     state: NewsHomeReaderState,
-    scrollPosition: MutableMap<String, Int>,
+    scrollPosition: MutableMap<String, Pair<Int, Int?>>,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
 
@@ -47,6 +48,13 @@ fun SettingsPage(
             severity = state.uiMessageSeverity,
             shapeContainer = MaterialTheme.shapes.small
         )
+
+        Text(
+            text = stringResource(Res.string.title_settings),
+            style = MaterialTheme.typography.headlineMedium
+        )
+
+        Spacer(Modifier.height(16.dp))
 
         Row(
             modifier = Modifier
@@ -84,7 +92,7 @@ fun SettingsPage(
 
         ConfigurationEditForm(
             scrollPosition = scrollPosition,
-            title = stringResource(Res.string.title_settings),
+            scrollbarId = "configuration_settings",
             fieldHeight = 50.dp,
             onValueChange = { keyValue ->
                 onAction(

@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.typography
+import de.visualdigits.common.presentation.components.BindBackHandler
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.common.presentation.components.container.ErrorCard
 import de.visualdigits.compose.resources.Res
@@ -62,6 +63,10 @@ fun MainPage(
     val maxImageSize = state.settings?.get<Int>(SK.maxImageSize) ?: 1200
 
     val uriHandler = LocalUriHandler.current
+
+    BindBackHandler(isEnabled = state.currentNewsArticle != null) {
+        viewModel.onAction(NewsHomeReaderAction.OnNewsItemClosed())
+    }
 
     BoxWithConstraints(
         modifier = Modifier

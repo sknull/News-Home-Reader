@@ -18,7 +18,7 @@ import de.visualdigits.newshomereader.presentation.style.gap
 @Composable
 fun NewsFeeds(
     state: NewsHomeReaderState,
-    scrollPosition: MutableMap<String, Int>,
+    scrollPosition: MutableMap<String, Pair<Int, Int?>>,
     maxWidth: Dp,
     maxImageSize: Int?,
     onAction: (NewsHomeReaderAction) -> Unit,

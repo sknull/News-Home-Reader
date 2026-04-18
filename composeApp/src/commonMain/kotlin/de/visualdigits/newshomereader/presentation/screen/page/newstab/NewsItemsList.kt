@@ -1,7 +1,6 @@
 package de.visualdigits.newshomereader.presentation.screen.page.newstab
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,11 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,19 +45,13 @@ import org.jetbrains.compose.resources.stringResource
 fun NewsItemsList(
     modifier: Modifier = Modifier,
     state: NewsHomeReaderState,
-    scrollPosition: MutableMap<String, Int>,
+    scrollPosition: MutableMap<String, Pair<Int, Int?>>,
     isLandscape: Boolean,
     maxWidth: Dp,
     maxImageSize: Int?,
     onAction: (NewsHomeReaderAction) -> Unit,
     connectivityManager: ConnectivityManager
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val scrollState = rememberScrollState(scrollPosition["newsfeed_${state.currentFeedName}"]?:0)
-    LaunchedEffect(scrollState.value) {
-        onAction(NewsHomeReaderAction.OnScrollPositionChange("newsfeed_${state.currentFeedName}", scrollState.value))
-    }
-
     Column(
         modifier = modifier
             .fillMaxSize(),
@@ -94,28 +85,28 @@ fun NewsItemsList(
                 .fillMaxHeight()
                 .width(10.dp)
                 .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
-            scrollState = scrollState,
-            interactionSource = interactionSource,
-            rows = {
-                rowData.map { (_, rowItems) ->
-                        Pair(rowItems.joinToString("_") { item -> item.id.toString() }, @Composable {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
-                            ) {
-                                rowItems.forEach { item ->
-                                    NewsItemCard(
-                                        modifier = Modifier.weight(1f),
-                                        maxImageSize = maxImageSize,
-                                        newsItem = item,
-                                        onAction = onAction
-                                    )
-                                }
-                            }
-                        })
+            "newsfeed_${state.currentFeedName}",
+            scrollPosition = scrollPosition,
+            onAction
+        ) {
+            rowData.map { (_, rowItems) ->
+                Pair(rowItems.joinToString("_") { item -> item.id.toString() }, @Composable {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                    ) {
+                        rowItems.forEach { item ->
+                            NewsItemCard(
+                                modifier = Modifier.weight(1f),
+                                maxImageSize = maxImageSize,
+                                newsItem = item,
+                                onAction = onAction
+                            )
+                        }
                     }
+                })
             }
-        )
+        }
     }
 }
 

@@ -1,10 +1,8 @@
 package de.visualdigits.common.presentation.components.form
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,17 +10,11 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -38,7 +30,7 @@ import de.visualdigits.common.domain.model.configuration.AbstractFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.Field
 import de.visualdigits.common.domain.model.configuration.ListFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.SpacerFieldDescriptor
-import de.visualdigits.common.presentation.components.PlatformVerticalScrollbar
+import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.cancel
@@ -54,9 +46,9 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConfigurationEditForm(
-    scrollPosition: MutableMap<String, Int>,
-    title: String,
     modifier: Modifier = Modifier,
+    scrollPosition: MutableMap<String, Pair<Int, Int?>>,
+    scrollbarId: String,
     fieldHeight: Dp = Dp.Unspecified,
     focusedBorderColor: Color = MaterialTheme.colorScheme.outline,
     unfocusedBorderColor: Color = MaterialTheme.colorScheme.outlineVariant,
@@ -73,98 +65,87 @@ fun ConfigurationEditForm(
     onAction: (NewsHomeReaderAction) -> Unit,
     deleteAllowed: (AbstractFieldDescriptor<*,*,*>, String) -> Boolean = { _,_ -> true }
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val scrollState = rememberScrollState(scrollPosition["configuration_form_$title"]?:0)
-    LaunchedEffect(scrollState.value) {
-        onAction(NewsHomeReaderAction.OnScrollPositionChange("configuration_form_$title", scrollState.value))
-    }
-
-    // scrollbar box
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
+    PlatformVerticalScrollbarBox(
+        boxModifier = modifier
+            .fillMaxWidth(),
+        scrollbarModifier = Modifier
+            .clip(MaterialTheme.shapes.small)
+            .fillMaxHeight()
+            .width(10.dp)
+            .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
+        scrollbarId,
+        scrollPosition = scrollPosition,
+        onAction
     ) {
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState)
-                .padding(end = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(space)
-        ) {
-            FlowRow(
-                modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.spacedBy(space),
-                verticalArrangement = Arrangement.spacedBy(space)
-            ) {
-                configuration
-                    ?.fields
-                    ?.filter { (_, field) -> field.descriptor.visible }
-                    ?.values
-                    ?.forEach { field ->
-                        Box(
-                            modifier = Modifier
-                                .width(300.dp)
-                        ) {
-                            EditableField(
-                                configuration = configuration,
-                                field = field,
-                                fieldHeight = fieldHeight,
-                                space = space,
-                                unfocusedBorderColor = unfocusedBorderColor,
-                                focusedBorderColor = focusedBorderColor,
-                                iconTint = iconTint,
-                                buttonColor = buttonColor,
-                                buttonShape = buttonShape,
-                                containerShape = containerShape,
-                                textStyle = textStyle,
-                                onValueChange = onValueChange,
-                                deleteAllowed = deleteAllowed
-                            )
+        listOf(
+            Pair("fields", @Composable {
+                FlowRow(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.spacedBy(space),
+                    verticalArrangement = Arrangement.spacedBy(space)
+                ) {
+                    configuration
+                        ?.fields
+                        ?.filter { (_, field) -> field.descriptor.visible }
+                        ?.values
+                        ?.forEach { field ->
+                            Box(
+                                modifier = Modifier
+                                    .width(300.dp)
+                            ) {
+                                EditableField(
+                                    configuration = configuration,
+                                    field = field,
+                                    fieldHeight = fieldHeight,
+                                    space = space,
+                                    unfocusedBorderColor = unfocusedBorderColor,
+                                    focusedBorderColor = focusedBorderColor,
+                                    iconTint = iconTint,
+                                    buttonColor = buttonColor,
+                                    buttonShape = buttonShape,
+                                    containerShape = containerShape,
+                                    textStyle = textStyle,
+                                    onValueChange = onValueChange,
+                                    deleteAllowed = deleteAllowed
+                                )
+                            }
                         }
-                    }
-            }
+                }
+            }),
+            Pair("spacer", @Composable {
+                Spacer(Modifier.height(16.dp))
+            }),
+            Pair("buttons", @Composable {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(space),
+                    modifier = Modifier
+                        .wrapContentWidth(),
+                ) {
+                    Spacer(Modifier.weight(1f))
 
-            Spacer(Modifier.height(16.dp))
+                    IndicatorButton(
+                        toolTip = stringResource(Res.string.cancel),
+                        width = 50.dp,
+                        height = 50.dp,
+                        buttonColor = buttonColor,
+                        shape = buttonShape,
+                        leadingIcon = painterResource(Res.drawable.icon_cancel_24px),
+                        leadingIconTint = iconTint,
+                        onClick = onCancelClick
+                    )
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(space),
-                modifier = Modifier
-                    .align(Alignment.End)
-                    .wrapContentWidth()
-            ) {
-                IndicatorButton(
-                    toolTip = stringResource(Res.string.cancel),
-                    width = 50.dp,
-                    height = 50.dp,
-                    buttonColor = buttonColor,
-                    shape = buttonShape,
-                    leadingIcon = painterResource(Res.drawable.icon_cancel_24px),
-                    leadingIconTint = iconTint,
-                    onClick = onCancelClick
-                )
-
-                IndicatorButton(
-                    toolTip = stringResource(Res.string.ok),
-                    width = 50.dp,
-                    height = 50.dp,
-                    buttonColor = buttonColor,
-                    shape = buttonShape,
-                    leadingIcon = painterResource(Res.drawable.icon_check_small_24px),
-                    leadingIconTint = iconTint,
-                    onClick = onOkClick
-                )
-            }
-        }
-
-        PlatformVerticalScrollbar(
-            interactionSource = interactionSource,
-            modifier = Modifier
-                .clip(MaterialTheme.shapes.small)
-                .align(Alignment.CenterEnd)
-                .fillMaxHeight()
-                .background(Color.Black.copy(alpha = 0.4f))
-                .width(8.dp),
-            scrollState = scrollState
+                    IndicatorButton(
+                        toolTip = stringResource(Res.string.ok),
+                        width = 50.dp,
+                        height = 50.dp,
+                        buttonColor = buttonColor,
+                        shape = buttonShape,
+                        leadingIcon = painterResource(Res.drawable.icon_check_small_24px),
+                        leadingIconTint = iconTint,
+                        onClick = onOkClick
+                    )
+                }
+            })
         )
     }
 }

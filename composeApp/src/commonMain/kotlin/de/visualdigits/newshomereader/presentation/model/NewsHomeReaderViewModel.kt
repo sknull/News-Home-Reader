@@ -52,7 +52,7 @@ class NewsHomeReaderViewModel(
 
     private val log = kermitLogger()
 
-    val scrollPosition: MutableMap<String, Int> = mutableMapOf()
+    val scrollPosition: MutableMap<String, Pair<Int, Int?>> = mutableMapOf()
     var platformType: PlatformType = PlatformType.unknown
 
     private val _state = MutableStateFlow(NewsHomeReaderState())
@@ -190,6 +190,14 @@ class NewsHomeReaderViewModel(
                 loadArticle(action.newsItem)
             }
 
+            is NewsHomeReaderAction.OnNewsItemClosed -> {
+                _state.update {
+                    it.copy(
+                        currentNewsArticle = null
+                    )
+                }
+            }
+
             is NewsHomeReaderAction.OnMarkReadClicked -> {
                 markItemsAsRead(action.days)
             }
@@ -233,7 +241,7 @@ class NewsHomeReaderViewModel(
             }
 
             is NewsHomeReaderAction.OnScrollPositionChange -> {
-                scrollPosition[action.id] = action.position
+                scrollPosition[action.id] = Pair(action.position, action.offset)
             }
 
             is NewsHomeReaderAction.OnLanguageSelected -> {

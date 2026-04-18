@@ -73,6 +73,9 @@ sealed interface NewsHomeReaderAction {
     ) : NewsHomeReaderAction
 
     @Immutable
+    class OnNewsItemClosed : NewsHomeReaderAction
+
+    @Immutable
     data class OnMarkReadClicked(
         val days: Long
     ) : NewsHomeReaderAction
@@ -100,7 +103,8 @@ sealed interface NewsHomeReaderAction {
     @Immutable
     data class OnScrollPositionChange(
         val id: String,
-        val position: Int
+        val position: Int,
+        val offset: Int? = null
     ): NewsHomeReaderAction
 
     @Immutable

@@ -14,12 +14,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,7 +61,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun NewsArticleCard(
     modifier: Modifier = Modifier,
-    scrollPosition: MutableMap<String, Int>,
+    scrollPosition: MutableMap<String, Pair<Int, Int?>>,
     maxWidth: Dp,
     maxImageSize: Int?,
     newsArticle: FullArticle?,
@@ -74,10 +72,6 @@ fun NewsArticleCard(
     connectivityManager: ConnectivityManager
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val scrollState = rememberScrollState(scrollPosition["newsarticle_${newsArticle?.itemId}"]?:0)
-    LaunchedEffect(scrollState.value) {
-        onAction(NewsHomeReaderAction.OnScrollPositionChange("newsarticle_${newsArticle?.itemId}", scrollState.value))
-    }
 
     // scrollbar box
     Column(
@@ -102,9 +96,11 @@ fun NewsArticleCard(
                 .fillMaxHeight()
                 .width(10.dp)
                 .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
-            scrollState = scrollState,
-            interactionSource = interactionSource,
-            rows = { listOf(
+            "newsarticle_${newsArticle?.itemId}",
+            scrollPosition = scrollPosition,
+            onAction
+        ) {
+            listOf(
                 Pair("title", @Composable {
                     Text(
                         modifier = Modifier,
@@ -149,7 +145,7 @@ fun NewsArticleCard(
                     val wifiOnly = settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
                     if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                         MediaItemButtons(
-                            mediaItems = (newsArticle?.videoItems?:listOf()) + (newsArticle?.audioItems?:listOf()),
+                            mediaItems = (newsArticle?.videoItems ?: listOf()) + (newsArticle?.audioItems ?: listOf()),
                             uriHandler = uriHandler,
                             currentNewsItem = newsItem
                         )
@@ -180,7 +176,7 @@ fun NewsArticleCard(
                     Text(
                         modifier = Modifier,
                         text = htmlToAnnotatedString(
-                            html = newsArticle?.html?:"",
+                            html = newsArticle?.html ?: "",
                             style = HtmlStyle(
                                 textLinkStyles = displayTheme.textLinkStyles
                             ),
@@ -195,8 +191,7 @@ fun NewsArticleCard(
                     )
                 }),
             )
-            }
-        )
+        }
     }
 }
 
