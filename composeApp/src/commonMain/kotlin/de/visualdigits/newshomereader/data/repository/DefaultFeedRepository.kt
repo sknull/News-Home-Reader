@@ -87,6 +87,7 @@ class DefaultFeedRepository(
             dao.upsertNewsFeed(newsFeed.toNewsFeedEntity())
             Result.Success(Unit)
         } catch (e: Exception) {
+            log.e("Something went wrong during upserting news feed", e)
             Result.Error(DataError.Local.UNKNOWN)
         }
     }
@@ -100,6 +101,7 @@ class DefaultFeedRepository(
             }
             Result.Success(Unit)
         } catch (e: Exception) {
+            log.e("Something went wrong during marking news item as read", e)
             Result.Error(DataError.Local.UNKNOWN)
         }
     }
@@ -109,6 +111,7 @@ class DefaultFeedRepository(
             dao.upsertNewsItem(newsItem.toNewsItemEntity(), forceUpdate)
             Result.Success(Unit)
         } catch (e: Exception) {
+            log.e("Something went wrong during upserting news item", e)
             Result.Error(DataError.Local.UNKNOWN)
         }
     }
@@ -129,11 +132,11 @@ class DefaultFeedRepository(
                 val newsFeeds = newsFeedConfigurations.mapNotNull { newsFeedConfiguration ->
                     log.i("#### Refreshing newsfeed '${newsFeedConfiguration.name}', loadArticles=$loadArticles...")
                     try {
-                        val response = httpClient?.get(urlString = newsFeedConfiguration.url)
-                        val xml = response?.bodyAsText()
+                        val response = httpClient.get(urlString = newsFeedConfiguration.url)
+                        val xml = response.bodyAsText()
                         readFromString(newsFeedConfiguration.name, xml)
                     } catch (e: Exception) {
-                        log.e("Could not load feed '${newsFeedConfiguration.name}'")
+                        log.e("Could not load feed '${newsFeedConfiguration.name}'", e)
                         null
                     }
                 }
@@ -211,8 +214,8 @@ class DefaultFeedRepository(
         log.i("#### Refreshing newsfeed '$feedName', loadArticles=$loadArticles...")
         try {
             val updated = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
-                val response = httpClient?.get(urlString = url)
-                val xml = response?.bodyAsText()
+                val response = httpClient.get(urlString = url)
+                val xml = response.bodyAsText()
                 val newsFeed = readFromString(feedName, xml)
 
                 val totalItems = newsFeed.items.size + 1

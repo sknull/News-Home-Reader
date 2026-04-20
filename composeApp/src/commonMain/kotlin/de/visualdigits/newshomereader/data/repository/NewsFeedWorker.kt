@@ -37,7 +37,7 @@ class NewsFeedWorker(
                     keepUnreadArticlesInDays = keepUnreadArticles,
                     maxImageSize = maxImageSize,
                     loadArticles = loadArticles
-                ) { _ -> }.onError { remote, throwable ->
+                ) { _ -> }.onError { _, throwable ->
                     log.e("Could not load news feeds", throwable)
                 }
             } else if (feedConfigurationResult is Result.Error) {

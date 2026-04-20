@@ -35,7 +35,7 @@ class FeedRepositoryTest : KoinTest {
             )
                 .onSuccess { feed ->
                     println(feed)
-                }.onError { error, throwable ->
+                }.onError { _, throwable ->
                     if (throwable != null) {
                         throw throwable
                     }

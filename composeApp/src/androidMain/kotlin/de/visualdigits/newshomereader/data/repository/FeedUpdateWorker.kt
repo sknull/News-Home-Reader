@@ -37,6 +37,7 @@ class FeedUpdateWorker(
             newsFeedWorker.execute(maxImageSize)
             Result.success()
         } catch(e: Exception) {
+            log.e("Something went wrong during refresh news feed", e)
             Result.retry()
         }
     }

@@ -28,7 +28,7 @@ class ArticleRepositoryTest : KoinTest {
             repository.readFullArticle(4711, "https://www1.wdr.de/nachrichten/olympia-abstimmung-nrw-koeln-rhein-ruhr-ticker-100.html")
                 .onSuccess { article ->
                     println(article)
-                }.onError { error, throwable ->
+                }.onError { _, throwable ->
                     if (throwable != null) {
                         throw throwable
                     }
