@@ -11,13 +11,21 @@ import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
 import de.visualdigits.newshomereader.domain.util.decodeFromString
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
+import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import org.jsoup.parser.Parser
 import java.io.File
 
-class MockFeedRepository : FeedRepository {
+class MockFeedRepository(
+    private val httpClient: HttpClient,
+) : FeedRepository {
 
     override suspend fun readFromFile(
         feedName: String,
@@ -68,13 +76,15 @@ class MockFeedRepository : FeedRepository {
         loadArticles: Boolean,
         progress: (Float) -> Unit
     ): Result<NewsFeed?, DataError.Remote> {
-        return Result.Success(readFromString(feedName, ""))
+        val response = httpClient.get(urlString = url)
+        val xml = response.bodyAsText()
+        return Result.Success(readFromString(feedName, xml))
     }
 
     override suspend fun readFromString(
         feedName: String,
         xml: String?
-    ): NewsFeed {
+    ): NewsFeed = withContext(Dispatchers.IO) {
         checkNotNull(xml) { "No xml given" }
 
         val feedType = Jsoup
@@ -87,7 +97,7 @@ class MockFeedRepository : FeedRepository {
             ?.firstOrNull()
             ?.lowercase()
 
-        return when (feedType) {
+        when (feedType) {
             "rss" -> {
                 val rss = decodeFromString<Rss>(xml)
                 rss.toNewsFeed(feedName)

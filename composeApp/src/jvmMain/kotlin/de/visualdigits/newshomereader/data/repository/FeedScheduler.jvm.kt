@@ -13,7 +13,7 @@ actual class FeedScheduler(
     private val newsFeedWorker: NewsFeedWorker,
 ) {
 
-    private val log = kermitLogger()
+    private val log = kermitLogger(this::class)
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private var job: Job? = null
@@ -22,7 +22,7 @@ actual class FeedScheduler(
         job?.cancel()
         job = scope.launch {
             while (isActive) {
-                log.i("Running scheduled newsfeed refresh...")
+                log.i("#### Running scheduled newsfeed refresh...")
                 newsFeedWorker.execute(maxImageSize)
                 delay(minutes * 60 * 1000)
             }

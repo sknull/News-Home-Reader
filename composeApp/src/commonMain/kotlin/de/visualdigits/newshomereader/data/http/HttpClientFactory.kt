@@ -16,7 +16,7 @@ import kotlinx.serialization.json.Json
 
 object HttpClientFactory {
 
-    private val log = kermitLogger()
+    private val log = kermitLogger("HttpClientFactory")
 
     fun create(engine: HttpClientEngine): HttpClient {
         return HttpClient(engine) {

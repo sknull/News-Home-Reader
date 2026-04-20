@@ -11,10 +11,9 @@ import org.koin.test.KoinTest
 import org.koin.test.inject
 import org.koin.test.junit5.KoinTestExtension
 
-//@Disabled("Only for local testing")
-class ArticleRepositoryTest : KoinTest {
+class FeedRepositoryTest : KoinTest {
 
-    private val repository: ArticleRepository by inject()
+    private val repository: FeedRepository by inject()
 
     @JvmField
     @RegisterExtension
@@ -23,11 +22,19 @@ class ArticleRepositoryTest : KoinTest {
     }
 
     @Test
-    fun testReadArticle() {
+    fun testReadFeed() {
         runBlocking {
-            repository.readFullArticle(4711, "https://www1.wdr.de/nachrichten/olympia-abstimmung-nrw-koeln-rhein-ruhr-ticker-100.html")
-                .onSuccess { article ->
-                    println(article)
+            repository.refreshNewsFeed(
+                feedName = "TEST", url = "https://trancefertohamburg.ddns.net/rss.xml",
+                wifiOnly = false,
+                keepReadArticlesInDays = 30,
+                keepUnreadArticlesInDays = 30,
+                maxImageSize = 1200,
+                loadArticles = false,
+                progress = { },
+            )
+                .onSuccess { feed ->
+                    println(feed)
                 }.onError { error, throwable ->
                     if (throwable != null) {
                         throw throwable

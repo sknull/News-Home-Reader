@@ -9,9 +9,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import co.touchlab.kermit.Logger
 import de.visualdigits.common.domain.model.FileMode
 import de.visualdigits.common.presentation.components.button.IndicatorButton
+import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import java.io.File
 import java.io.InputStream
 
@@ -28,7 +28,7 @@ actual fun PlatformFileChooser(
     onOk: (InputStream) -> Unit
 ) {
 
-    val log = Logger.withTag("PlatformFileChooser")
+    val log = kermitLogger("PlatformFileChooser")
 
     val context = LocalContext.current
 

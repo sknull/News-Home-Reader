@@ -18,7 +18,7 @@ class DefaultSettingsRepository(
     private val dao: NewsHomeReaderDatabaseQueries
 ): SettingsRepository {
 
-    private val log = kermitLogger()
+    private val log = kermitLogger(this::class)
 
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 

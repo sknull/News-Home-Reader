@@ -16,7 +16,16 @@ import org.koin.dsl.module
 
 actual val platformModule: Module
     get() = module {
-        single<HttpClientEngine> { OkHttp.create() }
+        single<HttpClientEngine> {
+            OkHttp.create {
+                config {
+                    // limits parallel connections to avoid jam
+                    dispatcher(okhttp3.Dispatcher().apply {
+                        maxRequestsPerHost = 4
+                    })
+                }
+            }
+        }
         single {
             HttpClient(get<HttpClientEngine>()) {
                 install(HttpTimeout) {

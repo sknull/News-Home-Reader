@@ -44,14 +44,14 @@ import java.time.temporal.ChronoUnit
 import java.util.concurrent.atomic.AtomicInteger
 
 class DefaultFeedRepository(
-    private val httpClient: HttpClient? = null,
+    private val httpClient: HttpClient,
     private val dao: NewsHomeReaderDatabaseQueries,
     private val connectivityManager: ConnectivityManager,
     private val imageCache: ImageCache,
     val articleRepository: ArticleRepository,
 ) : FeedRepository {
 
-    private val log = kermitLogger()
+    private val log = kermitLogger(this::class)
 
     override suspend fun readFromFile(
         feedName: String,
@@ -127,7 +127,7 @@ class DefaultFeedRepository(
         try {
             val finalNewsFeeds = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                 val newsFeeds = newsFeedConfigurations.mapNotNull { newsFeedConfiguration ->
-                    log.i("Refreshing newsfeed '${newsFeedConfiguration.name}', loadArticles=$loadArticles...")
+                    log.i("#### Refreshing newsfeed '${newsFeedConfiguration.name}', loadArticles=$loadArticles...")
                     try {
                         val response = httpClient?.get(urlString = newsFeedConfiguration.url)
                         val xml = response?.bodyAsText()
@@ -143,28 +143,53 @@ class DefaultFeedRepository(
                 currentStep.set(0)
 
                 val persistedItems = dao.transactionWithResult {
-                    val newsItems = newsFeeds.flatMap { newsFeed -> persistNewsFeed(newsFeed, totalSteps, progress) }
+                    val newsItems = newsFeeds.flatMap { newsFeed ->
+                        persistNewsFeed(newsFeed, totalSteps, progress)
+                    }
                     dao.cleanupOldReadNewsItems(OffsetDateTime.now().minus(Duration.of(keepReadArticlesInDays, ChronoUnit.DAYS)).toInstant().toEpochMilli())
                     dao.cleanupOldUnreadNewsItems(OffsetDateTime.now().minus(Duration.of(keepUnreadArticlesInDays, ChronoUnit.DAYS)).toInstant().toEpochMilli())
                     newsItems
                 }
 
-                imageCache.prefetchImages(persistedItems.map { item -> item.image }.filter { url -> url.isNotEmpty() })
-
                 val newsFeedsMap = newsFeeds
                     .associate { nf -> Pair(nf.feedName, nf.copy(items = listOf())) }
                     .toMutableMap()
 
-                loadArticles(loadArticles, persistedItems, totalSteps, progress).mapNotNull { item ->
-                    item.newsFeed?.let { nf ->
-                        val newsFeed = newsFeedsMap[nf.feedName]
-                        newsFeed
-                            ?.copy(items = newsFeed.items + item)
-                            ?.also { nf -> newsFeedsMap[nf.feedName] = nf }
+                val feedsWithArticle = loadArticles(loadArticles, persistedItems, totalSteps, progress)
+                    .mapNotNull { item ->
+                        item.newsFeed?.let { nf ->
+                            val newsFeed = newsFeedsMap[nf.feedName]
+                            newsFeed
+                                ?.copy(items = newsFeed.items + item)
+                                ?.also { nf -> newsFeedsMap[nf.feedName] = nf }
+                        }
                     }
-                }
+
+                // grab all the images for offline use we can get
+                val feedUrls = feedsWithArticle
+                    .map { feed -> feed.image }
+                    .filter { url -> url.isNotEmpty() }
+                val itemUrls = feedsWithArticle
+                    .flatMap { feed ->
+                        feed.items.map { item -> item.image }
+                    }
+                val articleUrls = feedsWithArticle
+                    .flatMap { feed -> feed.items
+                        .filter { item -> item.newsArticle != null }
+                        .map { item ->
+                            val newsArticle = item.newsArticle!!
+                            newsArticle.articleImage +
+                                    newsArticle.audioItems.flatMap { ai -> ai.thumbnails.map { t -> t.url } } +
+                                    newsArticle.videoItems.flatMap { ai -> ai.thumbnails.map { t -> t.url } }
+                        }
+                    }
+                val urls = (feedUrls + itemUrls + articleUrls).distinct()
+                log.i("#### Prefetching ${feedUrls.size} feed images, ${itemUrls.size} item images, ${articleUrls.size} article images = ${urls.size} distinct images")
+                imageCache.prefetchImages(urls)
+
+                feedsWithArticle
             } else {
-                log.i("No free of charge internet connection available - fetching newsFeeds from database")
+                log.i("#### No free of charge internet connection available - fetching newsFeeds from database")
                 dao.getAllNewsFeeds().executeAsList().map { nf -> nf.toNewsFeed() }
             }
             Result.Success(finalNewsFeeds)
@@ -183,7 +208,7 @@ class DefaultFeedRepository(
         loadArticles: Boolean,
         progress: (Float) -> Unit
     ): Result<NewsFeed?, DataError.Remote> = withContext(Dispatchers.IO) {
-        log.i("Refreshing newsfeed '$feedName', loadArticles=$loadArticles...")
+        log.i("#### Refreshing newsfeed '$feedName', loadArticles=$loadArticles...")
         try {
             val updated = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                 val response = httpClient?.get(urlString = url)

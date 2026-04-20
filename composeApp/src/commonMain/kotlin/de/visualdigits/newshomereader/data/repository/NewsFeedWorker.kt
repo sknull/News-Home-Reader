@@ -16,7 +16,7 @@ class NewsFeedWorker(
     private val settingsRepository: SettingsRepository,
 ) {
 
-    private val log = kermitLogger()
+    private val log = kermitLogger(this::class)
 
     suspend fun execute(maxImageSize: Int) {
         val settingsResult = settingsRepository.getSettings()

@@ -14,7 +14,16 @@ import io.ktor.http.HttpHeaders
 import org.koin.dsl.module
 
 val testModule = module {
-    single<HttpClientEngine> { OkHttp.create() }
+    single<HttpClientEngine> {
+        OkHttp.create {
+            config {
+                // limits parallel connections to avoid jam
+                dispatcher(okhttp3.Dispatcher().apply {
+                    maxRequestsPerHost = 4
+                })
+            }
+        }
+    }
     single {
         HttpClient(get<HttpClientEngine>()) {
             install(HttpTimeout) {
@@ -31,6 +40,6 @@ val testModule = module {
             }
         }
     }
-    single<FeedRepository> { MockFeedRepository() }
+    single<FeedRepository> { MockFeedRepository(get()) }
     single<ArticleRepository> { MockArticleRepository(get()) }
 }

@@ -25,7 +25,7 @@ data class LogMessage(
     @Suppress("NOTHING_TO_INLINE")
     companion object {
 
-        val log = kermitLogger()
+        val log = kermitLogger(this::class)
 
         inline fun log(
             severity: Severity,

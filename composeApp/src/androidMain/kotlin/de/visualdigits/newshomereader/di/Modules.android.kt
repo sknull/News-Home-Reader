@@ -48,7 +48,7 @@ actual val platformModule: Module
         }
 
         single { NewsFeedWorker(get(), get(), get()) }
-        worker { FeedUpdateWorker(get(), get(), get(), get()) }
+        worker { FeedUpdateWorker(get(), get()) }
         single { FeedScheduler(get()) }
 
         single { DriverFactory(androidApplication()) }

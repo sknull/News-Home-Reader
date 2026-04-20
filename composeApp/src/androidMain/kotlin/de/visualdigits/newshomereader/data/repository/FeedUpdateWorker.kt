@@ -6,18 +6,25 @@ import androidx.work.WorkerParameters
 import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.repository.SettingsRepository
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 /**
  * Responsible to update feeds while app is inactive.
  */
 class FeedUpdateWorker(
     context: Context,
-    workerParams: WorkerParameters,
-    private val newsFeedWorker: NewsFeedWorker,
-    private val settingsRepository: SettingsRepository
-) : CoroutineWorker(context, workerParams) {
+    workerParams: WorkerParameters
+) : CoroutineWorker(context, workerParams), KoinComponent {
 
-    private val log = kermitLogger()
+    private val log = kermitLogger("FeedUpdateWorker")
+
+    private val newsFeedWorker: NewsFeedWorker by inject<NewsFeedWorker>()
+    private val settingsRepository: SettingsRepository by inject<SettingsRepository>()
+
+    init {
+        log.i("#### FeedUpdateWorker initialized")
+    }
 
     override suspend fun doWork(): Result {
         return try {
@@ -27,11 +34,9 @@ class FeedUpdateWorker(
             } else {
                 1200
             }
-            log.i("Running scheduled newsfeed refresh...")
             newsFeedWorker.execute(maxImageSize)
             Result.success()
         } catch(e: Exception) {
-            log.e("Could not refresh repositories", e)
             Result.retry()
         }
     }
