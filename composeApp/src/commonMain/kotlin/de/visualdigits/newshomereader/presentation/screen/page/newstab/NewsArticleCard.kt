@@ -35,7 +35,6 @@ import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_arrow_back_24px
 import de.visualdigits.compose.resources.icon_chat_24px
 import de.visualdigits.compose.resources.icon_link_24px
-import de.visualdigits.compose.resources.icon_speaker_2_24px
 import de.visualdigits.compose.resources.icon_timelapse_24px
 import de.visualdigits.compose.resources.icon_videocam_24px
 import de.visualdigits.compose.resources.icon_volume_up_24px

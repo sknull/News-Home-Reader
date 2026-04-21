@@ -63,7 +63,7 @@ class ArticleRepositoryTest : KoinTest {
             repository.readFullArticle(newsItem.copy(link = "https://www.heise.de/bestenlisten/testbericht/ecovacs-t90-pro-omni-im-test-saugroboter-saugt-stark-und-laedt-klug/j1tydeh?wt_mc=rss.red.ho.ho.atom.beitrag.beitrag"))
                 .onSuccess { article ->
                     println(article)
-                }.onError { remote, throwable -> throwable?.also { throw it } }
+                }.onError { _, throwable -> throwable?.also { throw it } }
         }
     }
 }

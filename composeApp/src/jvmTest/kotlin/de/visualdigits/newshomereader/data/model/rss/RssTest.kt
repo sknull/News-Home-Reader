@@ -74,7 +74,7 @@ class RssTest : KoinTest {
                     val entity = newsFeed?.toNewsFeedEntity()
                     println(entity)
                 }
-                .onError { remote, throwable ->
+                .onError { _, throwable ->
                     throwable?.also { throw it }
                 }
         }

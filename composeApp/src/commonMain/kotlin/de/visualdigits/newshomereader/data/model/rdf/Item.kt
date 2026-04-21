@@ -1,8 +1,6 @@
 package de.visualdigits.newshomereader.data.model.rdf
 
 import androidx.compose.runtime.Immutable
-import com.fleeksoft.ksoup.nodes.Document
-import com.fleeksoft.ksoup.nodes.Entities
 import de.visualdigits.newshomereader.data.serializer.OffsetDateTimeHeuristicDeserializer
 import de.visualdigits.newshomereader.domain.util.StringEscapeUtils
 import kotlinx.serialization.Serializable

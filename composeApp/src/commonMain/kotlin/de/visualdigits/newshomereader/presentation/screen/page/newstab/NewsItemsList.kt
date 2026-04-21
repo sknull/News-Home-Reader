@@ -184,7 +184,7 @@ private fun NewsListMenuBar(
             }
 
             Text(
-                text = state.currentFeedName ?: "",
+                text = state.currentFeedName,
                 style = if (isLandscape) MaterialTheme.typography.headlineMedium else  MaterialTheme.typography.headlineSmall,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis

@@ -31,7 +31,6 @@ import be.digitalia.compose.htmlconverter.HtmlStyle
 import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
 import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
 import de.visualdigits.compose.resources.Res
-import de.visualdigits.compose.resources.icon_speaker_2_24px
 import de.visualdigits.compose.resources.icon_videocam_24px
 import de.visualdigits.compose.resources.icon_volume_up_24px
 import de.visualdigits.newshomereader.domain.model.settings.SK
