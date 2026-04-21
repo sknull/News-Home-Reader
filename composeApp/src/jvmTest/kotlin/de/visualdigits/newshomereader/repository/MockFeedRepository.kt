@@ -30,7 +30,7 @@ class MockFeedRepository(
     override suspend fun readFromFile(
         feedName: String,
         file: File
-    ): NewsFeed {
+    ): NewsFeed? {
         return readFromString(feedName, file.readText())
     }
 
@@ -50,8 +50,8 @@ class MockFeedRepository(
         return Result.Success(Unit)
     }
 
-    override suspend fun upsertNewsItem(newsItem: NewsItem, forceUpdate: Boolean): Result<Unit, DataError.Local> {
-        return Result.Success(Unit)
+    override suspend fun upsertNewsItem(newsItem: NewsItem, forceUpdate: Boolean): Result<Pair<NewsItem, Boolean>, DataError.Local> {
+        return Result.Success(Pair(newsItem, false))
     }
 
     override suspend fun refreshNewsFeeds(
@@ -62,8 +62,8 @@ class MockFeedRepository(
         maxImageSize: Int,
         loadArticles: Boolean,
         progress: (Float) -> Unit
-    ): Result<List<NewsFeed>, DataError.Remote> {
-        return Result.Success(listOf())
+    ): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> {
+        return Result.Success(Pair(listOf(), false))
     }
 
     override suspend fun refreshNewsFeed(
@@ -75,16 +75,16 @@ class MockFeedRepository(
         maxImageSize: Int,
         loadArticles: Boolean,
         progress: (Float) -> Unit
-    ): Result<NewsFeed?, DataError.Remote> {
+    ): Result<Pair<NewsFeed?, Boolean>, DataError.Remote> {
         val response = httpClient.get(urlString = url)
         val xml = response.bodyAsText()
-        return Result.Success(readFromString(feedName, xml))
+        return Result.Success(Pair(readFromString(feedName, xml), false))
     }
 
     override suspend fun readFromString(
         feedName: String,
         xml: String?
-    ): NewsFeed = withContext(Dispatchers.IO) {
+    ): NewsFeed? = withContext(Dispatchers.IO) {
         checkNotNull(xml) { "No xml given" }
 
         val feedType = Ksoup

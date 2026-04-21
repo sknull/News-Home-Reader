@@ -20,7 +20,8 @@ data class NewsItem(
     val imageCaption: String,
     val isRead: Boolean = false,
     val newsFeed: NewsFeed? = null,
-    val newsArticle: FullArticle? = null
+    val newsArticle: FullArticle? = null,
+    val isChanged: Boolean = false,
 ): Comparable<NewsItem> {
 
     override fun compareTo(other: NewsItem): Int = compareBy<NewsItem>(

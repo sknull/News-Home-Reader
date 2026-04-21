@@ -19,7 +19,7 @@ object ItemSerializer : KSerializer<ItemDto> {
     }
 
     override fun deserialize(decoder: Decoder): ItemDto {
-        val jsonDecoder = decoder as? JsonDecoder ?: error("Unknown decoder")
+        val jsonDecoder = decoder as JsonDecoder
         val element = jsonDecoder.decodeJsonElement()
         return if (element is JsonPrimitive && element.isString) {
             ItemDto(url = element.content)

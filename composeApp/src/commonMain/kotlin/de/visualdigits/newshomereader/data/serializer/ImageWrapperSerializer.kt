@@ -21,7 +21,7 @@ object ImageWrapperSerializer : KSerializer<ImageWrapper> {
     }
 
     override fun deserialize(decoder: Decoder): ImageWrapper {
-        val jsonDecoder = decoder as? JsonDecoder ?: error("Unknown decoder")
+        val jsonDecoder = decoder as JsonDecoder
         val element = jsonDecoder.decodeJsonElement()
         return if (element is JsonPrimitive && element.isString) {
             ImageWrapper(listOf(ImageDto(url = listOf(element.content))))

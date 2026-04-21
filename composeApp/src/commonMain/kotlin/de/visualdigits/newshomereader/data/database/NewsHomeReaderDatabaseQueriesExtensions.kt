@@ -125,21 +125,19 @@ fun NewsHomeReaderDatabaseQueries.upsertNewsItem(newsItemEntity: NewsItemEntity,
         identifier = cleanIdentifier
     )
 
-    return transactionWithResult {
-        val existingNewsItemEntity = getNewsItemByFeedNameAndIdentifier(cleanFeed, cleanIdentifier).executeAsOneOrNull()
-        if (existingNewsItemEntity != null) {
-            if (forceUpdate || normalizedItem.updatedMillis > existingNewsItemEntity.updatedMillis) {
-                val toUpdate = normalizedItem.copy(id = existingNewsItemEntity.id)
-                updateNewsItem(toUpdate)
-                Pair(toUpdate, existingNewsItemEntity.isEqualTo(newsItemEntity))
-            } else {
-                Pair(existingNewsItemEntity, false)
-            }
+    val existingNewsItemEntity = getNewsItemByFeedNameAndIdentifier(cleanFeed, cleanIdentifier).executeAsOneOrNull()
+    return if (existingNewsItemEntity != null) {
+        if (forceUpdate || normalizedItem.updatedMillis > existingNewsItemEntity.updatedMillis) {
+            val toUpdate = normalizedItem.copy(id = existingNewsItemEntity.id)
+            updateNewsItem(toUpdate)
+            Pair(toUpdate, existingNewsItemEntity.isEqualTo(newsItemEntity))
         } else {
-            insertNewsItem(normalizedItem)
-            val inserted = getNewsItemByFeedNameAndIdentifier(cleanFeed, cleanIdentifier).executeAsOne()
-            Pair(inserted, true)
+            Pair(existingNewsItemEntity, false)
         }
+    } else {
+        insertNewsItem(normalizedItem)
+        val inserted = getNewsItemByFeedNameAndIdentifier(cleanFeed, cleanIdentifier).executeAsOne()
+        Pair(inserted, true)
     }
 }
 

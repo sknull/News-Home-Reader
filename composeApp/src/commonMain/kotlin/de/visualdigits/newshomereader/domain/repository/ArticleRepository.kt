@@ -19,7 +19,7 @@ interface ArticleRepository {
 
     suspend fun readFullArticle(
         newsItem: NewsItem,
-    ): Result<FullArticle, DataError.Remote>
+    ): Result<Pair<FullArticle, Boolean>, DataError.Remote>
 
     suspend fun readFromString(
         newsItem: NewsItem,

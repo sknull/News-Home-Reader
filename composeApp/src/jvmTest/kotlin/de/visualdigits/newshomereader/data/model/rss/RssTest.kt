@@ -70,7 +70,7 @@ class RssTest : KoinTest {
                 1200,
                 loadArticles = false
             ) {}
-                .onSuccess { newsFeed ->
+                .onSuccess { (newsFeed, changed) ->
                     val entity = newsFeed?.toNewsFeedEntity()
                     println(entity)
                 }

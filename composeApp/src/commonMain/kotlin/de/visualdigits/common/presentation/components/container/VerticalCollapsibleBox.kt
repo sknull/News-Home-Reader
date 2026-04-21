@@ -52,6 +52,7 @@ fun VerticalCollapsibleBox(
     onStateChange: (Boolean) -> Unit,
     iconTint: Color = MaterialTheme.colorScheme.onSurface,
     isExpanded: Boolean,
+    trailingIcon: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit
 ) {
     if (androidPlatform() == UiPlatform.UI_MODE_TYPE_TELEVISION) {
@@ -60,6 +61,7 @@ fun VerticalCollapsibleBox(
             title = title,
             backgroundColor = backgroundColor,
             shape = shape,
+            trailingIcon = trailingIcon,
             content = content
         )
     } else {
@@ -74,6 +76,7 @@ fun VerticalCollapsibleBox(
             iconTint = iconTint,
             onStateChange = onStateChange,
             isExpanded = isExpanded,
+            trailingIcon = trailingIcon,
             content = content
         )
     }
@@ -91,6 +94,7 @@ fun VerticalCollapsibleBoxFull(
     iconTint: Color = Color.White,
     onStateChange: (Boolean) -> Unit,
     isExpanded: Boolean,
+    trailingIcon: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -128,6 +132,7 @@ fun VerticalCollapsibleBoxFull(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             title?.let { t ->
@@ -140,6 +145,7 @@ fun VerticalCollapsibleBoxFull(
                             }
 
                             Spacer(modifier = Modifier.weight(1f))
+
                             if (isExpanded) {
                                 Icon(
                                     modifier = Modifier
@@ -157,6 +163,8 @@ fun VerticalCollapsibleBoxFull(
                                     tint = iconTint
                                 )
                             }
+
+                            trailingIcon?.let { ti -> ti() }
                         }
 
                         if (isExpanded) {
@@ -202,6 +210,7 @@ fun VerticalCollapsibleBoxTv(
     title: String?,
     backgroundColor: Color,
     shape: Shape,
+    trailingIcon: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit
 ) {
     Column(
@@ -216,7 +225,8 @@ fun VerticalCollapsibleBoxTv(
                     .fillMaxWidth()
                     .padding(MaterialTheme.shapes.gap)
                     .background(backgroundColor.copy(alpha = 0.4f), shape)
-                    .platformFocus()
+                    .platformFocus(),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
             ) {
                 Text(
                     modifier = Modifier
@@ -224,6 +234,8 @@ fun VerticalCollapsibleBoxTv(
                     text = t,
                     style = MaterialTheme.typography.titleSmall
                 )
+
+                trailingIcon?.let { ti -> ti() }
             }
         }
 

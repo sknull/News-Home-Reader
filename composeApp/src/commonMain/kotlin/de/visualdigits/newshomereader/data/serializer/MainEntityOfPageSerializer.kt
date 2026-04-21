@@ -19,7 +19,7 @@ object MainEntityOfPageSerializer : KSerializer<MainEntityOfPageDto> {
     }
 
     override fun deserialize(decoder: Decoder): MainEntityOfPageDto {
-        val jsonDecoder = decoder as? JsonDecoder ?: error("Unknown decoder")
+        val jsonDecoder = decoder as JsonDecoder
         val element = jsonDecoder.decodeJsonElement()
         return if (element is JsonPrimitive && element.isString) {
             MainEntityOfPageDto(url = element.content)

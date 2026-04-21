@@ -22,6 +22,7 @@ import coil3.request.crossfade
 import coil3.size.Size
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_emergency_home_24px
+import de.visualdigits.compose.resources.icon_hourglass_top_24px
 import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.presentation.util.conditional
 import org.jetbrains.compose.resources.painterResource
@@ -66,7 +67,7 @@ fun NewsItemImage(
         Icon(
             modifier = Modifier
                 .size(48.dp),
-            painter = painterResource(Res.drawable.icon_emergency_home_24px),
+            painter = painterResource(Res.drawable.icon_hourglass_top_24px),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface
         )

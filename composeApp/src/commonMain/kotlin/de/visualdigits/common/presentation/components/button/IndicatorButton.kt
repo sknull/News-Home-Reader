@@ -53,6 +53,7 @@ fun IndicatorButton(
     textColor: Color = MaterialTheme.colorScheme.onSurface,
     textColorDisabled: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
     textStyle: TextStyle = MaterialTheme.typography.labelMedium,
+    textAlign: TextAlign = TextAlign.Center,
     toolTip: String? = null,
     width: Dp = 160.dp,
     height: Dp = 50.dp,
@@ -168,7 +169,7 @@ fun IndicatorButton(
                             modifier = Modifier
                                 .weight(1f),
                             text = text,
-                            textAlign = TextAlign.Center,
+                            textAlign = textAlign,
                             maxLines = maxLines,
                             overflow = if (maxLines == 1) TextOverflow.Ellipsis else TextOverflow.Clip,
                             softWrap = maxLines > 1,

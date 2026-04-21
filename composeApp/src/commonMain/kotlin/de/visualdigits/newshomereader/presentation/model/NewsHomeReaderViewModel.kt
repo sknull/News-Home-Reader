@@ -20,6 +20,7 @@ import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfiguration
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
@@ -44,6 +45,7 @@ import java.io.InputStream
 import java.time.OffsetDateTime
 import java.time.temporal.ChronoUnit
 import java.util.Locale
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class NewsHomeReaderViewModel(
@@ -72,7 +74,7 @@ class NewsHomeReaderViewModel(
             .flatMapLatest { feedName ->
                 if (!feedName.isNullOrBlank()) {
                     feedRepository.observeFeedItems(feedName)
-                        .debounce(150)
+                        .debounce(150.milliseconds)
                         .map { items ->
                             // ALLES im Hintergrund vorbereiten
                             withContext(Dispatchers.Default) {
@@ -94,7 +96,7 @@ class NewsHomeReaderViewModel(
                             }
                         }
                 } else {
-                    flowOf(emptyList<NewsItem>() to emptyList<NewsItem>())
+                    flowOf(emptyList<NewsItem>() to emptyList())
                 }
             }
             .onEach { (enriched, visible) ->
@@ -174,6 +176,145 @@ class NewsHomeReaderViewModel(
                         maxImageSize = action.maxImageSize
                     )
                 }
+            }
+
+            //
+            // EditMode
+            //
+            is NewsHomeReaderAction.OnEditModeClick -> {
+                _state.update {
+                    it.copy(
+                        isEditMode = action.isEditingMode,
+                        isShowInfos = false,
+                        uiMessage = null,
+                        uiMessageSeverity = null
+                    )
+                }
+            }
+
+            //
+            // NewsFeedConfiguration
+            //
+            is NewsHomeReaderAction.OnEditNewsFeedConfigurationClick -> {
+                _state.update {
+                    it.copy(
+                        isEditingNewsFeedConfiguration = true,
+                        originalNewsFeedConfiguration = action.originalNewsFeedConfiguration
+                    )
+                }
+            }
+            is NewsHomeReaderAction.OnAddNewsFeedConfigurationClick -> {
+                _state.update {
+                    it.copy(
+                        isAddingNewsFeedConfiguration = true
+                    )
+                }
+            }
+            is NewsHomeReaderAction.OnDeleteNewsFeedConfigurationCancelClick -> {
+                _state.update {
+                    it.copy(
+                        isDeletingNewsFeedConfiguration = false
+                    )
+                }
+            }
+            is NewsHomeReaderAction.OnDeleteNewsFeedConfigurationClick -> {
+                _state.update {
+                    it.copy(
+                        isAddingNewsFeedConfiguration = false,
+                        isEditingNewsFeedConfiguration = false,
+                        isAddingNewsFeedGroup = false,
+                        isEditingNewsFeedGroup = false,
+                        isDeletingNewsFeedConfiguration = true
+                    )
+                }
+            }
+            is NewsHomeReaderAction.OnDeleteNewsFeedConfigurationOkClick -> {
+                _state.update {
+                    it.copy(
+                        isAddingNewsFeedConfiguration = false,
+                        isEditingNewsFeedConfiguration = false,
+                        isDeletingNewsFeedConfiguration = false
+                    )
+                }
+            }
+            is NewsHomeReaderAction.OnNewsFeedConfigurationOkClick -> {
+                _state.update {
+                    it.copy(
+                        isAddingNewsFeedConfiguration = false,
+                        isEditingNewsFeedConfiguration = false,
+                    )
+                }
+            }
+            is NewsHomeReaderAction.OnNewsFeedConfigurationCancelClick -> {
+                _state.update {
+                    it.copy(
+                        isAddingNewsFeedConfiguration = false,
+                        isEditingNewsFeedConfiguration = false,
+                    )
+                }
+            }
+
+            //
+            // NewsFeedGroup
+            //
+            is NewsHomeReaderAction.OnEditNewsfeedGroupGroupClick -> {
+                _state.update {
+                    it.copy(
+                        isEditingNewsFeedGroup = true,
+                        originalNewsFeedGroupName = action.originalNewsFeedGroupName,
+                        currentNewsFeedGroupName = action.originalNewsFeedGroupName,
+                    )
+                }
+            }
+            is NewsHomeReaderAction.OnEditNewsFeedGroupOkClick -> {
+                editNewsFeedGroup(state.value.originalNewsFeedGroupName?:"", action.newsFeedGroupName)
+            }
+            is NewsHomeReaderAction.OnEditNewsFeedGroupCancelClick -> {
+                _state.update {
+                    it.copy(
+                        isAddingNewsFeedGroup = false,
+                        isEditingNewsFeedGroup = false,
+                    )
+                }
+            }
+            is NewsHomeReaderAction.OnAddNewsfeedGroupGroupClick -> {
+                _state.update {
+                    it.copy(
+                        originalNewsFeedGroupName = null,
+                        currentNewsFeedGroupName = null,
+                        isAddingNewsFeedGroup = true
+                    )
+                }
+            }
+            is NewsHomeReaderAction.OnAddNewsFeedGroupOkClick -> {
+                addNewsFeedGroup(action.newsFeedGroupName)
+            }
+            is NewsHomeReaderAction.OnAddNewsFeedGroupCancelClick -> {
+                _state.update {
+                    it.copy(
+                        isAddingNewsFeedGroup = false,
+                        isEditingNewsFeedGroup = false,
+                    )
+                }
+            }
+            is NewsHomeReaderAction.OnDeleteNewsfeedGroupCancelClick -> {
+                _state.update {
+                    it.copy(
+                        isDeletingNewsFeedGroup = false,
+                        currentNewsFeedGroupName = null
+                    )
+                }
+            }
+            is NewsHomeReaderAction.OnDeleteNewsfeedGroupClick -> {
+                _state.update {
+                    it.copy(
+                        isDeletingNewsFeedGroup = true,
+                        currentNewsFeedGroupName = action.newsFeedGroupName
+                    )
+                }
+            }
+            is NewsHomeReaderAction.OnDeleteNewsfeedGroupOkClick -> {
+                deleteNewsFeedGroup(state.value.currentNewsFeedGroupName)
             }
 
             //
@@ -295,8 +436,60 @@ class NewsHomeReaderViewModel(
         }
     }
 
+    private fun addNewsFeedGroup(newsFeedGroupName: String) = viewModelScope.launch {
+        val addResult = newsFeedConfigurationRepository.upsertNewsFeedGroup(NewsFeedGroup(name = newsFeedGroupName))
+            if (addResult is Result.Success) {
+                _state.update {
+                    it.copy(
+                        isAddingNewsFeedGroup = false,
+                        newsFeedGroups = addResult.data
+                    )
+                }
+            } else if (addResult is Result.Error) {
+                log.e("Could not add newsfeed group '$newsFeedGroupName'")
+            }
+    }
+
+    private fun editNewsFeedGroup(oldFeedGroupName: String, newNewsFeedGroupName: String) = viewModelScope.launch {
+        val getResult = newsFeedConfigurationRepository.getNewsFeedGroupByName(oldFeedGroupName)
+        if (getResult is Result.Success) {
+            val newsFeedGroup = getResult.data?.copy(name = newNewsFeedGroupName)?: NewsFeedGroup(name = newNewsFeedGroupName)
+            val upsertResult = newsFeedConfigurationRepository.upsertNewsFeedGroup(newsFeedGroup)
+            if (upsertResult is Result.Success) {
+                _state.update {
+                    it.copy(
+                        isEditingNewsFeedGroup = false,
+                        newsFeedGroups = upsertResult.data
+                    )
+                }
+            } else if (upsertResult is Result.Error) {
+                log.e("Could not upsertResult newsfeed group '$newNewsFeedGroupName'")
+            }
+        } else if (getResult is Result.Error) {
+            log.e("Could not get old newsfeed group '$oldFeedGroupName'")
+        }
+    }
+
+
+    private fun deleteNewsFeedGroup(newsFeedGroupName: String?) = viewModelScope.launch {
+        if (newsFeedGroupName != null) {
+            val deleteResult = newsFeedConfigurationRepository.deleteNewsFeedGroup(newsFeedGroupName)
+            if (deleteResult is Result.Success) {
+                _state.update {
+                    it.copy(
+                        isDeletingNewsFeedGroup = false,
+                        currentNewsArticle = null,
+                        newsFeedGroups = deleteResult.data
+                    )
+                }
+            } else if (deleteResult is Result.Error) {
+                log.e("Could not add newsfeed group '$newsFeedGroupName'")
+            }
+        }
+    }
+
     private fun refreshNewsFeeds() = viewModelScope.launch {
-        val result = newsFeedConfigurationRepository.getNewsFeeds()
+        val result = newsFeedConfigurationRepository.getNewsFeedGroups()
         if (result is Result.Success) {
             val newsFeedGroups = result.data
             val newsFeedConfigurations = newsFeedGroups.flatMap { nfg -> nfg.newsFeeds }
@@ -312,14 +505,14 @@ class NewsHomeReaderViewModel(
             )
         }
 
-        val newFeedConfigurationResult = newsFeedConfigurationRepository.setNewsFeeds(ins)
+        val newFeedConfigurationResult = newsFeedConfigurationRepository.setNewsFeedGroups(ins)
         if (newFeedConfigurationResult is Result.Success) {
             val newsFeedGroups = newFeedConfigurationResult.data
             val newsFeedConfigurations = newsFeedGroups.flatMap { nfg -> nfg.newsFeeds }
             val newsFeedResult = refreshNewsFeeds(newsFeedConfigurations)
 
             if (newsFeedResult is Result.Success) {
-                val newsFeeds = newsFeedResult.data
+                val (newsFeeds, _) = newsFeedResult.data
                 _state.update {
                     val currentNewsItems = newsFeeds.find { nf -> nf.feedName == it.currentFeedName }?.items ?: listOf()
                     it.copy(
@@ -361,7 +554,7 @@ class NewsHomeReaderViewModel(
     }
 
 
-    private suspend fun refreshNewsFeeds(newsFeedConfigurations: List<NewsFeedConfiguration>): Result<List<NewsFeed>, DataError.Remote> {
+    private suspend fun refreshNewsFeeds(newsFeedConfigurations: List<NewsFeedConfiguration>): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> {
         val wifiOnly = state.value.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
         val loadArticles = state.value.settings?.get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false
         val keepReadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue ?: 30
@@ -421,7 +614,7 @@ class NewsHomeReaderViewModel(
                     }
                 }
                 if (feedResult is Result.Success) {
-                    val newsFeed = feedResult.data
+                    val (newsFeed, _) = feedResult.data
 
                     _state.update {
                         it.copy(
@@ -504,7 +697,7 @@ class NewsHomeReaderViewModel(
             }
         }
 
-        newsFeedConfigurationRepository.getNewsFeeds()
+        newsFeedConfigurationRepository.getNewsFeedGroups()
             .onSuccess { newsFeedConfiguration ->
                 _state.update {
                     it.copy(
@@ -578,14 +771,14 @@ class NewsHomeReaderViewModel(
         feedRepository.upsertNewsItem(copy, true)
         val articleResult = articleRepository.readFullArticle(newsItem)
         if (articleResult is Result.Success) {
-            copy = copy.copy(newsArticle = articleResult.data)
+            copy = copy.copy(newsArticle = articleResult.data.first)
             _state.update {
                 val currentNewsItems = it.currentNewsItems.map { ni ->
                     if (ni.id == newsItem.id) copy else ni
                 }
                 it.copy(
                     currentNewsItem = copy,
-                    currentNewsArticle = articleResult.data,
+                    currentNewsArticle = articleResult.data.first,
                     currentNewsItems = currentNewsItems,
                     visibleNewsItems = calculateVisibleNewsItems(
                         newsItems = currentNewsItems,

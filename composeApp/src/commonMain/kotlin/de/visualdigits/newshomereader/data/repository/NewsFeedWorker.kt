@@ -5,10 +5,14 @@ import de.visualdigits.common.domain.model.configuration.keyfactory.KeepArticles
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.domain.model.errorhandling.onError
+import de.visualdigits.newshomereader.domain.model.errorhandling.onSuccess
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
 import de.visualdigits.newshomereader.domain.repository.NewsFeedConfigurationRepository
 import de.visualdigits.newshomereader.domain.repository.SettingsRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class NewsFeedWorker(
     private val feedRepository: FeedRepository,
@@ -26,7 +30,7 @@ class NewsFeedWorker(
             val loadArticles = settings?.get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false
             val keepReadArticles = settings?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue ?: 30
             val keepUnreadArticles = settings?.get<KeepArticlesEnum>(SK.keepUnreadArticles)?.longValue ?: 30
-            val feedConfigurationResult = newsFeedConfigurationRepository.getNewsFeeds()
+            val feedConfigurationResult = newsFeedConfigurationRepository.getNewsFeedGroups()
             if (feedConfigurationResult is Result.Success) {
                 val newsFeedGroups = feedConfigurationResult.data
                 val newsFeedConfigurations = newsFeedGroups.flatMap { nfg -> nfg.newsFeeds }
@@ -36,8 +40,18 @@ class NewsFeedWorker(
                     keepReadArticlesInDays = keepReadArticles,
                     keepUnreadArticlesInDays = keepUnreadArticles,
                     maxImageSize = maxImageSize,
-                    loadArticles = loadArticles
-                ) { _ -> }.onError { _, throwable ->
+                    loadArticles = loadArticles,
+                    progress = {}
+                ).onSuccess { result ->
+                    if (result.second) {
+                        settings?.also { s ->
+                            s.set(SK.feedsChanged, BooleanEnum.TRUE)
+                            CoroutineScope(Dispatchers.Default).launch {
+                                settingsRepository.setSettings(s)
+                            }
+                        }
+                    }
+                }.onError { _, throwable ->
                     log.e("Could not load news feeds", throwable)
                 }
             } else if (feedConfigurationResult is Result.Error) {

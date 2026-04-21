@@ -35,11 +35,11 @@ class MockArticleRepository(
 
     override suspend fun readFullArticle(
         newsItem: NewsItem
-    ): Result<FullArticle, DataError.Remote> {
+    ): Result<Pair<FullArticle, Boolean>, DataError.Remote> {
         val response = httpClient.get(urlString = newsItem.link)
-        val rawHtml = response?.bodyAsText()
+        val rawHtml = response.bodyAsText()
         val data = readFromString(newsItem, rawHtml)
-        return Result.Success(data)
+        return Result.Success(Pair(data, false))
     }
 
 

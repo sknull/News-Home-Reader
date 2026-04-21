@@ -23,7 +23,7 @@ class ListSerializer<T : Any>(
 
     @Suppress("UNCHECKED_CAST")
     override fun deserialize(decoder: Decoder): List<T> {
-        val jsonDecoder = decoder as? JsonDecoder ?: error("Unknown decoder")
+        val jsonDecoder = decoder as JsonDecoder
         val element = jsonDecoder.decodeJsonElement()
         return if (element is JsonObject) {
             listOf(decoder.json.decodeFromJsonElement(element = element, deserializer = dataSerializer))

@@ -1,10 +1,8 @@
 package de.visualdigits.newshomereader.data.repository
 
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
-import de.visualdigits.newshomereader.data.database.insertNewsFeedGroup
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedGroup
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedGroupEntity
-import de.visualdigits.newshomereader.data.database.updateNewsFeedGroup
 import de.visualdigits.newshomereader.data.database.upsertNewsFeedGroup
 import de.visualdigits.newshomereader.data.mapper.toNewsFeedConfiguration
 import de.visualdigits.newshomereader.data.model.opml.Opml
@@ -26,16 +24,25 @@ class DefaultNewsFeedConfigurationRepository(
 
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 
-    override suspend fun upsertNewsFeedGroup(newsFeedGroup: NewsFeedGroup): Result<Unit, DataError.Local> = withContext(dispatcher) {
+    override suspend fun upsertNewsFeedGroup(newsFeedGroup: NewsFeedGroup): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         try {
             dao.upsertNewsFeedGroup(newsFeedGroup.toNewsFeedGroupEntity())
-            Result.Success(Unit)
+            Result.Success(dao.getAllNewsFeedGroupEntities().executeAsList().map { ni -> ni.toNewsFeedGroup() })
         } catch (e: Exception) {
             Result.Error(DataError.Local.SERIALIZATION, e)
         }
     }
 
-    override suspend fun getNewsFeeds(): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
+    override suspend fun deleteNewsFeedGroup(newsFeedGroupName: String): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
+        try {
+            dao.deleteNewsFeedGroupEntityByName(newsFeedGroupName)
+            Result.Success(dao.getAllNewsFeedGroupEntities().executeAsList().map { ni -> ni.toNewsFeedGroup() })
+        } catch (e: Exception) {
+            Result.Error(DataError.Local.SERIALIZATION, e)
+        }
+    }
+
+    override suspend fun getNewsFeedGroups(): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         try {
             Result.Success(dao.getAllNewsFeedGroupEntities()
                 .executeAsList()
@@ -45,46 +52,42 @@ class DefaultNewsFeedConfigurationRepository(
         }
     }
 
-    suspend fun addNewsFeedGroup(newsFeedGroup: NewsFeedGroup): Result<Unit, DataError.Local> = withContext(dispatcher) {
+    override suspend fun getNewsFeedGroupByName(name: String): Result<NewsFeedGroup?, DataError.Local> = withContext(dispatcher) {
         try {
-            dao.updateNewsFeedGroup(newsFeedGroup.toNewsFeedGroupEntity())
-            Result.Success(Unit)
+            Result.Success(dao.getNewsFeedGroupEntityByName(name).executeAsOneOrNull()?.toNewsFeedGroup())
         } catch (e: Exception) {
             Result.Error(DataError.Local.SERIALIZATION, e)
         }
     }
 
-    suspend fun addNewsFeedConfiguration(newsFeedConfiguration: NewsFeedConfiguration): Result<Unit, DataError.Local> = withContext(dispatcher) {
+    override suspend fun upsertNewsFeedConfiguration(newsFeedConfiguration: NewsFeedConfiguration): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         try {
-            val entity = dao.getNewsFeedGroupEntityByName(newsFeedConfiguration.groupName).executeAsOneOrNull()
-            if (entity != null) {
-                val map = entity.newsFeeds.associateBy { nf -> nf.name }
-                if (!map.containsKey(newsFeedConfiguration.name)) {
-                    dao.upsertNewsFeedGroup(entity.copy(newsFeeds = entity.newsFeeds + newsFeedConfiguration))
-                }
+            val newsFeedGroupEntity = dao.getNewsFeedGroupEntityByName(newsFeedConfiguration.groupName).executeAsOneOrNull()
+            if (newsFeedGroupEntity != null) {
+                dao.upsertNewsFeedGroup(newsFeedGroupEntity.copy(newsFeeds = newsFeedGroupEntity.newsFeeds - newsFeedConfiguration + newsFeedConfiguration))
             }
-            Result.Success(Unit)
+            Result.Success(dao.getAllNewsFeedGroupEntities().executeAsList().map { ni -> ni.toNewsFeedGroup() })
         } catch (e: Exception) {
             Result.Error(DataError.Local.SERIALIZATION, e)
         }
     }
 
-    override suspend fun setNewsFeeds(newsFeedGroups: List<NewsFeedGroup>): Result<Unit, DataError.Local> = withContext(dispatcher) {
+    override suspend fun setNewsFeedGroups(newsFeedGroups: List<NewsFeedGroup>): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         try {
             newsFeedGroups.forEach { newsFeedGroup ->
-                dao.insertNewsFeedGroup(newsFeedGroup.toNewsFeedGroupEntity())
+                dao.upsertNewsFeedGroup(newsFeedGroup.toNewsFeedGroupEntity())
             }
-            Result.Success(Unit)
+            Result.Success(dao.getAllNewsFeedGroupEntities().executeAsList().map { ni -> ni.toNewsFeedGroup() })
         } catch (e: Exception) {
             Result.Error(DataError.Local.SERIALIZATION, e)
         }
     }
 
-    override suspend fun setNewsFeeds(ins: InputStream): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
+    override suspend fun setNewsFeedGroups(ins: InputStream): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         try {
             val newsFeedGroups = decodeFromString<Opml>(String(ins.readBytes()))
                 .toNewsFeedConfiguration()
-            setNewsFeeds(newsFeedGroups)
+            setNewsFeedGroups(newsFeedGroups)
             Result.Success(newsFeedGroups)
         } catch (e: Exception) {
             Result.Error(DataError.Local.SERIALIZATION, e)

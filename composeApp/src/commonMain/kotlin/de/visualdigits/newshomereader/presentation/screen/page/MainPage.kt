@@ -2,12 +2,14 @@ package de.visualdigits.newshomereader.presentation.screen.page
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,17 +17,29 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.ProgressIndicatorDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
@@ -34,14 +48,22 @@ import de.visualdigits.common.presentation.components.BindBackHandler
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.common.presentation.components.container.ErrorCard
 import de.visualdigits.compose.resources.Res
+import de.visualdigits.compose.resources.cancel
+import de.visualdigits.compose.resources.icon_edit_24px
 import de.visualdigits.compose.resources.icon_info_24px
 import de.visualdigits.compose.resources.icon_menu_24px
 import de.visualdigits.compose.resources.icon_refresh_24px
 import de.visualdigits.compose.resources.icon_settings_24px
+import de.visualdigits.compose.resources.icon_warning_24px
+import de.visualdigits.compose.resources.ok
+import de.visualdigits.compose.resources.title_add_newsfeedgroup
+import de.visualdigits.compose.resources.title_delete
 import de.visualdigits.compose.resources.tooltip_refresh_newsfeed
+import de.visualdigits.compose.resources.warning_delete
 import de.visualdigits.newshomereader.data.repository.ConnectivityManager
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.screen.page.newstab.NewsArticleCard
 import de.visualdigits.newshomereader.presentation.screen.page.newstab.NewsFeeds
@@ -63,6 +85,9 @@ fun MainPage(
     val maxImageSize = state.settings?.get<Int>(SK.maxImageSize) ?: 1200
 
     val uriHandler = LocalUriHandler.current
+
+    val focusRequester = remember { FocusRequester() }
+    var currentNewsFeedGroupName by remember { mutableStateOf<String>("") }
 
     BindBackHandler(isEnabled = state.currentNewsArticle != null) {
         viewModel.onAction(NewsHomeReaderAction.OnNewsItemClosed())
@@ -124,13 +149,23 @@ fun MainPage(
                         ) {
                             IndicatorButton(
                                 modifier = Modifier,
-                                width = 50.dp,
-                                height = 50.dp,
+                                width = 30.dp,
+                                height = 30.dp,
                                 padding = 2.dp,
                                 leadingIcon = painterResource(Res.drawable.icon_menu_24px)
                             ) {
                                 val isExpanded = state.collapsibleState["group_newsfeeds_navigation"] == true
                                 onAction(NewsHomeReaderAction.OnCollapsibleStateChange("group_newsfeeds_navigation", !isExpanded))
+                            }
+
+                            IndicatorButton(
+                                modifier = Modifier,
+                                width = 30.dp,
+                                height = 30.dp,
+                                padding = 2.dp,
+                                leadingIcon = painterResource(Res.drawable.icon_edit_24px)
+                            ) {
+                                onAction(NewsHomeReaderAction.OnEditModeClick(!state.isEditMode))
                             }
 
                             Spacer(Modifier.weight(1f))
@@ -166,8 +201,9 @@ fun MainPage(
 
                             IndicatorButton(
                                 modifier = Modifier,
-                                width = 50.dp,
-                                height = 50.dp,
+                                width = 30.dp,
+                                height = 30.dp,
+                                padding = 2.dp,
                                 leadingIcon = painterResource(Res.drawable.icon_info_24px)
                             ) {
                                 onAction(NewsHomeReaderAction.OnShowInfosClick(!state.isShowInfos))
@@ -175,8 +211,8 @@ fun MainPage(
 
                             IndicatorButton(
                                 modifier = Modifier,
-                                width = 50.dp,
-                                height = 50.dp,
+                                width = 30.dp,
+                                height = 30.dp,
                                 leadingIcon = painterResource(Res.drawable.icon_settings_24px),
                             ) {
                                 onAction(NewsHomeReaderAction.OnEditSettingsClick(!state.isEditingSettings))
@@ -232,6 +268,16 @@ fun MainPage(
                     }
                 }
             }
+
+            AddNewsFeedConfigurationGroupDialog(
+                state = state,
+                onAction = onAction
+            )
+
+            ConfirmDeleteNewsFeedGroupDialog(
+                state = state,
+                onAction = onAction
+            )
         }
     }
 }

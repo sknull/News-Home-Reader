@@ -26,6 +26,7 @@ sealed interface NewsHomeReaderAction {
         val keyValue: KeyValue,
     ): NewsHomeReaderAction
 
+    @Immutable
     class OnEditSettingsCancelClick : NewsHomeReaderAction
 
     @Immutable
@@ -48,6 +49,86 @@ sealed interface NewsHomeReaderAction {
         val settings: Settings?,
         val maxImageSize: Int
     ) : NewsHomeReaderAction
+
+    //
+    // EditMode
+    //
+    @Immutable
+    data class OnEditModeClick(
+        val isEditingMode: Boolean
+    ) : NewsHomeReaderAction
+
+    //
+    // NewsFeedConfiguration
+    //
+    @Immutable
+    data class OnEditNewsFeedConfigurationClick(
+        val originalNewsFeedConfiguration: NewsFeedConfiguration,
+    ) : NewsHomeReaderAction
+
+    @Immutable
+    data class OnDeleteNewsFeedConfigurationClick(
+        val newsFeedConfiguration: NewsFeedConfiguration?,
+    ) : NewsHomeReaderAction
+
+    @Immutable
+    class OnDeleteNewsFeedConfigurationOkClick : NewsHomeReaderAction
+
+    @Immutable
+    class OnDeleteNewsFeedConfigurationCancelClick : NewsHomeReaderAction
+
+    @Immutable
+    class OnAddNewsFeedConfigurationClick(
+        val isAddingNewsFeedConfiguration: Boolean
+    ) : NewsHomeReaderAction
+
+    @Immutable
+    class OnNewsFeedConfigurationOkClick(
+        val newsFeedConfiguration: NewsFeedConfiguration
+    ) : NewsHomeReaderAction
+
+    @Immutable
+    class OnNewsFeedConfigurationCancelClick : NewsHomeReaderAction
+
+    //
+    // NewsFeedGroup
+    //
+    @Immutable
+    data class OnEditNewsfeedGroupGroupClick(
+        val originalNewsFeedGroupName: String,
+    ) : NewsHomeReaderAction
+
+    @Immutable
+    data class OnEditNewsFeedGroupOkClick(
+        val newsFeedGroupName: String
+    ) : NewsHomeReaderAction
+
+    @Immutable
+    class OnEditNewsFeedGroupCancelClick : NewsHomeReaderAction
+
+    @Immutable
+    data class OnAddNewsfeedGroupGroupClick(
+        val isAddingNewsfeedGroup: Boolean
+    ) : NewsHomeReaderAction
+
+    @Immutable
+    data class OnAddNewsFeedGroupOkClick(
+        val newsFeedGroupName: String
+    ) : NewsHomeReaderAction
+
+    @Immutable
+    class OnAddNewsFeedGroupCancelClick : NewsHomeReaderAction
+
+    @Immutable
+    data class OnDeleteNewsfeedGroupClick(
+        val newsFeedGroupName: String
+    ) : NewsHomeReaderAction
+
+    @Immutable
+    class OnDeleteNewsfeedGroupOkClick : NewsHomeReaderAction
+
+    @Immutable
+    class OnDeleteNewsfeedGroupCancelClick : NewsHomeReaderAction
 
     //
     // News

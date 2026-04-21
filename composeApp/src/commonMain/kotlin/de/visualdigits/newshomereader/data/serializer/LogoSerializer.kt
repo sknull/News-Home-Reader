@@ -19,7 +19,7 @@ object LogoSerializer : KSerializer<LogoDto> {
     }
 
     override fun deserialize(decoder: Decoder): LogoDto {
-        val jsonDecoder = decoder as? JsonDecoder ?: error("Unknown decoder")
+        val jsonDecoder = decoder as JsonDecoder
         val element = jsonDecoder.decodeJsonElement()
         return if (element is JsonPrimitive && element.isString) {
             LogoDto(url = element.content)

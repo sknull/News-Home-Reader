@@ -21,7 +21,7 @@ object AuthorWrapperSerializer : KSerializer<AuthorWrapper> {
     }
 
     override fun deserialize(decoder: Decoder): AuthorWrapper {
-        val jsonDecoder = decoder as? JsonDecoder ?: error("Unknown decoder")
+        val jsonDecoder = decoder as JsonDecoder
         val element = jsonDecoder.decodeJsonElement()
         return if (element is JsonPrimitive && element.isString) {
             AuthorWrapper(listOf(AuthorDto(url = element.content)))

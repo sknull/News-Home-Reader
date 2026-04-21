@@ -66,6 +66,12 @@
   <string name="tab_shelly_status">Shelly Status</string>
   <string name="tab_studio_clock">Studio Uhr</string>
   <string name="title_delete">Element löschen</string>
+  <string name="title_add_newsfeedgroup">Neue Gruppe erstellen</string>
+  <string name="title_edit_newsfeedgroup">Gruppe bearbeiten</string>
+  <string name="title_delete_newsfeedgroup">Gruppe löschen</string>
+  <string name="title_add_newsfeedconfiguration">Neuen Newsfeed Erstellen</string>
+  <string name="title_edit_newsfeedconfiguration">Newsfeed bearbeiten</string>
+  <string name="title_delete_newsfeedconfiguration">Newsfeed löschen</string>
   <string name="title_info">Info</string>
   <string name="title_settings">Einstellungen</string>
   <string name="tooltip_add_scene">Neue Szene...</string>

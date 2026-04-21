@@ -15,7 +15,7 @@ fun Item.toNewsItem(feedName: String): NewsItem {
 
     return NewsItem(
         feedName = feedName,
-        identifier = identifier ?: link?.let { l -> File(URI(l).path).nameWithoutExtension } ?: error("No identifier"),
+        identifier = identifier ?: link?.let { l -> File(URI(l).path).nameWithoutExtension } ?: "${feedName}_${title}_$pubDate",
         published = date ?: pubDate ?: OffsetDateTime.MIN,
         updated = pubDate ?: OffsetDateTime.MIN,
         link = link ?: "",

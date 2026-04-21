@@ -34,7 +34,7 @@ fun SettingsEntity.toSettings(): Settings {
     settings.set(SK.loadArticles, loadArticles)
     settings.set(SK.refreshInterval, refreshInterval)
     settings.set(SK.refreshWifiOnly, refreshWifiOnly)
-    settings.set(SK.maxImageSize, 1200)
+    settings.set(SK.maxImageSize, lastMaxImageSize)
     settings.set(SK.keepReadArticles, keepReadArticles)
     settings.set(SK.keepUnreadArticles, keepUnreadArticles)
 

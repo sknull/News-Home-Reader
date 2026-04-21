@@ -13,7 +13,7 @@ interface FeedRepository {
     suspend fun readFromFile(
         feedName: String,
         file: File
-    ): NewsFeed
+    ): NewsFeed?
 
     suspend fun getFeedItemsByNewsFeedName(
         feedName: String
@@ -32,7 +32,7 @@ interface FeedRepository {
     suspend fun upsertNewsItem(
         newsItem: NewsItem,
         forceUpdate: Boolean = false
-    ): Result<Unit, DataError.Local>
+    ): Result<Pair<NewsItem, Boolean>, DataError.Local>
 
     suspend fun refreshNewsFeeds(
         newsFeedConfigurations: List<NewsFeedConfiguration>,
@@ -42,7 +42,7 @@ interface FeedRepository {
         maxImageSize: Int,
         loadArticles: Boolean,
         progress: (Float) -> Unit,
-    ): Result<List<NewsFeed>, DataError.Remote>
+    ): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote>
 
     suspend fun refreshNewsFeed(
         feedName: String,
@@ -53,10 +53,10 @@ interface FeedRepository {
         maxImageSize: Int,
         loadArticles: Boolean,
         progress: (Float) -> Unit,
-    ): Result<NewsFeed?, DataError.Remote>
+    ): Result<Pair<NewsFeed?, Boolean>, DataError.Remote>
 
     suspend fun readFromString(
         feedName: String,
         xml: String?
-    ): NewsFeed
+    ): NewsFeed?
 }

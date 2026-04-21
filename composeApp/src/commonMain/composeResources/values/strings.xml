@@ -65,6 +65,12 @@
   <string name="tab_news">News</string>
   <string name="tab_shelly_status">Shelly Status</string>
   <string name="tab_studio_clock">Studio Clock</string>
+  <string name="title_add_newsfeedgroup">Add Newsfeed Group</string>
+  <string name="title_edit_newsfeedgroup">Edit Newsfeed Group</string>
+  <string name="title_delete_newsfeedgroup">Delete Newsfeed Group</string>
+  <string name="title_add_newsfeedconfiguration">Add Newsfeed</string>
+  <string name="title_edit_newsfeedconfiguration">Edit Newsfeed</string>
+  <string name="title_delete_newsfeedconfiguration">Delete Newsfeed</string>
   <string name="title_delete">Delete Element</string>
   <string name="title_info">Info</string>
   <string name="title_settings">Settings</string>

@@ -21,7 +21,7 @@ object TargetWrapperSerializer : KSerializer<TargetWrapper> {
     }
 
     override fun deserialize(decoder: Decoder): TargetWrapper {
-        val jsonDecoder = decoder as? JsonDecoder ?: error("Unknown decoder")
+        val jsonDecoder = decoder as JsonDecoder
         val element = jsonDecoder.decodeJsonElement()
         return if (element is JsonPrimitive && element.isString) {
             TargetWrapper(listOf(TargetDto(urlTemplate = element.content)))

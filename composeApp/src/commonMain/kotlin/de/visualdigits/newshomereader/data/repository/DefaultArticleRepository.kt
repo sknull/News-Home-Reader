@@ -44,16 +44,18 @@ class DefaultArticleRepository(
 
     override suspend fun readFullArticle(
         newsItem: NewsItem
-    ): Result<FullArticle, DataError.Remote> = withContext(Dispatchers.IO) {
+    ): Result<Pair<FullArticle, Boolean>, DataError.Remote> = withContext(Dispatchers.IO) {
         try {
             var fullArticle = dao.getFullArticleByItemId(newsItem.id).executeAsOneOrNull()?.toFullArticle()
-            if (fullArticle == null) {
+            val changedArticle = if (fullArticle == null || newsItem.isChanged) {
                 val response = httpClient.get(urlString = newsItem.link)
                 val rawHtml = response.bodyAsText()
                 fullArticle = readFromString(newsItem, rawHtml)
                 dao.upsertFullArticle(fullArticle.toFullArticleEntity())
+            } else {
+                false
             }
-            Result.Success(fullArticle)
+            Result.Success(Pair(fullArticle, changedArticle))
         } catch (e: Exception) {
             Result.Error(DataError.Remote.SERIALIZATION, throwable = e)
         }

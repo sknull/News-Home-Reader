@@ -48,5 +48,20 @@ data class NewsHomeReaderState(
     val currentProgress: Float = 0.0f,
     val logs: List<LogMessage> = listOf(),
 
-    val collapsibleState: Map<String, Boolean> = mapOf()
+    val collapsibleState: Map<String, Boolean> = mapOf(),
+
+    val isEditMode: Boolean = false,
+
+    val originalNewsFeedConfiguration: NewsFeedConfiguration? = null,
+    val isEditingNewsFeedGroup: Boolean = false,
+    val isAddingNewsFeedGroup: Boolean = false,
+    val isDeletingNewsFeedGroup: Boolean = false,
+
+    val originalNewsFeedGroup: NewsFeedGroup? = null,
+    val isEditingNewsFeedConfiguration: Boolean = false,
+    val isAddingNewsFeedConfiguration: Boolean = false,
+    val isDeletingNewsFeedConfiguration: Boolean = false,
+
+    val originalNewsFeedGroupName: String? = null,
+    val currentNewsFeedGroupName: String? = null
 )
