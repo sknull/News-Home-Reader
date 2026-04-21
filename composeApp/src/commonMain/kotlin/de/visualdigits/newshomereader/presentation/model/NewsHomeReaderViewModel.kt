@@ -576,7 +576,7 @@ class NewsHomeReaderViewModel(
         }
         var copy = newsItem.copy(isRead = true)
         feedRepository.upsertNewsItem(copy, true)
-        val articleResult = articleRepository.readFullArticle(newsItem.id, newsItem.link)
+        val articleResult = articleRepository.readFullArticle(newsItem)
         if (articleResult is Result.Success) {
             copy = copy.copy(newsArticle = articleResult.data)
             _state.update {

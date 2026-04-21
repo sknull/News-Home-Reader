@@ -1,12 +1,12 @@
 package de.visualdigits.newshomereader.domain.util
 
-import org.jsoup.Jsoup
+import com.fleeksoft.ksoup.Ksoup
 import java.io.File
 import java.net.URI
 
 
 fun extractImage(content: String): Triple<String?, String?, String?> {
-    val document = Jsoup.parse(content)
+    val document = Ksoup.parse(content)
     val image = document.select("img").firstOrNull()
     val url = image?.attr("src")
     val title = image?.attr("title")

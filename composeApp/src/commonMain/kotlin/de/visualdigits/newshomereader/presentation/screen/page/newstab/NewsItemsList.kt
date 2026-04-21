@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -34,6 +36,7 @@ import de.visualdigits.compose.resources.tooltip_mark_read_older_2
 import de.visualdigits.compose.resources.tooltip_refresh_newsfeed
 import de.visualdigits.newshomereader.data.repository.ConnectivityManager
 import de.visualdigits.newshomereader.domain.model.settings.SK
+import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.gap
@@ -49,6 +52,8 @@ fun NewsItemsList(
     isLandscape: Boolean,
     maxWidth: Dp,
     maxImageSize: Int?,
+    settings: Settings?,
+    uriHandler: UriHandler,
     onAction: (NewsHomeReaderAction) -> Unit,
     connectivityManager: ConnectivityManager
 ) {
@@ -99,9 +104,14 @@ fun NewsItemsList(
                             NewsItemCard(
                                 modifier = Modifier.weight(1f),
                                 maxImageSize = maxImageSize,
+                                settings = settings,
+                                uriHandler = uriHandler,
                                 newsItem = item,
                                 onAction = onAction
                             )
+                        }
+                        (0 until chunks - rowItems.size).forEach {
+                            Spacer(Modifier.weight(1f))
                         }
                     }
                 })

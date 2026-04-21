@@ -10,38 +10,31 @@ version-androidx-lifecycle = "2.9.6" # DO NOT UPGRADE FOR NOW
 version-androidx-work = "2.11.2"
 version-coil3 = "3.4.0"
 version-colorpicker = "1.1.3"
-version-commons-text = "1.15.0"
-version-essence = "1.0.0-SNAPSHOT"
+version-essence = "1.1.0-SNAPSHOT"
 version-flatlaf = "3.7.1"
 version-gradle-pdf = "4.0.5"
 version-html-converter = "1.1.0"
 version-jetbrains-kotlin = "1.10.3"
-version-jsoup = "1.22.1"
 version-junit = "6.0.3"
 version-kermit = "2.1.0"
+version-ksoup = "0.2.6"
 version-okhttp = "5.3.2" # used in build.gradle.kts - DO NOT REMOVE
 version-okio = "3.16.4" # used in build.gradle.kts - DO NOT REMOVE
 version-koin = "4.2.1"
 version-kotlin = "2.3.20"
-version-kotlin-reactor = "1.10.2"
 version-kotlin-xml-util = "0.91.3"
-version-kotlin-serialization-json-jvm = "1.11.0"
 version-kotlin-coroutines = "1.10.2"
 version-kotlinx-coroutines-swing="1.10.2"
 version-kotlinx-datetime = "0.7.1"
 version-kotlinx-io-core = "0.9.0"
 version-ktor = "3.4.2"
 version-material3 = "1.9.0"
-version-mediaplayer = "0.9.0"
-version-androidx-mediaplayer = "1.5.0.1"
 version-navigation-compose = "2.9.2" # DO NOT UPGRADE FOR NOW
 version-proguardGradle = "7.9.1"
 version-skikoAwtRuntimeWindowsX64 = "0.9.47" # DO NOT UPGRADE FOR NOW
-version-spring-restdocs-mockmvc = "4.0.0"
 
 version-sqldelight = "2.3.2"
 version-sqlite = "2.6.2" # DO NOT UPGRADE FOR NOW
-version-tika = "3.3.0"
 
 
 [libraries]
@@ -51,7 +44,6 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "version-kotlin" }
 kotlin-xml-util = { module = "io.github.pdvrieze.xmlutil:core", version.ref = "version-kotlin-xml-util" }
 kotlin-xml-serialization = { module = "io.github.pdvrieze.xmlutil:serialization", version.ref = "version-kotlin-xml-util" }
-kotlin-serialization-json-jvm = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm", version.ref = "version-kotlin-serialization-json-jvm" }
 kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "version-kotlinx-coroutines-swing" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "version-kotlinx-datetime" }
 kotlinx-io-core = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "version-kotlinx-io-core" }
@@ -110,23 +102,13 @@ sqldelight-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "version-sqldelight" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "version-sqlite" }
 
-mediaplayer = { module = "io.github.kdroidfilter:composemediaplayer", version.ref = "version-mediaplayer" }
-androidx-mediaplayer = { module = "com.tidal.androidx.media3:media3-exoplayer-hls", version.ref = "version-androidx-mediaplayer" }
 compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "version-colorpicker" }
 
-kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "version-kotlin" }
-kotlin-reactor = { module = "io.projectreactor.kotlin:reactor-kotlin-extensions", version.ref = "version-kotlin-reactor" }
-kotlin-reactor-coroutrines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor", version.ref = "version-kotlin-reactor" }
-
-jsoup = { module = "org.jsoup:jsoup", version.ref = "version-jsoup" }
 essence = { module = "de.visualdigits:essence", version.ref = "version-essence" }
-commons-text = { module = "org.apache.commons:commons-text", version.ref = "version-commons-text" }
-tika-core = { module = "org.apache.tika:tika-core", version.ref = "version-tika" }
 
-kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref = "version-kotlin" }
+ksoup-core = { module = "com.fleeksoft.ksoup:ksoup", version.ref = "version-ksoup" }
+
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "version-kotlin-coroutines" }
-kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "version-kotlin-coroutines" }
-spring-restdocs-mockmvc = { module = "org.springframework.restdocs:spring-restdocs-mockmvc", version.ref = "version-spring-restdocs-mockmvc" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

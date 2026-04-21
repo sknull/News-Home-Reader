@@ -1,7 +1,6 @@
 package de.visualdigits.newshomereader.presentation.screen.page.newstab
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -18,7 +17,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,6 +38,7 @@ import de.visualdigits.compose.resources.icon_link_24px
 import de.visualdigits.compose.resources.icon_speaker_2_24px
 import de.visualdigits.compose.resources.icon_timelapse_24px
 import de.visualdigits.compose.resources.icon_videocam_24px
+import de.visualdigits.compose.resources.icon_volume_up_24px
 import de.visualdigits.compose.resources.tooltip_back
 import de.visualdigits.compose.resources.tooltip_open_chat
 import de.visualdigits.compose.resources.tooltip_open_link
@@ -52,9 +51,9 @@ import de.visualdigits.newshomereader.domain.model.unified.MediaType
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.style.gap
+import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import java.net.URI
 import java.time.format.DateTimeFormatter
 
 
@@ -71,9 +70,6 @@ fun NewsArticleCard(
     onAction: (NewsHomeReaderAction) -> Unit,
     connectivityManager: ConnectivityManager
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-
-    // scrollbar box
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -122,9 +118,9 @@ fun NewsArticleCard(
                         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                     ) {
                         Icon(
+                            modifier = Modifier.size(14.dp),
                             painter = painterResource(Res.drawable.icon_timelapse_24px),
                             contentDescription = null,
-                            modifier = Modifier.size(14.dp),
                             tint = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
@@ -147,7 +143,7 @@ fun NewsArticleCard(
                         MediaItemButtons(
                             mediaItems = (newsArticle?.videoItems ?: listOf()) + (newsArticle?.audioItems ?: listOf()),
                             uriHandler = uriHandler,
-                            currentNewsItem = newsItem
+                            newsItem = newsItem
                         )
                     }
                 }),
@@ -202,7 +198,11 @@ private fun ArticleImage(
     newsArticle: FullArticle?,
     maxImageSize: Int?
 ) {
-    if (newsArticle?.articleImage?.isNotEmpty() == true) {
+    var image = newsArticle?.articleImage
+    if (image == null || image.isEmpty()) {
+        image = newsItem.image
+    }
+    if (image.isNotEmpty()) {
         Column(
             modifier = modifier
                 .fillMaxSize(),
@@ -218,7 +218,7 @@ private fun ArticleImage(
             NewsItemImage(
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.small),
-                url = newsArticle.articleImage,
+                url = image,
                 contentDescription = newsItem.imageCaption,
                 maxImageSize = maxImageSize
             )
@@ -228,8 +228,9 @@ private fun ArticleImage(
                     text = newsItem.imageCaption,
                     style = MaterialTheme.typography.bodySmall
                 )
-                Spacer(Modifier.height(16.dp))
             }
+
+            Spacer(Modifier.height(16.dp))
         }
     }
 }
@@ -294,7 +295,7 @@ private fun MediaItemButtons(
     modifier: Modifier = Modifier,
     mediaItems: List<MediaItem>,
     uriHandler: UriHandler,
-    currentNewsItem: NewsItem
+    newsItem: NewsItem
 ) {
     FlowRow(
         modifier = modifier
@@ -307,7 +308,9 @@ private fun MediaItemButtons(
             .forEach { mediaItem ->
                 if (mediaItem.url?.isNotEmpty() == true) {
                     IndicatorButton(
-                        modifier = Modifier,
+                        modifier = Modifier
+                            .clip(MaterialTheme.shapes.extraSmall),
+                        padding = 0.dp,
                         textStyle = MaterialTheme.typography.bodySmall,
                         buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
                         maxLines = Int.MAX_VALUE,
@@ -336,41 +339,47 @@ private fun MediaItemButtons(
                                     }
                                 }
 
-                                Text(
-                                    text = "${mediaItem.uploadDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}",
-                                    style = MaterialTheme.typography.bodySmall
-                                )
-
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
-                                    verticalAlignment = Alignment.Top
+                                Column(
+                                    modifier = Modifier
+                                        .padding(5.dp),
+                                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                                 ) {
-                                    if (mediaItem.type == MediaType.video) {
-                                        Icon(
-                                            painter = painterResource(Res.drawable.icon_videocam_24px),
-                                            contentDescription = null,
-                                            tint = MaterialTheme.colorScheme.onSurface
-                                        )
-
-                                    } else {
-                                        Icon(
-                                            painter = painterResource(Res.drawable.icon_speaker_2_24px),
-                                            contentDescription = null,
-                                            tint = MaterialTheme.colorScheme.onSurface
-                                        )
-                                    }
-
                                     Text(
-                                        text = mediaItem.headline ?: "",
+                                        text = "${mediaItem.uploadDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}",
                                         style = MaterialTheme.typography.bodySmall
                                     )
+
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
+                                        verticalAlignment = Alignment.Top
+                                    ) {
+                                        if (mediaItem.type == MediaType.video) {
+                                            Icon(
+                                                painter = painterResource(Res.drawable.icon_videocam_24px),
+                                                contentDescription = null,
+                                                tint = MaterialTheme.colorScheme.onSurface
+                                            )
+
+                                        } else {
+                                            Icon(
+                                                painter = painterResource(Res.drawable.icon_volume_up_24px),
+                                                contentDescription = null,
+                                                tint = MaterialTheme.colorScheme.onSurface
+                                            )
+                                        }
+
+                                        Text(
+                                            text = mediaItem.headline ?: "",
+                                            style = MaterialTheme.typography.bodySmall
+                                        )
+                                    }
                                 }
                             }
                         }
                     ) {
                         uriHandler.openUri(
                             makeUrlAbsolute(
-                                currentNewsItem.link,
+                                newsItem.link,
                                 mediaItem.url
                             )
                         )
@@ -378,16 +387,4 @@ private fun MediaItemButtons(
             }
         }
     }
-}
-
-private fun makeUrlAbsolute(
-    absoluteUrl: String,
-    relativeUrl: String
-): String {
-    val rel = URI(relativeUrl)
-    return if (!rel.isAbsolute) {
-        val abs = URI(absoluteUrl)
-        val absoluteUrl = URI(abs.scheme, abs.userInfo, abs.host, abs.port, rel.path, rel.query, rel.fragment)
-        absoluteUrl.toString()
-    } else relativeUrl
 }

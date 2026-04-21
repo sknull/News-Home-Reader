@@ -1,5 +1,7 @@
 package de.visualdigits.newshomereader.repository
 
+import com.fleeksoft.ksoup.Ksoup
+import com.fleeksoft.ksoup.parser.Parser
 import de.visualdigits.newshomereader.data.mapper.toNewsFeed
 import de.visualdigits.newshomereader.data.model.atom.Feed
 import de.visualdigits.newshomereader.data.model.rdf.Rdf
@@ -19,8 +21,6 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.withContext
-import org.jsoup.Jsoup
-import org.jsoup.parser.Parser
 import java.io.File
 
 class MockFeedRepository(
@@ -87,8 +87,8 @@ class MockFeedRepository(
     ): NewsFeed = withContext(Dispatchers.IO) {
         checkNotNull(xml) { "No xml given" }
 
-        val feedType = Jsoup
-            .parse(xml, "", Parser.xmlParser())
+        val feedType = Ksoup
+            .parse(html = xml, baseUri = "", parser = Parser.xmlParser())
             .root()
             .select("> *")
             .firstOrNull()

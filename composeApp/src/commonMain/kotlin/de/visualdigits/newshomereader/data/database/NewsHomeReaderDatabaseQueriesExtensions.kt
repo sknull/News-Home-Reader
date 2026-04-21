@@ -69,12 +69,14 @@ fun NewsHomeReaderDatabaseQueries.updateSettings(settingsEntity: SettingsEntity)
     )
 }
 
-fun NewsHomeReaderDatabaseQueries.upsertNewsFeed(newsFeedEntity: NewsFeedEntity) {
-    val entity = getNewsFeedByFeedName(newsFeedEntity.feedName).executeAsOneOrNull()
-    if (entity != null) {
+fun NewsHomeReaderDatabaseQueries.upsertNewsFeed(newsFeedEntity: NewsFeedEntity): Boolean {
+    val existingNewsFeedEntity = getNewsFeedByFeedName(newsFeedEntity.feedName).executeAsOneOrNull()
+    return if (existingNewsFeedEntity != null) {
         updateNewsFeed(newsFeedEntity)
+        !existingNewsFeedEntity.isEqualTo(newsFeedEntity)
     } else {
         insertNewsFeed(newsFeedEntity)
+        true
     }
 }
 
@@ -114,7 +116,7 @@ fun NewsHomeReaderDatabaseQueries.updateNewsFeed(newsFeedEntity: NewsFeedEntity)
     )
 }
 
-fun NewsHomeReaderDatabaseQueries.upsertNewsItem(newsItemEntity: NewsItemEntity, forceUpdate: Boolean = false): NewsItemEntity {
+fun NewsHomeReaderDatabaseQueries.upsertNewsItem(newsItemEntity: NewsItemEntity, forceUpdate: Boolean = false): Pair<NewsItemEntity, Boolean> {
     val cleanFeed = newsItemEntity.feedName.trim().lowercase()
     val cleanIdentifier = newsItemEntity.identifier.trim().lowercase()
 
@@ -124,19 +126,19 @@ fun NewsHomeReaderDatabaseQueries.upsertNewsItem(newsItemEntity: NewsItemEntity,
     )
 
     return transactionWithResult {
-        val existing = getNewsItemByFeedNameAndIdentifier(cleanFeed, cleanIdentifier).executeAsOneOrNull()
-        if (existing != null) {
-            if (forceUpdate || normalizedItem.updatedMillis > existing.updatedMillis) {
-                val toUpdate = normalizedItem.copy(id = existing.id)
+        val existingNewsItemEntity = getNewsItemByFeedNameAndIdentifier(cleanFeed, cleanIdentifier).executeAsOneOrNull()
+        if (existingNewsItemEntity != null) {
+            if (forceUpdate || normalizedItem.updatedMillis > existingNewsItemEntity.updatedMillis) {
+                val toUpdate = normalizedItem.copy(id = existingNewsItemEntity.id)
                 updateNewsItem(toUpdate)
-                toUpdate
+                Pair(toUpdate, existingNewsItemEntity.isEqualTo(newsItemEntity))
             } else {
-                existing
+                Pair(existingNewsItemEntity, false)
             }
         } else {
             insertNewsItem(normalizedItem)
             val inserted = getNewsItemByFeedNameAndIdentifier(cleanFeed, cleanIdentifier).executeAsOne()
-            inserted
+            Pair(inserted, true)
         }
     }
 }
@@ -184,12 +186,14 @@ fun NewsHomeReaderDatabaseQueries.updateNewsItem(newsItemEntity: NewsItemEntity)
 }
 
 
-fun NewsHomeReaderDatabaseQueries.upsertFullArticle(fullArticleEntity: FullArticleEntity) {
-    val entity = getFullArticleById(fullArticleEntity.itemId).executeAsOneOrNull()
-    if (entity != null) {
+fun NewsHomeReaderDatabaseQueries.upsertFullArticle(fullArticleEntity: FullArticleEntity): Boolean {
+    val existingFullArticleEntity = getFullArticleByItemId(fullArticleEntity.itemId).executeAsOneOrNull()
+    return if (existingFullArticleEntity != null) {
         updateFullArticle(fullArticleEntity)
+        !existingFullArticleEntity.isEqualto(fullArticleEntity)
     } else {
         insertFullArticle(fullArticleEntity)
+        true
     }
 }
 
@@ -212,6 +216,7 @@ fun NewsHomeReaderDatabaseQueries.insertFullArticle(fullArticleEntity: FullArtic
 
 fun NewsHomeReaderDatabaseQueries.updateFullArticle(fullArticleEntity: FullArticleEntity) {
     updateFullArticle(
+        itemId = fullArticleEntity.itemId,
         applicationJson = fullArticleEntity.applicationJson,
         html = fullArticleEntity.html,
         imageItems = fullArticleEntity.imageItems,
@@ -223,6 +228,60 @@ fun NewsHomeReaderDatabaseQueries.updateFullArticle(fullArticleEntity: FullArtic
         isFree = fullArticleEntity.isFree,
         wordCount = fullArticleEntity.wordCount,
         readingTime = fullArticleEntity.readingTime,
-        itemId = fullArticleEntity.itemId,
+        id = fullArticleEntity.id
     )
+}
+
+fun NewsFeedEntity.isEqualTo(other: NewsFeedEntity): Boolean {
+    return id ==  other.id &&
+    identifier ==  other.identifier &&
+    feedName ==  other.feedName &&
+    title ==  other.title &&
+    description ==  other.description &&
+    link ==  other.link &&
+    image ==  other.image &&
+    imageTitle ==  other.imageTitle &&
+    imageCaption ==  other.imageCaption &&
+    updatedMillis ==  other.updatedMillis &&
+    updatedZone ==  other.updatedZone &&
+    rights ==  other.rights &&
+    language ==  other.language &&
+    keywords ==  other.keywords
+}
+
+fun NewsItemEntity.isEqualTo(other: NewsItemEntity): Boolean {
+    return id == other.id &&
+    feedName == other.feedName &&
+    identifier  == other.identifier  &&
+    publishedMillis == other.publishedMillis &&
+    publishedZone  == other.publishedZone  &&
+    updatedMillis == other.updatedMillis &&
+    lastSeenMillis == other.lastSeenMillis &&
+    updatedZone  == other.updatedZone  &&
+    link  == other.link  &&
+    title  == other.title  &&
+    summary  == other.summary  &&
+    content == other.content &&
+    keywords  == other.keywords  &&
+    image  == other.image  &&
+    imageTitle  == other.imageTitle  &&
+    imageCaption  == other.imageCaption  &&
+    isRead == other.isRead
+}
+
+fun FullArticleEntity.isEqualto(other: FullArticleEntity): Boolean {
+    return id == other.id &&
+    itemId == other.itemId &&
+    applicationJson == other.applicationJson &&
+    html  == other.html  &&
+    imageItems == other.imageItems &&
+    videoItems == other.videoItems &&
+    audioItems == other.audioItems &&
+    articleImage == other.articleImage &&
+    discussionUrl == other.discussionUrl &&
+    commentCount == other.commentCount &&
+    isFree == other.isFree &&
+    wordCount == other.wordCount &&
+    readingTime == other.readingTime
+
 }

@@ -1,11 +1,13 @@
 package de.visualdigits.newshomereader.data.model.rdf
 
 import androidx.compose.runtime.Immutable
+import com.fleeksoft.ksoup.nodes.Document
+import com.fleeksoft.ksoup.nodes.Entities
 import de.visualdigits.newshomereader.data.serializer.OffsetDateTimeHeuristicDeserializer
+import de.visualdigits.newshomereader.domain.util.StringEscapeUtils
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
-import org.apache.commons.text.StringEscapeUtils
 import java.time.OffsetDateTime
 
 @Serializable

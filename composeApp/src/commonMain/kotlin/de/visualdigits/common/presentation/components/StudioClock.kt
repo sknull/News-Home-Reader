@@ -2,6 +2,7 @@ package de.visualdigits.common.presentation.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,12 +46,7 @@ private val formatterDate = DateTimeFormatter.ofPattern("dd.MM.")
 @Composable
 fun StudioClock(
     modifier: Modifier = Modifier,
-    colorHours: Color = Color(0xFFFF0040),
-    colorMinutes: Color = Color(0xFFFB7C9C),
-    colorSeconds: Color = Color(0xFFFF0040),
-    colorTime: Color = Color(0xFFFF0040),
-    colorDate: Color = Color(0xFF9E4F62),
-    colorBackground: Color = Color(0xdd000000),
+    colors: StudioClockColors = defaultStudioClockColors,
     showSeconds: Boolean = true,
     showDate: Boolean = true
 ) {
@@ -111,7 +107,7 @@ fun StudioClock(
                             fontFamily = fontFamily,
                             fontSize = finalFontSize,
                             shadow = Shadow(
-                                color = colorTime,
+                                color = colors.colorTime,
                                 offset = Offset(0f, 0f),
                                 blurRadius = unit.toFloat()
                             )
@@ -123,9 +119,9 @@ fun StudioClock(
                         maxLines = 1,
                         style = TextStyle(
                             fontFamily = fontFamily,
-                            fontSize = finalFontSize * 0.75f,
+                            fontSize = finalFontSize * 0.5f,
                             shadow = Shadow(
-                                color = colorTime,
+                                color = colors.colorTime,
                                 offset = Offset(0f, 0f),
                                 blurRadius = unit.toFloat()
                             )
@@ -134,7 +130,7 @@ fun StudioClock(
 
                     onDrawWithContent {
                         drawCircle(
-                            color = colorBackground
+                            color = colors.colorBackground
                         )
                         // hours
                         drawDots(
@@ -144,8 +140,8 @@ fun StudioClock(
                             size = (4 * unit).toFloat(),
                             numberOfDots = 12,
                             highlightedDots = currentDateTime.hour % 12,
-                            colorHighlighted = colorHours,
-                            colorDimmed = colorHours.copy(value = 0.1f)
+                            colorHighlighted = colors.colorHours,
+                            colorDimmed = colors.colorHours.copy(value = 0.1f)
                         )
 
                         // minutes
@@ -156,8 +152,8 @@ fun StudioClock(
                             size = (2 * unit).toFloat(),
                             numberOfDots = 60,
                             highlightedDots = currentDateTime.minute,
-                            colorHighlighted = colorMinutes,
-                            colorDimmed = colorMinutes.copy(value = 0.1f)
+                            colorHighlighted = colors.colorMinutes,
+                            colorDimmed = colors.colorMinutes.copy(value = 0.1f)
                         )
 
                         // seconds
@@ -169,8 +165,8 @@ fun StudioClock(
                                 size = unit.toFloat(),
                                 numberOfDots = 60,
                                 highlightedDots = currentDateTime.second,
-                                colorHighlighted = colorSeconds,
-                                colorDimmed = colorSeconds.copy(value = 0.1f)
+                                colorHighlighted = colors.colorSeconds,
+                                colorDimmed = colors.colorSeconds.copy(value = 0.1f)
                             )
                         }
 
@@ -180,7 +176,7 @@ fun StudioClock(
                                 x = offsetX - timeLayoutResult.size.width / 2.0f,
                                 y = offsetY - timeLayoutResult.size.height / 2.0f - (if(showDate) 3.0f else 0.0f)
                             ),
-                            color = colorTime
+                            color = colors.colorTime
                         )
 
                         if (showDate) {
@@ -188,9 +184,9 @@ fun StudioClock(
                                 textLayoutResult = dateLayoutResult,
                                 topLeft = Offset(
                                     x = offsetX - dateLayoutResult.size.width / 2.0f,
-                                    y = offsetY - dateLayoutResult.size.height / 2.0f + timeLayoutResult.size.height
+                                    y = offsetY - dateLayoutResult.size.height / 2.0f + timeLayoutResult.size.height * 0.75f
                                 ),
-                                color = colorDate
+                                color = colors.colorDate
                             )
                         }
 

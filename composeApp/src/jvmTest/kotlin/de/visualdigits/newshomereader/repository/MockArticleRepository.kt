@@ -1,19 +1,20 @@
 package de.visualdigits.newshomereader.repository
 
+import com.fleeksoft.ksoup.Ksoup
+import de.visualdigits.essence.Essence
 import de.visualdigits.newshomereader.data.mapper.toAppJson
 import de.visualdigits.newshomereader.data.model.applicationjson.AppJsonDto
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
+import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
-import io.github.cdimascio.essence.Essence
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
-import org.jsoup.Jsoup
 import java.io.File
 import kotlin.math.roundToLong
 
@@ -22,29 +23,28 @@ class MockArticleRepository(
 ) : ArticleRepository {
 
     override suspend fun readFromFile(
-        itemId: Long,
+        newsItem: NewsItem,
         file: File
     ): FullArticle {
-        return readFromString(itemId, file.readText())
+        return readFromString(newsItem, file.readText())
     }
 
     override suspend fun getFullArticle(itemId: Long): Result<FullArticle?, DataError.Local> {
-        return Result.Success(FullArticle(itemId = 4711, html = ""))
+        return Result.Success(FullArticle(id = 1234, itemId = 4711, html = ""))
     }
 
     override suspend fun readFullArticle(
-        itemId: Long,
-        url: String
+        newsItem: NewsItem
     ): Result<FullArticle, DataError.Remote> {
-        val response = httpClient?.get(urlString = url)
+        val response = httpClient.get(urlString = newsItem.link)
         val rawHtml = response?.bodyAsText()
-        val data = readFromString(itemId, rawHtml)
+        val data = readFromString(newsItem, rawHtml)
         return Result.Success(data)
     }
 
 
     override suspend fun readFromString(
-        itemId: Long,
+        newsItem: NewsItem,
         rawHtml: String?
     ): FullArticle = withContext(Dispatchers.IO) {
         // extract main text from raw html using essence's heuristics
@@ -53,7 +53,7 @@ class MockArticleRepository(
         val words = htmlElement?.text()?.split("\\s+".toRegex())?.filter { it.isNotBlank() }
         val wordCount = words?.size?.toLong() ?: 0L
 
-        val applicationJson = rawHtml?.let {rh -> Jsoup.parse(rh) }
+        val applicationJson = html.let { rh -> Ksoup.parse(rh) }
             ?.select("script[type=application/ld+json]")
             ?.map { script ->
                 val json = script.data()
@@ -97,7 +97,8 @@ class MockArticleRepository(
             ?: ""
 
         FullArticle(
-            itemId = itemId,
+            id = 1234,
+            itemId = newsItem.id,
             applicationJson = applicationJson?.map { a -> a.toAppJson() }?:listOf(),
             html = html,
             imageItems = imageItems,

@@ -148,6 +148,7 @@ val applicationJsonAdapter = object : ColumnAdapter<List<AppJson>, String> {
 
 fun FullArticle.toFullArticleEntity(): FullArticleEntity {
     return FullArticleEntity(
+        id = id,
         itemId = itemId,
         applicationJson = applicationJson,
         html = html,
@@ -165,6 +166,7 @@ fun FullArticle.toFullArticleEntity(): FullArticleEntity {
 
 fun FullArticleEntity.toFullArticle(): FullArticle {
     return FullArticle(
+        id = id,
         itemId = itemId,
         applicationJson = applicationJson,
         html = html,

@@ -138,14 +138,11 @@ kotlin {
             implementation(libs.kotlinx.coroutines)
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.io.core)
-            implementation(libs.flatlaf)
 
             implementation(libs.kermit)
 
-            implementation(libs.jsoup)
             implementation(libs.essence)
-            implementation(libs.commons.text)
-            implementation(libs.tika.core)
+            implementation(libs.ksoup.core)
 
             implementation(libs.html.converter)
 
@@ -164,6 +161,7 @@ kotlin {
         }
 
         jvmMain.dependencies {
+            implementation(libs.flatlaf)
             implementation(compose.desktop.currentOs)
             implementation(libs.skiko.awt.runtime.windows.x64)
             implementation(libs.kotlinx.coroutinesSwing)
@@ -197,7 +195,6 @@ android {
     defaultConfig {
         applicationId = "de.visualdigits.newshomereader"
         minSdk = libs.versions.android.minSdk.get().toInt()
-        //noinspection OldTargetApi
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"

@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
 import de.visualdigits.common.presentation.components.StudioClock
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
@@ -25,6 +26,7 @@ import de.visualdigits.newshomereader.presentation.style.gap
 @Composable
 fun NewsFeedsNavigation(
     state: NewsHomeReaderState,
+    displayTheme: DisplayThemeEnum,
     isLandscape: Boolean,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
@@ -54,7 +56,8 @@ fun NewsFeedsNavigation(
                         .width(200.dp)
                         .height(200.dp),
                     showSeconds = false,
-                    showDate = true
+                    showDate = true,
+                    colors = displayTheme.studioClockColors
                 )
             }
         }

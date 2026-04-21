@@ -2,6 +2,7 @@ package de.visualdigits.newshomereader.data.repository
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import com.fleeksoft.ksoup.Ksoup
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeed
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedEntity
@@ -35,8 +36,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
-import org.jsoup.Jsoup
-import org.jsoup.parser.Parser
 import java.io.File
 import java.time.Duration
 import java.time.OffsetDateTime
@@ -247,11 +246,13 @@ class DefaultFeedRepository(
         totalSteps: Int,
         progress: (Float) -> Unit
     ): List<NewsItem> {
-        dao.upsertNewsFeed(newsFeed.toNewsFeedEntity())
+        val changedFeed = dao.upsertNewsFeed(newsFeed.toNewsFeedEntity())
+        var changedItems: Boolean = false
         val done = currentStep.incrementAndGet()
         progress(done.toFloat() / totalSteps)
         return newsFeed.items.map { newsItem ->
-            val insertedItem = dao.upsertNewsItem(newsItem.toNewsItemEntity())
+            val (insertedItem, changedItem) = dao.upsertNewsItem(newsItem.toNewsItemEntity())
+            changedItems = changedItems || changedItem
             val done = currentStep.incrementAndGet()
             progress(done.toFloat() / totalSteps)
             insertedItem.toNewsItem().copy(newsFeed = newsFeed)
@@ -272,7 +273,7 @@ class DefaultFeedRepository(
                         try {
                             semaphore.withPermit {
                                 val articleResult =
-                                    articleRepository.readFullArticle(itemId = newsItem.id, url = newsItem.link)
+                                    articleRepository.readFullArticle(newsItem = newsItem)
                                 val item = when (articleResult) {
                                     is Result.Success -> {
                                         newsItem.copy(newsArticle = articleResult.data)
@@ -309,8 +310,8 @@ class DefaultFeedRepository(
     ): NewsFeed = withContext(Dispatchers.IO) {
         checkNotNull(xml) { "No xml given" }
 
-        val feedType = Jsoup
-            .parse(xml, "", Parser.xmlParser())
+        val feedType = Ksoup
+            .parse(html = xml, baseUri = "", parser = com.fleeksoft.ksoup.parser.Parser.xmlParser())
             .root()
             .select("> *")
             .firstOrNull()

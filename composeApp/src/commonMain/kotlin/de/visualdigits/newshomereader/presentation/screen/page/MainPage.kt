@@ -219,8 +219,11 @@ fun MainPage(
                                 NewsFeeds(
                                     state = state,
                                     scrollPosition = viewModel.scrollPosition,
+                                    displayTheme = displayTheme,
                                     maxWidth = mw,
                                     maxImageSize = maxImageSize,
+                                    settings = state.settings,
+                                    uriHandler = uriHandler,
                                     onAction = onAction,
                                     connectivityManager = connectivityManager
                                 )

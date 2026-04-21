@@ -7,6 +7,7 @@ import javax.swing.LookAndFeel
 
 val DisplayThemeEnum.laf: LookAndFeel
     get() = when (this) {
+        DisplayThemeEnum.ANTHRACITE -> FlatDarculaLaf()
         DisplayThemeEnum.DARK -> FlatDarculaLaf()
         DisplayThemeEnum.LIGHT -> FlatLightLaf()
     }

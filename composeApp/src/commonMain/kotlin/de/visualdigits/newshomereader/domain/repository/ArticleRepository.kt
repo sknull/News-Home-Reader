@@ -3,12 +3,13 @@ package de.visualdigits.newshomereader.domain.repository
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
+import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import java.io.File
 
 interface ArticleRepository {
 
     suspend fun readFromFile(
-        itemId: Long,
+        newsItem: NewsItem,
         file: File
     ): FullArticle
 
@@ -17,12 +18,11 @@ interface ArticleRepository {
     ): Result<FullArticle?, DataError.Local>
 
     suspend fun readFullArticle(
-        itemId: Long,
-        url: String
+        newsItem: NewsItem,
     ): Result<FullArticle, DataError.Remote>
 
     suspend fun readFromString(
-        itemId: Long,
-        html: String?
+        newsItem: NewsItem,
+        rawHtml: String?
     ): FullArticle
 }

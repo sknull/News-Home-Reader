@@ -1,5 +1,7 @@
 package de.visualdigits.newshomereader.data.repository
 
+import com.fleeksoft.ksoup.Ksoup
+import de.visualdigits.essence.Essence
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.data.database.mapper.toFullArticle
 import de.visualdigits.newshomereader.data.database.mapper.toFullArticleEntity
@@ -9,15 +11,14 @@ import de.visualdigits.newshomereader.data.model.applicationjson.AppJsonDto
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
+import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
-import io.github.cdimascio.essence.Essence
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
-import org.jsoup.Jsoup
 import java.io.File
 import kotlin.math.roundToLong
 
@@ -27,30 +28,29 @@ class DefaultArticleRepository(
 ) : ArticleRepository {
 
     override suspend fun readFromFile(
-        itemId: Long,
+        newsItem: NewsItem,
         file: File
     ): FullArticle = withContext(Dispatchers.IO) {
-        readFromString(itemId, file.readText())
+        readFromString(newsItem, file.readText())
     }
 
     override suspend fun getFullArticle(itemId: Long): Result<FullArticle?, DataError.Local> {
         return try {
-            Result.Success(dao.getFullArticleById(itemId).executeAsOneOrNull()?.toFullArticle())
+            Result.Success(dao.getFullArticleByItemId(itemId).executeAsOneOrNull()?.toFullArticle())
         } catch (e: Exception) {
             Result.Error(DataError.Local.SERIALIZATION, throwable = e)
         }
     }
 
     override suspend fun readFullArticle(
-        itemId: Long,
-        url: String
+        newsItem: NewsItem
     ): Result<FullArticle, DataError.Remote> = withContext(Dispatchers.IO) {
         try {
-            var fullArticle = dao.getFullArticleById(itemId).executeAsOneOrNull()?.toFullArticle()
+            var fullArticle = dao.getFullArticleByItemId(newsItem.id).executeAsOneOrNull()?.toFullArticle()
             if (fullArticle == null) {
-                val response = httpClient.get(urlString = url)
+                val response = httpClient.get(urlString = newsItem.link)
                 val rawHtml = response.bodyAsText()
-                fullArticle = readFromString(itemId, rawHtml)
+                fullArticle = readFromString(newsItem, rawHtml)
                 dao.upsertFullArticle(fullArticle.toFullArticleEntity())
             }
             Result.Success(fullArticle)
@@ -60,16 +60,17 @@ class DefaultArticleRepository(
     }
 
     override suspend fun readFromString(
-        itemId: Long,
+        newsItem: NewsItem,
         rawHtml: String?
     ): FullArticle = withContext(Dispatchers.IO) {
         // extract main text from raw html using essence's heuristics
         val htmlElement = rawHtml?.let { rh -> Essence.extract(rh).html }
-        val html = htmlElement?.html()?:""
+        var html = htmlElement?.html()?:""
+
         val words = htmlElement?.text()?.split("\\s+".toRegex())?.filter { it.isNotBlank() }
         val wordCount = words?.size?.toLong() ?: 0L
 
-        val applicationJson = rawHtml?.let {rh -> Jsoup.parse(rh) }
+        val applicationJson = rawHtml?.let { rh -> Ksoup.parse(rh) }
             ?.select("script[type=application/ld+json]")
             ?.map { script ->
                 val json = script.data()
@@ -112,8 +113,14 @@ class DefaultArticleRepository(
             ?: imageItems.firstOrNull()?.url
             ?: ""
 
+        // cleanup if possible
+        if (html.contains(newsItem.summary)) {
+            html = html.replace(newsItem.summary, "")
+        }
+
         FullArticle(
-            itemId = itemId,
+            id = 0L,
+            itemId = newsItem.id,
             applicationJson = applicationJson?.map { a -> a.toAppJson() }?:listOf(),
             html = html,
             imageItems = imageItems,

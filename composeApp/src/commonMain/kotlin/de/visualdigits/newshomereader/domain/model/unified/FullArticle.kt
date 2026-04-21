@@ -5,6 +5,7 @@ import de.visualdigits.newshomereader.domain.model.applicationjson.AppJson
 
 @Immutable
 data class FullArticle(
+    val id: Long,
     val itemId: Long,
     val applicationJson: List<AppJson> = listOf(),
     val html: String,
