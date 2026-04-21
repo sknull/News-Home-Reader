@@ -2,14 +2,12 @@ package de.visualdigits.newshomereader.presentation.screen.page
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,12 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,11 +29,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
@@ -47,23 +38,19 @@ import de.visualdigits.common.domain.model.configuration.keyfactory.typography
 import de.visualdigits.common.presentation.components.BindBackHandler
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.common.presentation.components.container.ErrorCard
+import de.visualdigits.common.presentation.components.form.ConfigurationEditForm
 import de.visualdigits.compose.resources.Res
-import de.visualdigits.compose.resources.cancel
 import de.visualdigits.compose.resources.icon_edit_24px
 import de.visualdigits.compose.resources.icon_info_24px
 import de.visualdigits.compose.resources.icon_menu_24px
 import de.visualdigits.compose.resources.icon_refresh_24px
 import de.visualdigits.compose.resources.icon_settings_24px
-import de.visualdigits.compose.resources.icon_warning_24px
-import de.visualdigits.compose.resources.ok
-import de.visualdigits.compose.resources.title_add_newsfeedgroup
-import de.visualdigits.compose.resources.title_delete
+import de.visualdigits.compose.resources.title_add_newsfeedconfiguration
+import de.visualdigits.compose.resources.title_edit_newsfeedconfiguration
 import de.visualdigits.compose.resources.tooltip_refresh_newsfeed
-import de.visualdigits.compose.resources.warning_delete
 import de.visualdigits.newshomereader.data.repository.ConnectivityManager
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
-import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.screen.page.newstab.NewsArticleCard
 import de.visualdigits.newshomereader.presentation.screen.page.newstab.NewsFeeds
@@ -133,6 +120,53 @@ fun MainPage(
                     InfoPage(uriHandler, onAction)
                 } else if (state.isEditingSettings) {
                     SettingsPage(state, viewModel.scrollPosition, onAction)
+                } else if (state.isAddingNewsFeedConfiguration || state.isEditingNewsFeedConfiguration) {
+                    Column(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxSize()
+                    ) {
+                        Text(
+                            text = if (state.isEditingNewsFeedConfiguration) stringResource(Res.string.title_edit_newsfeedconfiguration) else  stringResource(Res.string.title_add_newsfeedconfiguration),
+                            style = MaterialTheme.typography.headlineMedium
+                        )
+
+                        Spacer(Modifier.height(16.dp))
+
+                        ConfigurationEditForm(
+                            scrollPosition = viewModel.scrollPosition,
+                            scrollbarId = "configuration_settings",
+                            fieldHeight = 50.dp,
+                            onValueChange = { keyValue ->
+                                onAction(
+                                    NewsHomeReaderAction.OnNewsFeedConfigurationValueChanged(
+                                        newsFeedConfiguration = state.editedNewsFeedConfiguration,
+                                        keyValue = keyValue
+                                    )
+                                )
+                            },
+                            configuration = state.editedNewsFeedConfiguration,
+                            onCancelClick = {
+                                onAction(
+                                    if (state.isAddingNewsFeedConfiguration) {
+                                        NewsHomeReaderAction.OnAddNewsFeedConfigurationCancelClick()
+                                    } else {
+                                        NewsHomeReaderAction.OnEditNewsFeedConfigurationCancelClick()
+                                    }
+                                )
+                            },
+                            onOkClick = {
+                                onAction(
+                                    if (state.isAddingNewsFeedConfiguration) {
+                                        NewsHomeReaderAction.OnAddNewsFeedConfigurationOkClick(state.editedNewsFeedConfiguration)
+                                    } else {
+                                        NewsHomeReaderAction.OnEditNewsFeedConfigurationOkClick(state.editedNewsFeedConfiguration)
+                                    }
+                                )
+                            },
+                            onAction = onAction
+                        )
+                    }
                 } else {
                     Column(
                         modifier = Modifier
@@ -269,7 +303,7 @@ fun MainPage(
                 }
             }
 
-            AddNewsFeedConfigurationGroupDialog(
+            NewsFeedConfigurationGroupDialog(
                 state = state,
                 onAction = onAction
             )

@@ -4,10 +4,11 @@ import androidx.compose.runtime.Stable
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.newshomereader.domain.model.errorhandling.LogMessage
+import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfiguration
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import org.jetbrains.compose.resources.StringResource
@@ -19,7 +20,7 @@ data class NewsHomeReaderState(
 
     val newsFeedGroups: List<NewsFeedGroup> = listOf(),
 
-    val currentFeedConfiguration: NewsFeedConfiguration? = null,
+    val currentNewsFeedConfiguration: NewsFeedConfigurationEntity? = null,
     val currentFeedName: String? = null,
     val currentNewsItems: List<NewsItem> = listOf(),
     val visibleNewsItems: List<NewsItem> = listOf(),
@@ -53,6 +54,7 @@ data class NewsHomeReaderState(
     val isEditMode: Boolean = false,
 
     val originalNewsFeedConfiguration: NewsFeedConfiguration? = null,
+    val editedNewsFeedConfiguration: NewsFeedConfiguration? = null,
     val isEditingNewsFeedGroup: Boolean = false,
     val isAddingNewsFeedGroup: Boolean = false,
     val isDeletingNewsFeedGroup: Boolean = false,
@@ -61,6 +63,7 @@ data class NewsHomeReaderState(
     val isEditingNewsFeedConfiguration: Boolean = false,
     val isAddingNewsFeedConfiguration: Boolean = false,
     val isDeletingNewsFeedConfiguration: Boolean = false,
+    val deleteNewsFeedConfiguration: NewsFeedConfigurationEntity? = null,
 
     val originalNewsFeedGroupName: String? = null,
     val currentNewsFeedGroupName: String? = null

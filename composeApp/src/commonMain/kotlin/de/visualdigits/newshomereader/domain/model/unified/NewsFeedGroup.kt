@@ -6,5 +6,5 @@ import androidx.compose.runtime.Immutable
 data class NewsFeedGroup(
     val id: Long = 0L,
     val name: String,
-    val newsFeeds: List<NewsFeedConfiguration> = listOf(),
+    val newsFeeds: List<NewsFeedConfigurationEntity> = listOf(),
 )

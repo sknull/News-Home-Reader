@@ -1,7 +1,6 @@
 package de.visualdigits.common.domain.model.configuration
 
 import de.visualdigits.common.domain.model.configuration.keyfactory.IntKeyFactory
-import de.visualdigits.common.domain.model.configuration.keyfactory.StringKeyFactory
 import org.jetbrains.compose.resources.StringResource
 
 /**

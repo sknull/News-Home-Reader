@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,7 +21,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -53,6 +56,7 @@ import de.visualdigits.compose.resources.icon_edit_24px
 import de.visualdigits.compose.resources.icon_file_save_24px
 import de.visualdigits.compose.resources.ok
 import de.visualdigits.newshomereader.presentation.style.gap
+import de.visualdigits.newshomereader.presentation.util.conditional
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -75,10 +79,15 @@ fun EditableList(
     deleteAllowed: (AbstractFieldDescriptor<*,*,*>, String) -> Boolean = { _, _ -> true }
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-
-    val values = field.stringValue()?.split(",")?:listOf()
-    val previousItems = remember(values) { values.toMutableStateList() }
-    val items = remember(values) { values.toMutableStateList() }
+    val values = (field.value as? List<String>)?:listOf()
+    val previousItems = remember { values.toMutableStateList() }
+    val items = remember { mutableStateListOf<String>() }
+    LaunchedEffect(values) {
+        if (items != values) {
+            items.clear()
+            items.addAll(values)
+        }
+    }
     var showDialog by remember { mutableStateOf(false) }
     var editingIndex by remember { mutableStateOf<Int?>(null) }
     var currentText by remember { mutableStateOf<String?>(null) }
@@ -95,7 +104,7 @@ fun EditableList(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
-                .verticalScroll(scrollState),
+                .conditional(scrollable) { verticalScroll(scrollState) },
             verticalArrangement = Arrangement.spacedBy(space)
         ) {
             Text(
@@ -124,22 +133,21 @@ fun EditableList(
                             .background(Color.Transparent)
                             .padding(start = MaterialTheme.shapes.gap, end = 0.dp),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(1.dp)
+                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                     ) {
                         Text(
                             text = item,
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.weight(1f)
+                            style = MaterialTheme.typography.bodySmall
                         )
+
+                        Spacer(Modifier.weight(1f))
 
                         if (field.enabled) {
                             IndicatorButton(
                                 leadingIcon = painterResource(Res.drawable.icon_edit_24px),
-                                leadingIconTint = iconTint,
-                                modifier = Modifier.padding(start = 5.dp),
                                 toolTip = stringResource(Res.string.edit),
-                                shape = buttonShape,
-                                buttonColor = buttonColor,
+                                width = 30.dp,
+                                height = 30.dp,
                                 onClick = {
                                     editingIndex = index
                                     currentText = item
@@ -149,12 +157,10 @@ fun EditableList(
 
                             IndicatorButton(
                                 leadingIcon = painterResource(Res.drawable.icon_delete_24px),
-                                leadingIconTint = iconTint,
-                                modifier = Modifier.padding(start = 5.dp),
                                 toolTip = stringResource(Res.string.delete),
+                                width = 30.dp,
+                                height = 30.dp,
                                 enabled = allowDelete,
-                                shape = buttonShape,
-                                buttonColor = buttonColor,
                                 onClick = {
                                     editingIndex = null
                                     currentText = null
@@ -253,7 +259,7 @@ fun EditableList(
                     onValueChange(
                         KeyValue(
                             descriptor = field.descriptor,
-                            value = items.joinToString(","),
+                            value = if (items.isNotEmpty()) items.joinToString(",") else null,
                             previousValue = previousValue,
                             newValue = currentText
                         )

@@ -89,7 +89,7 @@ fun NewsFeedNavigationNodes(
                                 padding = 2.dp,
                                 leadingIcon = painterResource(Res.drawable.icon_add_24px)
                             ) {
-                                onAction(NewsHomeReaderAction.OnAddNewsFeedConfigurationClick(true))
+                                onAction(NewsHomeReaderAction.OnAddNewsFeedConfigurationClick(newsFeedGroup.name))
                             }
                         }
                     }
@@ -114,7 +114,7 @@ fun NewsFeedNavigationNodes(
                                 padding = 2.dp,
                                 leadingIcon = painterResource(Res.drawable.icon_add_24px)
                             ) {
-                                onAction(NewsHomeReaderAction.OnAddNewsFeedConfigurationClick(true))
+                                onAction(NewsHomeReaderAction.OnAddNewsFeedConfigurationClick(newsFeedGroup.name))
                             }
                         }
                     }

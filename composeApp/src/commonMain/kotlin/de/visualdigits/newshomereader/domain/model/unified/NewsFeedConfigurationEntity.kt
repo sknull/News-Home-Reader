@@ -1,19 +1,18 @@
 package de.visualdigits.newshomereader.domain.model.unified
 
 import androidx.compose.runtime.Immutable
-import de.visualdigits.newshomereader.data.model.newsfeeds.FeedFilter
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.io.File
 
 @Serializable
 @Immutable
-data class NewsFeedConfiguration(
-    val name: String,
-    val groupName: String,
+data class NewsFeedConfigurationEntity(
+    val name: String? = null,
+    val groupName: String? = null,
     val imageUrl: String? = null,
-    val url: String = "",
-    val filters: Map<String, FeedFilter> = mapOf()
+    val url: String? = null,
+    val stopWords: List<String>? = listOf()
 ) {
 
     companion object {
@@ -24,11 +23,11 @@ data class NewsFeedConfiguration(
             encodeDefaults = false
         }
 
-        fun decodeFromString(json: String): NewsFeedConfiguration {
+        fun decodeFromString(json: String): NewsFeedConfigurationEntity {
             return mapper.decodeFromString(json)
         }
 
-        fun decodeValue(file: File): NewsFeedConfiguration {
+        fun decodeValue(file: File): NewsFeedConfigurationEntity {
             return mapper.decodeFromString(file.readText())
         }
     }

@@ -2,7 +2,7 @@ package de.visualdigits.newshomereader.data.mapper
 
 import de.visualdigits.newshomereader.data.model.opml.Opml
 import de.visualdigits.newshomereader.data.model.opml.Outline
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfiguration
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 
 fun Opml.toNewsFeedConfiguration(): List<NewsFeedGroup> {
@@ -19,7 +19,7 @@ fun Outline.toNewsFeedConfiguration(parent: Outline? = null, newsFeedGroups: Mut
         val parentName = parent?.title?.replace("\n", "")?.trim() ?: ""
         val group = newsFeedGroups[parentName]
         if (group != null) {
-            val node = NewsFeedConfiguration(
+            val node = NewsFeedConfigurationEntity(
                 name = name,
                 groupName = parentName,
                 imageUrl = imageUrl,

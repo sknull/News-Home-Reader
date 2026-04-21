@@ -4,7 +4,16 @@ class StringListKeyFactory {
 
     companion object : KeyFactory<MutableList<String>> {
 
-        override fun fromString(value: String?): MutableList<String>  = value?.split(",")?.map { v -> v.trim() }?.toMutableList()?:mutableListOf()
+        override fun fromString(value: String?): MutableList<String> {
+            return if (value?.isNotEmpty() == true) {
+                value
+                    .split(",")
+                    .map { v -> v.trim() }
+                    .toMutableList()
+            } else {
+                mutableListOf()
+            }
+        }
 
         override fun fromValue(value: Any?): MutableList<String>? {
             return when (value) {

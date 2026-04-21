@@ -21,7 +21,6 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import coil3.size.Size
 import de.visualdigits.compose.resources.Res
-import de.visualdigits.compose.resources.icon_emergency_home_24px
 import de.visualdigits.compose.resources.icon_hourglass_top_24px
 import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.presentation.util.conditional

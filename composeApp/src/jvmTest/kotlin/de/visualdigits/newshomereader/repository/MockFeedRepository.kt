@@ -9,7 +9,7 @@ import de.visualdigits.newshomereader.data.model.rss.Rss
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfiguration
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
 import de.visualdigits.newshomereader.domain.util.decodeFromString
@@ -55,7 +55,7 @@ class MockFeedRepository(
     }
 
     override suspend fun refreshNewsFeeds(
-        newsFeedConfigurations: List<NewsFeedConfiguration>,
+        newsFeedConfigurations: List<NewsFeedConfigurationEntity>,
         wifiOnly: Boolean,
         keepReadArticlesInDays: Long,
         keepUnreadArticlesInDays: Long,
@@ -82,7 +82,7 @@ class MockFeedRepository(
     }
 
     override suspend fun readFromString(
-        feedName: String,
+        feedName: String?,
         xml: String?
     ): NewsFeed? = withContext(Dispatchers.IO) {
         checkNotNull(xml) { "No xml given" }

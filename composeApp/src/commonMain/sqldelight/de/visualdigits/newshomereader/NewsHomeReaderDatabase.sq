@@ -1,6 +1,6 @@
 import de.visualdigits.newshomereader.domain.model.applicationjson.AppJson;
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem;
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfiguration;
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity;
 import kotlin.Boolean;
 import kotlin.String;
 import kotlin.collections.List;
@@ -256,7 +256,7 @@ WHERE id = :id;
 CREATE TABLE NewsFeedGroupEntity (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    newsFeeds TEXT AS List<NewsFeedConfiguration> NOT NULL
+    newsFeeds TEXT AS List<NewsFeedConfigurationEntity> NOT NULL
 );
 
 insertNewsFeedGroupEntity:

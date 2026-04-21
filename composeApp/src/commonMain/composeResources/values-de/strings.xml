@@ -39,6 +39,7 @@
   <string name="label_delete_scene">Szene löschen</string>
   <string name="label_displayTheme">Oberflächen Thema</string>
   <string name="label_feedName">Feed Name</string>
+  <string name="label_groupName">Gruppen Name</string>
   <string name="label_hide_read">Gelesene Verstecken</string>
   <string name="label_hostUrl">Host URL</string>
   <string name="label_imageUrl">Icon URL</string>

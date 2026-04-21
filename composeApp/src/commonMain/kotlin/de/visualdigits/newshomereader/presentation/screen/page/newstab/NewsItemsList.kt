@@ -180,7 +180,7 @@ private fun NewsListMenuBar(
                 leadingIcon = painterResource(Res.drawable.icon_refresh_24px),
                 toolTip = stringResource(Res.string.tooltip_refresh_newsfeed),
             ) {
-                onAction(NewsHomeReaderAction.OnNewsFeedRefresh(state.currentFeedName, state.currentFeedConfiguration?.url))
+                onAction(NewsHomeReaderAction.OnNewsFeedRefresh(state.currentFeedName, state.currentNewsFeedConfiguration?.url))
             }
 
             Text(

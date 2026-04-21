@@ -17,6 +17,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,7 +56,14 @@ fun ComboBox(
     onValueChange: (KeyValue) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val textFieldState = rememberTextFieldState(field.currentOption().second?.asString() ?:"")
+    val asString = field.currentOption().second?.asString()?:field.currentOption().first
+    val textFieldState = rememberTextFieldState(asString)
+    LaunchedEffect(asString) {
+        textFieldState.edit {
+            // Ersetzt den aktuellen Text durch den neuen Wert aus dem Model
+            replace(0, length, asString)
+        }
+    }
     if (enabled) {
         ExposedDropdownMenuBox(
             modifier = Modifier

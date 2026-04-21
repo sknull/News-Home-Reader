@@ -6,11 +6,13 @@ import de.visualdigits.newshomereader.NewsFeedEntity
 import de.visualdigits.newshomereader.NewsFeedGroupEntity
 import de.visualdigits.newshomereader.NewsItemEntity
 import de.visualdigits.newshomereader.domain.model.applicationjson.AppJson
+import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NC
+import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem
 import de.visualdigits.newshomereader.domain.model.unified.MediaType
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfiguration
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import kotlinx.serialization.json.Json
@@ -32,6 +34,27 @@ fun NewsFeedGroupEntity.toNewsFeedGroup(): NewsFeedGroup {
         name = name,
         newsFeeds = newsFeeds
     )
+}
+
+fun NewsFeedConfiguration.toNewsFeedConfigurationEntity(): NewsFeedConfigurationEntity {
+    return NewsFeedConfigurationEntity(
+        name = get<String>(NC.feedName),
+        groupName = get<String>(NC.groupName),
+        imageUrl = get<String>(NC.imageUrl),
+        url = get<String>(NC.url),
+        stopWords = get<List<String>>(NC.stopWords)
+    )
+}
+
+fun NewsFeedConfigurationEntity.toNewsFeedConfiguration(newsFeedGroups: List<NewsFeedGroup>): NewsFeedConfiguration {
+    val newsFeedConfiguration = NewsFeedConfiguration(newsFeedGroups = newsFeedGroups)
+    newsFeedConfiguration.set(NC.feedName, name)
+    newsFeedConfiguration.set(NC.groupName, groupName)
+    newsFeedConfiguration.set(NC.imageUrl, imageUrl)
+    newsFeedConfiguration.set(NC.url, url)
+    newsFeedConfiguration.set(NC.stopWords, stopWords)
+
+    return newsFeedConfiguration
 }
 
 fun NewsFeed.toNewsFeedEntity(): NewsFeedEntity {
@@ -122,11 +145,11 @@ val intAdapter = object : ColumnAdapter<Int, Long> {
     override fun encode(value: Int): Long = value.toLong()
 }
 
-val newsFeedsAdapter = object : ColumnAdapter<List<NewsFeedConfiguration>, String> {
-    override fun decode(databaseValue: String): List<NewsFeedConfiguration> =
+val newsFeedsAdapter = object : ColumnAdapter<List<NewsFeedConfigurationEntity>, String> {
+    override fun decode(databaseValue: String): List<NewsFeedConfigurationEntity> =
         if (databaseValue.isEmpty()) listOf() else Json.decodeFromString(databaseValue)
 
-    override fun encode(value: List<NewsFeedConfiguration>): String =
+    override fun encode(value: List<NewsFeedConfigurationEntity>): String =
         Json.encodeToString(value)
 }
 

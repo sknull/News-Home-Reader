@@ -8,18 +8,22 @@ import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayTheme
 import de.visualdigits.common.domain.model.configuration.keyfactory.KeepArticlesEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.generated.AppVersion
+import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedConfiguration
+import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedConfigurationEntity
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.domain.model.errorhandling.onError
 import de.visualdigits.newshomereader.domain.model.errorhandling.onSuccess
 import de.visualdigits.newshomereader.domain.model.errorhandling.toUiText
+import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NC
+import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.model.platform.PlatformType
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfiguration
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
@@ -196,17 +200,50 @@ class NewsHomeReaderViewModel(
             // NewsFeedConfiguration
             //
             is NewsHomeReaderAction.OnEditNewsFeedConfigurationClick -> {
+                val newsFeedConfiguration = action.originalNewsFeedConfiguration?.toNewsFeedConfiguration(state.value.newsFeedGroups)
                 _state.update {
                     it.copy(
                         isEditingNewsFeedConfiguration = true,
-                        originalNewsFeedConfiguration = action.originalNewsFeedConfiguration
+                        originalNewsFeedConfiguration = newsFeedConfiguration,
+                        editedNewsFeedConfiguration = newsFeedConfiguration
+                    )
+                }
+            }
+            is NewsHomeReaderAction.OnEditNewsFeedConfigurationOkClick -> {
+                editNewsFeedConfiguration(state.value.originalNewsFeedConfiguration , action.newsFeedConfiguration)
+            }
+            is NewsHomeReaderAction.OnEditNewsFeedConfigurationCancelClick -> {
+                _state.update {
+                    it.copy(
+                        isAddingNewsFeedConfiguration = false,
+                        isEditingNewsFeedConfiguration = false,
                     )
                 }
             }
             is NewsHomeReaderAction.OnAddNewsFeedConfigurationClick -> {
+                val newsFeedConfiguration = NewsFeedConfiguration(newsFeedGroups = state.value.newsFeedGroups)
+                newsFeedConfiguration.set(NC.feedName, "")
+                newsFeedConfiguration.set(NC.groupName, action.newsFeedGroupName)
+                newsFeedConfiguration.set(NC.imageUrl, "")
+                newsFeedConfiguration.set(NC.url, "")
+                newsFeedConfiguration.set(NC.stopWords, "")
+
                 _state.update {
                     it.copy(
-                        isAddingNewsFeedConfiguration = true
+                        isAddingNewsFeedConfiguration = true,
+                        originalNewsFeedConfiguration = null,
+                        editedNewsFeedConfiguration = newsFeedConfiguration
+                    )
+                }
+            }
+            is NewsHomeReaderAction.OnAddNewsFeedConfigurationOkClick -> {
+                upsertNewsFeedConfiguration(action.newsFeedConfiguration)
+            }
+            is NewsHomeReaderAction.OnAddNewsFeedConfigurationCancelClick -> {
+                _state.update {
+                    it.copy(
+                        isAddingNewsFeedConfiguration = false,
+                        isEditingNewsFeedConfiguration = false,
                     )
                 }
             }
@@ -224,18 +261,13 @@ class NewsHomeReaderViewModel(
                         isEditingNewsFeedConfiguration = false,
                         isAddingNewsFeedGroup = false,
                         isEditingNewsFeedGroup = false,
-                        isDeletingNewsFeedConfiguration = true
+                        isDeletingNewsFeedConfiguration = true,
+                        deleteNewsFeedConfiguration = action.newsFeedConfiguration
                     )
                 }
             }
             is NewsHomeReaderAction.OnDeleteNewsFeedConfigurationOkClick -> {
-                _state.update {
-                    it.copy(
-                        isAddingNewsFeedConfiguration = false,
-                        isEditingNewsFeedConfiguration = false,
-                        isDeletingNewsFeedConfiguration = false
-                    )
-                }
+                deleteNewsFeedConfiguration(state.value.deleteNewsFeedConfiguration)
             }
             is NewsHomeReaderAction.OnNewsFeedConfigurationOkClick -> {
                 _state.update {
@@ -250,6 +282,17 @@ class NewsHomeReaderViewModel(
                     it.copy(
                         isAddingNewsFeedConfiguration = false,
                         isEditingNewsFeedConfiguration = false,
+                    )
+                }
+            }
+            is NewsHomeReaderAction.OnNewsFeedConfigurationValueChanged -> {
+                _state.update {
+                    val newsFeedConfiguration = action.newsFeedConfiguration?.copy(
+                        key = action.keyValue.descriptor.key as NC,
+                        value = action.keyValue.value
+                    )
+                    it.copy(
+                        editedNewsFeedConfiguration = newsFeedConfiguration,
                     )
                 }
             }
@@ -470,6 +513,48 @@ class NewsHomeReaderViewModel(
         }
     }
 
+    private fun upsertNewsFeedConfiguration(newsFeedConfiguration: NewsFeedConfiguration?) = viewModelScope.launch {
+        val addResult = newsFeedConfiguration?.toNewsFeedConfigurationEntity()
+            ?.let { nfc -> newsFeedConfigurationRepository.upsertNewsFeedConfiguration(nfc) }
+        if (addResult is Result.Success) {
+            _state.update {
+                it.copy(
+                    isAddingNewsFeedConfiguration = false,
+                    isEditingNewsFeedConfiguration = false,
+                    newsFeedGroups = addResult.data
+                )
+            }
+        } else if (addResult is Result.Error) {
+            log.e("Could not add newsfeed group '$newsFeedConfiguration'")
+        }
+    }
+
+    private fun editNewsFeedConfiguration(oldNewsFeedConfiguration: NewsFeedConfiguration?, newNewsFeedConfiguration: NewsFeedConfiguration?) = viewModelScope.launch {
+        val oldEntity = oldNewsFeedConfiguration?.toNewsFeedConfigurationEntity()
+        val newEntity = newNewsFeedConfiguration?.toNewsFeedConfigurationEntity()
+        if (oldEntity != null && newEntity != null) {
+            newsFeedConfigurationRepository.editNewsFeedConfiguration(oldEntity, newEntity)
+                .onSuccess { newsFeedGroups ->
+                    _state.update {
+                        it.copy(
+                            isAddingNewsFeedConfiguration = false,
+                            isEditingNewsFeedConfiguration = false,
+                            newsFeedGroups = newsFeedGroups
+                        )
+                    }
+                }
+                .onError { local, throwable ->
+                    log.e("Could not modify newsfeed configuration '${oldEntity.name}' from '${newEntity.name}' to '${local}'")
+                }
+        } else {
+            _state.update {
+                it.copy(
+                    isAddingNewsFeedConfiguration = false,
+                    isEditingNewsFeedConfiguration = false,
+                )
+            }
+        }
+    }
 
     private fun deleteNewsFeedGroup(newsFeedGroupName: String?) = viewModelScope.launch {
         if (newsFeedGroupName != null) {
@@ -484,6 +569,22 @@ class NewsHomeReaderViewModel(
                 }
             } else if (deleteResult is Result.Error) {
                 log.e("Could not add newsfeed group '$newsFeedGroupName'")
+            }
+        }
+    }
+
+    private fun deleteNewsFeedConfiguration(newsFeedGroupConfiguration: NewsFeedConfigurationEntity?) = viewModelScope.launch {
+        if (newsFeedGroupConfiguration != null) {
+            val deleteResult = newsFeedGroupConfiguration?.let { nfc -> newsFeedConfigurationRepository.deleteNewsFeedConfiguration(nfc) }
+            if (deleteResult is Result.Success) {
+                _state.update {
+                    it.copy(
+                        isDeletingNewsFeedConfiguration = false,
+                        newsFeedGroups = deleteResult.data
+                    )
+                }
+            } else if (deleteResult is Result.Error) {
+                log.e("Could not add newsfeed configuration '${newsFeedGroupConfiguration.name}'")
             }
         }
     }
@@ -554,7 +655,7 @@ class NewsHomeReaderViewModel(
     }
 
 
-    private suspend fun refreshNewsFeeds(newsFeedConfigurations: List<NewsFeedConfiguration>): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> {
+    private suspend fun refreshNewsFeeds(newsFeedConfigurations: List<NewsFeedConfigurationEntity>): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> {
         val wifiOnly = state.value.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
         val loadArticles = state.value.settings?.get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false
         val keepReadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue ?: 30
@@ -711,13 +812,13 @@ class NewsHomeReaderViewModel(
     }
 
     private fun loadFeedItems(
-        feedName: String,
-        currentFeedConfiguration: NewsFeedConfiguration
+        feedName: String?,
+        currentFeedConfiguration: NewsFeedConfigurationEntity
     ) = viewModelScope.launch {
         _state.update {
             it.copy(
                 currentFeedName = feedName,
-                currentFeedConfiguration = currentFeedConfiguration,
+                currentNewsFeedConfiguration = currentFeedConfiguration,
                 currentNewsArticle = null,
                 isLoading = false,
                 uiMessage = null,

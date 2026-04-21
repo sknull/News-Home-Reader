@@ -30,7 +30,7 @@ import org.jetbrains.compose.resources.stringResource
 
 
 @Composable
-fun AddNewsFeedConfigurationGroupDialog(
+fun NewsFeedConfigurationGroupDialog(
     state: NewsHomeReaderState,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
@@ -43,13 +43,7 @@ fun AddNewsFeedConfigurationGroupDialog(
                 .border(1.dp, MaterialTheme.colorScheme.outlineVariant, MaterialTheme.shapes.small),
             containerColor = MaterialTheme.colorScheme.background,
             shape = MaterialTheme.shapes.small,
-            onDismissRequest = {
-                if (state.isAddingNewsFeedGroup) {
-                    onAction(NewsHomeReaderAction.OnAddNewsfeedGroupGroupClick(false))
-                } else if (state.isEditingNewsFeedGroup) {
-                    onAction(NewsHomeReaderAction.OnEditNewsfeedGroupGroupClick(state.originalNewsFeedGroupName?:""))
-                }
-            },
+            onDismissRequest = {},
             title = {
                 Text(
                     text = if (state.isAddingNewsFeedGroup) {

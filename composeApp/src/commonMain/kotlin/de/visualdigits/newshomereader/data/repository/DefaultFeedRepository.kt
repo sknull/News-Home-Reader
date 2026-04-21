@@ -18,7 +18,7 @@ import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfiguration
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
@@ -118,7 +118,7 @@ class DefaultFeedRepository(
     private val currentStep = AtomicInteger(0)
 
     override suspend fun refreshNewsFeeds(
-        newsFeedConfigurations: List<NewsFeedConfiguration>,
+        newsFeedConfigurations: List<NewsFeedConfigurationEntity>,
         wifiOnly: Boolean,
         keepReadArticlesInDays: Long,
         keepUnreadArticlesInDays: Long,
@@ -131,8 +131,8 @@ class DefaultFeedRepository(
                 val newsFeeds = newsFeedConfigurations.mapNotNull { newsFeedConfiguration ->
                     log.i("#### Refreshing newsfeed '${newsFeedConfiguration.name}', loadArticles=$loadArticles...")
                     try {
-                        val response = httpClient.get(urlString = newsFeedConfiguration.url)
-                        val xml = response.bodyAsText()
+                        val response = newsFeedConfiguration.url?.let { u -> httpClient.get(urlString = u) }
+                        val xml = response?.bodyAsText()
                         readFromString(newsFeedConfiguration.name, xml)
                     } catch (e: Exception) {
                         log.e("Could not load feed '${newsFeedConfiguration.name}'", e)
@@ -320,9 +320,10 @@ class DefaultFeedRepository(
     }
 
     override suspend fun readFromString(
-        feedName: String,
+        feedName: String?,
         xml: String?
     ): NewsFeed? = withContext(Dispatchers.IO) {
+        checkNotNull(feedName) { "No feed name given" }
         checkNotNull(xml) { "No xml given" }
 
         val feedType = Ksoup

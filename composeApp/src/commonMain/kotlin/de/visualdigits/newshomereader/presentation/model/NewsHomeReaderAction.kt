@@ -2,9 +2,10 @@ package de.visualdigits.newshomereader.presentation.model
 
 import androidx.compose.runtime.Immutable
 import de.visualdigits.common.domain.model.KeyValue
+import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfiguration
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import nl.adaptivity.xmlutil.core.impl.multiplatform.InputStream
 import org.jetbrains.compose.resources.StringResource
@@ -63,12 +64,39 @@ sealed interface NewsHomeReaderAction {
     //
     @Immutable
     data class OnEditNewsFeedConfigurationClick(
-        val originalNewsFeedConfiguration: NewsFeedConfiguration,
+        val originalNewsFeedConfiguration: NewsFeedConfigurationEntity?,
     ) : NewsHomeReaderAction
 
     @Immutable
-    data class OnDeleteNewsFeedConfigurationClick(
+    data class OnEditNewsFeedConfigurationOkClick(
         val newsFeedConfiguration: NewsFeedConfiguration?,
+    ) : NewsHomeReaderAction
+
+    @Immutable
+    class OnEditNewsFeedConfigurationCancelClick : NewsHomeReaderAction
+
+    @Immutable
+    class OnAddNewsFeedConfigurationClick(
+        val newsFeedGroupName: String
+    ) : NewsHomeReaderAction
+
+    @Immutable
+    data class OnAddNewsFeedConfigurationOkClick(
+        val newsFeedConfiguration: NewsFeedConfiguration?,
+    ) : NewsHomeReaderAction
+
+    @Immutable
+    class OnAddNewsFeedConfigurationCancelClick : NewsHomeReaderAction
+
+    @Immutable
+    data class OnNewsFeedConfigurationValueChanged(
+        val newsFeedConfiguration: NewsFeedConfiguration?,
+        val keyValue: KeyValue,
+    ): NewsHomeReaderAction
+
+    @Immutable
+    data class OnDeleteNewsFeedConfigurationClick(
+        val newsFeedConfiguration: NewsFeedConfigurationEntity?,
     ) : NewsHomeReaderAction
 
     @Immutable
@@ -78,13 +106,8 @@ sealed interface NewsHomeReaderAction {
     class OnDeleteNewsFeedConfigurationCancelClick : NewsHomeReaderAction
 
     @Immutable
-    class OnAddNewsFeedConfigurationClick(
-        val isAddingNewsFeedConfiguration: Boolean
-    ) : NewsHomeReaderAction
-
-    @Immutable
     class OnNewsFeedConfigurationOkClick(
-        val newsFeedConfiguration: NewsFeedConfiguration
+        val newsFeedConfiguration: NewsFeedConfigurationEntity
     ) : NewsHomeReaderAction
 
     @Immutable
@@ -144,8 +167,8 @@ sealed interface NewsHomeReaderAction {
 
     @Immutable
     data class OnNewsFeedClicked(
-        val feedName: String,
-        val currentFeedConfiguration: NewsFeedConfiguration
+        val feedName: String?,
+        val currentFeedConfiguration: NewsFeedConfigurationEntity
     ) : NewsHomeReaderAction
 
     @Immutable

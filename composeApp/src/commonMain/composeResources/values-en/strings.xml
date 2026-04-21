@@ -39,6 +39,7 @@
   <string name="label_delete_scene">Delete Scene</string>
   <string name="label_displayTheme">Display Theme</string>
   <string name="label_feedName">Feed Name</string>
+  <string name="label_groupName">Group Name</string>
   <string name="label_hide_read">Hide Read items</string>
   <string name="label_hostUrl">Host URL</string>
   <string name="label_imageUrl">Image URL</string>

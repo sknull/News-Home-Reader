@@ -198,7 +198,7 @@ fun TypeAwareEditableField(
                     modifier = modifier
                         .focusRequester(focusRequester)
                         .fillMaxWidth()
-                        .height(fieldHeight),
+                        .height(fieldHeight + minimizedLabelHalfHeight(textStyle)),
                     textStyle = textStyle,
                     enabled = enabled,
                     label = {
@@ -217,7 +217,8 @@ fun TypeAwareEditableField(
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
                         unfocusedBorderColor = finalUnfocusedBorderColor,
-                        focusedBorderColor = focusedBorderColor
+                        focusedBorderColor = focusedBorderColor,
+                        cursorColor = MaterialTheme.colorScheme.outlineVariant
                     )
                 )
             })
