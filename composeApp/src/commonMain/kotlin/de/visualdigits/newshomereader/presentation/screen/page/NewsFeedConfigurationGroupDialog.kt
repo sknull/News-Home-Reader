@@ -2,6 +2,7 @@ package de.visualdigits.newshomereader.presentation.screen.page
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -60,7 +61,8 @@ fun NewsFeedConfigurationGroupDialog(
                 OutlinedTextField(
                     modifier = Modifier
                         .focusRequester(focusRequester)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .height(70.dp),
                     label = { Text(text = if (state.isAddingNewsFeedGroup) stringResource(Res.string.title_add_newsfeedgroup) else state.originalNewsFeedGroupName?:"") },
                     value = currentNewsFeedGroupName,
                     shape = MaterialTheme.shapes.extraSmall,

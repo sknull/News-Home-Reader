@@ -8,6 +8,7 @@ import de.visualdigits.newshomereader.domain.model.type.Language
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import nl.adaptivity.xmlutil.core.impl.multiplatform.InputStream
+import nl.adaptivity.xmlutil.core.impl.multiplatform.OutputStream
 import org.jetbrains.compose.resources.StringResource
 
 sealed interface NewsHomeReaderAction {
@@ -33,6 +34,11 @@ sealed interface NewsHomeReaderAction {
     @Immutable
     data class OnOpmlImport(
         val ins: InputStream
+    ): NewsHomeReaderAction
+
+    @Immutable
+    data class OnOpmlExport(
+        val outs: OutputStream
     ): NewsHomeReaderAction
 
     @Immutable

@@ -5,6 +5,7 @@ import de.visualdigits.newshomereader.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import nl.adaptivity.xmlutil.core.impl.multiplatform.InputStream
+import nl.adaptivity.xmlutil.core.impl.multiplatform.OutputStream
 
 interface NewsFeedConfigurationRepository {
 
@@ -18,6 +19,8 @@ interface NewsFeedConfigurationRepository {
      * [ins] must represent a stream of OPML.
      */
     suspend fun setNewsFeedGroups(ins: InputStream): Result<List<NewsFeedGroup>, DataError.Local>
+
+    suspend fun saveNewsFeedGroups(outs: OutputStream): Result<Unit, DataError.Local>
 
     suspend fun upsertNewsFeedGroup(newsFeedGroup: NewsFeedGroup): Result<List<NewsFeedGroup>, DataError.Local>
 

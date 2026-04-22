@@ -201,7 +201,7 @@ WHERE lastSeenMillis < :timeStamp AND isRead = 0;
 --
 CREATE TABLE FullArticleEntity (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    itemId INTEGER NOT NULL,
+    itemId INTEGER NOT NULL UNIQUE,
     applicationJson TEXT AS List<AppJson> NOT NULL,
     html TEXT NOT NULL,
     imageItems TEXT AS List<MediaItem> NOT NULL,
@@ -215,8 +215,6 @@ CREATE TABLE FullArticleEntity (
     readingTime INTEGER NOT NULL,
     FOREIGN KEY(itemId) REFERENCES NewsItemEntity(id) ON DELETE CASCADE
 );
-
-CREATE INDEX IF NOT EXISTS index_full_article_itemid ON FullArticleEntity(itemId);
 
 insertFullArticle:
 INSERT OR REPLACE INTO FullArticleEntity (
@@ -233,7 +231,7 @@ SELECT * FROM FullArticleEntity WHERE itemId = :itemId;
 
 updateFullArticle:
 UPDATE FullArticleEntity
-SET itemId = :itemId,
+SET id = :id,
     applicationJson = :applicationJson,
     html = :html,
     imageItems = :imageItems,
@@ -245,7 +243,7 @@ SET itemId = :itemId,
     isFree = :isFree,
     wordCount = :wordCount,
     readingTime = :readingTime
-WHERE id = :id;
+WHERE itemId = :itemId;
 
 
 

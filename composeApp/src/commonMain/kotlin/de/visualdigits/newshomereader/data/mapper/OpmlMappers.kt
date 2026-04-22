@@ -1,5 +1,7 @@
 package de.visualdigits.newshomereader.data.mapper
 
+import de.visualdigits.newshomereader.data.model.opml.Body
+import de.visualdigits.newshomereader.data.model.opml.Head
 import de.visualdigits.newshomereader.data.model.opml.Opml
 import de.visualdigits.newshomereader.data.model.opml.Outline
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
@@ -23,7 +25,8 @@ fun Outline.toNewsFeedConfiguration(parent: Outline? = null, newsFeedGroups: Mut
                 name = name,
                 groupName = parentName,
                 imageUrl = imageUrl,
-                url = xmlUrl?:""
+                url = xmlUrl?:"",
+                stopWords = stopWords?.split(",")?:listOf()
             )
             newsFeedGroups[parentName] = group.copy(
                 newsFeeds = group.newsFeeds + node
@@ -35,4 +38,31 @@ fun Outline.toNewsFeedConfiguration(parent: Outline? = null, newsFeedGroups: Mut
     }
 
     return newsFeedGroups.values.toList()
+}
+
+fun List<NewsFeedGroup>.toOpml(): Opml {
+    return Opml(
+        version = "1.1",
+        head = Head(
+            title = "NewsHomeReader"
+        ),
+        body = Body(
+            outlines = this.map { group ->
+                Outline(
+                    title = group.name,
+                    text = group.name,
+                    outlines = group.newsFeeds.map { item ->
+                        Outline(
+                            title = item.name,
+                            text = item.name,
+                            xmlUrl = item.url,
+                            type = "rss",
+                            imageUrl = item.imageUrl,
+                            stopWords = item.stopWords?.joinToString(",")
+                        )
+                    }
+                )
+            },
+        )
+    )
 }

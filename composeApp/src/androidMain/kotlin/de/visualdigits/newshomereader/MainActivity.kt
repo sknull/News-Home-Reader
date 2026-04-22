@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
-                    val isDark = state.settings?.get<DisplayThemeEnum>(SK.displayTheme) == DisplayThemeEnum.DARK
+                    val isDark = state.settings?.get<DisplayThemeEnum>(SK.displayTheme)?.isDark?:false
 
                     // for newer device starting with android 14/15
                     enableEdgeToEdge(

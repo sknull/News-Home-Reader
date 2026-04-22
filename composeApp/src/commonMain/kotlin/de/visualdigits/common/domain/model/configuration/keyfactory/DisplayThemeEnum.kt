@@ -19,7 +19,8 @@ enum class DisplayThemeEnum(
     val colorScheme: ColorScheme,
     val textLinkStyles:TextLinkStyles,
     val textColor: Color,
-    val studioClockColors: StudioClockColors
+    val studioClockColors: StudioClockColors,
+    val isDark: Boolean // consider as dark theme for android
 ) : StringResourceEnumerable<DisplayThemeEnum> {
 
     //
@@ -28,6 +29,7 @@ enum class DisplayThemeEnum(
     //
 
     ANTHRACITE(
+        isDark = true,
         uiText = UiText.DynamicString("Anthracite"),
         drawableResourceId = null,
         colorScheme = darkColorScheme(
@@ -85,6 +87,7 @@ enum class DisplayThemeEnum(
     ),
 
     DARK(
+        isDark = true,
         uiText = UiText.DynamicString("Dark"),
         drawableResourceId = null,
         colorScheme = darkColorScheme(
@@ -135,6 +138,7 @@ enum class DisplayThemeEnum(
     ),
 
     LIGHT(
+        isDark = false,
         uiText = UiText.DynamicString("Light"),
         drawableResourceId = null,
         colorScheme = lightColorScheme(

@@ -12,37 +12,36 @@ import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.FileMode
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
-import java.io.File
-import java.io.InputStream
+import java.io.OutputStream
 
 @Composable
-actual fun PlatformFileChooser(
+actual fun PlatformFileSaver(
     label: String,
     title: String,
     fileMode: FileMode,
-    startDirectory: File?,
-    options: List<String>,
+    suggestedFileName: String,
     buttonShape: Shape,
     buttonColor: Color,
     onCancel: (() -> Unit)?,
-    onOk: (InputStream) -> Unit
+    onOk: (OutputStream) -> Unit
 ) {
-    val log = kermitLogger("PlatformFileChooser")
-
     val context = LocalContext.current
+    val log = kermitLogger("PlatformFileSaver")
 
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
+        contract = ActivityResultContracts.CreateDocument("*/*")
     ) { uri: Uri? ->
-        try {
-            uri?.also { safeUri ->
-                context.contentResolver.openInputStream(safeUri)?.use { ins ->
-                    val bytes = ins.readBytes()
-                    onOk(bytes.inputStream())
+        if (uri != null) {
+            try {
+                val outs = context.contentResolver.openOutputStream(uri)
+                if (outs != null) {
+                    onOk(outs)
                 }
+            } catch (e: Exception) {
+                log.e("Could not save file", e)
             }
-        } catch (e: Exception) {
-            log.e("Could not pick file", e)
+        } else {
+            onCancel?.invoke()
         }
     }
 
@@ -53,6 +52,6 @@ actual fun PlatformFileChooser(
         shape = buttonShape,
         buttonColor = buttonColor
     ) {
-        launcher.launch("*/*")
+        launcher.launch(suggestedFileName)
     }
 }

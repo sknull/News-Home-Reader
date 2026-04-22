@@ -1,6 +1,7 @@
 package de.visualdigits.newshomereader.domain.model.unified
 
 import androidx.compose.runtime.Immutable
+import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NewsFeedConfiguration
 import java.time.OffsetDateTime
 
 @Immutable

@@ -9,7 +9,7 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 @Immutable
 data class Body(
     @XmlSerialName("outline") val outlines: List<Outline> = listOf(),
-    @XmlSerialName("settings") val settings: Settings?
+    @XmlSerialName("settings") val settings: Settings? = null
 ) {
 
     val settingsMap: Map<String, String>?

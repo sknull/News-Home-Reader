@@ -16,6 +16,7 @@ import de.visualdigits.common.domain.model.UiPlatform
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import java.io.File
 import java.io.InputStream
+import java.io.OutputStream
 
 @Composable
 expect fun BindBackHandler(isEnabled: Boolean, onBack: () -> Unit)
@@ -73,4 +74,16 @@ expect fun PlatformFileChooser(
     buttonColor: Color = MaterialTheme.colorScheme.surface,
     onCancel: (() -> Unit)? = null,
     onOk: (InputStream) -> Unit
+)
+
+@Composable
+expect fun PlatformFileSaver(
+    label: String,
+    title: String,
+    fileMode: FileMode,
+    suggestedFileName: String,
+    buttonShape: Shape = MaterialTheme.shapes.extraSmall,
+    buttonColor: Color = MaterialTheme.colorScheme.surface,
+    onCancel: (() -> Unit)? = null,
+    onOk: (OutputStream) -> Unit
 )

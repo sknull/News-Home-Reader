@@ -73,11 +73,19 @@ class DefaultFeedRepository(
     }
 
     override fun observeFeedItems(feedName: String): Flow<List<NewsItem>> {
+        val newsFeed = dao.getNewsFeedByFeedName(feedName).executeAsOneOrNull()?.toNewsFeed()
+        val newsFeedGroups = dao.getAllNewsFeedGroupEntities().executeAsList()
+        val newsFeedConfiguration = newsFeedGroups
+                .flatMap { nfg -> nfg.newsFeeds }
+                .find { nfi -> nfi.name == feedName }
+
         return dao.getAllNewsItemsByFeedName(feedName.trim().lowercase())
             .asFlow()
             .mapToList(Dispatchers.IO)
-            .map { entities ->
-                entities.map { it.toNewsItem() }
+            .map { newsItemEntities ->
+                newsItemEntities.map { newsItemEntity ->
+                    newsItemEntity.toNewsItem().copy(newsFeed = newsFeed)
+                }
             }
     }
 

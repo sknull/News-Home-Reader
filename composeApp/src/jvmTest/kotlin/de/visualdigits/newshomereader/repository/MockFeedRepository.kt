@@ -100,15 +100,15 @@ class MockFeedRepository(
         when (feedType) {
             "rss" -> {
                 val rss = decodeFromString<Rss>(xml)
-                rss.toNewsFeed(feedName)
+                rss.toNewsFeed(feedName!!)
             }
             "rdf" -> {
                 val rdf = decodeFromString<Rdf>(xml)
-                rdf.toNewsFeed(feedName)
+                rdf.toNewsFeed(feedName!!)
             }
             "feed" -> {
                 val feed = decodeFromString<Feed>(xml)
-                feed.toNewsFeed(feedName)
+                feed.toNewsFeed(feedName!!)
             }
             else -> error("Unsupported feed type '$feedType'")
         }

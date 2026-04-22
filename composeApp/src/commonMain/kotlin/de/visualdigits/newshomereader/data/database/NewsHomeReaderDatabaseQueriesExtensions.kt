@@ -187,7 +187,7 @@ fun NewsHomeReaderDatabaseQueries.updateNewsItem(newsItemEntity: NewsItemEntity)
 fun NewsHomeReaderDatabaseQueries.upsertFullArticle(fullArticleEntity: FullArticleEntity): Boolean {
     val existingFullArticleEntity = getFullArticleByItemId(fullArticleEntity.itemId).executeAsOneOrNull()
     return if (existingFullArticleEntity != null) {
-        updateFullArticle(fullArticleEntity)
+        insertFullArticle(fullArticleEntity)
         !existingFullArticleEntity.isEqualto(fullArticleEntity)
     } else {
         insertFullArticle(fullArticleEntity)
@@ -208,25 +208,7 @@ fun NewsHomeReaderDatabaseQueries.insertFullArticle(fullArticleEntity: FullArtic
         commentCount = fullArticleEntity.commentCount,
         isFree = fullArticleEntity.isFree,
         wordCount = fullArticleEntity.wordCount,
-        readingTime = fullArticleEntity.readingTime
-    )
-}
-
-fun NewsHomeReaderDatabaseQueries.updateFullArticle(fullArticleEntity: FullArticleEntity) {
-    updateFullArticle(
-        itemId = fullArticleEntity.itemId,
-        applicationJson = fullArticleEntity.applicationJson,
-        html = fullArticleEntity.html,
-        imageItems = fullArticleEntity.imageItems,
-        videoItems = fullArticleEntity.videoItems,
-        audioItems = fullArticleEntity.audioItems,
-        articleImage = fullArticleEntity.articleImage,
-        discussionUrl = fullArticleEntity.discussionUrl,
-        commentCount = fullArticleEntity.commentCount,
-        isFree = fullArticleEntity.isFree,
-        wordCount = fullArticleEntity.wordCount,
         readingTime = fullArticleEntity.readingTime,
-        id = fullArticleEntity.id
     )
 }
 

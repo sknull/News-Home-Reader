@@ -46,6 +46,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.InputStream
+import java.io.OutputStream
 import java.time.OffsetDateTime
 import java.time.temporal.ChronoUnit
 import java.util.Locale
@@ -93,7 +94,8 @@ class NewsHomeReaderViewModel(
 
                                 // Auch das Filtern/Sichtbarkeit im Hintergrund berechnen
                                 val hideRead = _state.value.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
-                                val visible = calculateVisibleNewsItems(enriched, hideRead)
+                                val newsFeedConfiguration = _state.value.currentNewsFeedConfiguration
+                                val visible = calculateVisibleNewsItems(enriched, hideRead, newsFeedConfiguration)
 
                                 // Paar aus beidem zurückgeben
                                 enriched to visible
@@ -168,6 +170,10 @@ class NewsHomeReaderViewModel(
 
             is NewsHomeReaderAction.OnOpmlImport -> {
                 importOpml(action.ins)
+            }
+
+            is NewsHomeReaderAction.OnOpmlExport -> {
+                exportOpml(action.outs)
             }
 
             is NewsHomeReaderAction.UpdateMaxImageSize -> {
@@ -537,9 +543,15 @@ class NewsHomeReaderViewModel(
                 .onSuccess { newsFeedGroups ->
                     _state.update {
                         it.copy(
+                            currentNewsFeedConfiguration = newEntity,
                             isAddingNewsFeedConfiguration = false,
                             isEditingNewsFeedConfiguration = false,
-                            newsFeedGroups = newsFeedGroups
+                            newsFeedGroups = newsFeedGroups,
+                            visibleNewsItems = calculateVisibleNewsItems(
+                                newsItems = it.currentNewsItems,
+                                hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
+                                newNewsFeedConfiguration = newEntity
+                            )
                         )
                     }
                 }
@@ -598,6 +610,32 @@ class NewsHomeReaderViewModel(
         }
     }
 
+    private fun exportOpml(outs: OutputStream) = viewModelScope.launch {
+        log.i("#### Exporting opml...")
+        _state.update {
+            it.copy(
+                isLoading = true,
+            )
+        }
+        newsFeedConfigurationRepository.saveNewsFeedGroups(outs)
+            .onSuccess {
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                    )
+                }
+            }
+            .onError { error, throwable ->
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        uiMessage = error.toUiText(),
+                        uiMessageSeverity = Severity.Error
+                    )
+                }
+            }
+    }
+
     private fun importOpml(ins: InputStream) = viewModelScope.launch {
         log.i("#### Importing opml...")
         _state.update {
@@ -625,7 +663,8 @@ class NewsHomeReaderViewModel(
                         currentNewsItems = currentNewsItems,
                         visibleNewsItems = calculateVisibleNewsItems(
                             newsItems = currentNewsItems,
-                            hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
+                            hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
+                            newNewsFeedConfiguration = it.currentNewsFeedConfiguration
                         ),
                         newsFeedGroups = newsFeedGroups
                     )
@@ -724,7 +763,8 @@ class NewsHomeReaderViewModel(
                             currentNewsItems = newsFeed?.items?.toList()?:listOf(), // force repaint
                             visibleNewsItems = calculateVisibleNewsItems(
                                 newsItems = newsFeed?.items ?: listOf(),
-                                hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
+                                hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
+                                newNewsFeedConfiguration = it.currentNewsFeedConfiguration
                             ),
                             currentNewsArticle = null,
                             isLoading = false,
@@ -845,7 +885,8 @@ class NewsHomeReaderViewModel(
                         currentNewsItems = newsItems,
                         visibleNewsItems = calculateVisibleNewsItems(
                             newsItems = newsItems,
-                            hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false
+                            hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false,
+                            newNewsFeedConfiguration = it.currentNewsFeedConfiguration
                         ),
                     )
                 }
@@ -883,7 +924,8 @@ class NewsHomeReaderViewModel(
                     currentNewsItems = currentNewsItems,
                     visibleNewsItems = calculateVisibleNewsItems(
                         newsItems = currentNewsItems,
-                        hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false
+                        hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false,
+                        newNewsFeedConfiguration = it.currentNewsFeedConfiguration
                     ),
                     isLoading = false,
                     uiMessage = null,
@@ -918,7 +960,8 @@ class NewsHomeReaderViewModel(
                         settings = settings.copy(),
                         visibleNewsItems = calculateVisibleNewsItems(
                             newsItems = it.currentNewsItems,
-                            hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false
+                            hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false,
+                            newNewsFeedConfiguration =it.currentNewsFeedConfiguration
                         ),
                         isLoading = false,
                         isEditingSettings = false,
@@ -939,10 +982,16 @@ class NewsHomeReaderViewModel(
             }
     }
 
-    private fun calculateVisibleNewsItems(newsItems: List<NewsItem>, hideRead: Boolean): List<NewsItem> {
+    private fun calculateVisibleNewsItems(newsItems: List<NewsItem>, hideRead: Boolean, newNewsFeedConfiguration: NewsFeedConfigurationEntity?): List<NewsItem> {
+        val stopWords = newNewsFeedConfiguration?.stopWords?:listOf()
         val sortedByDescending = newsItems
-            .filter { item -> !hideRead || !item.isRead }
+            .filter { item -> (!hideRead || !item.isRead)
+                    && item.title.nostop(stopWords)
+                    && item.summary.nostop(stopWords)
+            }
             .sortedByDescending { item -> item.updated }
         return sortedByDescending
     }
 }
+
+private fun String.nostop(stopWords: List<String>): Boolean = stopWords.none { w -> this.contains(w, ignoreCase = true) }
