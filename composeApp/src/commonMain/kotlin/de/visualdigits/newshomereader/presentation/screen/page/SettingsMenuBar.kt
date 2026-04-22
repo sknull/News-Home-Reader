@@ -15,7 +15,6 @@ import de.visualdigits.compose.resources.dialog_title_import_opml
 import de.visualdigits.compose.resources.label_export_opml
 import de.visualdigits.compose.resources.label_import_opml
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
-import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.gap
 import org.jetbrains.compose.resources.stringResource
 import java.time.OffsetDateTime
@@ -23,8 +22,7 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun SettingsMenuBar(
-    onAction: (NewsHomeReaderAction) -> Unit,
-    state: NewsHomeReaderState
+    onAction: (NewsHomeReaderAction) -> Unit
 ) {
     Row(
         modifier = Modifier

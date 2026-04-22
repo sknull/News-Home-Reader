@@ -45,8 +45,7 @@ fun SettingsPage(
         Spacer(Modifier.height(16.dp))
 
         SettingsMenuBar(
-            onAction = onAction,
-            state = state
+            onAction = onAction
         )
 
         Spacer(Modifier.height(16.dp))

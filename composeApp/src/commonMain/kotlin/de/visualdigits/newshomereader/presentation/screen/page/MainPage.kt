@@ -42,9 +42,6 @@ fun MainPage(
 
     val uriHandler = LocalUriHandler.current
 
-    val focusRequester = remember { FocusRequester() }
-    var currentNewsFeedGroupName by remember { mutableStateOf<String>("") }
-
     BindBackHandler(isEnabled = state.currentNewsArticle != null) {
         viewModel.onAction(NewsHomeReaderAction.OnNewsItemClosed())
     }

@@ -9,6 +9,7 @@ import nl.adaptivity.xmlutil.serialization.DefaultXmlSerializationPolicy
 import nl.adaptivity.xmlutil.serialization.XML
 import java.io.File
 
+@OptIn(ExperimentalXmlUtilApi::class)
 object XmlUtil {
 
     var xmlMapper: XML
