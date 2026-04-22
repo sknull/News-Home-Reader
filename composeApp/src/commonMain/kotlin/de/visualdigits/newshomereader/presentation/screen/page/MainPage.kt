@@ -119,6 +119,18 @@ fun MainPage(
                     .background(displayTheme.colorScheme.background)
                     .safeDrawingPadding()
             ) {
+                ErrorCard(
+                    errorMessage = state.uiMessage,
+                    severity = state.uiMessageSeverity,
+                    shapeContainer = MaterialTheme.shapes.small
+                )
+
+                MainMenuBar(
+                    state = state,
+                    onAction = onAction,
+                    connectivityManager = connectivityManager
+                )
+
                 if (state.isShowInfos) {
                     InfoPage(uriHandler, onAction)
                 } else if (state.isEditingSettings) {
@@ -130,12 +142,6 @@ fun MainPage(
                         modifier = Modifier
                             .fillMaxSize()
                     ) {
-                        MainMenuBar(
-                            state = state,
-                            onAction = onAction,
-                            connectivityManager = connectivityManager
-                        )
-
                         NewsContent(
                             state = state,
                             viewModel = viewModel,

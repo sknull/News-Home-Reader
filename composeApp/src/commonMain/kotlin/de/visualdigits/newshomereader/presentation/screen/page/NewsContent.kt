@@ -38,12 +38,6 @@ fun NewsContent(
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
     ) {
-        ErrorCard(
-            errorMessage = state.uiMessage,
-            severity = state.uiMessageSeverity,
-            shapeContainer = MaterialTheme.shapes.small
-        )
-
         if (state.currentNewsArticle != null) {
             state.currentNewsItem?.let { ni ->
                 Box(

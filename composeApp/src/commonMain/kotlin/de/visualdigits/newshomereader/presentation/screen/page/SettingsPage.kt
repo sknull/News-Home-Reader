@@ -50,13 +50,6 @@ fun SettingsPage(
             .padding(16.dp)
             .fillMaxSize()
     ) {
-
-        ErrorCard(
-            errorMessage = state.uiMessage,
-            severity = state.uiMessageSeverity,
-            shapeContainer = MaterialTheme.shapes.small
-        )
-
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -103,56 +96,5 @@ fun SettingsPage(
             },
             onAction = onAction
         )
-    }
-}
-
-@Composable
-private fun SettingsMenuBar(
-    onAction: (NewsHomeReaderAction) -> Unit,
-    state: NewsHomeReaderState
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
-    ) {
-        PlatformFileChooser(
-            label = stringResource(Res.string.label_import_opml),
-            title = stringResource(Res.string.dialog_title_import_opml),
-            buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
-            fileMode = FileMode.FILES_ONLY,
-        ) { ins ->
-            onAction(NewsHomeReaderAction.OnOpmlImport(ins))
-        }
-
-        PlatformFileSaver(
-            label = stringResource(Res.string.label_export_opml),
-            title = stringResource(Res.string.dialog_title_export_opml),
-            buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
-            fileMode = FileMode.FILES_ONLY,
-            suggestedFileName = "newshomereader-export_${
-                OffsetDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
-            }.opml",
-        ) { outs ->
-            onAction(NewsHomeReaderAction.OnOpmlExport(outs))
-        }
-
-        if (state.currentProgress > 0.0f) {
-            Spacer(Modifier.weight(1f))
-
-            val animatedProgress by animateFloatAsState(
-                targetValue = state.currentProgress,
-                animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec // Sorgt für sanftes Gleiten
-            )
-            CircularProgressIndicator(
-                progress = { animatedProgress },
-                modifier = Modifier
-                    .size(24.dp),
-                color = MaterialTheme.colorScheme.outlineVariant,
-                strokeWidth = ProgressIndicatorDefaults.CircularStrokeWidth,
-                trackColor = MaterialTheme.colorScheme.surfaceDim,
-                strokeCap = ProgressIndicatorDefaults.CircularDeterminateStrokeCap,
-            )
-        }
     }
 }

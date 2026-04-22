@@ -58,7 +58,7 @@ fun List<NewsFeedGroup>.toOpml(): Opml {
                             xmlUrl = item.url,
                             type = "rss",
                             imageUrl = item.imageUrl,
-                            stopWords = item.stopWords?.joinToString(",")
+                            stopWords = if (item.stopWords?.isNotEmpty() == true) item.stopWords.filter { sw -> sw.isNotEmpty() }.joinToString(",") else null
                         )
                     }
                 )
