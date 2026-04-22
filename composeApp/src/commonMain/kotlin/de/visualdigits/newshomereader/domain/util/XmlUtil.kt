@@ -3,13 +3,11 @@ package de.visualdigits.newshomereader.domain.util
 import de.visualdigits.newshomereader.domain.util.XmlUtil.xmlMapper
 import kotlinx.serialization.SerializationStrategy
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
-import nl.adaptivity.xmlutil.SimpleNamespaceContext
 import nl.adaptivity.xmlutil.XmlDeclMode
 import nl.adaptivity.xmlutil.core.XmlVersion
 import nl.adaptivity.xmlutil.serialization.DefaultXmlSerializationPolicy
 import nl.adaptivity.xmlutil.serialization.XML
 import java.io.File
-import java.io.OutputStream
 
 object XmlUtil {
 
