@@ -1,4 +1,4 @@
-package de.visualdigits.newshomereader.presentation.screen.page.newstab
+package de.visualdigits.newshomereader.presentation.screen.page.newstab.newslist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -55,6 +55,7 @@ fun NewsListMenuBar(
                 height = 30.dp,
                 padding = 2.dp,
                 leadingIcon = painterResource(Res.drawable.icon_counter_2_24px),
+                leadingIconTint = MaterialTheme.colorScheme.onSurface,
                 toolTip = stringResource(Res.string.tooltip_mark_read_older_2)
             ) {
                 onAction(NewsHomeReaderAction.OnMarkReadClicked(2))
@@ -66,6 +67,7 @@ fun NewsListMenuBar(
                 height = 30.dp,
                 padding = 2.dp,
                 leadingIcon = painterResource(Res.drawable.icon_counter_1_24px),
+                leadingIconTint = MaterialTheme.colorScheme.onSurface,
                 toolTip = stringResource(Res.string.tooltip_mark_read_older_1)
             ) {
                 onAction(NewsHomeReaderAction.OnMarkReadClicked(1))
@@ -77,6 +79,7 @@ fun NewsListMenuBar(
                 height = 30.dp,
                 padding = 2.dp,
                 leadingIcon = painterResource(Res.drawable.icon_done_all_24px),
+                leadingIconTint = MaterialTheme.colorScheme.onSurface,
                 toolTip = stringResource(Res.string.tooltip_mark_read_all)
             ) {
                 onAction(NewsHomeReaderAction.OnMarkReadClicked(0))
@@ -90,6 +93,7 @@ fun NewsListMenuBar(
                 height = 30.dp,
                 padding = 2.dp,
                 leadingIcon = painterResource(Res.drawable.icon_refresh_24px),
+                leadingIconTint = MaterialTheme.colorScheme.onSurface,
                 toolTip = stringResource(Res.string.tooltip_refresh_newsfeed),
             ) {
                 onAction(NewsHomeReaderAction.OnNewsFeedRefresh(state.currentFeedName, state.currentNewsFeedConfiguration?.url))

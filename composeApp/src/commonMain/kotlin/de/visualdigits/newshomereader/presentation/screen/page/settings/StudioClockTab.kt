@@ -1,4 +1,4 @@
-package de.visualdigits.newshomereader.presentation.screen.page
+package de.visualdigits.newshomereader.presentation.screen.page.settings
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

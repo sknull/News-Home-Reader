@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.FileMode
 import de.visualdigits.common.domain.model.UiPlatform
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
-import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -66,24 +65,29 @@ expect fun Modifier.platformFocus(
 @Composable
 expect fun PlatformFileChooser(
     label: String,
+    buttonTextStyle: TextStyle,
     title: String,
     fileMode: FileMode,
-    startDirectory: File? = null,
     options: List<String> = listOf(),
     buttonShape: Shape = MaterialTheme.shapes.extraSmall,
     buttonColor: Color = MaterialTheme.colorScheme.surface,
+    buttonWidth: Dp = 120.dp,
+    buttonHeight: Dp = 50.dp,
     onCancel: (() -> Unit)? = null,
-    onOk: (InputStream) -> Unit
+    onOk: (String, InputStream) -> Unit
 )
 
 @Composable
 expect fun PlatformFileSaver(
     label: String,
+    buttonTextStyle: TextStyle,
     title: String,
     fileMode: FileMode,
     suggestedFileName: String,
     buttonShape: Shape = MaterialTheme.shapes.extraSmall,
     buttonColor: Color = MaterialTheme.colorScheme.surface,
+    buttonWidth: Dp = 120.dp,
+    buttonHeight: Dp = 50.dp,
     onCancel: (() -> Unit)? = null,
-    onOk: (OutputStream) -> Unit
+    onOk: (String, OutputStream) -> Unit
 )

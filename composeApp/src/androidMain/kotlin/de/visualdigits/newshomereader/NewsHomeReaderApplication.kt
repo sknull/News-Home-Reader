@@ -11,7 +11,7 @@ import org.koin.core.context.GlobalContext.startKoin
 class NewsHomeReaderApplication: Application() {
 
     override fun onCreate() {
-        Logger.i("#### Starting koin...")
+        Logger.i("Starting koin...")
         startKoin {
             androidContext(this@NewsHomeReaderApplication)
             workManagerFactory()
@@ -19,9 +19,9 @@ class NewsHomeReaderApplication: Application() {
         }
 
         // IMPORTANT do super create AFTER koin initializing to avoid problems with work managers
-        Logger.i("#### Initializing application...")
+        Logger.i("Initializing application...")
         super.onCreate()
 
-        Logger.i("#### Application initialized")
+        Logger.i("Application initialized")
     }
 }

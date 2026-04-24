@@ -1,4 +1,4 @@
-package de.visualdigits.newshomereader.presentation.screen.page.newstab
+package de.visualdigits.newshomereader.presentation.screen.page.newstab.item
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

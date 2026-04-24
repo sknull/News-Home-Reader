@@ -9,6 +9,7 @@ import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import co.touchlab.kermit.Logger
+import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.common.domain.service.getPlatformLogWriters
@@ -59,6 +60,7 @@ fun main() {
     val writers = getPlatformLogWriters()
     Logger.setLogWriters(writers)
     Logger.setTag("NewsHomeReader")
+    Logger.setMinSeverity(Severity.Info)
 
     System.setProperty("flatlaf.useWindowDecorations", "true")
 

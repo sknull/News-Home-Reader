@@ -23,7 +23,7 @@ class FeedUpdateWorker(
     private val settingsRepository: SettingsRepository by inject<SettingsRepository>()
 
     init {
-        log.i("#### FeedUpdateWorker initialized")
+        log.i("FeedUpdateWorker initialized")
     }
 
     override suspend fun doWork(): Result {

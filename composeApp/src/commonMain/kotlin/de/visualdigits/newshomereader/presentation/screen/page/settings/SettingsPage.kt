@@ -1,4 +1,4 @@
-package de.visualdigits.newshomereader.presentation.screen.page
+package de.visualdigits.newshomereader.presentation.screen.page.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

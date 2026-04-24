@@ -1,4 +1,4 @@
-package de.visualdigits.newshomereader.presentation.screen.page.newstab
+package de.visualdigits.newshomereader.presentation.screen.page.newstab.newsfeeds
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -141,7 +141,7 @@ private fun NewsFeedItems(
                 width = 200.dp - MaterialTheme.shapes.gap * 2,
                 height = 50.dp,
                 indicatorPosition = Alignment.CenterStart,
-                indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+                indicatorColor = MaterialTheme.colorScheme.onSurface,
                 text = newsFeedConfiguration.name,
                 textStyle = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Start,

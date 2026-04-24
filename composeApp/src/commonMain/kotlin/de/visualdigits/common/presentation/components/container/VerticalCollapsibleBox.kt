@@ -45,7 +45,7 @@ fun VerticalCollapsibleBox(
     modifier: Modifier = Modifier,
     title: String?,
     focusedBorderColor: Color = MaterialTheme.colorScheme.outline,
-    unfocusedBorderColor: Color = MaterialTheme.colorScheme.outlineVariant,
+    unfocusedBorderColor: Color = MaterialTheme.colorScheme.onSurface,
     backgroundColor: Color = MaterialTheme.colorScheme.surface,
     shape: Shape = MaterialTheme.shapes.small,
     containerPadding: Dp = MaterialTheme.shapes.gap,

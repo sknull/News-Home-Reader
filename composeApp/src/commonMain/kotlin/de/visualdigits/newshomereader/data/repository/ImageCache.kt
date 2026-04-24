@@ -6,5 +6,8 @@ expect class ImageCache {
 
     fun getImageLoader(): ImageLoader
 
-    fun prefetchImages(urls: List<String>)
+    suspend fun prefetchImages(
+        urls: List<String>,
+        onImageDone: suspend () -> Unit
+    )
 }

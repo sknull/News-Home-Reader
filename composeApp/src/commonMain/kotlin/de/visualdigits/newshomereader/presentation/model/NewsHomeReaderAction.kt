@@ -33,11 +33,25 @@ sealed interface NewsHomeReaderAction {
 
     @Immutable
     data class OnOpmlImport(
+        val fileName: String,
         val ins: InputStream
     ): NewsHomeReaderAction
 
     @Immutable
     data class OnOpmlExport(
+        val fileName: String,
+        val outs: OutputStream
+    ): NewsHomeReaderAction
+
+    @Immutable
+    data class OnSettingsImport(
+        val fileName: String,
+        val ins: InputStream
+    ): NewsHomeReaderAction
+
+    @Immutable
+    data class OnSettingsExport(
+        val fileName: String,
         val outs: OutputStream
     ): NewsHomeReaderAction
 

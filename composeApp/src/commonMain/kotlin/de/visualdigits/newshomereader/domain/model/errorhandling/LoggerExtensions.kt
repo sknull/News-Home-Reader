@@ -7,4 +7,4 @@ fun kermitLogger(tag: KClass<*>): Logger =
     Logger.withTag(tag.simpleName?.let { t -> "NHR_$t" } ?: "Unknown")
 
 fun kermitLogger(tag: String): Logger =
-    Logger.withTag(tag)
+    Logger.withTag("NHR_$tag")

@@ -10,6 +10,7 @@ import de.visualdigits.newshomereader.data.database.mapper.applicationJsonAdapte
 import de.visualdigits.newshomereader.data.database.mapper.mediaItemAdapter
 import de.visualdigits.newshomereader.data.database.mapper.newsFeedsAdapter
 import de.visualdigits.newshomereader.data.database.mapper.stringListAdapter
+import de.visualdigits.newshomereader.data.database.mapper.subGroupsAdapter
 import de.visualdigits.newshomereader.data.http.HttpClientFactory
 import de.visualdigits.newshomereader.data.repository.DefaultArticleRepository
 import de.visualdigits.newshomereader.data.repository.DefaultFeedRepository
@@ -45,7 +46,8 @@ val sharedModule = module {
                 keywordsAdapter = stringListAdapter
             ),
             NewsFeedGroupEntityAdapter = NewsFeedGroupEntity.Adapter(
-                newsFeedsAdapter = newsFeedsAdapter
+                newsFeedsAdapter = newsFeedsAdapter,
+                subGroupsAdapter = subGroupsAdapter
             )
         )
     }

@@ -7,6 +7,7 @@ import de.visualdigits.newshomereader.domain.model.errorhandling.LogMessage
 import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
+import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
@@ -47,6 +48,7 @@ data class NewsHomeReaderState(
     val uiMessageSeverity: Severity? = null,
 
     val currentProgress: Float = 0.0f,
+    val progressStage: ProgressStage = ProgressStage.NONE,
     val logs: List<LogMessage> = listOf(),
 
     val collapsibleState: Map<String, Boolean> = mapOf(),

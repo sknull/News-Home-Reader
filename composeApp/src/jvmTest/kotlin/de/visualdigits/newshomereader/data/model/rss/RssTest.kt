@@ -68,8 +68,9 @@ class RssTest : KoinTest {
                 keepReadArticlesInDays = 30,
                 keepUnreadArticlesInDays = 30,
                 1200,
-                loadArticles = false
-            ) {}
+                loadArticles = false,
+                progress = { _,_ -> }
+            )
                 .onSuccess { (newsFeed, changed) ->
                     val entity = newsFeed?.toNewsFeedEntity()
                     println(entity)

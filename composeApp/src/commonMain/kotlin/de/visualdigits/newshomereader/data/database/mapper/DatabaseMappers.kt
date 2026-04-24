@@ -1,13 +1,21 @@
 package de.visualdigits.newshomereader.data.database.mapper
 
 import app.cash.sqldelight.ColumnAdapter
+import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
+import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
+import de.visualdigits.common.domain.model.configuration.keyfactory.KeepArticlesEnum
+import de.visualdigits.common.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.newshomereader.FullArticleEntity
 import de.visualdigits.newshomereader.NewsFeedEntity
 import de.visualdigits.newshomereader.NewsFeedGroupEntity
 import de.visualdigits.newshomereader.NewsItemEntity
+import de.visualdigits.newshomereader.SettingsEntity
 import de.visualdigits.newshomereader.domain.model.applicationjson.AppJson
 import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NC
 import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NewsFeedConfiguration
+import de.visualdigits.newshomereader.domain.model.settings.SK
+import de.visualdigits.newshomereader.domain.model.settings.Settings
+import de.visualdigits.newshomereader.domain.model.type.Language
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem
 import de.visualdigits.newshomereader.domain.model.unified.MediaType
@@ -19,12 +27,44 @@ import kotlinx.serialization.json.Json
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+fun Settings.toSettingsEntity(): SettingsEntity {
+    val settingsEntity = SettingsEntity(
+        id = 0,
+        displayTheme = get<DisplayThemeEnum>(SK.displayTheme)?.name ?: "LIGHT",
+        language = get<Language>(SK.language)?.name ?: "EN",
+        hideRead = get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
+        loadArticles = get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false,
+        refreshInterval = get<RefreshIntervalEnum>(SK.refreshInterval)?.name ?: "MINUTES_60",
+        refreshWifiOnly = get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false,
+        lastMaxImageSize = get<Int>(SK.maxImageSize)?.toLong() ?: 1200L,
+        keepReadArticles = get<KeepArticlesEnum>(SK.keepReadArticles)?.name ?: "DAYS_30",
+        keepUnreadArticles = get<KeepArticlesEnum>(SK.keepUnreadArticles)?.name ?: "DAYS_30",
+    )
+    return settingsEntity
+}
+
+fun SettingsEntity.toSettings(): Settings {
+    val settings = Settings()
+
+    settings.set(SK.displayTheme, displayTheme)
+    settings.set(SK.language, language)
+    settings.set(SK.hideRead, hideRead)
+    settings.set(SK.loadArticles, loadArticles)
+    settings.set(SK.refreshInterval, refreshInterval)
+    settings.set(SK.refreshWifiOnly, refreshWifiOnly)
+    settings.set(SK.maxImageSize, lastMaxImageSize)
+    settings.set(SK.keepReadArticles, keepReadArticles)
+    settings.set(SK.keepUnreadArticles, keepUnreadArticles)
+
+    return settings
+}
 
 fun NewsFeedGroup.toNewsFeedGroupEntity(): NewsFeedGroupEntity {
     return NewsFeedGroupEntity(
         id = id,
         name = name,
-        newsFeeds = newsFeeds
+        newsFeeds = newsFeeds,
+        subGroups = subGroups
     )
 }
 
@@ -32,7 +72,8 @@ fun NewsFeedGroupEntity.toNewsFeedGroup(): NewsFeedGroup {
     return NewsFeedGroup(
         id = id,
         name = name,
-        newsFeeds = newsFeeds
+        newsFeeds = newsFeeds,
+        subGroups = subGroups
     )
 }
 
@@ -150,6 +191,14 @@ val newsFeedsAdapter = object : ColumnAdapter<List<NewsFeedConfigurationEntity>,
         if (databaseValue.isEmpty()) listOf() else Json.decodeFromString(databaseValue)
 
     override fun encode(value: List<NewsFeedConfigurationEntity>): String =
+        Json.encodeToString(value)
+}
+
+val subGroupsAdapter = object : ColumnAdapter<List<NewsFeedGroup>, String> {
+    override fun decode(databaseValue: String): List<NewsFeedGroup> =
+        if (databaseValue.isEmpty()) listOf() else Json.decodeFromString(databaseValue)
+
+    override fun encode(value: List<NewsFeedGroup>): String =
         Json.encodeToString(value)
 }
 

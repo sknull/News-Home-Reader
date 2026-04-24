@@ -18,10 +18,11 @@ actual fun PlatformVerticalScrollbar(
 ) {
     VerticalScrollbar(
         adapter = rememberScrollbarAdapter(scrollState = scrollState),
-        modifier = modifier.background(MaterialTheme.colorScheme.tertiary),
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)),
         style = defaultScrollbarStyle().copy(
-            unhoverColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.6f),
-            hoverColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.8f)
+            unhoverColor = MaterialTheme.colorScheme.onSurface,
+            hoverColor = MaterialTheme.colorScheme.inverseSurface
         ),
         interactionSource = interactionSource
     )

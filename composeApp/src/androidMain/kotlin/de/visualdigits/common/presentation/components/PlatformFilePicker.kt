@@ -8,7 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
 import de.visualdigits.common.domain.model.FileMode
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
@@ -18,14 +19,16 @@ import java.io.InputStream
 @Composable
 actual fun PlatformFileChooser(
     label: String,
+    buttonTextStyle: TextStyle,
     title: String,
     fileMode: FileMode,
-    startDirectory: File?,
     options: List<String>,
     buttonShape: Shape,
     buttonColor: Color,
+    buttonWidth: Dp,
+    buttonHeight: Dp,
     onCancel: (() -> Unit)?,
-    onOk: (InputStream) -> Unit
+    onOk: (String, InputStream) -> Unit
 ) {
     val log = kermitLogger("PlatformFileChooser")
 
@@ -36,9 +39,19 @@ actual fun PlatformFileChooser(
     ) { uri: Uri? ->
         try {
             uri?.also { safeUri ->
+                var fileName = "unknown"
+                context.contentResolver.query(safeUri, null, null, null, null)?.use { cursor ->
+                    val nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
+                    if (cursor.moveToFirst()) {
+                        fileName = cursor.getString(nameIndex)
+                    }
+                    if (fileName == "unknown") {
+                        fileName = safeUri.path?.substringAfterLast('/') ?: "file"
+                    }                }
+
                 context.contentResolver.openInputStream(safeUri)?.use { ins ->
                     val bytes = ins.readBytes()
-                    onOk(bytes.inputStream())
+                    onOk(fileName, bytes.inputStream())
                 }
             }
         } catch (e: Exception) {
@@ -48,8 +61,10 @@ actual fun PlatformFileChooser(
 
     IndicatorButton(
         modifier = Modifier,
-        width = 180.dp,
+        width = buttonWidth,
+        height = buttonHeight,
         text = label,
+        textStyle = buttonTextStyle,
         shape = buttonShape,
         buttonColor = buttonColor
     ) {

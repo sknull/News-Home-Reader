@@ -1,6 +1,6 @@
 [versions]
 agp = "8.13.2"
-android-compileSdk = "36" # DO NOT UPGRADE FOR NOW
+android-compileSdk = "36"
 android-minSdk = "26"
 android-targetSdk = "35" # DO NOT UPGRADE FOR NOW
 tvMaterial = "1.0.1"
@@ -29,12 +29,12 @@ version-kotlinx-datetime = "0.7.1"
 version-kotlinx-io-core = "0.9.0"
 version-ktor = "3.4.2"
 version-material3 = "1.9.0"
-version-navigation-compose = "2.9.2" # DO NOT UPGRADE FOR NOW
+version-navigation-compose = "2.9.2"
 version-proguardGradle = "7.9.1"
 version-skikoAwtRuntimeWindowsX64 = "0.9.47" # DO NOT UPGRADE FOR NOW
 
 version-sqldelight = "2.3.2"
-version-sqlite = "2.6.2" # DO NOT UPGRADE FOR NOW
+version-sqlite = "2.6.2"
 
 
 [libraries]

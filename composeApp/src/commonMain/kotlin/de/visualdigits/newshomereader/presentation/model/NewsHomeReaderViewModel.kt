@@ -3,10 +3,13 @@ package de.visualdigits.newshomereader.presentation.model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Severity
+import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.KeepArticlesEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.RefreshIntervalEnum
+import de.visualdigits.compose.resources.Res
+import de.visualdigits.compose.resources.error_local_wrong_filetype
 import de.visualdigits.generated.AppVersion
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedConfiguration
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedConfigurationEntity
@@ -22,6 +25,7 @@ import de.visualdigits.newshomereader.domain.model.platform.PlatformType
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
+import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
@@ -69,9 +73,9 @@ class NewsHomeReaderViewModel(
     val state = _state.asStateFlow()
 
     init {
-        log.i("#### Application version ${AppVersion().version} initializing...")
+        log.i("Application version ${AppVersion().version} initializing...")
         loadData()
-        log.i("#### Application started")
+        log.i("Application started")
 
         _state
             .map { it.currentFeedName }
@@ -169,11 +173,19 @@ class NewsHomeReaderViewModel(
             }
 
             is NewsHomeReaderAction.OnOpmlImport -> {
-                importOpml(action.ins)
+                importOpml(action.fileName, action.ins)
             }
 
             is NewsHomeReaderAction.OnOpmlExport -> {
-                exportOpml(action.outs)
+                exportOpml(action.fileName, action.outs)
+            }
+
+            is NewsHomeReaderAction.OnSettingsImport -> {
+                importSettings(action.fileName, action.ins)
+            }
+
+            is NewsHomeReaderAction.OnSettingsExport -> {
+                exportSettings(action.fileName, action.outs)
             }
 
             is NewsHomeReaderAction.UpdateMaxImageSize -> {
@@ -495,7 +507,7 @@ class NewsHomeReaderViewModel(
                     )
                 }
             } else if (addResult is Result.Error) {
-                log.e("Could not add newsfeed group '$newsFeedGroupName'")
+                log.e("Could not add newsfeed group '$newsFeedGroupName'", addResult.throwable)
             }
     }
 
@@ -512,10 +524,10 @@ class NewsHomeReaderViewModel(
                     )
                 }
             } else if (upsertResult is Result.Error) {
-                log.e("Could not upsertResult newsfeed group '$newNewsFeedGroupName'")
+                log.e("Could not upsertResult newsfeed group '$newNewsFeedGroupName'", upsertResult.throwable)
             }
         } else if (getResult is Result.Error) {
-            log.e("Could not get old newsfeed group '$oldFeedGroupName'")
+            log.e("Could not get old newsfeed group '$oldFeedGroupName'", getResult.throwable)
         }
     }
 
@@ -531,7 +543,7 @@ class NewsHomeReaderViewModel(
                 )
             }
         } else if (addResult is Result.Error) {
-            log.e("Could not add newsfeed group '$newsFeedConfiguration'")
+            log.e("Could not add newsfeed group '$newsFeedConfiguration'", addResult.throwable)
         }
     }
 
@@ -555,8 +567,8 @@ class NewsHomeReaderViewModel(
                         )
                     }
                 }
-                .onError { local, throwable ->
-                    log.e("Could not modify newsfeed configuration '${oldEntity.name}' from '${newEntity.name}' to '${local}'")
+                .onError { error, throwable ->
+                    log.e("Could not modify newsfeed configuration from '${oldEntity.name}' to '${newEntity.name}'", throwable)
                 }
         } else {
             _state.update {
@@ -580,7 +592,7 @@ class NewsHomeReaderViewModel(
                     )
                 }
             } else if (deleteResult is Result.Error) {
-                log.e("Could not add newsfeed group '$newsFeedGroupName'")
+                log.e("Could not add newsfeed group '$newsFeedGroupName'", deleteResult.throwable)
             }
         }
     }
@@ -596,7 +608,7 @@ class NewsHomeReaderViewModel(
                     )
                 }
             } else if (deleteResult is Result.Error) {
-                log.e("Could not add newsfeed configuration '${newsFeedGroupConfiguration.name}'")
+                log.e("Could not add newsfeed configuration '${newsFeedGroupConfiguration.name}'", deleteResult.throwable)
             }
         }
     }
@@ -606,57 +618,15 @@ class NewsHomeReaderViewModel(
         if (result is Result.Success) {
             val newsFeedGroups = result.data
             val newsFeedConfigurations = newsFeedGroups.flatMap { nfg -> nfg.newsFeeds }
-            refreshNewsFeeds(newsFeedConfigurations)
-        }
-    }
-
-    private fun exportOpml(outs: OutputStream) = viewModelScope.launch {
-        log.i("#### Exporting opml...")
-        _state.update {
-            it.copy(
-                isLoading = true,
-            )
-        }
-        newsFeedConfigurationRepository.saveNewsFeedGroups(outs)
-            .onSuccess {
-                _state.update {
-                    it.copy(
-                        isLoading = false,
-                    )
-                }
-            }
-            .onError { error, throwable ->
-                _state.update {
-                    it.copy(
-                        isLoading = false,
-                        uiMessage = error.toUiText(),
-                        uiMessageSeverity = Severity.Error
-                    )
-                }
-            }
-    }
-
-    private fun importOpml(ins: InputStream) = viewModelScope.launch {
-        log.i("#### Importing opml...")
-        _state.update {
-            it.copy(
-                isLoading = true,
-            )
-        }
-
-        val newFeedConfigurationResult = newsFeedConfigurationRepository.setNewsFeedGroups(ins)
-        if (newFeedConfigurationResult is Result.Success) {
-            val newsFeedGroups = newFeedConfigurationResult.data
-            val newsFeedConfigurations = newsFeedGroups.flatMap { nfg -> nfg.newsFeeds }
             val newsFeedResult = refreshNewsFeeds(newsFeedConfigurations)
-
             if (newsFeedResult is Result.Success) {
-                val (newsFeeds, _) = newsFeedResult.data
+                val (newsFeeds, changed) = newsFeedResult.data
                 _state.update {
                     val currentNewsItems = newsFeeds.find { nf -> nf.feedName == it.currentFeedName }?.items ?: listOf()
                     it.copy(
                         isLoading = false,
                         currentProgress = 0.0f,
+                        progressStage = ProgressStage.NONE,
                         isEditingSettings = false,
                         currentNewsItem = null,
                         currentNewsArticle = null,
@@ -669,30 +639,238 @@ class NewsHomeReaderViewModel(
                         newsFeedGroups = newsFeedGroups
                     )
                 }
+                prefetchImages(changed, newsFeeds)
+                    .onSuccess {
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                currentProgress = 0.0f,
+                                progressStage = ProgressStage.NONE,
+                            )
+                        }
+                    }
+                    .onError { _, throwable ->
+                        log.e("Could not prefetch images", throwable)
+                    }
             } else if (newsFeedResult is Result.Error) {
-                log.e("Could not import OPML", newsFeedResult.throwable)
+                log.e("Could not refresh newsfeeds'", newsFeedResult.throwable)
                 _state.update {
                     it.copy(
                         isLoading = false,
                         currentProgress = 0.0f,
-                        uiMessage = newsFeedResult.error.toUiText(),
-                        uiMessageSeverity = Severity.Error
+                        progressStage = ProgressStage.NONE,
                     )
                 }
             }
-        } else if (newFeedConfigurationResult is Result.Error){
-            log.e("Could not import OPML", newFeedConfigurationResult.throwable)
+        }
+    }
+
+    private fun importSettings(fileName: String, ins: InputStream) = viewModelScope.launch {
+        log.i("Importing settings")
+        if (fileName.endsWith(".json", ignoreCase = true)) {
+            _state.update {
+                it.copy(
+                    isLoading = true,
+                )
+            }
+            settingsRepository.importSettings(ins)
+                .onSuccess { settings ->
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            settings = settings,
+                            isEditingSettings = false,
+                            uiMessage = null,
+                        )
+                    }
+                }
+                .onError { error, throwable ->
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            uiMessage = error.toUiText(),
+                            uiMessageSeverity = Severity.Error
+                        )
+                    }
+                }
+        } else {
             _state.update {
                 it.copy(
                     isLoading = false,
                     currentProgress = 0.0f,
-                    uiMessage = newFeedConfigurationResult.error.toUiText(),
+                    progressStage = ProgressStage.NONE,
+                    uiMessage = UiText.StringResourceId(Res.string.error_local_wrong_filetype),
                     uiMessageSeverity = Severity.Error
                 )
             }
         }
     }
 
+    private fun exportSettings(fileName: String, outs: OutputStream) = viewModelScope.launch {
+        log.i("Exporting settings")
+        if (fileName.endsWith(".json", ignoreCase = true)) {
+            _state.update {
+                it.copy(
+                    isLoading = true,
+                )
+            }
+            val settings = state.value.settings
+            if(settings != null) {
+                settingsRepository.exportSettings(settings, outs)
+                    .onSuccess {
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                uiMessage = null,
+                            )
+                        }
+                    }
+                    .onError { error, throwable ->
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                uiMessage = error.toUiText(),
+                                uiMessageSeverity = Severity.Error
+                            )
+                        }
+                    }
+            }
+        } else {
+            _state.update {
+                it.copy(
+                    isLoading = false,
+                    currentProgress = 0.0f,
+                    progressStage = ProgressStage.NONE,
+                    uiMessage = UiText.StringResourceId(Res.string.error_local_wrong_filetype),
+                    uiMessageSeverity = Severity.Error
+                )
+            }
+        }
+    }
+
+    private fun importOpml(fileName: String, ins: InputStream) = viewModelScope.launch {
+        log.i("Importing opml...")
+        if (fileName.endsWith(".opml", ignoreCase = true)) {
+            _state.update {
+                it.copy(
+                    isLoading = true,
+                )
+            }
+            val newFeedConfigurationResult = newsFeedConfigurationRepository.setNewsFeedGroups(ins)
+            if (newFeedConfigurationResult is Result.Success) {
+                val newsFeedGroups = newFeedConfigurationResult.data
+                val newsFeedConfigurations = newsFeedGroups.flatMap { nfg -> nfg.newsFeeds }
+                val newsFeedResult = refreshNewsFeeds(newsFeedConfigurations)
+                if (newsFeedResult is Result.Success) {
+                    val (newsFeeds, changed) = newsFeedResult.data
+                    _state.update {
+                        val currentNewsItems = newsFeeds.find { nf -> nf.feedName == it.currentFeedName }?.items ?: listOf()
+                        it.copy(
+                            isLoading = false,
+                            currentProgress = 0.0f,
+                            progressStage = ProgressStage.NONE,
+                            isEditingSettings = false,
+                            currentNewsItem = null,
+                            currentNewsArticle = null,
+                            currentNewsItems = currentNewsItems,
+                            visibleNewsItems = calculateVisibleNewsItems(
+                                newsItems = currentNewsItems,
+                                hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
+                                newNewsFeedConfiguration = it.currentNewsFeedConfiguration
+                            ),
+                            newsFeedGroups = newsFeedGroups
+                        )
+                    }
+                    prefetchImages(changed, newsFeeds)
+                        .onSuccess {
+                            _state.update {
+                                it.copy(
+                                    isLoading = false,
+                                    currentProgress = 0.0f,
+                                    progressStage = ProgressStage.NONE,
+                                    uiMessage = null,
+                                )
+                            }
+                        }
+                        .onError { _, throwable ->
+                            log.e("Could not prefetch images", throwable)
+                        }
+                } else if (newsFeedResult is Result.Error) {
+                    log.e("Could not import OPML", newsFeedResult.throwable)
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            currentProgress = 0.0f,
+                            progressStage = ProgressStage.NONE,
+                            uiMessage = newsFeedResult.error.toUiText(),
+                            uiMessageSeverity = Severity.Error
+                        )
+                    }
+                }
+            } else if (newFeedConfigurationResult is Result.Error){
+                log.e("Could not import OPML", newFeedConfigurationResult.throwable)
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        currentProgress = 0.0f,
+                        progressStage = ProgressStage.NONE,
+                        uiMessage = newFeedConfigurationResult.error.toUiText(),
+                        uiMessageSeverity = Severity.Error
+                    )
+                }
+            }
+        } else {
+            _state.update {
+                it.copy(
+                    isLoading = false,
+                    currentProgress = 0.0f,
+                    progressStage = ProgressStage.NONE,
+                    uiMessage = UiText.StringResourceId(Res.string.error_local_wrong_filetype),
+                    uiMessageSeverity = Severity.Error
+                )
+            }
+        }
+    }
+
+    private fun exportOpml(fileName: String, outs: OutputStream) = viewModelScope.launch {
+        log.i("Exporting opml...")
+        if (fileName.endsWith(".opml", ignoreCase = true)) {
+            _state.update {
+                it.copy(
+                    isLoading = true,
+                )
+            }
+            newsFeedConfigurationRepository.saveNewsFeedGroups(outs)
+                .onSuccess {
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            uiMessage = null,
+                        )
+                    }
+                }
+                .onError { error, throwable ->
+                    log.e("Could not export opml", throwable)
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            uiMessage = error.toUiText(),
+                            uiMessageSeverity = Severity.Error
+                        )
+                    }
+                }
+        } else {
+            _state.update {
+                it.copy(
+                    isLoading = false,
+                    currentProgress = 0.0f,
+                    progressStage = ProgressStage.NONE,
+                    uiMessage = UiText.StringResourceId(Res.string.error_local_wrong_filetype),
+                    uiMessageSeverity = Severity.Error
+                )
+            }
+        }
+    }
 
     private suspend fun refreshNewsFeeds(newsFeedConfigurations: List<NewsFeedConfigurationEntity>): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> {
         val wifiOnly = state.value.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
@@ -701,6 +879,11 @@ class NewsHomeReaderViewModel(
         val keepUnreadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepUnreadArticles)?.longValue ?: 30
         val maxImageSize = state.value.settings?.get<Int>(SK.maxImageSize) ?: 1200
 
+        scrollPosition
+            .keys
+            .filter { k -> k.startsWith("newsfeed_") }
+            .forEach { k -> scrollPosition[k] = Pair(0, 0)}
+
         return feedRepository.refreshNewsFeeds(
             newsFeedConfigurations = newsFeedConfigurations,
             wifiOnly = wifiOnly,
@@ -708,13 +891,12 @@ class NewsHomeReaderViewModel(
             keepUnreadArticlesInDays = keepUnreadArticles,
             maxImageSize = maxImageSize,
             loadArticles = loadArticles,
-            progress = { p ->
-                viewModelScope.launch {
-                    _state.update {
-                        it.copy(
-                            currentProgress = p,
-                        )
-                    }
+            progress = { progress, progressStage ->
+                _state.update {
+                    it.copy(
+                        currentProgress = progress,
+                        progressStage = progressStage
+                    )
                 }
             }
         )
@@ -729,6 +911,7 @@ class NewsHomeReaderViewModel(
                 isLoading = true,
             )
         }
+        scrollPosition["newsfeed_$feedName"] = Pair(0, 0)
         val wifiOnly = state.value.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
         val loadArticles = state.value.settings?.get<BooleanEnum>(SK.loadArticles)?.booleanValue?:false
         val keepReadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue?:30
@@ -744,22 +927,23 @@ class NewsHomeReaderViewModel(
                     keepUnreadArticlesInDays = keepUnreadArticles,
                     maxImageSize = maxImageSize,
                     loadArticles = loadArticles
-                ) { p ->
+                ) { progress, progressStage ->
                     viewModelScope.launch {
                         _state.update {
                             it.copy(
-                                currentProgress = p,
+                                currentProgress = progress,
+                                progressStage = progressStage
                             )
                         }
                     }
                 }
                 if (feedResult is Result.Success) {
-                    val (newsFeed, _) = feedResult.data
-
+                    val (newsFeed, changed) = feedResult.data
                     _state.update {
                         it.copy(
                             currentFeedName = fn,
                             currentProgress = 0.0f,
+                            progressStage = ProgressStage.NONE,
                             currentNewsItems = newsFeed?.items?.toList()?:listOf(), // force repaint
                             visibleNewsItems = calculateVisibleNewsItems(
                                 newsItems = newsFeed?.items ?: listOf(),
@@ -772,12 +956,26 @@ class NewsHomeReaderViewModel(
                             uiMessageSeverity = null
                         )
                     }
+                    prefetchImages(changed, listOfNotNull(newsFeed))
+                        .onSuccess {
+                            _state.update {
+                                it.copy(
+                                    isLoading = false,
+                                    currentProgress = 0.0f,
+                                    progressStage = ProgressStage.NONE,
+                                )
+                            }
+                        }
+                        .onError { _, throwable ->
+                            log.e("Could not prefetch images", throwable)
+                        }
                 } else if (feedResult is Result.Error) {
                     log.e("Could not load feed '$feedName'", feedResult.throwable)
                     _state.update {
                         it.copy(
                             isLoading = false,
                             currentProgress = 0.0f,
+                            progressStage = ProgressStage.NONE,
                             uiMessage = feedResult.error.toUiText(),
                             uiMessageSeverity = Severity.Error
                         )
@@ -787,10 +985,32 @@ class NewsHomeReaderViewModel(
         }
     }
 
+    private suspend fun prefetchImages(
+        changed: Boolean,
+        newsFeeds: List<NewsFeed>
+    ): Result<Unit, DataError.Remote> {
+        return if (changed) {
+            feedRepository.prefetchImages(
+                newsFeeds = newsFeeds
+            ) { progress, progressStage ->
+                _state.update {
+                    it.copy(
+                        currentProgress = progress,
+                        progressStage = progressStage
+                    )
+                }
+            }
+        } else {
+            Result.Success(Unit)
+        }
+    }
+
     private fun loadData() = viewModelScope.launch {
         _state.update {
             it.copy(
                 isLoading = true,
+                currentProgress = 0.0f,
+                progressStage = ProgressStage.NONE,
             )
         }
         val result = settingsRepository.getSettings()
@@ -822,6 +1042,8 @@ class NewsHomeReaderViewModel(
                 it.copy(
                     settings = finalSettings,
                     isLoading = false,
+                    currentProgress = 0.0f,
+                    progressStage = ProgressStage.NONE,
                     uiMessage = null,
                     uiMessageSeverity = null,
                     collapsibleState = mapOf("group_newsfeeds_navigation" to true)
@@ -832,6 +1054,8 @@ class NewsHomeReaderViewModel(
             _state.update {
                 it.copy(
                     isLoading = false,
+                    currentProgress = 0.0f,
+                    progressStage = ProgressStage.NONE,
                     uiMessage = result.error.toUiText(),
                     uiMessageSeverity = Severity.Error
                 )
@@ -844,6 +1068,20 @@ class NewsHomeReaderViewModel(
                     it.copy(
                         newsFeedGroups = newsFeedConfiguration,
                         isLoading = false,
+                        currentProgress = 0.0f,
+                        progressStage = ProgressStage.NONE,
+                        uiMessage = null,
+                        uiMessageSeverity = null
+                    )
+                }
+            }
+            .onError { local, throwable ->
+                log.e("Could not get settings", throwable)
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        currentProgress = 0.0f,
+                        progressStage = ProgressStage.NONE,
                         uiMessage = null,
                         uiMessageSeverity = null
                     )
@@ -861,6 +1099,8 @@ class NewsHomeReaderViewModel(
                 currentNewsFeedConfiguration = currentFeedConfiguration,
                 currentNewsArticle = null,
                 isLoading = false,
+                currentProgress = 0.0f,
+                progressStage = ProgressStage.NONE,
                 uiMessage = null,
                 uiMessageSeverity = null
             )
@@ -882,6 +1122,8 @@ class NewsHomeReaderViewModel(
                 _state.update {
                     it.copy(
                         isLoading = false,
+                        currentProgress = 0.0f,
+                        progressStage = ProgressStage.NONE,
                         currentNewsItems = newsItems,
                         visibleNewsItems = calculateVisibleNewsItems(
                             newsItems = newsItems,
@@ -896,6 +1138,8 @@ class NewsHomeReaderViewModel(
                 _state.update {
                     it.copy(
                         isLoading = false,
+                        currentProgress = 0.0f,
+                        progressStage = ProgressStage.NONE,
                         uiMessage = error.toUiText(),
                         uiMessageSeverity = Severity.Error
                     )
@@ -928,6 +1172,8 @@ class NewsHomeReaderViewModel(
                         newNewsFeedConfiguration = it.currentNewsFeedConfiguration
                     ),
                     isLoading = false,
+                    currentProgress = 0.0f,
+                    progressStage = ProgressStage.NONE,
                     uiMessage = null,
                     uiMessageSeverity = null
                 )
@@ -937,6 +1183,8 @@ class NewsHomeReaderViewModel(
             _state.update {
                 it.copy(
                     isLoading = false,
+                    currentProgress = 0.0f,
+                    progressStage = ProgressStage.NONE,
                     uiMessage = articleResult.error.toUiText(),
                     uiMessageSeverity = Severity.Error
                 )
@@ -964,6 +1212,8 @@ class NewsHomeReaderViewModel(
                             newNewsFeedConfiguration =it.currentNewsFeedConfiguration
                         ),
                         isLoading = false,
+                        currentProgress = 0.0f,
+                        progressStage = ProgressStage.NONE,
                         isEditingSettings = false,
                         uiMessage = null,
                         uiMessageSeverity = null
@@ -975,6 +1225,8 @@ class NewsHomeReaderViewModel(
                 _state.update {
                     it.copy(
                         isLoading = false,
+                        currentProgress = 0.0f,
+                        progressStage = ProgressStage.NONE,
                         uiMessage = error.toUiText(),
                         uiMessageSeverity = Severity.Error
                     )

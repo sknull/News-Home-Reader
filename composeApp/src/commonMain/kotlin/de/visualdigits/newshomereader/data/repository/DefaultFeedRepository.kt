@@ -17,6 +17,7 @@ import de.visualdigits.newshomereader.data.model.rss.Rss
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
+import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
@@ -132,12 +133,12 @@ class DefaultFeedRepository(
         keepUnreadArticlesInDays: Long,
         maxImageSize: Int,
         loadArticles: Boolean,
-        progress: (Float) -> Unit
+        progress: (Float, ProgressStage) -> Unit
     ): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> = withContext(Dispatchers.IO) {
         try {
             val finalNewsFeeds = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                 val newsFeeds = newsFeedConfigurations.mapNotNull { newsFeedConfiguration ->
-                    log.i("#### Refreshing newsfeed '${newsFeedConfiguration.name}', loadArticles=$loadArticles...")
+                    log.i("Refreshing newsfeed '${newsFeedConfiguration.name}', loadArticles=$loadArticles...")
                     try {
                         val response = newsFeedConfiguration.url?.let { u -> httpClient.get(urlString = u) }
                         val xml = response?.bodyAsText()
@@ -153,9 +154,16 @@ class DefaultFeedRepository(
                 currentStep.set(0)
 
                 val (persistedItems, changedNewsItems) = dao.transactionWithResult {
-                    val result = newsFeeds.map { newsFeed ->
+                    val persistedNewsFeeds = newsFeeds.map { newsFeed ->
                         persistNewsFeed(newsFeed, totalSteps, progress)
-                    }.reduce { acc, pair -> Pair(acc.first + pair.first, acc.second || pair.second) }
+                    }
+                    val result = if (persistedNewsFeeds.isNotEmpty()) {
+                        persistedNewsFeeds.reduce { acc, pair ->
+                            Pair(acc.first + pair.first, acc.second || pair.second)
+                        }
+                    } else {
+                        Pair(listOf(), false)
+                    }
                     dao.cleanupOldReadNewsItems(OffsetDateTime.now().minus(Duration.of(keepReadArticlesInDays, ChronoUnit.DAYS)).toInstant().toEpochMilli())
                     dao.cleanupOldUnreadNewsItems(OffsetDateTime.now().minus(Duration.of(keepUnreadArticlesInDays, ChronoUnit.DAYS)).toInstant().toEpochMilli())
                     result
@@ -175,15 +183,13 @@ class DefaultFeedRepository(
                     }
                 }
 
-                // grab all the images for offline use we can get
-                prefetchImages(newsFeedsWithArticles)
-
                 Pair(newsFeedsWithArticles, changedArticles)
             } else {
-                log.i("#### No free of charge internet connection available - fetching newsFeeds from database")
+                log.i("No free of charge internet connection available - fetching newsFeeds from database")
                 val newsFeeds = dao.getAllNewsFeeds().executeAsList().map { nf -> nf.toNewsFeed() }
                 Pair(newsFeeds, false)
             }
+            log.i("Refresh finished")
             Result.Success(finalNewsFeeds)
         } catch (e: Exception) {
             Result.Error(DataError.Remote.SERIALIZATION, e)
@@ -198,9 +204,9 @@ class DefaultFeedRepository(
         keepUnreadArticlesInDays: Long,
         maxImageSize: Int,
         loadArticles: Boolean,
-        progress: (Float) -> Unit
+        progress: (Float, ProgressStage) -> Unit
     ): Result<Pair<NewsFeed?, Boolean>, DataError.Remote> = withContext(Dispatchers.IO) {
-        log.i("#### Refreshing newsfeed '$feedName', loadArticles=$loadArticles...")
+        log.i("Refreshing newsfeed '$feedName', loadArticles=$loadArticles...")
         try {
             val updatedNewsFeed = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                 val response = httpClient.get(urlString = url)
@@ -220,7 +226,7 @@ class DefaultFeedRepository(
 
                 val (articles, changedArticles) = loadArticles(loadArticles, persistedItems, totalSteps, progress)
                 val newsFeedWithArticles = newsFeed?.copy(items = articles)
-                prefetchImages(newsFeedWithArticles?.let { listOf(it) }?:listOf())
+
                 Pair(newsFeedWithArticles, changedNewsItems || changedArticles)
             } else {
                 Pair(dao.getNewsFeedByFeedName(feedName).executeAsOneOrNull()?.toNewsFeed(), false)
@@ -232,7 +238,10 @@ class DefaultFeedRepository(
         }
     }
 
-    private fun prefetchImages(newsFeeds: List<NewsFeed>) {
+    override suspend fun prefetchImages(
+        newsFeeds: List<NewsFeed>,
+        progress: (Float, ProgressStage) -> Unit
+    ): Result<Unit, DataError.Remote> = withContext(Dispatchers.IO) {
         val feedUrls = newsFeeds
             .map { feed -> feed.image }
             .filter { url -> url.isNotEmpty() }
@@ -244,33 +253,43 @@ class DefaultFeedRepository(
             .flatMap { feed ->
                 feed.items
                     .filter { item -> item.newsArticle != null }
-                    .map { item ->
+                    .flatMap { item ->
                         val newsArticle = item.newsArticle!!
-                        newsArticle.articleImage +
-                                newsArticle.audioItems.flatMap { ai -> ai.thumbnails.map { t -> t.url } } +
-                                newsArticle.videoItems.flatMap { ai -> ai.thumbnails.map { t -> t.url } }
+                        listOfNotNull(newsArticle.articleImage) +
+                        newsArticle.audioItems.flatMap { ai -> ai.thumbnails.flatMap { t -> t.url } } +
+                        newsArticle.videoItems.flatMap { ai -> ai.thumbnails.flatMap { t -> t.url } }
                     }
             }
         val urls = (feedUrls + itemUrls + articleUrls).distinct()
-        log.i("#### Prefetching ${feedUrls.size} feed images, ${itemUrls.size} item images, ${articleUrls.size} article images = ${urls.size} distinct images")
-        imageCache.prefetchImages(urls)
+        val totalSteps = urls.size
+        if (totalSteps > 0) {
+            currentStep.set(0)
+            log.i("Prefetching ${feedUrls.size} feed images, ${itemUrls.size} item images, ${articleUrls.size} article images = ${urls.size} distinct images")
+            imageCache.prefetchImages(urls) {
+                val done = currentStep.incrementAndGet()
+                progress(done.toFloat() / totalSteps, ProgressStage.LOAD_IMAGES)
+            }
+        }
+        log.i("Finished prefetching")
+
+        Result.Success(Unit)
     }
 
     private fun persistNewsFeed(
         newsFeed: NewsFeed?,
         totalSteps: Int,
-        progress: (Float) -> Unit
+        progress: (Float, ProgressStage) -> Unit
     ): Pair<List<NewsItem>, Boolean> {
         return if (newsFeed != null) {
             val changedFeed = dao.upsertNewsFeed(newsFeed.toNewsFeedEntity())
             var changedItems: Boolean = false
             val done = currentStep.incrementAndGet()
-            progress(done.toFloat() / totalSteps)
+            progress(done.toFloat() / totalSteps, ProgressStage.LOAD_ARTICLES)
             val persistedNewsItems = newsFeed.items.map { newsItem ->
                 val (insertedItem, changedItem) = dao.upsertNewsItem(newsItem.toNewsItemEntity())
                 changedItems = changedItems || changedItem
                 val done = currentStep.incrementAndGet()
-                progress(done.toFloat() / totalSteps)
+                progress(done.toFloat() / totalSteps, ProgressStage.LOAD_ARTICLES)
                 insertedItem.toNewsItem().copy(newsFeed = newsFeed, isChanged = changedItem)
             }
             Pair(persistedNewsItems, changedFeed || changedItems)
@@ -283,8 +302,9 @@ class DefaultFeedRepository(
         loadArticles: Boolean,
         persistedItems: List<NewsItem>,
         totalSteps: Int,
-        progress: (Float) -> Unit
+        progress: (Float, ProgressStage) -> Unit
     ): Pair<List<NewsItem>, Boolean> {
+        log.i("Loading articles")
         var changed: Boolean = false
         val newsItemsWithArticles =  if (loadArticles) {
             coroutineScope {
@@ -307,7 +327,7 @@ class DefaultFeedRepository(
                                 }
 
                                 val done = currentStep.incrementAndGet()
-                                progress(done.toFloat() / totalSteps)
+                                progress(done.toFloat() / totalSteps, ProgressStage.LOAD_ARTICLES)
                                 item
                             }
                         } catch (e: Exception) {

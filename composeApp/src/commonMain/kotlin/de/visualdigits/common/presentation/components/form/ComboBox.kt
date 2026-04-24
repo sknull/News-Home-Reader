@@ -50,7 +50,7 @@ fun ComboBox(
     fieldHeight: Dp = Dp.Unspecified,
     enabled: Boolean = true,
     focusedBorderColor: Color = MaterialTheme.colorScheme.outline,
-    unfocusedBorderColor: Color = MaterialTheme.colorScheme.outlineVariant,
+    unfocusedBorderColor: Color = MaterialTheme.colorScheme.onSurface,
     buttonShape: Shape,
     options: List<Triple<String, StringResource?, DrawableResource?>>? = null,
     onValueChange: (KeyValue) -> Unit,

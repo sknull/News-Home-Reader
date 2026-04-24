@@ -38,7 +38,7 @@ fun InfoPage(
             .background(MaterialTheme.colorScheme.surfaceContainerLow, MaterialTheme.shapes.small)
             .padding(MaterialTheme.shapes.gap)
     ) {
-        val linkColor = MaterialTheme.colorScheme.outlineVariant
+        val linkColor = MaterialTheme.colorScheme.onSurface
         val html = remember(linkColor) {
             htmlToAnnotatedString(
                 html = """

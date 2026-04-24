@@ -1,6 +1,7 @@
 import de.visualdigits.newshomereader.domain.model.applicationjson.AppJson;
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem;
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity;
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup;
 import kotlin.Boolean;
 import kotlin.String;
 import kotlin.collections.List;
@@ -254,14 +255,15 @@ WHERE itemId = :itemId;
 CREATE TABLE NewsFeedGroupEntity (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    newsFeeds TEXT AS List<NewsFeedConfigurationEntity> NOT NULL
+    newsFeeds TEXT AS List<NewsFeedConfigurationEntity> NOT NULL,
+    subGroups TEXT AS List<NewsFeedGroup> NOT NULL -- todo bad naming
 );
 
 insertNewsFeedGroupEntity:
 INSERT OR REPLACE INTO NewsFeedGroupEntity (
-    name, newsFeeds
+    name, newsFeeds, subGroups
 )
-VALUES (?, ?);
+VALUES (?, ?, ?);
 
 getAllNewsFeedGroupEntities:
 SELECT * FROM NewsFeedGroupEntity;
@@ -277,7 +279,8 @@ WHERE name = :name;
 updateNewsFeedGroupEntity:
 UPDATE NewsFeedGroupEntity
 SET name = :name,
-    newsFeeds = :newsFeeds
+    newsFeeds = :newsFeeds,
+    subGroups = :subGroups
 WHERE id = :id;
 
 deleteNewsFeedGroupEntity:

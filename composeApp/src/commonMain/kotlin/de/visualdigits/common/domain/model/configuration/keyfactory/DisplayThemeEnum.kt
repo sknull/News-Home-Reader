@@ -35,7 +35,6 @@ enum class DisplayThemeEnum(
         colorScheme = darkColorScheme(
             primary = Color(0xFF3C3F40),
             onPrimary = Color(0xFFFFFFFF),
-            primaryContainer = Color(0xFFE67A2A),
             onPrimaryContainer = Color(0xFFFFFFFF),
 
             secondary = Color(0xFF313030),
@@ -44,14 +43,12 @@ enum class DisplayThemeEnum(
             secondaryContainer = Color(0xFFE1E1E1),
             onSecondaryContainer = Color(0xFF9A9A9A),
 
-            tertiary = Color(0xFF5A361B),
-            tertiaryContainer = Color(0xFFA5612F),
-
             background = Color(0xFF3C3F40),
             onBackground = Color(0xFFFFFFFF),
 
             surface = Color.Transparent,
-            onSurface = Color(0xFFE67A2A),
+            onSurface = Color(0xFF868686), // deco color
+
             inverseSurface = Color(0xFFFFFFFF),
             surfaceContainer = Color(0xFFFFFFFF),
             surfaceContainerHigh = Color.Transparent,
@@ -65,9 +62,8 @@ enum class DisplayThemeEnum(
             onErrorContainer = Color(0xFFFFFFFF),
 
             outline = Color(0xFFFFFFFF),
-            outlineVariant = Color(0xFFE67A2A),
 
-            primaryFixed = Color(0xAA000000)
+            primaryFixed = Color(0xAA000000),
         ),
         textLinkStyles = TextLinkStyles(
             style = SpanStyle(
@@ -86,14 +82,13 @@ enum class DisplayThemeEnum(
         )
     ),
 
-    DARK(
+    ANTHRACITE_ORANGE(
         isDark = true,
-        uiText = UiText.DynamicString("Dark"),
+        uiText = UiText.DynamicString("Anthracite Orange"),
         drawableResourceId = null,
         colorScheme = darkColorScheme(
-            primary = Color(0xFF000000),
-            onPrimary = Color(0xff000000),
-            primaryContainer = Color(0xff3b84eb),
+            primary = Color(0xFF3C3F40),
+            onPrimary = Color(0xFFFFFFFF),
             onPrimaryContainer = Color(0xFFFFFFFF),
 
             secondary = Color(0xFF313030),
@@ -102,14 +97,12 @@ enum class DisplayThemeEnum(
             secondaryContainer = Color(0xFFE1E1E1),
             onSecondaryContainer = Color(0xFF9A9A9A),
 
-            tertiary = Color(0xFFFFFFFF),
-            tertiaryContainer = Color(0xFFFFFFFF),
-
-            background = Color(0xFF000000),
+            background = Color(0xFF3C3F40),
             onBackground = Color(0xFFFFFFFF),
 
             surface = Color.Transparent,
-            onSurface = Color(0xFFFFFFFF),
+            onSurface = Color(0xFFE67A2A), // deco color
+
             inverseSurface = Color(0xFFFFFFFF),
             surfaceContainer = Color(0xFFFFFFFF),
             surfaceContainerHigh = Color.Transparent,
@@ -123,7 +116,115 @@ enum class DisplayThemeEnum(
             onErrorContainer = Color(0xFFFFFFFF),
 
             outline = Color(0xFFFFFFFF),
-            outlineVariant = Color(0xff3b84eb),
+
+            primaryFixed = Color(0xAA000000),
+        ),
+        textLinkStyles = TextLinkStyles(
+            style = SpanStyle(
+                color = Color(0xFFE67A2A),
+                textDecoration = TextDecoration.Underline
+            )
+        ),
+        textColor = Color(0xFFFFFFFF),
+        studioClockColors = StudioClockColors(
+            colorHours = Color(0xFFC96012),
+            colorMinutes = Color(0xFFDCA175),
+            colorSeconds = Color(0xFFC96012),
+            colorTime = Color(0xFFC96012),
+            colorDate = Color(0xFFDCA175),
+            colorBackground = Color(0xdd000000),
+        )
+    ),
+
+    ANTHRACITE_BLUE(
+        isDark = true,
+        uiText = UiText.DynamicString("Anthracite Blue"),
+        drawableResourceId = null,
+        colorScheme = darkColorScheme(
+            primary = Color(0xFF3C3F40),
+            onPrimary = Color(0xFFFFFFFF),
+            onPrimaryContainer = Color(0xFFFFFFFF),
+
+            secondary = Color(0xFF313030),
+            onSecondary = Color(0xFFFFFFFF),
+
+            secondaryContainer = Color(0xFFE1E1E1),
+            onSecondaryContainer = Color(0xFF9A9A9A),
+
+            background = Color(0xFF3C3F40),
+            onBackground = Color(0xFFFFFFFF),
+
+            surface = Color.Transparent,
+            onSurface = Color(0xFF439DDE), // deco color
+
+            inverseSurface = Color(0xFFFFFFFF),
+            surfaceContainer = Color(0xFFFFFFFF),
+            surfaceContainerHigh = Color.Transparent,
+            surfaceContainerLow = Color.Transparent,
+            surfaceContainerLowest = Color(0xFF373737),
+            surfaceDim = Color(0xFF393939),
+
+            error = Color(0xffff002a),
+            onError = Color(0xFFFFFFFF),
+            errorContainer = Color(0xffff002a),
+            onErrorContainer = Color(0xFFFFFFFF),
+
+            outline = Color(0xFFFFFFFF),
+
+            primaryFixed = Color(0xAA000000),
+        ),
+        textLinkStyles = TextLinkStyles(
+            style = SpanStyle(
+                color = Color(0xFF439DDE),
+                textDecoration = TextDecoration.Underline
+            )
+        ),
+        textColor = Color(0xFFFFFFFF),
+        studioClockColors = StudioClockColors(
+            colorHours = Color(0xFF0077D0),
+            colorMinutes = Color(0xFF439DDE),
+            colorSeconds = Color(0xFF0077D0),
+            colorTime = Color(0xFF0077D0),
+            colorDate = Color(0xFF439DDE),
+            colorBackground = Color(0xdd000000),
+        )
+    ),
+
+    DARK(
+        isDark = true,
+        uiText = UiText.DynamicString("Dark"),
+        drawableResourceId = null,
+        colorScheme = darkColorScheme(
+            primary = Color(0xFF000000),
+            onPrimary = Color(0xff000000),
+            onPrimaryContainer = Color(0xFFFFFFFF),
+
+            secondary = Color(0xFF313030),
+            onSecondary = Color(0xFFFFFFFF),
+
+            secondaryContainer = Color(0xFFE1E1E1),
+            onSecondaryContainer = Color(0xFF9A9A9A),
+
+            background = Color(0xFF000000),
+            onBackground = Color(0xFFFFFFFF),
+
+            surface = Color.Transparent,
+
+            onSurface = Color(0xFFFFFFFF), // deco color
+
+            inverseSurface = Color(0xFFFFFFFF),
+            surfaceContainer = Color(0xFFFFFFFF),
+            surfaceContainerHigh = Color.Transparent,
+            surfaceContainerLow = Color.Transparent,
+            surfaceContainerLowest = Color(0xFF373737),
+            surfaceDim = Color(0xFF393939),
+
+            error = Color(0xffff002a),
+            onError = Color(0xFFFFFFFF),
+            errorContainer = Color(0xffff002a),
+            onErrorContainer = Color(0xFFFFFFFF),
+
+            outline = Color(0xFFFFFFFF),
 
             primaryFixed = Color(0xAA000000)
         ),
@@ -144,7 +245,6 @@ enum class DisplayThemeEnum(
         colorScheme = lightColorScheme(
             primary = Color(0xFFFFFFFF),
             onPrimary = Color(0xff000000),
-            primaryContainer = Color(0xff3b84eb),
             onPrimaryContainer = Color(0xFFFFFFFF),
 
             secondary = Color(0xFFBFBEBE),
@@ -153,15 +253,14 @@ enum class DisplayThemeEnum(
             secondaryContainer = Color(0xFFE1E1E1),
             onSecondaryContainer = Color(0xFF9A9A9A),
 
-            tertiary = Color(0xFF000000),
-            tertiaryContainer = Color(0xFF000000),
-
             background = Color(0xFFFFFFFF),
             onBackground = Color(0xFF000000),
 
             surface = Color.Transparent,
-            onSurface = Color(0xFF000000),
-            inverseSurface = Color(0xFFFFFFFF),
+
+            onSurface = Color(0xFF000000), // deco color
+
+            inverseSurface = Color(0xFF000000),
             surfaceContainer = Color(0xFF000000),
             surfaceContainerHigh = Color.Transparent,
             surfaceContainerLow = Color.Transparent,
@@ -174,7 +273,6 @@ enum class DisplayThemeEnum(
             onErrorContainer = Color(0xFFFFFFFF),
 
             outline = Color(0xFF000000),
-            outlineVariant = Color(0xff3b84eb),
 
             primaryFixed = Color(0xAA000000)
         ),

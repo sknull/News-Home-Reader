@@ -1,6 +1,7 @@
 package de.visualdigits.common.presentation.components
 
 import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.background
 import androidx.compose.foundation.defaultScrollbarStyle
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.lazy.LazyListState
@@ -17,10 +18,11 @@ actual fun PlatformLazyVerticalScrollbar(
 ) {
     VerticalScrollbar(
         adapter = rememberScrollbarAdapter(scrollState = scrollState),
-        modifier = modifier,
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)),
         style = defaultScrollbarStyle().copy(
-            unhoverColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.6f),
-            hoverColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.8f)
+            unhoverColor = MaterialTheme.colorScheme.onSurface,
+            hoverColor = MaterialTheme.colorScheme.inverseSurface
         ),
         interactionSource = interactionSource
     )

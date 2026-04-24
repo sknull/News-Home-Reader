@@ -54,8 +54,8 @@ class MockArticleRepository(
         val wordCount = words?.size?.toLong() ?: 0L
 
         val applicationJson = html.let { rh -> Ksoup.parse(rh) }
-            ?.select("script[type=application/ld+json]")
-            ?.map { script ->
+            .select("script[type=application/ld+json]")
+            .map { script ->
                 val json = script.data()
                 val appJsonDto = AppJsonDto.decodeFromString(json)
                 appJsonDto.clazz = script.attr("class")

@@ -26,12 +26,13 @@ enum class BooleanEnum(
         }
 
         override fun fromValue(value: Any?): BooleanEnum? {
-            return when (value) {
+            val v = when (value) {
                 is String -> fromString(value)
                 is Boolean -> entries.find { e -> e.booleanValue == value }
                 is BooleanEnum -> value
                 else -> null
             }
+            return v
         }
 
         override fun stringValue(value: Any?): String? = (value as? BooleanEnum)?.name?:value?.toString()?.lowercase()

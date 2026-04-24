@@ -31,7 +31,7 @@ class FeedRepositoryTest : KoinTest {
                 keepUnreadArticlesInDays = 30,
                 maxImageSize = 1200,
                 loadArticles = false,
-                progress = { },
+                progress = { _,_ -> },
             )
                 .onSuccess { feed ->
                     println(feed)

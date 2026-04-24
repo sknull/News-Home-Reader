@@ -19,9 +19,12 @@ import de.visualdigits.common.domain.model.configuration.keyfactory.typography
 import de.visualdigits.common.presentation.components.BindBackHandler
 import de.visualdigits.common.presentation.components.container.ErrorCard
 import de.visualdigits.newshomereader.data.repository.ConnectivityManager
+import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
+import de.visualdigits.newshomereader.presentation.screen.page.newstab.NewsContent
+import de.visualdigits.newshomereader.presentation.screen.page.settings.SettingsPage
 import de.visualdigits.newshomereader.presentation.style.MyShapes
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.max
@@ -32,6 +35,7 @@ fun MainPage(
     connectivityManager: ConnectivityManager
 ) {
     val viewModel: NewsHomeReaderViewModel = koinViewModel()
+
     val state by viewModel.state.collectAsState()
     val displayTheme = state.settings?.get<DisplayThemeEnum>(SK.displayTheme) ?: DisplayThemeEnum.LIGHT
     val maxImageSize = state.settings?.get<Int>(SK.maxImageSize) ?: 1200

@@ -20,6 +20,7 @@ fun NewsHomeReaderDatabaseQueries.updateNewsFeedGroup(newsFeedGroupEntity: NewsF
     updateNewsFeedGroupEntity(
         name = newsFeedGroupEntity.name,
         newsFeeds = newsFeedGroupEntity.newsFeeds,
+        subGroups = newsFeedGroupEntity.subGroups,
         id = newsFeedGroupEntity.id
     )
 }
@@ -27,7 +28,8 @@ fun NewsHomeReaderDatabaseQueries.updateNewsFeedGroup(newsFeedGroupEntity: NewsF
 fun NewsHomeReaderDatabaseQueries.insertNewsFeedGroup(newsFeedGroupEntity: NewsFeedGroupEntity) {
     insertNewsFeedGroupEntity(
         name = newsFeedGroupEntity.name,
-        newsFeeds = newsFeedGroupEntity.newsFeeds
+        newsFeeds = newsFeedGroupEntity.newsFeeds,
+        subGroups = newsFeedGroupEntity.subGroups
     )
 }
 

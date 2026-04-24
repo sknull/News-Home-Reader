@@ -22,7 +22,7 @@ actual class FeedScheduler(
         job?.cancel()
         job = scope.launch {
             while (isActive) {
-                log.i("#### Running scheduled newsfeed refresh...")
+                log.i("Running scheduled newsfeed refresh...")
                 newsFeedWorker.execute(maxImageSize)
                 delay(minutes * 60 * 1000)
             }

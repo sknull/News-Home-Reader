@@ -41,7 +41,7 @@ fun NewsFeedConfigurationGroupDialog(
         var currentNewsFeedGroupName by remember { mutableStateOf<String>(state.originalNewsFeedGroupName?:"") }
         AlertDialog(
             modifier = Modifier
-                .border(1.dp, MaterialTheme.colorScheme.outlineVariant, MaterialTheme.shapes.small),
+                .border(1.dp, MaterialTheme.colorScheme.onSurface, MaterialTheme.shapes.small),
             containerColor = MaterialTheme.colorScheme.background,
             shape = MaterialTheme.shapes.small,
             onDismissRequest = {},
@@ -70,8 +70,8 @@ fun NewsFeedConfigurationGroupDialog(
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MaterialTheme.colorScheme.outline,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-                        cursorColor = MaterialTheme.colorScheme.outlineVariant,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                        cursorColor = MaterialTheme.colorScheme.onSurface,
                     )
                 )
             },

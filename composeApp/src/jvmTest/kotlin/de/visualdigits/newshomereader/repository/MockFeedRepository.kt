@@ -8,6 +8,7 @@ import de.visualdigits.newshomereader.data.model.rdf.Rdf
 import de.visualdigits.newshomereader.data.model.rss.Rss
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
+import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
@@ -61,7 +62,7 @@ class MockFeedRepository(
         keepUnreadArticlesInDays: Long,
         maxImageSize: Int,
         loadArticles: Boolean,
-        progress: (Float) -> Unit
+        progress: (Float, ProgressStage) -> Unit
     ): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> {
         return Result.Success(Pair(listOf(), false))
     }
@@ -74,17 +75,24 @@ class MockFeedRepository(
         keepUnreadArticlesInDays: Long,
         maxImageSize: Int,
         loadArticles: Boolean,
-        progress: (Float) -> Unit
+        progress: (Float, ProgressStage) -> Unit
     ): Result<Pair<NewsFeed?, Boolean>, DataError.Remote> {
         val response = httpClient.get(urlString = url)
         val xml = response.bodyAsText()
         return Result.Success(Pair(readFromString(feedName, xml), false))
     }
 
+    override suspend fun prefetchImages(
+        newsFeeds: List<NewsFeed>,
+        progress: (Float, ProgressStage) -> Unit
+    ): Result<Unit, DataError.Remote> {
+        return Result.Success(Unit)
+    }
+
     override suspend fun readFromString(
         feedName: String?,
         xml: String?
-    ): NewsFeed? = withContext(Dispatchers.IO) {
+    ): NewsFeed = withContext(Dispatchers.IO) {
         checkNotNull(xml) { "No xml given" }
 
         val feedType = Ksoup

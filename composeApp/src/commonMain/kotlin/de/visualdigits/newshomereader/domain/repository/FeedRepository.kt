@@ -2,6 +2,7 @@ package de.visualdigits.newshomereader.domain.repository
 
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
+import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
@@ -41,7 +42,7 @@ interface FeedRepository {
         keepUnreadArticlesInDays: Long,
         maxImageSize: Int,
         loadArticles: Boolean,
-        progress: (Float) -> Unit,
+        progress: (Float, ProgressStage) -> Unit,
     ): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote>
 
     suspend fun refreshNewsFeed(
@@ -52,8 +53,13 @@ interface FeedRepository {
         keepUnreadArticlesInDays: Long,
         maxImageSize: Int,
         loadArticles: Boolean,
-        progress: (Float) -> Unit,
+        progress: (Float, ProgressStage) -> Unit,
     ): Result<Pair<NewsFeed?, Boolean>, DataError.Remote>
+
+    suspend fun prefetchImages(
+        newsFeeds: List<NewsFeed>,
+        progress: (Float, ProgressStage) -> Unit
+    ): Result<Unit, DataError.Remote>
 
     suspend fun readFromString(
         feedName: String?,

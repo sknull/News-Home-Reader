@@ -43,7 +43,7 @@ import org.jetbrains.compose.resources.painterResource
 fun HorizontalCollapsibleBox(
     modifier: Modifier = Modifier,
     focusedBorderColor: Color = MaterialTheme.colorScheme.outline,
-    unfocusedBorderColor: Color = MaterialTheme.colorScheme.outlineVariant,
+    unfocusedBorderColor: Color = MaterialTheme.colorScheme.onSurface,
     backgroundColor: Color = MaterialTheme.colorScheme.surface,
     shape: Shape = MaterialTheme.shapes.small,
     expandedWidth: Dp,

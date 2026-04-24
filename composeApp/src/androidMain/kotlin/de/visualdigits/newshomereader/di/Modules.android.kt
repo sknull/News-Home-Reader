@@ -32,7 +32,7 @@ actual val platformModule: Module
             }
         }
 
-        // global http client for all other calls
+        // global http client for all calls
         single {
             HttpClient(get<HttpClientEngine>()) {
                 install(HttpTimeout) {
@@ -40,6 +40,7 @@ actual val platformModule: Module
                     connectTimeoutMillis = 10000
                     socketTimeoutMillis = 15000
                 }
+                followRedirects = true
                 defaultRequest {
                     header(HttpHeaders.AcceptCharset, "utf-8")
                     header(HttpHeaders.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0")

@@ -68,7 +68,7 @@ fun EditableList(
     fieldHeight: Dp = Dp.Unspecified,
     space: Dp,
     focusedBorderColor: Color = MaterialTheme.colorScheme.outline,
-    unfocusedBorderColor: Color = MaterialTheme.colorScheme.outlineVariant,
+    unfocusedBorderColor: Color = MaterialTheme.colorScheme.onSurface,
     iconTint: Color = MaterialTheme.colorScheme.onSurface,
     buttonShape: Shape = MaterialTheme.shapes.extraSmall,
     containerShape: Shape = MaterialTheme.shapes.small,

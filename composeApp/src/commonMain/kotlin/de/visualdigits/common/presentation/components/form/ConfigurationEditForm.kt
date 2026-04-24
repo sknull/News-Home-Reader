@@ -51,7 +51,7 @@ fun ConfigurationEditForm(
     scrollbarId: String,
     fieldHeight: Dp = Dp.Unspecified,
     focusedBorderColor: Color = MaterialTheme.colorScheme.outline,
-    unfocusedBorderColor: Color = MaterialTheme.colorScheme.outlineVariant,
+    unfocusedBorderColor: Color = MaterialTheme.colorScheme.onSurface,
     iconTint: Color = MaterialTheme.colorScheme.onSurface,
     buttonShape: Shape = MaterialTheme.shapes.extraSmall,
     buttonColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
