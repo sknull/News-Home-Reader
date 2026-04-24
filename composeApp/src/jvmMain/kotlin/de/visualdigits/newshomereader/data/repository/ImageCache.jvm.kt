@@ -4,9 +4,6 @@ import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
-import coil3.request.SuccessResult
-import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
-import de.visualdigits.newshomereader.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.CoroutineScope
@@ -17,9 +14,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
-import kotlinx.coroutines.withContext
 import okio.Path.Companion.toPath
-import java.util.concurrent.atomic.AtomicInteger
 
 private val log = kermitLogger("ImageCache")
 

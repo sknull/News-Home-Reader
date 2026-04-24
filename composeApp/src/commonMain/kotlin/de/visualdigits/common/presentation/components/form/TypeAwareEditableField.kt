@@ -1,11 +1,6 @@
 package de.visualdigits.common.presentation.components.form
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -16,7 +11,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.Enumerable
@@ -28,8 +22,6 @@ import de.visualdigits.common.domain.model.configuration.Field
 import de.visualdigits.common.domain.model.configuration.FileFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.ReferenceListFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
-import de.visualdigits.common.presentation.components.PlatformToolTip
-import de.visualdigits.common.presentation.components.util.minimizedLabelHalfHeight
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.choose_directory
 import de.visualdigits.compose.resources.choose_file

@@ -4,7 +4,6 @@ import de.visualdigits.newshomereader.data.mapper.toNewsFeedConfiguration
 import de.visualdigits.newshomereader.data.mapper.toOpml
 import de.visualdigits.newshomereader.domain.util.decodeValue
 import nl.adaptivity.xmlutil.XmlDeclMode
-import nl.adaptivity.xmlutil.core.KtXmlWriter
 import nl.adaptivity.xmlutil.core.XmlVersion
 import nl.adaptivity.xmlutil.serialization.XML
 import org.junit.jupiter.api.Test
