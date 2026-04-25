@@ -5,7 +5,7 @@ import de.visualdigits.common.domain.model.KeyValue
 import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import nl.adaptivity.xmlutil.core.impl.multiplatform.InputStream
 import nl.adaptivity.xmlutil.core.impl.multiplatform.OutputStream
@@ -84,7 +84,7 @@ sealed interface NewsHomeReaderAction {
     //
     @Immutable
     data class OnEditNewsFeedConfigurationClick(
-        val originalNewsFeedConfiguration: NewsFeedConfigurationEntity?,
+        val originalNewsFeedItem: NewsFeedItem?,
     ) : NewsHomeReaderAction
 
     @Immutable
@@ -116,7 +116,7 @@ sealed interface NewsHomeReaderAction {
 
     @Immutable
     data class OnDeleteNewsFeedConfigurationClick(
-        val newsFeedConfiguration: NewsFeedConfigurationEntity?,
+        val newsFeedItem: NewsFeedItem?,
     ) : NewsHomeReaderAction
 
     @Immutable
@@ -127,7 +127,7 @@ sealed interface NewsHomeReaderAction {
 
     @Immutable
     class OnNewsFeedConfigurationOkClick(
-        val newsFeedConfiguration: NewsFeedConfigurationEntity
+        val newsFeedItem: NewsFeedItem
     ) : NewsHomeReaderAction
 
     @Immutable
@@ -151,7 +151,7 @@ sealed interface NewsHomeReaderAction {
 
     @Immutable
     data class OnAddNewsfeedGroupGroupClick(
-        val isAddingNewsfeedGroup: Boolean
+        val parentNewsFeedGroupName: String? = null,
     ) : NewsHomeReaderAction
 
     @Immutable
@@ -188,7 +188,7 @@ sealed interface NewsHomeReaderAction {
     @Immutable
     data class OnNewsFeedClicked(
         val feedName: String?,
-        val currentFeedConfiguration: NewsFeedConfigurationEntity
+        val currentFeedIItem: NewsFeedItem
     ) : NewsHomeReaderAction
 
     @Immutable
@@ -206,6 +206,26 @@ sealed interface NewsHomeReaderAction {
 
     @Immutable
     class OnNewsItemBackClicked : NewsHomeReaderAction
+
+
+    //
+    // Catalog
+    //
+    @Immutable
+    data class OnCatalogClicked(
+        val isExpanded: Boolean
+    ): NewsHomeReaderAction
+
+    @Immutable
+    data class OnSearchTextChanged(
+        val text: String
+    ): NewsHomeReaderAction
+
+    @Immutable
+    data class OnSubscriptionChanged(
+        val newsFeedItem: NewsFeedItem,
+        val subscribe: Boolean
+    ): NewsHomeReaderAction
 
 
     //

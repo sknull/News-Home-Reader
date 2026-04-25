@@ -65,14 +65,16 @@ fun TypeAwareEditableField(
                 || field.descriptor.itemClass?.java?.let { fc -> Enumerable::class.java.isAssignableFrom(fc) } == true -> {
             if (field.descriptor.fieldClass == BooleanEnum::class) {
                 SwitchBox(
-                    field = field,
+                    label = stringResource(field.descriptor.label),
+                    value = field.value,
                     fieldHeight = fieldHeight,
-                    finalUnfocusedBorderColor = finalUnfocusedBorderColor,
                     focusedBorderColor = focusedBorderColor,
+                    unfocusedBorderColor = finalUnfocusedBorderColor,
                     buttonShape = buttonShape,
-                    textStyle = textStyle,
-                    onValueChange = onValueChange
-                )
+                    textStyle = textStyle
+                ) { v ->
+                    onValueChange(KeyValue(field.descriptor, v.toString()))
+                }
             } else {
                 ComboBox(
                     modifier = modifier

@@ -1,7 +1,6 @@
 import de.visualdigits.newshomereader.domain.model.applicationjson.AppJson;
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem;
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity;
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup;
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem;
 import kotlin.Boolean;
 import kotlin.String;
 import kotlin.collections.List;
@@ -36,19 +35,6 @@ SELECT * FROM SettingsEntity WHERE id = :id;
 getAllSettings:
 SELECT * FROM SettingsEntity;
 
-updateSettingsEntity:
-UPDATE SettingsEntity
-SET displayTheme = :displayTheme,
-    language = :language,
-    refreshInterval = :refreshInterval,
-    refreshWifiOnly = :refreshWifiOnly,
-    lastMaxImageSize = :lastMaxImageSize,
-    keepReadArticles = :keepReadArticles,
-    keepUnreadArticles = :keepUnreadArticles,
-    loadArticles = :loadArticles,
-    hideRead = :hideRead
-WHERE id IS :id;
-
 deleteSettings:
 DELETE FROM SettingsEntity
 WHERE id IS :id;
@@ -76,7 +62,7 @@ CREATE TABLE NewsFeedEntity (
 CREATE INDEX IF NOT EXISTS index_news_feed_feedname ON NewsFeedEntity(feedName);
 
 insertNewsFeed:
-INSERT INTO NewsFeedEntity (
+INSERT OR REPLACE INTO NewsFeedEntity (
     identifier, feedName, title, description, link, image,
     imageTitle, imageCaption, updatedMillis, updatedZone,
     rights, language, keywords
@@ -91,22 +77,6 @@ SELECT * FROM NewsFeedEntity WHERE id = :id;
 
 getNewsFeedByFeedName:
 SELECT * FROM NewsFeedEntity WHERE feedName = :feedName;
-
-updateNewsFeed:
-UPDATE NewsFeedEntity
-SET title = :title,
-    identifier = :identifier,
-    description = :description,
-    link = :link,
-    image = :image,
-    imageTitle = :imageTitle,
-    imageCaption = :imageCaption,
-    updatedMillis = :updatedMillis,
-    updatedZone = :updatedZone,
-    rights = :rights,
-    language = :language,
-    keywords = :keywords
-WHERE feedName = :feedName;
 
 
 
@@ -162,25 +132,6 @@ getAllNewsItemsByFeedName:
 SELECT * FROM NewsItemEntity WHERE feedName = :feedName
 ORDER BY updatedMillis DESC;
 
-updateNewsItem:
-UPDATE NewsItemEntity
-SET feedName = :feedName,
-    identifier = :identifier,
-    publishedMillis = :publishedMillis,
-    publishedZone = :publishedZone,
-    updatedMillis = :updatedMillis,
-    updatedZone = :updatedZone,
-    link = :link,
-    title = :title,
-    summary = :summary,
-    content = :content,
-    keywords = :keywords,
-    image = :image,
-    imageTitle = :imageTitle,
-    imageCaption = :imageCaption,
-    isRead = :isRead
-WHERE id = :id;
-
 markNewsItemsAsRead:
 UPDATE NewsItemEntity
 SET isRead = :isRead
@@ -193,8 +144,6 @@ WHERE lastSeenMillis < :timeStamp AND isRead = 1;
 cleanupOldUnreadNewsItems:
 DELETE FROM NewsItemEntity
 WHERE lastSeenMillis < :timeStamp AND isRead = 0;
-
-
 
 
 --
@@ -230,22 +179,6 @@ SELECT * FROM FullArticleEntity WHERE id = :id;
 getFullArticleByItemId:
 SELECT * FROM FullArticleEntity WHERE itemId = :itemId;
 
-updateFullArticle:
-UPDATE FullArticleEntity
-SET id = :id,
-    applicationJson = :applicationJson,
-    html = :html,
-    imageItems = :imageItems,
-    videoItems = :videoItems,
-    audioItems = :audioItems,
-    articleImage = :articleImage,
-    discussionUrl = :discussionUrl,
-    commentCount = :commentCount,
-    isFree = :isFree,
-    wordCount = :wordCount,
-    readingTime = :readingTime
-WHERE itemId = :itemId;
-
 
 
 --
@@ -254,16 +187,19 @@ WHERE itemId = :itemId;
 
 CREATE TABLE NewsFeedGroupEntity (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    newsFeeds TEXT AS List<NewsFeedConfigurationEntity> NOT NULL,
-    subGroups TEXT AS List<NewsFeedGroup> NOT NULL -- todo bad naming
+    parentId INTEGER,
+    parentGroupName TEXT,
+    name TEXT NOT NULL UNIQUE,
+    newsFeeds TEXT AS List<NewsFeedItem> NOT NULL,
+    subGroups TEXT AS List<NewsFeedGroupEntity> NOT NULL,
+    FOREIGN KEY(parentId) REFERENCES NewsFeedGroupEntity(id) ON DELETE CASCADE
 );
 
 insertNewsFeedGroupEntity:
 INSERT OR REPLACE INTO NewsFeedGroupEntity (
-    name, newsFeeds, subGroups
+    parentGroupName, name, newsFeeds, subGroups
 )
-VALUES (?, ?, ?);
+VALUES (?, ?, ?, ?);
 
 getAllNewsFeedGroupEntities:
 SELECT * FROM NewsFeedGroupEntity;
@@ -275,13 +211,6 @@ WHERE id = :id;
 getNewsFeedGroupEntityByName:
 SELECT * FROM NewsFeedGroupEntity
 WHERE name = :name;
-
-updateNewsFeedGroupEntity:
-UPDATE NewsFeedGroupEntity
-SET name = :name,
-    newsFeeds = :newsFeeds,
-    subGroups = :subGroups
-WHERE id = :id;
 
 deleteNewsFeedGroupEntity:
 DELETE FROM NewsFeedGroupEntity

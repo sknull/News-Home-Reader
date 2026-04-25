@@ -4,6 +4,7 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import com.fleeksoft.ksoup.Ksoup
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
+import de.visualdigits.newshomereader.data.database.getAllNewsFeedGroups
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeed
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedEntity
 import de.visualdigits.newshomereader.data.database.mapper.toNewsItem
@@ -19,7 +20,7 @@ import de.visualdigits.newshomereader.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
@@ -75,10 +76,6 @@ class DefaultFeedRepository(
 
     override fun observeFeedItems(feedName: String): Flow<List<NewsItem>> {
         val newsFeed = dao.getNewsFeedByFeedName(feedName).executeAsOneOrNull()?.toNewsFeed()
-        val newsFeedGroups = dao.getAllNewsFeedGroupEntities().executeAsList()
-        val newsFeedConfiguration = newsFeedGroups
-                .flatMap { nfg -> nfg.newsFeeds }
-                .find { nfi -> nfi.name == feedName }
 
         return dao.getAllNewsItemsByFeedName(feedName.trim().lowercase())
             .asFlow()
@@ -127,7 +124,7 @@ class DefaultFeedRepository(
     private val currentStep = AtomicInteger(0)
 
     override suspend fun refreshNewsFeeds(
-        newsFeedConfigurations: List<NewsFeedConfigurationEntity>,
+        newsFeedItems: List<NewsFeedItem>,
         wifiOnly: Boolean,
         keepReadArticlesInDays: Long,
         keepUnreadArticlesInDays: Long,
@@ -137,7 +134,7 @@ class DefaultFeedRepository(
     ): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> = withContext(Dispatchers.IO) {
         try {
             val finalNewsFeeds = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
-                val newsFeeds = newsFeedConfigurations.mapNotNull { newsFeedConfiguration ->
+                val newsFeeds = newsFeedItems.mapNotNull { newsFeedConfiguration ->
                     log.i("Refreshing newsfeed '${newsFeedConfiguration.name}', loadArticles=$loadArticles...")
                     try {
                         val response = newsFeedConfiguration.url?.let { u -> httpClient.get(urlString = u) }

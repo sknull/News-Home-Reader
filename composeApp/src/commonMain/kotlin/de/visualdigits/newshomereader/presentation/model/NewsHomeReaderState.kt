@@ -3,13 +3,14 @@ package de.visualdigits.newshomereader.presentation.model
 import androidx.compose.runtime.Stable
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.UiText
+import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalog
 import de.visualdigits.newshomereader.domain.model.errorhandling.LogMessage
 import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
 import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import org.jetbrains.compose.resources.StringResource
@@ -21,7 +22,7 @@ data class NewsHomeReaderState(
 
     val newsFeedGroups: List<NewsFeedGroup> = listOf(),
 
-    val currentNewsFeedConfiguration: NewsFeedConfigurationEntity? = null,
+    val currentNewsFeedItem: NewsFeedItem? = null,
     val currentFeedName: String? = null,
     val currentNewsItems: List<NewsItem> = listOf(),
     val visibleNewsItems: List<NewsItem> = listOf(),
@@ -40,6 +41,13 @@ data class NewsHomeReaderState(
 
     val isShowInfos: Boolean = false,
     val isEditingSettings: Boolean = false,
+
+    val newsFeedCatalog: NewsFeedCatalog? = null,
+    val isViewingCatalog: Boolean = false,
+
+    val searchText: String = "",
+    val isSearchActive: Boolean = false,
+    val filteredCatalog: NewsFeedCatalog? = null,
 
     val isLoading: Boolean = false,
     val isConverting: Boolean = false,
@@ -65,8 +73,9 @@ data class NewsHomeReaderState(
     val isEditingNewsFeedConfiguration: Boolean = false,
     val isAddingNewsFeedConfiguration: Boolean = false,
     val isDeletingNewsFeedConfiguration: Boolean = false,
-    val deleteNewsFeedConfiguration: NewsFeedConfigurationEntity? = null,
+    val deleteNewsFeedItem: NewsFeedItem? = null,
 
+    val parentNewsFeedGroupName: String? = null,
     val originalNewsFeedGroupName: String? = null,
     val currentNewsFeedGroupName: String? = null
 )

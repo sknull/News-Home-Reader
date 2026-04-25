@@ -82,6 +82,7 @@
   <string name="title_edit_newsfeedconfiguration">Newsfeed bearbeiten</string>
   <string name="title_delete_newsfeedconfiguration">Newsfeed löschen</string>
   <string name="title_info">Info</string>
+  <string name="title_search">Suchen</string>
   <string name="title_settings">Einstellungen</string>
   <string name="tooltip_add_scene">Neue Szene...</string>
   <string name="tooltip_back">Zurück</string>

@@ -7,14 +7,13 @@ import java.io.File
 
 @Serializable
 @Immutable
-data class NewsFeedConfigurationEntity(
+data class NewsFeedItem(
+    var parentGroupName: String? = null,
     val name: String? = null,
-    val groupName: String? = null,
     val imageUrl: String? = null,
     val url: String? = null,
     val stopWords: List<String>? = listOf()
 ) {
-
     companion object {
 
         val mapper = Json {
@@ -23,11 +22,11 @@ data class NewsFeedConfigurationEntity(
             encodeDefaults = false
         }
 
-        fun decodeFromString(json: String): NewsFeedConfigurationEntity {
+        fun decodeFromString(json: String): NewsFeedItem {
             return mapper.decodeFromString(json)
         }
 
-        fun decodeValue(file: File): NewsFeedConfigurationEntity {
+        fun decodeValue(file: File): NewsFeedItem {
             return mapper.decodeFromString(file.readText())
         }
     }

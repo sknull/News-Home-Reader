@@ -10,7 +10,7 @@ import de.visualdigits.newshomereader.data.model.opml.Opml
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.repository.NewsFeedConfigurationRepository
 import de.visualdigits.newshomereader.domain.util.decodeFromString
@@ -50,9 +50,9 @@ class DefaultNewsFeedConfigurationRepository(
         }
     }
 
-    override suspend fun deleteNewsFeedConfiguration(newsFeedConfiguration: NewsFeedConfigurationEntity): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
+    override suspend fun deleteNewsFeedConfiguration(newsFeedConfiguration: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         try {
-            val newsFeedGroupEntity = newsFeedConfiguration.groupName?.let { gn -> dao.getNewsFeedGroupEntityByName(gn).executeAsOneOrNull() }
+            val newsFeedGroupEntity = newsFeedConfiguration.parentGroupName?.let { gn -> dao.getNewsFeedGroupEntityByName(gn).executeAsOneOrNull() }
             if (newsFeedGroupEntity != null) {
                 val newsFeeds = newsFeedGroupEntity.newsFeeds.toMutableList()
                 newsFeeds.removeIf { nf -> nf.name == newsFeedConfiguration.name }
@@ -85,9 +85,9 @@ class DefaultNewsFeedConfigurationRepository(
         }
     }
 
-    override suspend fun upsertNewsFeedConfiguration(newsFeedConfiguration: NewsFeedConfigurationEntity): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
+    override suspend fun upsertNewsFeedConfiguration(newsFeedConfiguration: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         try {
-            val newsFeedGroupEntity = newsFeedConfiguration.groupName?.let { gn -> dao.getNewsFeedGroupEntityByName(gn).executeAsOneOrNull() }
+            val newsFeedGroupEntity = newsFeedConfiguration.parentGroupName?.let { gn -> dao.getNewsFeedGroupEntityByName(gn).executeAsOneOrNull() }
             if (newsFeedGroupEntity != null) {
                 val newsFeeds = newsFeedGroupEntity.newsFeeds.toMutableList()
                 newsFeeds.removeIf { nf -> nf.name == newsFeedConfiguration.name }
@@ -101,13 +101,13 @@ class DefaultNewsFeedConfigurationRepository(
         }
     }
 
-    override suspend fun editNewsFeedConfiguration(oldNewsFeedConfiguration: NewsFeedConfigurationEntity, newNewsFeedConfiguration: NewsFeedConfigurationEntity): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
+    override suspend fun editNewsFeedConfiguration(oldNewsFeedConfiguration: NewsFeedItem, newNewsFeedConfiguration: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         try {
-            val newsFeedGroupEntity = oldNewsFeedConfiguration.groupName?.let { gn -> dao.getNewsFeedGroupEntityByName(gn).executeAsOneOrNull() }
+            val newsFeedGroupEntity = oldNewsFeedConfiguration.parentGroupName?.let { gn -> dao.getNewsFeedGroupEntityByName(gn).executeAsOneOrNull() }
             if (newsFeedGroupEntity != null) {
                 val newsFeeds = newsFeedGroupEntity.newsFeeds.toMutableList()
                 newsFeeds.removeIf { nf -> nf.name == oldNewsFeedConfiguration.name }
-                if (newNewsFeedConfiguration.groupName == oldNewsFeedConfiguration.groupName) {
+                if (newNewsFeedConfiguration.parentGroupName == oldNewsFeedConfiguration.parentGroupName) {
                     newsFeeds += newNewsFeedConfiguration
                     dao.upsertNewsFeedGroup(newsFeedGroupEntity.copy(newsFeeds = newsFeeds))
                 }

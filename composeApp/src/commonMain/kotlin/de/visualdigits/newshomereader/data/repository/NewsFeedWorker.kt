@@ -34,7 +34,7 @@ class NewsFeedWorker(
                 val newsFeedGroups = feedConfigurationResult.data
                 val newsFeedConfigurations = newsFeedGroups.flatMap { nfg -> nfg.newsFeeds }
                 val result = feedRepository.refreshNewsFeeds(
-                    newsFeedConfigurations = newsFeedConfigurations,
+                    newsFeedItems = newsFeedConfigurations,
                     wifiOnly = wifiOnly,
                     keepReadArticlesInDays = keepReadArticles,
                     keepUnreadArticlesInDays = keepUnreadArticles,

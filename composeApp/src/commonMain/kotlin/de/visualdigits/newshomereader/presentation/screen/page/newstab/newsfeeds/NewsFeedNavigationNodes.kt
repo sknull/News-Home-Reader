@@ -1,23 +1,24 @@
 package de.visualdigits.newshomereader.presentation.screen.page.newstab.newsfeeds
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.common.presentation.components.container.VerticalCollapsibleBox
 import de.visualdigits.compose.resources.Res
-import de.visualdigits.compose.resources.icon_add_24px
+import de.visualdigits.compose.resources.icon_add_notes_24px
 import de.visualdigits.compose.resources.icon_delete_24px
+import de.visualdigits.compose.resources.icon_docs_add_on_24px
 import de.visualdigits.compose.resources.icon_edit_24px
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
@@ -28,154 +29,133 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun NewsFeedNavigationNodes(
+    modifier: Modifier = Modifier,
     state: NewsHomeReaderState,
-    isLandscape: Boolean,
     newsFeedGroups: List<NewsFeedGroup>,
+    scrollPosition: MutableMap<String, Pair<Int, Int?>>,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
-    newsFeedGroups.forEach { newsFeedGroup ->
-        VerticalCollapsibleBox(
-            modifier = Modifier
-                .fillMaxWidth(),
-            title = newsFeedGroup.name,
-            focusedBorderColor = Color.Transparent,
-            unfocusedBorderColor = Color.Transparent,
-            backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
-            shape = RectangleShape,
-            containerPadding = 0.dp,
-            onStateChange = { state ->
-                onAction(NewsHomeReaderAction.OnCollapsibleStateChange("group_${newsFeedGroup.name}", state))
-            },
-            isExpanded = state.collapsibleState["group_${newsFeedGroup.name}"] == true,
-            trailingIcon = {
-                if (state.isEditMode) {
-                    Row() {
-                        IndicatorButton(
-                            modifier = Modifier,
-                            width = 30.dp,
-                            height = 30.dp,
-                            padding = 2.dp,
-                            leadingIcon = painterResource(Res.drawable.icon_edit_24px)
-                        ) {
-                            onAction(NewsHomeReaderAction.OnEditNewsfeedGroupGroupClick(newsFeedGroup.name))
-                        }
-                        IndicatorButton(
-                            modifier = Modifier,
-                            width = 30.dp,
-                            height = 30.dp,
-                            padding = 2.dp,
-                            leadingIcon = painterResource(Res.drawable.icon_delete_24px)
-                        ) {
-                            onAction(NewsHomeReaderAction.OnDeleteNewsfeedGroupClick(newsFeedGroup.name))
-                        }
-                    }
-                }
-            },
-            content = {
-                if (isLandscape) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        NewsFeedItems(newsFeedGroup, state, onAction)
-
-                        if (state.isEditMode) {
-                            IndicatorButton(
-                                modifier = Modifier,
-                                width = 30.dp,
-                                height = 30.dp,
-                                padding = 2.dp,
-                                leadingIcon = painterResource(Res.drawable.icon_add_24px)
-                            ) {
-                                onAction(NewsHomeReaderAction.OnAddNewsFeedConfigurationClick(newsFeedGroup.name))
-                            }
-                        }
-                    }
-                } else {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
-                    ) {
-                        FlowRow(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                        ) {
-                            NewsFeedItems(newsFeedGroup, state, onAction)
-                        }
-
-                        if (state.isEditMode) {
-                            IndicatorButton(
-                                modifier = Modifier,
-                                width = 30.dp,
-                                height = 30.dp,
-                                padding = 2.dp,
-                                leadingIcon = painterResource(Res.drawable.icon_add_24px)
-                            ) {
-                                onAction(NewsHomeReaderAction.OnAddNewsFeedConfigurationClick(newsFeedGroup.name))
-                            }
-                        }
-                    }
-                }
+    Column() {
+        if (state.isEditMode) {
+            IndicatorButton(
+                modifier = Modifier,
+                width = 30.dp,
+                height = 30.dp,
+                padding = 2.dp,
+                leadingIcon = painterResource(Res.drawable.icon_add_notes_24px)
+            ) {
+                onAction(NewsHomeReaderAction.OnAddNewsfeedGroupGroupClick())
             }
-        )
+        }
+
+        PlatformVerticalScrollbarBox(
+            boxModifier = modifier
+                .width(500.dp),
+            scrollbarModifier = Modifier
+                .clip(MaterialTheme.shapes.small)
+                .width(10.dp)
+                .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
+            "newsfeed_navigation",
+            scrollPosition = scrollPosition,
+            onAction
+        ) {
+            newsFeedGroups.map { newsFeedGroup ->
+                Pair("newsfeed_navigation_${newsFeedGroup.name}", @Composable {
+                    NewsFeedGroupBox(newsFeedGroup, onAction, state)
+                })
+            }
+        }
     }
 }
 
 @Composable
-private fun NewsFeedItems(
+private fun NewsFeedGroupBox(
     newsFeedGroup: NewsFeedGroup,
-    state: NewsHomeReaderState,
-    onAction: (NewsHomeReaderAction) -> Unit
+    onAction: (NewsHomeReaderAction) -> Unit,
+    state: NewsHomeReaderState
 ) {
-    newsFeedGroup.newsFeeds.forEach { newsFeedConfiguration ->
-        Row(
-            modifier = Modifier,
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
-            verticalAlignment = Alignment.CenterVertically
+    VerticalCollapsibleBox(
+        modifier = Modifier
+            .fillMaxWidth(),
+        title = newsFeedGroup.name,
+        focusedBorderColor = Color.Transparent,
+        unfocusedBorderColor = Color.Transparent,
+        backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        shape = MaterialTheme.shapes.small,
+        onStateChange = { state ->
+            onAction(NewsHomeReaderAction.OnCollapsibleStateChange("group_${newsFeedGroup.name}", state))
+        },
+        isExpanded = state.collapsibleState["group_${newsFeedGroup.name}"] == true,
+        trailingIcon = {
+            if (state.isEditMode) {
+                Row() {
+                    IndicatorButton(
+                        modifier = Modifier,
+                        width = 30.dp,
+                        height = 30.dp,
+                        padding = 2.dp,
+                        leadingIcon = painterResource(Res.drawable.icon_edit_24px)
+                    ) {
+                        onAction(NewsHomeReaderAction.OnEditNewsfeedGroupGroupClick(newsFeedGroup.name))
+                    }
+
+                    IndicatorButton(
+                        modifier = Modifier,
+                        width = 30.dp,
+                        height = 30.dp,
+                        padding = 2.dp,
+                        leadingIcon = painterResource(Res.drawable.icon_delete_24px)
+                    ) {
+                        onAction(NewsHomeReaderAction.OnDeleteNewsfeedGroupClick(newsFeedGroup.name))
+                    }
+
+                    IndicatorButton(
+                        modifier = Modifier,
+                        width = 30.dp,
+                        height = 30.dp,
+                        padding = 2.dp,
+                        leadingIcon = painterResource(Res.drawable.icon_add_notes_24px)
+                    ) {
+                        onAction(NewsHomeReaderAction.OnAddNewsfeedGroupGroupClick(parentNewsFeedGroupName = newsFeedGroup.name))
+                    }
+                }
+            }
+        },
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
         ) {
-            IndicatorButton(
-                modifier = Modifier,
-                width = 200.dp - MaterialTheme.shapes.gap * 2,
-                height = 50.dp,
-                indicatorPosition = Alignment.CenterStart,
-                indicatorColor = MaterialTheme.colorScheme.onSurface,
-                text = newsFeedConfiguration.name,
-                textStyle = MaterialTheme.typography.bodySmall,
-                textAlign = TextAlign.Start,
-                buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
-                shape = MaterialTheme.shapes.extraSmall,
-                selected = state.currentFeedName == newsFeedConfiguration.name
-            ) {
-                onAction(
-                    NewsHomeReaderAction.OnNewsFeedClicked(
-                        feedName = newsFeedConfiguration.name,
-                        currentFeedConfiguration = newsFeedConfiguration
-                    )
-                )
+            newsFeedGroup.subGroups.forEach { subNewsFeedGroup ->
+                Pair("newsfeed_navigation_${newsFeedGroup.name}_${subNewsFeedGroup.name}", @Composable {
+                    NewsFeedGroupBox(subNewsFeedGroup, onAction, state)
+                })
             }
 
-            if (state.isEditMode) {
-                IndicatorButton(
-                    modifier = Modifier,
-                    width = 30.dp,
-                    height = 30.dp,
-                    padding = 2.dp,
-                    leadingIcon = painterResource(Res.drawable.icon_edit_24px)
-                ) {
-                    onAction(NewsHomeReaderAction.OnEditNewsFeedConfigurationClick(newsFeedConfiguration))
-                }
+            NewsFeedItems(newsFeedGroup, state, onAction)
 
-                IndicatorButton(
-                    modifier = Modifier,
-                    width = 30.dp,
-                    height = 30.dp,
-                    padding = 2.dp,
-                    leadingIcon = painterResource(Res.drawable.icon_delete_24px)
-                ) {
-                    onAction(NewsHomeReaderAction.OnDeleteNewsFeedConfigurationClick(newsFeedConfiguration))
+            if (state.isEditMode) {
+                Row() {
+                    IndicatorButton(
+                        modifier = Modifier,
+                        width = 30.dp,
+                        height = 30.dp,
+                        padding = 2.dp,
+                        leadingIcon = painterResource(Res.drawable.icon_add_notes_24px)
+                    ) {
+                        onAction(NewsHomeReaderAction.OnAddNewsfeedGroupGroupClick(parentNewsFeedGroupName = newsFeedGroup.parentGroupName))
+                    }
+
+                    IndicatorButton(
+                        modifier = Modifier,
+                        width = 30.dp,
+                        height = 30.dp,
+                        padding = 2.dp,
+                        leadingIcon = painterResource(Res.drawable.icon_docs_add_on_24px)
+                    ) {
+                        onAction(NewsHomeReaderAction.OnAddNewsFeedConfigurationClick("${newsFeedGroup.name}${newsFeedGroup.parentGroupName?.let{ pcn -> "_$pcn"}}"))
+                    }
                 }
             }
         }

@@ -10,7 +10,7 @@ import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
 import de.visualdigits.newshomereader.domain.util.decodeFromString
@@ -56,7 +56,7 @@ class MockFeedRepository(
     }
 
     override suspend fun refreshNewsFeeds(
-        newsFeedConfigurations: List<NewsFeedConfigurationEntity>,
+        newsFeedItems: List<NewsFeedItem>,
         wifiOnly: Boolean,
         keepReadArticlesInDays: Long,
         keepUnreadArticlesInDays: Long,

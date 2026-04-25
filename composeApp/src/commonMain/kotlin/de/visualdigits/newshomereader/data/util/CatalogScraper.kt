@@ -4,8 +4,8 @@ import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Document
 import com.fleeksoft.ksoup.nodes.Element
 import com.fleeksoft.ksoup.nodes.TextNode
-import de.visualdigits.newshomereader.domain.model.catalog.NewsCategory
-import de.visualdigits.newshomereader.domain.model.catalog.NewsFeed
+import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogCategory
+import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalog
 import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
@@ -37,21 +37,21 @@ object CatalogScraper {
         }
         val json = jsonMapper.encodeToString(newsCatalog)
 
-        val directory = Paths.get(File(".").canonicalPath, "src/commonMain/resources").toFile()
+        val directory = Paths.get(File(".").canonicalPath, "src/commonMain/composeResources/files").toFile()
         if (!directory.exists()) {
             if (!directory.mkdirs()) {
                 log.e("Could not create catalog directory")
             }
         }
         val targetFile =
-            File(directory, "catalog.json")
+            File(directory, "composeResources/files/catalog.json")
         targetFile.writeText(json)
     }
 
     private suspend fun scrapeMainCategories(
         httpClient: HttpClient,
         baseUrl: String
-    ): List<NewsCategory> {
+    ): List<NewsFeedCatalogCategory> {
         log.i("Scraping toplevel categories")
         return readUrl(httpClient, baseUrl)
             ?.let { html ->
@@ -61,7 +61,7 @@ object CatalogScraper {
                         val a = elem.selectFirst("> a")
                         val name = a?.attr("title") ?: ""
                         val categoryPageUrl = makeUrlAbsolute(baseUrl, a?.attr("href") ?: "")
-                        NewsCategory(
+                        NewsFeedCatalogCategory(
                             name = name,
                             url = categoryPageUrl,
                             subCategories = scrapeSubCategories(
@@ -78,7 +78,7 @@ object CatalogScraper {
         httpClient: HttpClient,
         rootUrl: String,
         baseUrl: String
-    ): List<NewsCategory> {
+    ): List<NewsFeedCatalogCategory> {
         log.i("  Scraping sub categories for category $baseUrl")
         return readUrl(httpClient, baseUrl)
             ?.let { html ->
@@ -88,7 +88,7 @@ object CatalogScraper {
                         val a = li.select("a")
                         val subCategoryPageUrl = makeUrlAbsolute(baseUrl, a.attr("href"))
                         val categoryName = a.attr("title")
-                        NewsCategory(
+                        NewsFeedCatalogCategory(
                             name = categoryName,
                             url = subCategoryPageUrl,
                             feeds = scrapeFeeds(
@@ -107,7 +107,7 @@ object CatalogScraper {
         rootUrl: String,
         baseUrl: String,
         categoryName: String
-    ): List<NewsFeed> {
+    ): List<NewsFeedCatalogItem> {
         log.i("    Scraping feeds from category '$categoryName'")
 
         return readUrl(httpClient, baseUrl)
@@ -153,7 +153,7 @@ object CatalogScraper {
         doc: Document,
         categoryName: String,
         page: Int
-    ): List<NewsFeed> {
+    ): List<NewsFeedCatalogItem> {
         log.i("      Scraping feed page $page for category '$categoryName'")
         return (doc
             .selectFirst("div:containsOwn(Feeds)")?.parent()?.parent()?.parent()
@@ -171,7 +171,7 @@ object CatalogScraper {
             ?.mapNotNull { t ->
                 val feed = scrapeFeedUrl(httpClient, t.third)
                 if (feed != null) {
-                    NewsFeed(
+                    NewsFeedCatalogItem(
                         name = t.first,
                         descriptionShort = t.second,
                         descriptionLong = feed.first,

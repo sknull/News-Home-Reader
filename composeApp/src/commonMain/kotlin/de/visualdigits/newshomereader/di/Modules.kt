@@ -13,11 +13,13 @@ import de.visualdigits.newshomereader.data.database.mapper.stringListAdapter
 import de.visualdigits.newshomereader.data.database.mapper.subGroupsAdapter
 import de.visualdigits.newshomereader.data.http.HttpClientFactory
 import de.visualdigits.newshomereader.data.repository.DefaultArticleRepository
+import de.visualdigits.newshomereader.data.repository.DefaultCatalogRepository
 import de.visualdigits.newshomereader.data.repository.DefaultFeedRepository
 import de.visualdigits.newshomereader.data.repository.DefaultNewsFeedConfigurationRepository
 import de.visualdigits.newshomereader.data.repository.DefaultSettingsRepository
 import de.visualdigits.newshomereader.data.repository.NewsFeedWorker
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
+import de.visualdigits.newshomereader.domain.repository.CatalogRepository
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
 import de.visualdigits.newshomereader.domain.repository.NewsFeedConfigurationRepository
 import de.visualdigits.newshomereader.domain.repository.SettingsRepository
@@ -60,6 +62,7 @@ val sharedModule = module {
     singleOf(::DefaultNewsFeedConfigurationRepository).bind<NewsFeedConfigurationRepository>()
     singleOf(::DefaultArticleRepository).bind<ArticleRepository>()
     singleOf(::DefaultSettingsRepository).bind<SettingsRepository>()
+    singleOf(::DefaultCatalogRepository).bind<CatalogRepository>()
 
     single { NewsFeedWorker(
         feedRepository = get(),

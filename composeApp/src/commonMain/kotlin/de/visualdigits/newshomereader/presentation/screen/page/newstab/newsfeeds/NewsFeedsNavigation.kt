@@ -5,9 +5,8 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,6 +22,7 @@ import de.visualdigits.common.presentation.components.StudioClock
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_add_24px
+import de.visualdigits.compose.resources.icon_add_notes_24px
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.gap
@@ -33,44 +33,41 @@ fun NewsFeedsNavigation(
     state: NewsHomeReaderState,
     displayTheme: DisplayThemeEnum,
     isLandscape: Boolean,
+    scrollPosition: MutableMap<String, Pair<Int, Int?>>,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
     if (isLandscape) {
         if (state.collapsibleState["group_newsfeeds_navigation"] == true) {
-            Row(
+            Column(
                 modifier = Modifier
                     .fillMaxHeight()
+                    .width(if (state.isEditMode) 400.dp else 200.dp)
+                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                    .padding(MaterialTheme.shapes.gap)
+                    .animateContentSize(
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioNoBouncy,
+                            stiffness = Spring.StiffnessLow
+                        )
+                    ),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
             ) {
-                Column(
+                Box(
                     modifier = Modifier
-                        .fillMaxHeight()
-                        .width(if (state.isEditMode) 270.dp else 200.dp)
-                        .background(MaterialTheme.colorScheme.surfaceContainerLow)
-                        .padding(MaterialTheme.shapes.gap)
-                        .animateContentSize(
-                            animationSpec = spring(
-                                dampingRatio = Spring.DampingRatioNoBouncy,
-                                stiffness = Spring.StiffnessLow
-                            )
-                        ),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .fillMaxHeight(),
+                    contentAlignment = Alignment.BottomCenter
                 ) {
-                    if (state.isEditMode) {
-                        IndicatorButton(
-                            modifier = Modifier,
-                            width = 30.dp,
-                            height = 30.dp,
-                            padding = 2.dp,
-                            leadingIcon = painterResource(Res.drawable.icon_add_24px)
-                        ) {
-                            onAction(NewsHomeReaderAction.OnAddNewsfeedGroupGroupClick(true))
-                        }
+                    Box(
+                        modifier = Modifier
+                            .padding(bottom = 200.dp)
+                    ) {
+                        NewsFeedNavigationNodes(
+                            state = state,
+                            newsFeedGroups = state.newsFeedGroups,
+                            scrollPosition = scrollPosition,
+                            onAction = onAction
+                        )
                     }
-
-                    NewsFeedNavigationNodes(state, true, state.newsFeedGroups, onAction)
-
-                    Spacer(Modifier.weight(1f))
 
                     StudioClock(
                         modifier = Modifier
@@ -85,39 +82,26 @@ fun NewsFeedsNavigation(
         }
     } else {
         if (state.collapsibleState["group_newsfeeds_navigation"] == true) {
-            Row(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                    .padding(MaterialTheme.shapes.gap)
+                    .animateContentSize(
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioNoBouncy,
+                            stiffness = Spring.StiffnessLow
+                        )
+                    ),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.surfaceContainerLow)
-                        .padding(MaterialTheme.shapes.gap)
-                        .animateContentSize(
-                            animationSpec = spring(
-                                dampingRatio = Spring.DampingRatioNoBouncy,
-                                stiffness = Spring.StiffnessLow
-                            )
-                        ),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    if (state.isEditMode) {
-                        IndicatorButton(
-                            modifier = Modifier,
-                            width = 30.dp,
-                            height = 30.dp,
-                            padding = 2.dp,
-                            leadingIcon = painterResource(Res.drawable.icon_add_24px)
-                        ) {
-                            onAction(NewsHomeReaderAction.OnAddNewsfeedGroupGroupClick(true))
-                        }
-                    }
-
-                    NewsFeedNavigationNodes(state, false, state.newsFeedGroups, onAction)
-                }
+                NewsFeedNavigationNodes(
+                    state = state,
+                    newsFeedGroups = state.newsFeedGroups,
+                    scrollPosition = scrollPosition,
+                    onAction = onAction
+                )
             }
-            }
+        }
     }
 }

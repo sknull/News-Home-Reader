@@ -1,11 +1,13 @@
 package de.visualdigits.common.presentation.components.form
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
@@ -25,47 +27,49 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import de.visualdigits.common.domain.model.KeyValue
-import de.visualdigits.common.domain.model.configuration.Field
+import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.presentation.components.util.minimizedLabelHalfHeight
 import de.visualdigits.newshomereader.presentation.style.gap
-import org.jetbrains.compose.resources.stringResource
+import de.visualdigits.newshomereader.presentation.util.conditional
 
 @Composable
 fun SwitchBox(
-    field: Field<*, *, *>,
+    modifier: Modifier = Modifier,
+    label: String,
+    value: Any?,
     enabled: Boolean = true,
     fieldHeight: Dp,
-    finalUnfocusedBorderColor: Color,
     focusedBorderColor: Color,
+    unfocusedBorderColor: Color,
     buttonShape: Shape,
     textStyle: TextStyle,
-    onValueChange: (KeyValue) -> Unit
+    alignForForm: Boolean = true,
+    onValueChange: (Boolean) -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val booleanValue = when (val v = field.value) {
+    val booleanValue = when (val v = value) {
         is BooleanEnum -> v.booleanValue
         is Boolean -> v
         is String -> v.toBoolean()
         else -> false
     }
-    var checked by remember {
-        mutableStateOf(booleanValue)
-    }
+    var checked by remember { mutableStateOf(booleanValue) }
     val textFieldState = rememberTextFieldState(" ")
+    val halfHeight = minimizedLabelHalfHeight(textStyle)
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
+            .conditional(!alignForForm) { offset(y = halfHeight * -1.0f) }
     ) {
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(fieldHeight + minimizedLabelHalfHeight(textStyle)),
+                .height(fieldHeight + halfHeight),
             textStyle = textStyle,
             label = {
                 Text(
-                    text = stringResource(field.descriptor.label),
+                    text = label,
                     style = MaterialTheme.typography.bodySmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -82,7 +86,7 @@ fun SwitchBox(
                         checked = checked,
                         onCheckedChange = { v ->
                             checked = v
-                            onValueChange(KeyValue(field.descriptor, v.toString()))
+                            onValueChange(v)
                         },
                         interactionSource = interactionSource,
                         colors = SwitchDefaults.colors().copy(
@@ -97,7 +101,7 @@ fun SwitchBox(
                 }
             },
             colors = OutlinedTextFieldDefaults.colors(
-                unfocusedBorderColor = finalUnfocusedBorderColor,
+                unfocusedBorderColor = unfocusedBorderColor,
                 focusedBorderColor = focusedBorderColor
             )
         )

@@ -37,27 +37,18 @@ fun NewsContent(
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
     ) {
-        if (state.currentNewsArticle != null) {
-            state.currentNewsItem?.let { ni ->
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.TopCenter
-                ) {
-                    NewsArticleCard(
-                        modifier = Modifier
-                            .widthIn(max = 1000.dp),
-                        scrollPosition = viewModel.scrollPosition,
-                        maxWidth = mw,
-                        maxImageSize = maxImageSize,
-                        newsArticle = state.currentNewsArticle,
-                        settings = state.settings,
-                        uriHandler = uriHandler,
-                        newsItem = ni,
-                        onAction = onAction,
-                        connectivityManager = connectivityManager
-                    )
-                }
-            }
+        if (state.currentNewsArticle != null && state.currentNewsItem != null) {
+            NewsArticleCard(
+                scrollPosition = viewModel.scrollPosition,
+                maxWidth = mw,
+                maxImageSize = maxImageSize,
+                newsArticle = state.currentNewsArticle,
+                settings = state.settings,
+                uriHandler = uriHandler,
+                newsItem = state.currentNewsItem,
+                onAction = onAction,
+                connectivityManager = connectivityManager
+            )
         } else {
             NewsFeeds(
                 state = state,

@@ -12,7 +12,7 @@ import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.error_local_wrong_filetype
 import de.visualdigits.generated.AppVersion
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedConfiguration
-import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedConfigurationEntity
+import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedItem
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
@@ -27,10 +27,11 @@ import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
 import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
+import de.visualdigits.newshomereader.domain.repository.CatalogRepository
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
 import de.visualdigits.newshomereader.domain.repository.NewsFeedConfigurationRepository
 import de.visualdigits.newshomereader.domain.repository.SettingsRepository
@@ -62,6 +63,7 @@ class NewsHomeReaderViewModel(
     val articleRepository: ArticleRepository,
     val settingsRepository: SettingsRepository,
     val newsFeedConfigurationRepository: NewsFeedConfigurationRepository,
+    val catalogRepository: CatalogRepository,
 ) : ViewModel() {
 
     private val log = kermitLogger(this::class)
@@ -98,7 +100,7 @@ class NewsHomeReaderViewModel(
 
                                 // Auch das Filtern/Sichtbarkeit im Hintergrund berechnen
                                 val hideRead = _state.value.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
-                                val newsFeedConfiguration = _state.value.currentNewsFeedConfiguration
+                                val newsFeedConfiguration = _state.value.currentNewsFeedItem
                                 val visible = calculateVisibleNewsItems(enriched, hideRead, newsFeedConfiguration)
 
                                 // Paar aus beidem zurückgeben
@@ -218,7 +220,7 @@ class NewsHomeReaderViewModel(
             // NewsFeedConfiguration
             //
             is NewsHomeReaderAction.OnEditNewsFeedConfigurationClick -> {
-                val newsFeedConfiguration = action.originalNewsFeedConfiguration?.toNewsFeedConfiguration(state.value.newsFeedGroups)
+                val newsFeedConfiguration = action.originalNewsFeedItem?.toNewsFeedConfiguration(state.value.newsFeedGroups)
                 _state.update {
                     it.copy(
                         isEditingNewsFeedConfiguration = true,
@@ -255,7 +257,7 @@ class NewsHomeReaderViewModel(
                 }
             }
             is NewsHomeReaderAction.OnAddNewsFeedConfigurationOkClick -> {
-                upsertNewsFeedConfiguration(action.newsFeedConfiguration)
+                upsertNewsFeedConfiguration(action.newsFeedConfiguration?.toNewsFeedItem())
             }
             is NewsHomeReaderAction.OnAddNewsFeedConfigurationCancelClick -> {
                 _state.update {
@@ -280,12 +282,12 @@ class NewsHomeReaderViewModel(
                         isAddingNewsFeedGroup = false,
                         isEditingNewsFeedGroup = false,
                         isDeletingNewsFeedConfiguration = true,
-                        deleteNewsFeedConfiguration = action.newsFeedConfiguration
+                        deleteNewsFeedItem = action.newsFeedItem
                     )
                 }
             }
             is NewsHomeReaderAction.OnDeleteNewsFeedConfigurationOkClick -> {
-                deleteNewsFeedConfiguration(state.value.deleteNewsFeedConfiguration)
+                deleteNewsFeedItem(state.value.deleteNewsFeedItem)
             }
             is NewsHomeReaderAction.OnNewsFeedConfigurationOkClick -> {
                 _state.update {
@@ -341,6 +343,7 @@ class NewsHomeReaderViewModel(
             is NewsHomeReaderAction.OnAddNewsfeedGroupGroupClick -> {
                 _state.update {
                     it.copy(
+                        parentNewsFeedGroupName = action.parentNewsFeedGroupName,
                         originalNewsFeedGroupName = null,
                         currentNewsFeedGroupName = null,
                         isAddingNewsFeedGroup = true
@@ -348,7 +351,9 @@ class NewsHomeReaderViewModel(
                 }
             }
             is NewsHomeReaderAction.OnAddNewsFeedGroupOkClick -> {
-                addNewsFeedGroup(action.newsFeedGroupName)
+                addNewsFeedGroup(
+                    newsFeedGroupName = action.newsFeedGroupName
+                )
             }
             is NewsHomeReaderAction.OnAddNewsFeedGroupCancelClick -> {
                 _state.update {
@@ -390,7 +395,7 @@ class NewsHomeReaderViewModel(
             }
 
             is NewsHomeReaderAction.OnNewsFeedClicked -> {
-                loadFeedItems(action.feedName, action.currentFeedConfiguration)
+                loadFeedItems(action.feedName, action.currentFeedIItem)
             }
 
             is NewsHomeReaderAction.OnNewsItemClicked -> {
@@ -447,6 +452,23 @@ class NewsHomeReaderViewModel(
                 }
             }
 
+            is NewsHomeReaderAction.OnCatalogClicked -> {
+                loadCatalog(action.isExpanded)
+            }
+
+            is NewsHomeReaderAction.OnSubscriptionChanged -> {
+                maintainSubscription(action.newsFeedItem, action.subscribe)
+            }
+
+            is NewsHomeReaderAction.OnSearchTextChanged -> {
+                _state.update {
+                    it.copy(
+                        searchText = action.text
+                    )
+                }
+                filterCatalog(action.text)
+            }
+
             is NewsHomeReaderAction.OnScrollPositionChange -> {
                 scrollPosition[action.id] = Pair(action.position, action.offset)
             }
@@ -489,7 +511,6 @@ class NewsHomeReaderViewModel(
                     it.copy(
                         isEditingSettings = false,
                         isLoading = false,
-                        isConverting = false,
                         logs = listOf()
                     )
                 }
@@ -497,9 +518,16 @@ class NewsHomeReaderViewModel(
         }
     }
 
-    private fun addNewsFeedGroup(newsFeedGroupName: String) = viewModelScope.launch {
-        val addResult = newsFeedConfigurationRepository.upsertNewsFeedGroup(NewsFeedGroup(name = newsFeedGroupName))
-            if (addResult is Result.Success) {
+    private fun addNewsFeedGroup(
+        newsFeedGroupName: String
+    ) = viewModelScope.launch {
+        val addResult = newsFeedConfigurationRepository.upsertNewsFeedGroup(
+            NewsFeedGroup(
+                parentGroupName = state.value.parentNewsFeedGroupName,
+                name = newsFeedGroupName
+            )
+        )
+        if (addResult is Result.Success) {
                 _state.update {
                     it.copy(
                         isAddingNewsFeedGroup = false,
@@ -509,6 +537,23 @@ class NewsHomeReaderViewModel(
             } else if (addResult is Result.Error) {
                 log.e("Could not add newsfeed group '$newsFeedGroupName'", addResult.throwable)
             }
+    }
+
+    private fun maintainSubscription(newsFeedItem: NewsFeedItem, subscribe: Boolean) = viewModelScope.launch {
+        checkNotNull(newsFeedItem.parentGroupName) { "Newsitem has no group name"}
+        if (subscribe) {
+            newsFeedItem.parentGroupName
+            val getResult = newsFeedConfigurationRepository.getNewsFeedGroupByName(newsFeedItem.parentGroupName!!)
+            if (getResult is Result.Success) {
+                val newsFeedGroup = getResult.data
+                if (newsFeedGroup == null) {
+                    addNewsFeedGroup(newsFeedItem.parentGroupName!!)
+                }
+                upsertNewsFeedConfiguration(newsFeedItem)
+            }
+        } else {
+            deleteNewsFeedItem(newsFeedItem)
+        }
     }
 
     private fun editNewsFeedGroup(oldFeedGroupName: String, newNewsFeedGroupName: String) = viewModelScope.launch {
@@ -531,8 +576,8 @@ class NewsHomeReaderViewModel(
         }
     }
 
-    private fun upsertNewsFeedConfiguration(newsFeedConfiguration: NewsFeedConfiguration?) = viewModelScope.launch {
-        val addResult = newsFeedConfiguration?.toNewsFeedConfigurationEntity()
+    private fun upsertNewsFeedConfiguration(newsFeedItem: NewsFeedItem?) = viewModelScope.launch {
+        val addResult = newsFeedItem
             ?.let { nfc -> newsFeedConfigurationRepository.upsertNewsFeedConfiguration(nfc) }
         if (addResult is Result.Success) {
             _state.update {
@@ -543,19 +588,19 @@ class NewsHomeReaderViewModel(
                 )
             }
         } else if (addResult is Result.Error) {
-            log.e("Could not add newsfeed group '$newsFeedConfiguration'", addResult.throwable)
+            log.e("Could not add newsfeed item '${newsFeedItem.name}'", addResult.throwable)
         }
     }
 
     private fun editNewsFeedConfiguration(oldNewsFeedConfiguration: NewsFeedConfiguration?, newNewsFeedConfiguration: NewsFeedConfiguration?) = viewModelScope.launch {
-        val oldEntity = oldNewsFeedConfiguration?.toNewsFeedConfigurationEntity()
-        val newEntity = newNewsFeedConfiguration?.toNewsFeedConfigurationEntity()
+        val oldEntity = oldNewsFeedConfiguration?.toNewsFeedItem()
+        val newEntity = newNewsFeedConfiguration?.toNewsFeedItem()
         if (oldEntity != null && newEntity != null) {
             newsFeedConfigurationRepository.editNewsFeedConfiguration(oldEntity, newEntity)
                 .onSuccess { newsFeedGroups ->
                     _state.update {
                         it.copy(
-                            currentNewsFeedConfiguration = newEntity,
+                            currentNewsFeedItem = newEntity,
                             isAddingNewsFeedConfiguration = false,
                             isEditingNewsFeedConfiguration = false,
                             newsFeedGroups = newsFeedGroups,
@@ -597,9 +642,9 @@ class NewsHomeReaderViewModel(
         }
     }
 
-    private fun deleteNewsFeedConfiguration(newsFeedGroupConfiguration: NewsFeedConfigurationEntity?) = viewModelScope.launch {
-        if (newsFeedGroupConfiguration != null) {
-            val deleteResult = newsFeedGroupConfiguration?.let { nfc -> newsFeedConfigurationRepository.deleteNewsFeedConfiguration(nfc) }
+    private fun deleteNewsFeedItem(newsFeedItem: NewsFeedItem?) = viewModelScope.launch {
+        if (newsFeedItem != null) {
+            val deleteResult = newsFeedConfigurationRepository.deleteNewsFeedConfiguration(newsFeedItem)
             if (deleteResult is Result.Success) {
                 _state.update {
                     it.copy(
@@ -608,7 +653,7 @@ class NewsHomeReaderViewModel(
                     )
                 }
             } else if (deleteResult is Result.Error) {
-                log.e("Could not add newsfeed configuration '${newsFeedGroupConfiguration.name}'", deleteResult.throwable)
+                log.e("Could not add newsfeed configuration '${newsFeedItem.name}'", deleteResult.throwable)
             }
         }
     }
@@ -634,7 +679,7 @@ class NewsHomeReaderViewModel(
                         visibleNewsItems = calculateVisibleNewsItems(
                             newsItems = currentNewsItems,
                             hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-                            newNewsFeedConfiguration = it.currentNewsFeedConfiguration
+                            newNewsFeedConfiguration = it.currentNewsFeedItem
                         ),
                         newsFeedGroups = newsFeedGroups
                     )
@@ -776,7 +821,7 @@ class NewsHomeReaderViewModel(
                             visibleNewsItems = calculateVisibleNewsItems(
                                 newsItems = currentNewsItems,
                                 hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-                                newNewsFeedConfiguration = it.currentNewsFeedConfiguration
+                                newNewsFeedConfiguration = it.currentNewsFeedItem
                             ),
                             newsFeedGroups = newsFeedGroups
                         )
@@ -872,7 +917,7 @@ class NewsHomeReaderViewModel(
         }
     }
 
-    private suspend fun refreshNewsFeeds(newsFeedConfigurations: List<NewsFeedConfigurationEntity>): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> {
+    private suspend fun refreshNewsFeeds(newsFeedItems: List<NewsFeedItem>): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> {
         val wifiOnly = state.value.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
         val loadArticles = state.value.settings?.get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false
         val keepReadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue ?: 30
@@ -885,7 +930,7 @@ class NewsHomeReaderViewModel(
             .forEach { k -> scrollPosition[k] = Pair(0, 0)}
 
         return feedRepository.refreshNewsFeeds(
-            newsFeedConfigurations = newsFeedConfigurations,
+            newsFeedItems = newsFeedItems,
             wifiOnly = wifiOnly,
             keepReadArticlesInDays = keepReadArticles,
             keepUnreadArticlesInDays = keepUnreadArticles,
@@ -948,7 +993,7 @@ class NewsHomeReaderViewModel(
                             visibleNewsItems = calculateVisibleNewsItems(
                                 newsItems = newsFeed?.items ?: listOf(),
                                 hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-                                newNewsFeedConfiguration = it.currentNewsFeedConfiguration
+                                newNewsFeedConfiguration = it.currentNewsFeedItem
                             ),
                             currentNewsArticle = null,
                             isLoading = false,
@@ -991,18 +1036,66 @@ class NewsHomeReaderViewModel(
     ): Result<Unit, DataError.Remote> {
         return if (changed) {
             feedRepository.prefetchImages(
-                newsFeeds = newsFeeds
-            ) { progress, progressStage ->
+                newsFeeds = newsFeeds,
+                progress = { progress, progressStage ->
+                    _state.update {
+                        it.copy(
+                            currentProgress = progress,
+                            progressStage = progressStage
+                        )
+                    }
+                }
+            ).onSuccess {
                 _state.update {
                     it.copy(
-                        currentProgress = progress,
-                        progressStage = progressStage
+                        isLoading = false,
+                        currentProgress = 0.0f,
+                        progressStage = ProgressStage.NONE
+                    )
+                }
+            }
+            .onError { error, throwable ->
+                log.e("Could not refresh images", throwable)
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        uiMessage = error.toUiText(),
+                        uiMessageSeverity = Severity.Error,
+                        currentProgress = 0.0f,
+                        progressStage = ProgressStage.NONE
                     )
                 }
             }
         } else {
             Result.Success(Unit)
         }
+    }
+
+    private fun loadCatalog(isExpanded: Boolean) = viewModelScope.launch {
+        _state.update {
+            it.copy(
+                isLoading = true
+            )
+        }
+        catalogRepository.loadCatalog()
+            .onSuccess { newsFeedCatalog ->
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        isViewingCatalog = isExpanded,
+                        newsFeedCatalog = newsFeedCatalog,
+                        filteredCatalog = newsFeedCatalog
+                    )
+                }
+            }
+            .onError { _, throwable ->
+                log.e("Could not log catalog", throwable)
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                    )
+                }
+            }
     }
 
     private fun loadData() = viewModelScope.launch {
@@ -1091,12 +1184,12 @@ class NewsHomeReaderViewModel(
 
     private fun loadFeedItems(
         feedName: String?,
-        currentFeedConfiguration: NewsFeedConfigurationEntity
+        currentFeedItem: NewsFeedItem
     ) = viewModelScope.launch {
         _state.update {
             it.copy(
                 currentFeedName = feedName,
-                currentNewsFeedConfiguration = currentFeedConfiguration,
+                currentNewsFeedItem = currentFeedItem,
                 currentNewsArticle = null,
                 isLoading = false,
                 currentProgress = 0.0f,
@@ -1128,7 +1221,7 @@ class NewsHomeReaderViewModel(
                         visibleNewsItems = calculateVisibleNewsItems(
                             newsItems = newsItems,
                             hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false,
-                            newNewsFeedConfiguration = it.currentNewsFeedConfiguration
+                            newNewsFeedConfiguration = it.currentNewsFeedItem
                         ),
                     )
                 }
@@ -1169,7 +1262,7 @@ class NewsHomeReaderViewModel(
                     visibleNewsItems = calculateVisibleNewsItems(
                         newsItems = currentNewsItems,
                         hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false,
-                        newNewsFeedConfiguration = it.currentNewsFeedConfiguration
+                        newNewsFeedConfiguration = it.currentNewsFeedItem
                     ),
                     isLoading = false,
                     currentProgress = 0.0f,
@@ -1209,7 +1302,7 @@ class NewsHomeReaderViewModel(
                         visibleNewsItems = calculateVisibleNewsItems(
                             newsItems = it.currentNewsItems,
                             hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false,
-                            newNewsFeedConfiguration =it.currentNewsFeedConfiguration
+                            newNewsFeedConfiguration =it.currentNewsFeedItem
                         ),
                         isLoading = false,
                         currentProgress = 0.0f,
@@ -1234,7 +1327,36 @@ class NewsHomeReaderViewModel(
             }
     }
 
-    private fun calculateVisibleNewsItems(newsItems: List<NewsItem>, hideRead: Boolean, newNewsFeedConfiguration: NewsFeedConfigurationEntity?): List<NewsItem> {
+    private fun filterCatalog(query: String) {
+        val originalCatalog = _state.value.newsFeedCatalog ?: return
+        if (query.isBlank()) {
+            _state.update { it.copy(filteredCatalog = originalCatalog) }
+            return
+        }
+
+        val filtered = originalCatalog.copy(
+            categories = originalCatalog.categories.mapNotNull { category ->
+                val filteredSubs = category.subCategories.mapNotNull { sub ->
+                    val filteredFeeds = sub.feeds.filter { feed ->
+                        feed.name.contains(query, ignoreCase = true)
+                                || feed.descriptionShort.contains(query, ignoreCase = true)
+                                || feed.descriptionLong.contains(query, ignoreCase = true)
+                    }
+                    if (filteredFeeds.isNotEmpty() || sub.name.contains(query, ignoreCase = true)) {
+                        sub.copy(feeds = filteredFeeds)
+                    } else null
+                }
+                if (filteredSubs.isNotEmpty() || category.name.contains(query, ignoreCase = true)) {
+                    category.copy(subCategories = filteredSubs)
+                } else null
+            }
+        )
+        _state.update {
+            it.copy(filteredCatalog = filtered)
+        }
+    }
+
+    private fun calculateVisibleNewsItems(newsItems: List<NewsItem>, hideRead: Boolean, newNewsFeedConfiguration: NewsFeedItem?): List<NewsItem> {
         val stopWords = newNewsFeedConfiguration?.stopWords?:listOf()
         val sortedByDescending = newsItems
             .filter { item -> (!hideRead || !item.isRead)

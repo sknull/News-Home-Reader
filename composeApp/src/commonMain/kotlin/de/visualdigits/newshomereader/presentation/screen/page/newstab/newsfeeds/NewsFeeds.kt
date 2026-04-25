@@ -38,7 +38,13 @@ fun NewsFeeds(
                 .padding(MaterialTheme.shapes.gap),
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
         ) {
-            NewsFeedsNavigation(state, displayTheme, true, onAction)
+            NewsFeedsNavigation(
+                state = state,
+                displayTheme = displayTheme,
+                isLandscape = true,
+                scrollPosition = scrollPosition,
+                onAction = onAction
+            )
 
             NewsItemsList(
                 state = state,
@@ -59,7 +65,13 @@ fun NewsFeeds(
                 .padding(MaterialTheme.shapes.gap),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
         ) {
-            NewsFeedsNavigation(state, displayTheme, false, onAction)
+            NewsFeedsNavigation(
+                state = state,
+                displayTheme = displayTheme,
+                isLandscape = false,
+                scrollPosition = scrollPosition,
+                onAction = onAction
+            )
 
             NewsItemsList(
                 state = state,

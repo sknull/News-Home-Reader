@@ -4,8 +4,8 @@ import de.visualdigits.newshomereader.data.model.opml.Body
 import de.visualdigits.newshomereader.data.model.opml.Head
 import de.visualdigits.newshomereader.data.model.opml.Opml
 import de.visualdigits.newshomereader.data.model.opml.Outline
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 
 fun Opml.toNewsFeedConfiguration(): List<NewsFeedGroup> {
     return body?.outlines
@@ -21,12 +21,12 @@ fun Outline.toNewsFeedConfiguration(parent: Outline? = null, newsFeedGroups: Mut
         val parentName = parent?.title?.replace("\n", "")?.trim() ?: ""
         val group = newsFeedGroups[parentName]
         if (group != null) {
-            val node = NewsFeedConfigurationEntity(
+            val node = NewsFeedItem(
                 name = name,
-                groupName = parentName,
+                parentGroupName = parentName,
                 imageUrl = imageUrl,
                 url = xmlUrl?:"",
-                stopWords = stopWords?.split(",")?:listOf()
+                stopWords = if (stopWords?.isNotEmpty() == true) stopWords.split(",") else listOf()
             )
             newsFeedGroups[parentName] = group.copy(
                 newsFeeds = group.newsFeeds + node

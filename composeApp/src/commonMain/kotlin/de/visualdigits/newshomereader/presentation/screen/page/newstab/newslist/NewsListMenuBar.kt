@@ -96,7 +96,7 @@ fun NewsListMenuBar(
                 leadingIconTint = MaterialTheme.colorScheme.onSurface,
                 toolTip = stringResource(Res.string.tooltip_refresh_newsfeed),
             ) {
-                onAction(NewsHomeReaderAction.OnNewsFeedRefresh(state.currentFeedName, state.currentNewsFeedConfiguration?.url))
+                onAction(NewsHomeReaderAction.OnNewsFeedRefresh(state.currentFeedName, state.currentNewsFeedItem?.url))
             }
 
             Text(

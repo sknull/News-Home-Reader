@@ -11,6 +11,7 @@ import de.visualdigits.newshomereader.NewsFeedGroupEntity
 import de.visualdigits.newshomereader.NewsItemEntity
 import de.visualdigits.newshomereader.SettingsEntity
 import de.visualdigits.newshomereader.domain.model.applicationjson.AppJson
+import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
 import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NC
 import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.model.settings.SK
@@ -20,13 +21,14 @@ import de.visualdigits.newshomereader.domain.model.unified.FullArticle
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem
 import de.visualdigits.newshomereader.domain.model.unified.MediaType
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import kotlinx.serialization.json.Json
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+
 fun Settings.toSettingsEntity(): SettingsEntity {
     val settingsEntity = SettingsEntity(
         id = 0,
@@ -59,38 +61,51 @@ fun SettingsEntity.toSettings(): Settings {
     return settings
 }
 
+
 fun NewsFeedGroup.toNewsFeedGroupEntity(): NewsFeedGroupEntity {
     return NewsFeedGroupEntity(
         id = id,
+        parentId = parentId,
+        parentGroupName = parentGroupName,
         name = name,
         newsFeeds = newsFeeds,
-        subGroups = subGroups
+        subGroups = subGroups.map { sg -> sg.toNewsFeedGroupEntity() }
     )
 }
 
 fun NewsFeedGroupEntity.toNewsFeedGroup(): NewsFeedGroup {
     return NewsFeedGroup(
         id = id,
+        parentId = parentId,
+        parentGroupName = parentGroupName,
         name = name,
         newsFeeds = newsFeeds,
-        subGroups = subGroups
+        subGroups = subGroups.map { sg -> sg.toNewsFeedGroup() }
     )
 }
 
-fun NewsFeedConfiguration.toNewsFeedConfigurationEntity(): NewsFeedConfigurationEntity {
-    return NewsFeedConfigurationEntity(
+fun NewsFeedCatalogItem.toNewsFeedItem(): NewsFeedItem {
+    return NewsFeedItem(
+        name = "$name${parentCategoryName?.let{pcn -> "_$pcn"}}",
+        parentGroupName = parentCategoryName,
+        url = url
+    )
+}
+
+fun NewsFeedConfiguration.toNewsFeedItem(): NewsFeedItem {
+    return NewsFeedItem(
         name = get<String>(NC.feedName),
-        groupName = get<String>(NC.groupName),
+        parentGroupName = get<String>(NC.groupName),
         imageUrl = get<String>(NC.imageUrl),
         url = get<String>(NC.url),
         stopWords = get<List<String>>(NC.stopWords)
     )
 }
 
-fun NewsFeedConfigurationEntity.toNewsFeedConfiguration(newsFeedGroups: List<NewsFeedGroup>): NewsFeedConfiguration {
+fun NewsFeedItem.toNewsFeedConfiguration(newsFeedGroups: List<NewsFeedGroup>): NewsFeedConfiguration {
     val newsFeedConfiguration = NewsFeedConfiguration(newsFeedGroups = newsFeedGroups)
     newsFeedConfiguration.set(NC.feedName, name)
-    newsFeedConfiguration.set(NC.groupName, groupName)
+    newsFeedConfiguration.set(NC.groupName, parentGroupName)
     newsFeedConfiguration.set(NC.imageUrl, imageUrl)
     newsFeedConfiguration.set(NC.url, url)
     newsFeedConfiguration.set(NC.stopWords, stopWords)
@@ -186,19 +201,19 @@ val intAdapter = object : ColumnAdapter<Int, Long> {
     override fun encode(value: Int): Long = value.toLong()
 }
 
-val newsFeedsAdapter = object : ColumnAdapter<List<NewsFeedConfigurationEntity>, String> {
-    override fun decode(databaseValue: String): List<NewsFeedConfigurationEntity> =
+val newsFeedsAdapter = object : ColumnAdapter<List<NewsFeedItem>, String> {
+    override fun decode(databaseValue: String): List<NewsFeedItem> =
         if (databaseValue.isEmpty()) listOf() else Json.decodeFromString(databaseValue)
 
-    override fun encode(value: List<NewsFeedConfigurationEntity>): String =
+    override fun encode(value: List<NewsFeedItem>): String =
         Json.encodeToString(value)
 }
 
-val subGroupsAdapter = object : ColumnAdapter<List<NewsFeedGroup>, String> {
-    override fun decode(databaseValue: String): List<NewsFeedGroup> =
+val subGroupsAdapter = object : ColumnAdapter<List<NewsFeedGroupEntity>, String> {
+    override fun decode(databaseValue: String): List<NewsFeedGroupEntity> =
         if (databaseValue.isEmpty()) listOf() else Json.decodeFromString(databaseValue)
 
-    override fun encode(value: List<NewsFeedGroup>): String =
+    override fun encode(value: List<NewsFeedGroupEntity>): String =
         Json.encodeToString(value)
 }
 

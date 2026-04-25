@@ -1,10 +1,13 @@
 package de.visualdigits.newshomereader.presentation.screen.page
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,21 +21,28 @@ import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayTheme
 import de.visualdigits.common.domain.model.configuration.keyfactory.typography
 import de.visualdigits.common.presentation.components.BindBackHandler
 import de.visualdigits.common.presentation.components.container.ErrorCard
+import de.visualdigits.common.presentation.components.container.FlexibleSearchBar
 import de.visualdigits.newshomereader.data.repository.ConnectivityManager
+import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.screen.page.newstab.NewsContent
 import de.visualdigits.newshomereader.presentation.screen.page.settings.SettingsPage
 import de.visualdigits.newshomereader.presentation.style.MyShapes
+import de.visualdigits.newshomereader.presentation.style.gap
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.max
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainPage(
     onAction: (NewsHomeReaderAction) -> Unit,
     connectivityManager: ConnectivityManager
 ) {
+    val log = kermitLogger("MainPage")
+
+
     val viewModel: NewsHomeReaderViewModel = koinViewModel()
 
     val state by viewModel.state.collectAsState()
@@ -48,15 +58,15 @@ fun MainPage(
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background, MaterialTheme.shapes.small)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         val density = LocalDensity.current
-        val mw = maxWidth
-        val mh = maxHeight
+        val screenWidth = maxWidth
+        val screenHeight = maxHeight
 
         val sizeFactor = when {
-            mw < 500.dp -> 0.9f
-            mw > 1500.dp -> 1.5f
+            screenWidth < 500.dp -> 0.9f
+            screenWidth > 1500.dp -> 1.5f
             else -> 1.0f
         }
 
@@ -68,10 +78,10 @@ fun MainPage(
             ),
             shapes = MyShapes
         ) {
-            LaunchedEffect(mw, mh) {
+            LaunchedEffect(screenWidth, screenHeight) {
                 // Umrechnung von Dp in Pixel für Coil
-                val wPx = with(density) { mw.roundToPx() }
-                val hPx = with(density) { mh.roundToPx() }
+                val wPx = with(density) { screenWidth.roundToPx() }
+                val hPx = with(density) { screenHeight.roundToPx() }
                 onAction(NewsHomeReaderAction.UpdateMaxImageSize(state.settings, max(wPx, hPx)))
             }
 
@@ -79,7 +89,8 @@ fun MainPage(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(displayTheme.colorScheme.background)
-                    .safeDrawingPadding()
+                    .safeDrawingPadding(),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
             ) {
                 ErrorCard(
                     errorMessage = state.uiMessage,
@@ -99,22 +110,58 @@ fun MainPage(
                     SettingsPage(state, viewModel.scrollPosition, onAction)
                 } else if (state.isAddingNewsFeedConfiguration || state.isEditingNewsFeedConfiguration) {
                     NewsFeedConfigurationPage(state, viewModel, onAction)
-                } else {
+                } else if (state.isViewingCatalog) {
                     Column(
                         modifier = Modifier
-                            .fillMaxSize()
+                            .fillMaxSize(),
                     ) {
-                        NewsContent(
+                        FlexibleSearchBar(
+                            modifier = Modifier
+                                .fillMaxWidth(),
                             state = state,
-                            viewModel = viewModel,
-                            mw = mw,
-                            maxImageSize = maxImageSize,
+                            isLargeScreen = screenWidth > 100.dp,
+                            onQueryChange = { v ->
+                                onAction(NewsHomeReaderAction.OnSearchTextChanged(v))
+                            }
+                        ) {
+                            NewsFeedCatalog(
+                                modifier = Modifier,
+                                scrollPosition = viewModel.scrollPosition,
+                                catalog = state.filteredCatalog,
+                                state = state,
+                                uriHandler = uriHandler,
+                                displayTheme = displayTheme,
+                                onAction = onAction,
+                                onSubscriptionChanged = { newsFeedItem, subscribe ->
+                                    onAction(NewsHomeReaderAction.OnSubscriptionChanged(newsFeedItem, subscribe))
+                                }
+                            )
+                        }
+
+                        NewsFeedCatalog(
+                            modifier = Modifier,
+                            scrollPosition = viewModel.scrollPosition,
+                            catalog = state.newsFeedCatalog,
+                            state = state,
                             uriHandler = uriHandler,
+                            displayTheme = displayTheme,
                             onAction = onAction,
-                            connectivityManager = connectivityManager,
-                            displayTheme = displayTheme
+                            onSubscriptionChanged = { newsFeedItem, subscribe ->
+                                onAction(NewsHomeReaderAction.OnSubscriptionChanged(newsFeedItem, subscribe))
+                            }
                         )
                     }
+                } else {
+                    NewsContent(
+                        state = state,
+                        viewModel = viewModel,
+                        mw = screenWidth,
+                        maxImageSize = maxImageSize,
+                        uriHandler = uriHandler,
+                        onAction = onAction,
+                        connectivityManager = connectivityManager,
+                        displayTheme = displayTheme
+                    )
                 }
             }
 

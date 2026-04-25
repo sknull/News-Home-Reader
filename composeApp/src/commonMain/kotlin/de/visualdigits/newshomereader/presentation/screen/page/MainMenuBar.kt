@@ -24,6 +24,7 @@ import de.visualdigits.compose.resources.icon_article_24px
 import de.visualdigits.compose.resources.icon_edit_24px
 import de.visualdigits.compose.resources.icon_image_24px
 import de.visualdigits.compose.resources.icon_info_24px
+import de.visualdigits.compose.resources.icon_library_books_24px
 import de.visualdigits.compose.resources.icon_menu_24px
 import de.visualdigits.compose.resources.icon_refresh_24px
 import de.visualdigits.compose.resources.icon_settings_24px
@@ -73,6 +74,17 @@ fun MainMenuBar(
             leadingIconTint = MaterialTheme.colorScheme.onSurface
         ) {
             onAction(NewsHomeReaderAction.OnEditModeClick(!state.isEditMode))
+        }
+
+        IndicatorButton(
+            modifier = Modifier,
+            width = 30.dp,
+            height = 30.dp,
+            padding = 2.dp,
+            leadingIcon = painterResource(Res.drawable.icon_library_books_24px),
+            leadingIconTint = MaterialTheme.colorScheme.onSurface
+        ) {
+            onAction(NewsHomeReaderAction.OnCatalogClicked(!state.isViewingCatalog))
         }
 
         Spacer(Modifier.weight(1f))

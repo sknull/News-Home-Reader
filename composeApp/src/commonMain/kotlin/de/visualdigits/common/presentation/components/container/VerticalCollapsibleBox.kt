@@ -1,8 +1,7 @@
 package de.visualdigits.common.presentation.components.container
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -23,13 +22,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.UiPlatform
 import de.visualdigits.common.presentation.components.androidPlatform
@@ -48,7 +46,6 @@ fun VerticalCollapsibleBox(
     unfocusedBorderColor: Color = MaterialTheme.colorScheme.onSurface,
     backgroundColor: Color = MaterialTheme.colorScheme.surface,
     shape: Shape = MaterialTheme.shapes.small,
-    containerPadding: Dp = MaterialTheme.shapes.gap,
     onStateChange: (Boolean) -> Unit,
     iconTint: Color = MaterialTheme.colorScheme.onSurface,
     isExpanded: Boolean,
@@ -72,7 +69,6 @@ fun VerticalCollapsibleBox(
             focusedBorderColor = focusedBorderColor,
             backgroundColor = backgroundColor,
             shape = shape,
-            containerPadding = containerPadding,
             iconTint = iconTint,
             onStateChange = onStateChange,
             isExpanded = isExpanded,
@@ -90,7 +86,6 @@ fun VerticalCollapsibleBoxFull(
     focusedBorderColor: Color,
     backgroundColor: Color,
     shape: Shape,
-    containerPadding: Dp = MaterialTheme.shapes.gap,
     iconTint: Color = Color.White,
     onStateChange: (Boolean) -> Unit,
     isExpanded: Boolean,
@@ -102,13 +97,16 @@ fun VerticalCollapsibleBoxFull(
     BasicTextField(
         modifier = modifier
             .fillMaxWidth()
-            .clip(shape)
             .background(backgroundColor)
             .animateContentSize(
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioNoBouncy,
-                    stiffness = Spring.StiffnessLow
+                animationSpec = tween(
+                    durationMillis = 500,
+                    delayMillis = 0
                 )
+//                animationSpec = spring(
+//                    dampingRatio = Spring.DampingRatioNoBouncy,
+//                    stiffness = Spring.StiffnessLow
+//                )
             ),
         value = "",
         onValueChange = { },
@@ -119,19 +117,18 @@ fun VerticalCollapsibleBoxFull(
                 innerTextField = {
                     Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(shape)
-                            .pointerHoverIcon(PointerIcon.Hand)
-                            .clickable {
-                                onStateChange(!isExpanded)
-                            },
+                            .fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         // header row
                         Row(
                             modifier = Modifier
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
+                                .pointerHoverIcon(PointerIcon.Hand)
+                                .clickable {
+                                    onStateChange(!isExpanded)
+                                },
                             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
                             verticalAlignment = Alignment.CenterVertically
                         ) {

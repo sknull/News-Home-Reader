@@ -67,17 +67,17 @@ enum class DisplayThemeEnum(
         ),
         textLinkStyles = TextLinkStyles(
             style = SpanStyle(
-                color = Color(0xFFE67A2A),
+                color = Color(0xFF868686),
                 textDecoration = TextDecoration.Underline
             )
         ),
         textColor = Color(0xFFFFFFFF),
         studioClockColors = StudioClockColors(
-            colorHours = Color(0xFFC96012),
-            colorMinutes = Color(0xFFDCA175),
-            colorSeconds = Color(0xFFC96012),
-            colorTime = Color(0xFFC96012),
-            colorDate = Color(0xFFDCA175),
+            colorHours = Color(0xFF868686),
+            colorMinutes = Color(0xFFC6C2C2),
+            colorSeconds = Color(0xFF868686),
+            colorTime = Color(0xFF868686),
+            colorDate = Color(0xFFC6C2C2),
             colorBackground = Color(0xdd000000),
         )
     ),
@@ -209,8 +209,7 @@ enum class DisplayThemeEnum(
             onBackground = Color(0xFFFFFFFF),
 
             surface = Color.Transparent,
-
-            onSurface = Color(0xFFFFFFFF), // deco color
+            onSurface = Color(0xFF1B9EFF), // deco color
 
             inverseSurface = Color(0xFFFFFFFF),
             surfaceContainer = Color(0xFFFFFFFF),
@@ -257,8 +256,7 @@ enum class DisplayThemeEnum(
             onBackground = Color(0xFF000000),
 
             surface = Color.Transparent,
-
-            onSurface = Color(0xFF000000), // deco color
+            onSurface = Color(0xFF1B9EFF), // deco color
 
             inverseSurface = Color(0xFF000000),
             surfaceContainer = Color(0xFF000000),

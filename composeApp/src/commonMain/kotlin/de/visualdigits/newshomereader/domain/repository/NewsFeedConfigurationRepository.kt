@@ -2,8 +2,8 @@ package de.visualdigits.newshomereader.domain.repository
 
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedConfigurationEntity
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import nl.adaptivity.xmlutil.core.impl.multiplatform.InputStream
 import nl.adaptivity.xmlutil.core.impl.multiplatform.OutputStream
 
@@ -26,9 +26,9 @@ interface NewsFeedConfigurationRepository {
 
     suspend fun deleteNewsFeedGroup(newsFeedGroupName: String): Result<List<NewsFeedGroup>, DataError.Local>
 
-    suspend fun deleteNewsFeedConfiguration(newsFeedConfiguration: NewsFeedConfigurationEntity): Result<List<NewsFeedGroup>, DataError.Local>
+    suspend fun deleteNewsFeedConfiguration(newsFeedConfiguration: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local>
 
-    suspend fun upsertNewsFeedConfiguration(newsFeedConfiguration: NewsFeedConfigurationEntity): Result<List<NewsFeedGroup>, DataError.Local>
+    suspend fun upsertNewsFeedConfiguration(newsFeedConfiguration: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local>
 
-    suspend fun editNewsFeedConfiguration(oldNewsFeedConfiguration: NewsFeedConfigurationEntity, newNewsFeedConfiguration: NewsFeedConfigurationEntity): Result<List<NewsFeedGroup>, DataError.Local>
+    suspend fun editNewsFeedConfiguration(oldNewsFeedConfiguration: NewsFeedItem, newNewsFeedConfiguration: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local>
 }
