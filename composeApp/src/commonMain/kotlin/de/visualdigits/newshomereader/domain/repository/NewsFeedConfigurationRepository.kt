@@ -11,7 +11,7 @@ interface NewsFeedConfigurationRepository {
 
     suspend fun getNewsFeedGroups(): Result<List<NewsFeedGroup>, DataError.Local>
 
-    suspend fun getNewsFeedGroupByName(name: String): Result<NewsFeedGroup?, DataError.Local>
+    suspend fun getNewsFeedGroupByName(parentGroupName: String?, name: String): Result<NewsFeedGroup?, DataError.Local>
 
     suspend fun setNewsFeedGroups(newsFeedGroups: List<NewsFeedGroup>): Result<List<NewsFeedGroup>, DataError.Local>
 
@@ -24,11 +24,13 @@ interface NewsFeedConfigurationRepository {
 
     suspend fun upsertNewsFeedGroup(newsFeedGroup: NewsFeedGroup): Result<List<NewsFeedGroup>, DataError.Local>
 
+    suspend fun upsertNewsFeedGroupSingle(newsFeedGroup: NewsFeedGroup?): Result<NewsFeedGroup?, DataError.Local>
+
     suspend fun deleteNewsFeedGroup(newsFeedGroupName: String): Result<List<NewsFeedGroup>, DataError.Local>
 
-    suspend fun deleteNewsFeedConfiguration(newsFeedConfiguration: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local>
+    suspend fun deleteNewsFeedItem(newsFeedItem: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local>
 
-    suspend fun upsertNewsFeedConfiguration(newsFeedConfiguration: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local>
+    suspend fun upsertNewsFeedItem(newsFeedConfiguration: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local>
 
-    suspend fun editNewsFeedConfiguration(oldNewsFeedConfiguration: NewsFeedItem, newNewsFeedConfiguration: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local>
+    suspend fun editNewsFeedItem(oldNewsFeedConfiguration: NewsFeedItem, newNewsFeedConfiguration: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local>
 }

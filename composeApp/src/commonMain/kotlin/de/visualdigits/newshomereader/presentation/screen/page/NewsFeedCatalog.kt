@@ -34,9 +34,8 @@ import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
 import de.visualdigits.common.presentation.components.container.VerticalCollapsibleBox
-import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedItem
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalog
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
+import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.gap
@@ -50,8 +49,14 @@ fun NewsFeedCatalog(
     uriHandler: UriHandler,
     displayTheme: DisplayThemeEnum,
     onAction: (NewsHomeReaderAction) -> Unit,
-    onSubscriptionChanged: (NewsFeedItem, Boolean) -> Unit
+    onSubscriptionChanged: (NewsFeedCatalogItem, Boolean) -> Unit
 ) {
+    val rootLines = state.newsFeedGroups.flatMap { nfg ->
+        nfg.subGroups.flatMap { sg ->
+            sg.newsFeeds.map { f -> f.rootLine }
+        }
+    }
+
     PlatformVerticalScrollbarBox(
         boxModifier = modifier
             .fillMaxSize(),
@@ -161,12 +166,12 @@ fun NewsFeedCatalog(
                                             leadingContent = {},
                                             trailingContent = {
                                                 val interactionSource = remember { MutableInteractionSource() }
-                                                var checked by remember { mutableStateOf(false) }
+                                                var checked by remember { mutableStateOf(rootLines.contains(feed.rootLine)) }
                                                 Switch(
                                                     checked = checked,
                                                     onCheckedChange = { v ->
                                                         checked = v
-                                                        onSubscriptionChanged(feed.toNewsFeedItem(), v)
+                                                        onSubscriptionChanged(feed, v)
                                                     },
                                                     interactionSource = interactionSource,
                                                     colors = SwitchDefaults.colors().copy(

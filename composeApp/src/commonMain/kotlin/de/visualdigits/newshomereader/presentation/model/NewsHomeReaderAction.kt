@@ -2,6 +2,7 @@ package de.visualdigits.newshomereader.presentation.model
 
 import androidx.compose.runtime.Immutable
 import de.visualdigits.common.domain.model.KeyValue
+import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
 import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
@@ -138,11 +139,13 @@ sealed interface NewsHomeReaderAction {
     //
     @Immutable
     data class OnEditNewsfeedGroupGroupClick(
+        val originalRootNewsFeedGroupName: String?,
         val originalNewsFeedGroupName: String,
     ) : NewsHomeReaderAction
 
     @Immutable
     data class OnEditNewsFeedGroupOkClick(
+        val oldFeedRootGroupName: String?,
         val newsFeedGroupName: String
     ) : NewsHomeReaderAction
 
@@ -223,7 +226,7 @@ sealed interface NewsHomeReaderAction {
 
     @Immutable
     data class OnSubscriptionChanged(
-        val newsFeedItem: NewsFeedItem,
+        val newsFeedCatalogItem: NewsFeedCatalogItem,
         val subscribe: Boolean
     ): NewsHomeReaderAction
 

@@ -17,4 +17,8 @@ data class NewsFeedGroup(
         newsFeeds.forEach { f -> f.parentGroupName = name }
         subGroups.forEach { sc -> sc.parentGroupName = name }
     }
+
+    override fun toString(): String {
+        return "NewsFeedGroup(id=$id, name='$name', newsFeeds=$newsFeeds, subGroups=$subGroups)"
+    }
 }

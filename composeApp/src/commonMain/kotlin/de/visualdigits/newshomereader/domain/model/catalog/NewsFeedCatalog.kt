@@ -9,10 +9,4 @@ data class NewsFeedCatalog(
     val baseUrl: String,
     @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) val date: OffsetDateTime,
     val categories: List<NewsFeedCatalogCategory>
-) {
-    val categoryMap = categories.associate { category ->
-        Pair(category.name, category.subCategories.associate { subCategory ->
-            Pair(subCategory.name, subCategory.feeds.associateBy { feed -> feed.name })
-        })
-    }
-}
+)

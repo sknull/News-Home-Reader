@@ -11,6 +11,7 @@ import de.visualdigits.newshomereader.NewsFeedGroupEntity
 import de.visualdigits.newshomereader.NewsItemEntity
 import de.visualdigits.newshomereader.SettingsEntity
 import de.visualdigits.newshomereader.domain.model.applicationjson.AppJson
+import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogCategory
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
 import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NC
 import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NewsFeedConfiguration
@@ -69,7 +70,7 @@ fun NewsFeedGroup.toNewsFeedGroupEntity(): NewsFeedGroupEntity {
         parentGroupName = parentGroupName,
         name = name,
         newsFeeds = newsFeeds,
-        subGroups = subGroups.map { sg -> sg.toNewsFeedGroupEntity() }
+        subGroups = subGroups
     )
 }
 
@@ -80,15 +81,27 @@ fun NewsFeedGroupEntity.toNewsFeedGroup(): NewsFeedGroup {
         parentGroupName = parentGroupName,
         name = name,
         newsFeeds = newsFeeds,
-        subGroups = subGroups.map { sg -> sg.toNewsFeedGroup() }
+        subGroups = subGroups
     )
 }
 
 fun NewsFeedCatalogItem.toNewsFeedItem(): NewsFeedItem {
     return NewsFeedItem(
-        name = "$name${parentCategoryName?.let{pcn -> "_$pcn"}}",
-        parentGroupName = parentCategoryName,
+        name = name,
+        rootGroupName = parentCategory?.parentCategory?.name,
+        parentGroupName = parentCategory?.name,
         url = url
+    )
+}
+
+fun NewsFeedCatalogCategory.toNewsFeedGroup(): NewsFeedGroup {
+    return NewsFeedGroup(
+        id = 0L,
+        parentId = 0L,
+        parentGroupName = parentCategory?.name,
+        name = name,
+        newsFeeds = feeds.map { f -> f.toNewsFeedItem() },
+        subGroups = subCategories.map { sc -> sc.toNewsFeedGroup() }
     )
 }
 
@@ -209,11 +222,11 @@ val newsFeedsAdapter = object : ColumnAdapter<List<NewsFeedItem>, String> {
         Json.encodeToString(value)
 }
 
-val subGroupsAdapter = object : ColumnAdapter<List<NewsFeedGroupEntity>, String> {
-    override fun decode(databaseValue: String): List<NewsFeedGroupEntity> =
+val subGroupsAdapter = object : ColumnAdapter<List<NewsFeedGroup>, String> {
+    override fun decode(databaseValue: String): List<NewsFeedGroup> =
         if (databaseValue.isEmpty()) listOf() else Json.decodeFromString(databaseValue)
 
-    override fun encode(value: List<NewsFeedGroupEntity>): String =
+    override fun encode(value: List<NewsFeedGroup>): String =
         Json.encodeToString(value)
 }
 

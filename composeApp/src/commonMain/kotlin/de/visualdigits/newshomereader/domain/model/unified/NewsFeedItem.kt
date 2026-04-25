@@ -8,6 +8,7 @@ import java.io.File
 @Serializable
 @Immutable
 data class NewsFeedItem(
+    var rootGroupName: String? = null,
     var parentGroupName: String? = null,
     val name: String? = null,
     val imageUrl: String? = null,
@@ -30,6 +31,9 @@ data class NewsFeedItem(
             return mapper.decodeFromString(file.readText())
         }
     }
+
+    val rootLine: String
+        get() = "${rootGroupName?.let{"${it}_"}}${parentGroupName?.let{"${it}_"}}$name"
 
     override fun toString(): String {
         return "$name: $url"

@@ -76,6 +76,8 @@ data class NewsHomeReaderState(
     val deleteNewsFeedItem: NewsFeedItem? = null,
 
     val parentNewsFeedGroupName: String? = null,
+    val originalRootNewsFeedGroupName: String? = null,
     val originalNewsFeedGroupName: String? = null,
+    val currentRootNewsFeedGroupName: String? = null,
     val currentNewsFeedGroupName: String? = null
 )

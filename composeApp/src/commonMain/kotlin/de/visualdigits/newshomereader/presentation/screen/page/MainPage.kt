@@ -23,6 +23,7 @@ import de.visualdigits.common.presentation.components.BindBackHandler
 import de.visualdigits.common.presentation.components.container.ErrorCard
 import de.visualdigits.common.presentation.components.container.FlexibleSearchBar
 import de.visualdigits.newshomereader.data.repository.ConnectivityManager
+import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
 import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
@@ -132,8 +133,8 @@ fun MainPage(
                                 uriHandler = uriHandler,
                                 displayTheme = displayTheme,
                                 onAction = onAction,
-                                onSubscriptionChanged = { newsFeedItem, subscribe ->
-                                    onAction(NewsHomeReaderAction.OnSubscriptionChanged(newsFeedItem, subscribe))
+                                onSubscriptionChanged = { newsFeedCatalogItem, subscribe ->
+                                    onAction(NewsHomeReaderAction.OnSubscriptionChanged(newsFeedCatalogItem, subscribe))
                                 }
                             )
                         }
@@ -146,8 +147,8 @@ fun MainPage(
                             uriHandler = uriHandler,
                             displayTheme = displayTheme,
                             onAction = onAction,
-                            onSubscriptionChanged = { newsFeedItem, subscribe ->
-                                onAction(NewsHomeReaderAction.OnSubscriptionChanged(newsFeedItem, subscribe))
+                            onSubscriptionChanged = { newsFeedCatalogItem, subscribe ->
+                                onAction(NewsHomeReaderAction.OnSubscriptionChanged(newsFeedCatalogItem, subscribe))
                             }
                         )
                     }

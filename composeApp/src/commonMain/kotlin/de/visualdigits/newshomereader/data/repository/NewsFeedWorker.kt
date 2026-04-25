@@ -32,7 +32,9 @@ class NewsFeedWorker(
             if (feedConfigurationResult is Result.Success) {
                 log.i("Executing news feed worker")
                 val newsFeedGroups = feedConfigurationResult.data
-                val newsFeedConfigurations = newsFeedGroups.flatMap { nfg -> nfg.newsFeeds }
+                val newsFeedConfigurations = newsFeedGroups.flatMap { nfg ->
+                    nfg.newsFeeds + nfg.subGroups.flatMap { sg -> sg.newsFeeds }
+                }
                 val result = feedRepository.refreshNewsFeeds(
                     newsFeedItems = newsFeedConfigurations,
                     wifiOnly = wifiOnly,

@@ -10,6 +10,7 @@ import de.visualdigits.newshomereader.data.mapper.toAppJson
 import de.visualdigits.newshomereader.data.model.applicationjson.AppJsonDto
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
+import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
@@ -26,6 +27,8 @@ class DefaultArticleRepository(
     private val httpClient: HttpClient,
     private val dao: NewsHomeReaderDatabaseQueries
 ) : ArticleRepository {
+
+    val log = kermitLogger(DefaultArticleRepository::class)
 
     override suspend fun readFromFile(
         newsItem: NewsItem,
@@ -72,14 +75,18 @@ class DefaultArticleRepository(
         val words = htmlElement?.text()?.split("\\s+".toRegex())?.filter { it.isNotBlank() }
         val wordCount = words?.size?.toLong() ?: 0L
 
-        val applicationJson = rawHtml?.let { rh -> Ksoup.parse(rh) }
-            ?.select("script[type=application/ld+json]")
-            ?.map { script ->
-                val json = script.data()
-                val appJsonDto = AppJsonDto.decodeFromString(json)
-                appJsonDto.clazz = script.attr("class")
-                appJsonDto
-            }
+        val applicationJson = try {
+            rawHtml?.let { rh -> Ksoup.parse(rh) }
+                ?.select("script[type=application/ld+json]")
+                ?.map { script ->
+                    val json = script.data()
+                    val appJsonDto = AppJsonDto.decodeFromString(json)
+                    appJsonDto.clazz = script.attr("class")
+                    appJsonDto
+                }
+        } catch (e: Exception) {
+            null
+        }
 
         val newsArticle = applicationJson
             ?.find { script -> script.type?.lowercase() == "newsarticle" }

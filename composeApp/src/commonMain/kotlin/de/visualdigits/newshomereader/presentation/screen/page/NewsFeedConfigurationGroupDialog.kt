@@ -83,7 +83,7 @@ fun NewsFeedConfigurationGroupDialog(
                     if (state.isAddingNewsFeedGroup) {
                         onAction(NewsHomeReaderAction.OnAddNewsFeedGroupOkClick(currentNewsFeedGroupName))
                     } else if (state.isEditingNewsFeedGroup) {
-                        onAction(NewsHomeReaderAction.OnEditNewsFeedGroupOkClick(currentNewsFeedGroupName))
+                        onAction(NewsHomeReaderAction.OnEditNewsFeedGroupOkClick(state.originalRootNewsFeedGroupName, currentNewsFeedGroupName))
                     }
                 }
             },

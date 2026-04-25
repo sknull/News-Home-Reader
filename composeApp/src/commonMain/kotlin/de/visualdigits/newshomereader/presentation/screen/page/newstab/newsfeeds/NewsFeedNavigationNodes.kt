@@ -96,7 +96,7 @@ private fun NewsFeedGroupBox(
                         padding = 2.dp,
                         leadingIcon = painterResource(Res.drawable.icon_edit_24px)
                     ) {
-                        onAction(NewsHomeReaderAction.OnEditNewsfeedGroupGroupClick(newsFeedGroup.name))
+                        onAction(NewsHomeReaderAction.OnEditNewsfeedGroupGroupClick(state.originalRootNewsFeedGroupName,newsFeedGroup.name))
                     }
 
                     IndicatorButton(
@@ -128,9 +128,7 @@ private fun NewsFeedGroupBox(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
         ) {
             newsFeedGroup.subGroups.forEach { subNewsFeedGroup ->
-                Pair("newsfeed_navigation_${newsFeedGroup.name}_${subNewsFeedGroup.name}", @Composable {
-                    NewsFeedGroupBox(subNewsFeedGroup, onAction, state)
-                })
+                NewsFeedGroupBox(subNewsFeedGroup, onAction, state)
             }
 
             NewsFeedItems(newsFeedGroup, state, onAction)

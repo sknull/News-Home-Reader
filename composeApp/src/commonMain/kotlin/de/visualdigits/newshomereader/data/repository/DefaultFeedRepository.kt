@@ -4,7 +4,6 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import com.fleeksoft.ksoup.Ksoup
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
-import de.visualdigits.newshomereader.data.database.getAllNewsFeedGroups
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeed
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedEntity
 import de.visualdigits.newshomereader.data.database.mapper.toNewsItem
