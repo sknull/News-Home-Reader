@@ -8,11 +8,9 @@ import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.HttpRedirect
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
-import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.header
 import io.ktor.http.HttpHeaders
 import org.koin.core.module.Module
@@ -25,6 +23,8 @@ actual val platformModule: Module
         single<HttpClientEngine> {
             OkHttp.create {
                 config {
+                    followRedirects(false)
+                    followSslRedirects(false)
                     // limits parallel connections to avoid jam
                     dispatcher(okhttp3.Dispatcher().apply {
                         maxRequestsPerHost = 4
@@ -39,18 +39,23 @@ actual val platformModule: Module
                     connectTimeoutMillis = 10000
                     socketTimeoutMillis = 15000
                 }
-                install(Logging) {
-                    level = LogLevel.INFO
-                    logger = object : Logger {
-                        override fun log(message: String) {
-                            log.d(message)
-                        }
-                    }
+                install(HttpRedirect) {
+                    checkHttpMethod = false
+                    allowHttpsDowngrade = true
                 }
+//                install(Logging) {
+//                    level = LogLevel.NONE
+//                    logger = object : Logger {
+//                        override fun log(message: String) {
+//                            log.d(message)
+//                        }
+//                    }
+//                }
                 followRedirects = true
                 defaultRequest {
+                    header(HttpHeaders.Accept, "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
                     header(HttpHeaders.AcceptCharset, "utf-8")
-                    header(HttpHeaders.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0")
+                    header(HttpHeaders.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/150.0")
                 }
             }
         }

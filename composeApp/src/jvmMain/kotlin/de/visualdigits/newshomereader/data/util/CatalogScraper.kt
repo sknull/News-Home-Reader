@@ -4,9 +4,9 @@ import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Document
 import com.fleeksoft.ksoup.nodes.Element
 import com.fleeksoft.ksoup.nodes.TextNode
+import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalog
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogCategory
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
-import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalog
 import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
 import io.ktor.client.HttpClient
@@ -44,7 +44,7 @@ object CatalogScraper {
             }
         }
         val targetFile =
-            File(directory, "composeResources/files/catalog.json")
+            File(directory, "catalog.json")
         targetFile.writeText(json)
     }
 
@@ -215,14 +215,14 @@ object CatalogScraper {
             }
     }
 
-    private suspend fun readUrl(httpClient: HttpClient, url: String): String? {
-        delay(500.milliseconds) // anti anti scrape
+    suspend fun readUrl(httpClient: HttpClient, url: String): String? {
         return try {
-            httpClient
+            val response = httpClient
                 .get(urlString = url)
-                .bodyAsText()
+            val status = response.status
+            response.bodyAsText()
         } catch (e: Exception) {
-            log.e("Could not read from url: $url")
+            log.e("Could not read from url '$url' [${e.message}]")
             null
         }
     }

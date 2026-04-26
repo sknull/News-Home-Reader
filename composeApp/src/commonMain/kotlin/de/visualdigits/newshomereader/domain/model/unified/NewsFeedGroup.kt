@@ -21,4 +21,22 @@ data class NewsFeedGroup(
     override fun toString(): String {
         return "NewsFeedGroup(id=$id, name='$name', newsFeeds=$newsFeeds, subGroups=$subGroups)"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is NewsFeedGroup) return false
+
+        return parentGroupName == other.parentGroupName &&
+                name == other.name &&
+                newsFeeds == other.newsFeeds &&
+                subGroups == other.subGroups
+    }
+
+    override fun hashCode(): Int {
+        var result = parentGroupName?.hashCode() ?: 0
+        result = 31 * result + name.hashCode()
+        result = 31 * result + newsFeeds.hashCode()
+        result = 31 * result + subGroups.hashCode()
+        return result
+    }
 }

@@ -1,10 +1,11 @@
 package de.visualdigits.newshomereader.domain.model.catalog
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 data class NewsFeedCatalogCategory(
-    var parentCategory: NewsFeedCatalogCategory? = null,
+    @Transient var parentCategory: NewsFeedCatalogCategory? = null,
     val name: String,
     val url: String,
     val feeds: List<NewsFeedCatalogItem> = listOf(),

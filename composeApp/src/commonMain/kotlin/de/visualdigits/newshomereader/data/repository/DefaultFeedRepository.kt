@@ -53,13 +53,6 @@ class DefaultFeedRepository(
 
     private val log = kermitLogger(this::class)
 
-    override suspend fun readFromFile(
-        feedName: String,
-        file: File
-    ): NewsFeed? = withContext(Dispatchers.IO) {
-        readFromString(feedName, file.readText())
-    }
-
     override suspend fun getFeedItemsByNewsFeedName(feedName: String): Result<List<NewsItem>, DataError.Remote> = withContext(Dispatchers.IO) {
         try {
             val data = dao.getAllNewsItemsByFeedName(feedName.trim().lowercase())
@@ -343,6 +336,13 @@ class DefaultFeedRepository(
         return Pair(newsItemsWithArticles, changed)
     }
 
+    override suspend fun readFromFile(
+        feedName: String,
+        file: File
+    ): NewsFeed? = withContext(Dispatchers.IO) {
+        readFromString(feedName, file.readText())
+    }
+
     override suspend fun readFromString(
         feedName: String?,
         xml: String?
@@ -374,8 +374,7 @@ class DefaultFeedRepository(
                 feed.toNewsFeed(feedName)
             }
             else -> {
-                log.e("Unsupported feed type '$feedType'")
-                null
+                null // Unsupported feed type
             }
         }
     }

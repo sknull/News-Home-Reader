@@ -30,19 +30,43 @@ data class NewsItem(
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (javaClass != other?.javaClass) return false
+        if (other !is NewsItem) return false
 
-        other as NewsItem
-
-        if (feedName != other.feedName) return false
-        if (identifier != other.identifier) return false
-
-        return true
+        return isRead == other.isRead &&
+                isChanged == other.isChanged &&
+                feedName == other.feedName &&
+                identifier == other.identifier &&
+                published == other.published &&
+                updated == other.updated &&
+                link == other.link &&
+                title == other.title &&
+                summary == other.summary &&
+                content == other.content &&
+                keywords == other.keywords &&
+                image == other.image &&
+                imageTitle == other.imageTitle &&
+                imageCaption == other.imageCaption &&
+                newsFeed == other.newsFeed &&
+                newsArticle == other.newsArticle
     }
 
     override fun hashCode(): Int {
-        var result = feedName.hashCode()
+        var result = isRead.hashCode()
+        result = 31 * result + isChanged.hashCode()
+        result = 31 * result + feedName.hashCode()
         result = 31 * result + identifier.hashCode()
+        result = 31 * result + published.hashCode()
+        result = 31 * result + updated.hashCode()
+        result = 31 * result + link.hashCode()
+        result = 31 * result + title.hashCode()
+        result = 31 * result + summary.hashCode()
+        result = 31 * result + content.hashCode()
+        result = 31 * result + keywords.hashCode()
+        result = 31 * result + image.hashCode()
+        result = 31 * result + imageTitle.hashCode()
+        result = 31 * result + imageCaption.hashCode()
+        result = 31 * result + (newsFeed?.hashCode() ?: 0)
+        result = 31 * result + (newsArticle?.hashCode() ?: 0)
         return result
     }
 }
