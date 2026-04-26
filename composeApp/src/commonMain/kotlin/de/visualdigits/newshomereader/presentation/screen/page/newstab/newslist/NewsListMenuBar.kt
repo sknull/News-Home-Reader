@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.presentation.components.button.IndicatorButton
@@ -36,7 +37,7 @@ import org.jetbrains.compose.resources.stringResource
 fun NewsListMenuBar(
     connectivityManager: ConnectivityManager,
     state: NewsHomeReaderState,
-    isLandscape: Boolean,
+    maxWidth: Dp,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
     Row(
@@ -86,22 +87,23 @@ fun NewsListMenuBar(
             }
 
             val wifiOnly = state.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
-            IndicatorButton(
-                modifier = Modifier,
-                enabled = !wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge,
-                width = 30.dp,
-                height = 30.dp,
-                padding = 2.dp,
-                leadingIcon = painterResource(Res.drawable.icon_refresh_24px),
-                leadingIconTint = MaterialTheme.colorScheme.onSurface,
-                toolTip = stringResource(Res.string.tooltip_refresh_newsfeed),
-            ) {
-                onAction(NewsHomeReaderAction.OnNewsFeedRefresh(state.currentFeedName, state.currentNewsFeedItem?.url))
+            if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
+                IndicatorButton(
+                    modifier = Modifier,
+                    width = 30.dp,
+                    height = 30.dp,
+                    padding = 2.dp,
+                    leadingIcon = painterResource(Res.drawable.icon_refresh_24px),
+                    leadingIconTint = MaterialTheme.colorScheme.onSurface,
+                    toolTip = stringResource(Res.string.tooltip_refresh_newsfeed),
+                ) {
+                    onAction(NewsHomeReaderAction.OnNewsFeedRefresh(state.currentFeedName, state.currentNewsFeedItem?.url))
+                }
             }
 
             Text(
                 text = state.currentFeedName,
-                style = if (isLandscape) MaterialTheme.typography.headlineMedium else  MaterialTheme.typography.headlineSmall,
+                style = if (maxWidth > 600.dp) MaterialTheme.typography.headlineMedium else  MaterialTheme.typography.headlineSmall,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )

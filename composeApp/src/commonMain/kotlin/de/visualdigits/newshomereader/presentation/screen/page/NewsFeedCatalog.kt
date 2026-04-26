@@ -66,6 +66,7 @@ fun NewsFeedCatalog(
             .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
         "catalog",
         scrollPosition = scrollPosition,
+        state,
         onAction = onAction
     ) {
         catalog?.categories?.sortedBy { c -> c.name.lowercase() }?.map { mainCategory ->

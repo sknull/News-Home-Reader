@@ -15,6 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.gap
 import kotlinx.coroutines.flow.collectLatest
 
@@ -24,6 +25,7 @@ actual fun PlatformVerticalScrollbarBox(
     scrollbarModifier: Modifier,
     scrollbarId: String,
     scrollPosition: MutableMap<String, Pair<Int, Int?>>,
+    state: NewsHomeReaderState,
     onAction: (NewsHomeReaderAction) -> Unit,
     rows: () -> List<Pair<String, @Composable () -> Unit>>
 ) {
@@ -35,6 +37,11 @@ actual fun PlatformVerticalScrollbarBox(
             initialFirstVisibleItemScrollOffset = scrollPosition[scrollbarId]?.second?:0
         )
 
+        LaunchedEffect(items.size) { // Reagiert, wenn sich die Anzahl der Items (Menü an/aus) ändert
+            if (state.collapsibleState["group_newsfeeds_navigation"] == true) {
+                lazyListState.animateScrollToItem(0)
+            }
+        }
         LaunchedEffect(lazyListState) {
             snapshotFlow {
                 // Wir beobachten zwei Werte gleichzeitig
@@ -45,24 +52,19 @@ actual fun PlatformVerticalScrollbarBox(
                     onAction(NewsHomeReaderAction.OnScrollPositionChange(scrollbarId, index, offset))
                 }
         }
-        Box(
-            modifier = Modifier
+        LazyColumn(
+            modifier = boxModifier
                 .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                .padding(MaterialTheme.shapes.gap),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
+            state = lazyListState
         ) {
-            LazyColumn(
-                modifier = boxModifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
-                    .padding(MaterialTheme.shapes.gap),
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
-                state = lazyListState
-            ) {
-                items(
-                    items = rows(),
-                    key = { row -> row.first }
-                ) {(_, rowContent) ->
-                    rowContent()
-                }
+            items(
+                items = rows(),
+                key = { row -> row.first }
+            ) {(_, rowContent) ->
+                rowContent()
             }
         }
     } else {

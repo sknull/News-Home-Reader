@@ -271,7 +271,7 @@ class DefaultFeedRepository(
     ): Pair<List<NewsItem>, Boolean> {
         return if (newsFeed != null) {
             val changedFeed = dao.upsertNewsFeed(newsFeed.toNewsFeedEntity())
-            var changedItems: Boolean = false
+            var changedItems = false
             val done = currentStep.incrementAndGet()
             progress(done.toFloat() / totalSteps, ProgressStage.LOAD_ARTICLES)
             val persistedNewsItems = newsFeed.items.map { newsItem ->
@@ -294,7 +294,7 @@ class DefaultFeedRepository(
         progress: (Float, ProgressStage) -> Unit
     ): Pair<List<NewsItem>, Boolean> {
         log.i("Loading articles")
-        var changed: Boolean = false
+        var changed = false
         val newsItemsWithArticles =  if (loadArticles) {
             coroutineScope {
                 val semaphore = Semaphore(5)

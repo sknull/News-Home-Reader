@@ -18,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
@@ -39,6 +38,7 @@ import de.visualdigits.compose.resources.icon_cancel_24px
 import de.visualdigits.compose.resources.icon_check_small_24px
 import de.visualdigits.compose.resources.ok
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.gap
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -61,6 +61,7 @@ fun ConfigurationEditForm(
     space: Dp = MaterialTheme.shapes.gap,
     onValueChange: (KeyValue) -> Unit,
     configuration: AbstractConfiguration<*,*>?,
+    state: NewsHomeReaderState,
     onCancelClick: () -> Unit,
     onOkClick: () -> Unit,
     onAction: (NewsHomeReaderAction) -> Unit,
@@ -76,6 +77,7 @@ fun ConfigurationEditForm(
             .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
         scrollbarId,
         scrollPosition = scrollPosition,
+        state,
         onAction
     ) {
         listOf(

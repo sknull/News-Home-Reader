@@ -1,18 +1,14 @@
 package de.visualdigits.newshomereader.presentation.screen.page.newstab.newsfeeds
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.common.presentation.components.container.VerticalCollapsibleBox
 import de.visualdigits.compose.resources.Res
@@ -26,50 +22,8 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.gap
 import org.jetbrains.compose.resources.painterResource
 
-
 @Composable
-fun NewsFeedNavigationNodes(
-    modifier: Modifier = Modifier,
-    state: NewsHomeReaderState,
-    newsFeedGroups: List<NewsFeedGroup>,
-    scrollPosition: MutableMap<String, Pair<Int, Int?>>,
-    onAction: (NewsHomeReaderAction) -> Unit
-) {
-    Column() {
-        if (state.isEditMode) {
-            IndicatorButton(
-                modifier = Modifier,
-                width = 30.dp,
-                height = 30.dp,
-                padding = 2.dp,
-                leadingIcon = painterResource(Res.drawable.icon_add_notes_24px)
-            ) {
-                onAction(NewsHomeReaderAction.OnAddNewsfeedGroupGroupClick())
-            }
-        }
-
-        PlatformVerticalScrollbarBox(
-            boxModifier = modifier
-                .width(500.dp),
-            scrollbarModifier = Modifier
-                .clip(MaterialTheme.shapes.small)
-                .width(10.dp)
-                .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
-            "newsfeed_navigation",
-            scrollPosition = scrollPosition,
-            onAction
-        ) {
-            newsFeedGroups.map { newsFeedGroup ->
-                Pair("newsfeed_navigation_${newsFeedGroup.name}", @Composable {
-                    NewsFeedGroupBox(newsFeedGroup, onAction, state)
-                })
-            }
-        }
-    }
-}
-
-@Composable
-private fun NewsFeedGroupBox(
+fun NewsFeedGroupBox(
     newsFeedGroup: NewsFeedGroup,
     onAction: (NewsHomeReaderAction) -> Unit,
     state: NewsHomeReaderState

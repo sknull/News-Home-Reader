@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.FileMode
 import de.visualdigits.common.domain.model.UiPlatform
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -26,6 +27,7 @@ expect fun PlatformVerticalScrollbarBox(
     scrollbarModifier: Modifier = Modifier,
     scrollbarId: String,
     scrollPosition: MutableMap<String, Pair<Int, Int?>>,
+    state: NewsHomeReaderState,
     onAction: (NewsHomeReaderAction) -> Unit,
     rows: () -> List<Pair<String, @Composable () -> Unit>>
 )

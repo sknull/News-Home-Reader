@@ -94,8 +94,8 @@ class CatalogScraperTest : KoinTest {
 
     private fun createValidationMap(): Map<String, Map<String, Map<String, String>>> {
         val validationMap = mutableMapOf<String, MutableMap<String, MutableMap<String, String>>>()
-        var mainCategory: String = ""
-        var subCategory: String = ""
+        var mainCategory = ""
+        var subCategory = ""
         File(ClassLoader.getSystemResource("catalog-validation-output.txt").toURI())
             .readLines()
             .forEach { line ->

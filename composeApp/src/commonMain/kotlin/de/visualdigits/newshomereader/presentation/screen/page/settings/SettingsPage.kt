@@ -63,6 +63,7 @@ fun SettingsPage(
                 )
             },
             configuration = state.settings,
+            state = state,
             onCancelClick = {
                 onAction(
                     NewsHomeReaderAction.OnEditSettingsCancelClick()

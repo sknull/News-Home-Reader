@@ -39,6 +39,7 @@ import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
 import org.jetbrains.compose.resources.painterResource
@@ -55,6 +56,7 @@ fun NewsArticleCard(
     settings: Settings?,
     uriHandler: UriHandler,
     newsItem: NewsItem,
+    state: NewsHomeReaderState,
     onAction: (NewsHomeReaderAction) -> Unit,
     connectivityManager: ConnectivityManager
 ) {
@@ -87,9 +89,19 @@ fun NewsArticleCard(
                     .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
                 "newsarticle_${newsArticle?.itemId}",
                 scrollPosition = scrollPosition,
+                state,
                 onAction
             ) {
                 listOf(
+                    Pair("feed_name", @Composable {
+                        newsItem.newsFeed?.feedName?.let { fn ->
+                            Text(
+                                modifier = Modifier,
+                                text = fn,
+                                style = if (maxWidth > 600.dp) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleSmall
+                            )
+                        }
+                    }),
                     Pair("title", @Composable {
                         Text(
                             modifier = Modifier,
@@ -134,7 +146,8 @@ fun NewsArticleCard(
                         val wifiOnly = settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
                         if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                             MediaItemButtons(
-                                mediaItems = (newsArticle?.videoItems ?: listOf()) + (newsArticle?.audioItems ?: listOf()),
+                                mediaItems = (newsArticle?.videoItems ?: listOf()) + (newsArticle?.audioItems
+                                    ?: listOf()),
                                 uriHandler = uriHandler,
                                 newsItem = newsItem
                             )

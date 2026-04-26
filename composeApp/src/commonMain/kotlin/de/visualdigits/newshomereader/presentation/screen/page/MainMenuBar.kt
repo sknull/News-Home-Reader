@@ -92,15 +92,17 @@ fun MainMenuBar(
         Box(
             contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator(
-                progress = { state.currentProgress },
-                modifier = Modifier
-                    .size(24.dp),
-                color = MaterialTheme.colorScheme.onSurface,
-                strokeWidth = ProgressIndicatorDefaults.CircularStrokeWidth,
-                trackColor = MaterialTheme.colorScheme.surfaceDim,
-                strokeCap = ProgressIndicatorDefaults.CircularDeterminateStrokeCap,
-            )
+            if (state.currentProgress > 0.0f) {
+                CircularProgressIndicator(
+                    progress = { state.currentProgress },
+                    modifier = Modifier
+                        .size(24.dp),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    strokeWidth = ProgressIndicatorDefaults.CircularStrokeWidth,
+                    trackColor = MaterialTheme.colorScheme.surfaceDim,
+                    strokeCap = ProgressIndicatorDefaults.CircularDeterminateStrokeCap,
+                )
+            }
 
             when (state.progressStage) {
                 ProgressStage.LOAD_ARTICLES -> Icon(
@@ -122,17 +124,18 @@ fun MainMenuBar(
         }
 
         val wifiOnly = state.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
-        IndicatorButton(
-            modifier = Modifier,
-            enabled = !wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge,
-            width = 30.dp,
-            height = 30.dp,
-            padding = 2.dp,
-            leadingIcon = painterResource(Res.drawable.icon_refresh_24px),
-            leadingIconTint = MaterialTheme.colorScheme.onSurface,
-            toolTip = stringResource(Res.string.tooltip_refresh_newsfeed),
-        ) {
-            onAction(NewsHomeReaderAction.OnNewsFeedsRefresh())
+        if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
+            IndicatorButton(
+                modifier = Modifier,
+                width = 30.dp,
+                height = 30.dp,
+                padding = 2.dp,
+                leadingIcon = painterResource(Res.drawable.icon_refresh_24px),
+                leadingIconTint = MaterialTheme.colorScheme.onSurface,
+                toolTip = stringResource(Res.string.tooltip_refresh_newsfeed),
+            ) {
+                onAction(NewsHomeReaderAction.OnNewsFeedsRefresh())
+            }
         }
 
         IndicatorButton(

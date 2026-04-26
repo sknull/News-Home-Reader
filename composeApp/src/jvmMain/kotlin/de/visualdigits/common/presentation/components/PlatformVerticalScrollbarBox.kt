@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.gap
 
 @Composable
@@ -26,6 +27,7 @@ actual fun PlatformVerticalScrollbarBox(
     scrollbarModifier: Modifier,
     scrollbarId: String,
     scrollPosition: MutableMap<String, Pair<Int, Int?>>,
+    state: NewsHomeReaderState,
     onAction: (NewsHomeReaderAction) -> Unit,
     rows: () -> List<Pair<String, @Composable () -> Unit>>
 ) {
