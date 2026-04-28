@@ -86,12 +86,21 @@ fun NewsFeedGroupEntity.toNewsFeedGroup(): NewsFeedGroup {
 }
 
 fun NewsFeedCatalogItem.toNewsFeedItem(): NewsFeedItem {
-    return NewsFeedItem(
-        name = name,
-        mainGroupName = parentCategory?.parentCategory?.name,
-        subGroupName = parentCategory?.name,
-        url = url
-    )
+    return if (parentCategory?.parentCategory != null) {
+        NewsFeedItem(
+            name = name,
+            mainGroupName = parentCategory?.parentCategory?.name?:error("No root category given"),
+            subGroupName = parentCategory?.name,
+            url = url
+        )
+    } else {
+        NewsFeedItem(
+            name = name,
+            mainGroupName = parentCategory?.name?:error("No parent category given"),
+            subGroupName = null,
+            url = url
+        )
+    }
 }
 
 fun NewsFeedCatalogCategory.toNewsFeedGroup(): NewsFeedGroup {
@@ -108,7 +117,7 @@ fun NewsFeedCatalogCategory.toNewsFeedGroup(): NewsFeedGroup {
 fun NewsFeedConfiguration.toNewsFeedItem(): NewsFeedItem {
     return NewsFeedItem(
         name = get<String>(NC.feedName),
-        mainGroupName = get<String>(NC.mainGroupName),
+        mainGroupName = get<String>(NC.mainGroupName)?:error("No main group given"),
         subGroupName = get<String>(NC.subGroupName),
         imageUrl = get<String>(NC.imageUrl),
         url = get<String>(NC.url),

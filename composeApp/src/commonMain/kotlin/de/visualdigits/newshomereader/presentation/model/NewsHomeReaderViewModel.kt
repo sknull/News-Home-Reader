@@ -335,12 +335,24 @@ class NewsHomeReaderViewModel(
                 }
             }
             is NewsHomeReaderAction.OnNewsFeedConfigurationValueChanged -> {
-                _state.update {
-                    val newsFeedConfiguration = action.newsFeedConfiguration?.copy(
-                        key = action.keyValue.descriptor.key as NC,
+                _state.update { state ->
+                    val key = action.keyValue.descriptor.key as NC
+                    var newsFeedConfiguration = action.newsFeedConfiguration?.copy(
+                        key = key,
                         value = action.keyValue.value
                     )
-                    it.copy(
+                    if (key == NC.mainGroupName) {
+                        val newMainGroupName = newsFeedConfiguration?.get<String>(NC.mainGroupName)?:""
+                        val newSubGroupName = newsFeedConfiguration?.mainNewsFeedGroupsMap
+                            ?.get(newMainGroupName)?.subGroups
+                            ?.map { sg ->  sg.name }
+                            ?.firstOrNull()
+                        newsFeedConfiguration = newsFeedConfiguration?.copy(
+                            key = NC.subGroupName,
+                            value = newSubGroupName
+                        )
+                    }
+                    state.copy(
                         editedNewsFeedConfiguration = newsFeedConfiguration,
                     )
                 }
@@ -353,15 +365,12 @@ class NewsHomeReaderViewModel(
                 _state.update {
                     it.copy(
                         isEditingNewsFeedGroup = true,
-                        originalRootNewsFeedGroupName = action.originalRootNewsFeedGroupName,
-                        originalNewsFeedGroupName = action.originalNewsFeedGroupName,
-                        currentRootNewsFeedGroupName = action.originalRootNewsFeedGroupName,
-                        currentNewsFeedGroupName = action.originalNewsFeedGroupName,
+                        originalNewsFeedGroup = action.originalNewsFeedGroup,
                     )
                 }
             }
             is NewsHomeReaderAction.OnEditNewsFeedGroupOkClick -> {
-                editNewsFeedGroup(oldFeedRootGroupName = state.value.originalRootNewsFeedGroupName, oldFeedGroupName = state.value.originalNewsFeedGroupName?:"", newNewsFeedGroupName = action.newsFeedGroupName)
+                editNewsFeedGroup(newsFeedGroup = state.value.originalNewsFeedGroup, editedNewsFeedGroupName = action.editedNewsFeedGroupName)
             }
             is NewsHomeReaderAction.OnEditNewsFeedGroupCancelClick -> {
                 _state.update {
@@ -374,10 +383,9 @@ class NewsHomeReaderViewModel(
             is NewsHomeReaderAction.OnAddNewsfeedGroupGroupClick -> {
                 _state.update {
                     it.copy(
-                        parentNewsFeedGroupName = action.parentNewsFeedGroupName,
-                        originalNewsFeedGroupName = null,
-                        originalRootNewsFeedGroupName = null,
-                        currentNewsFeedGroupName = null,
+                        parentNewsFeedGroupName = action.newsFeedGroupName,
+                        originalNewsFeedGroup = null,
+                        currentNewsFeedGroup = null,
                         isAddingNewsFeedGroup = true
                     )
                 }
@@ -400,7 +408,7 @@ class NewsHomeReaderViewModel(
                 _state.update {
                     it.copy(
                         isDeletingNewsFeedGroup = false,
-                        currentNewsFeedGroupName = null
+                        currentNewsFeedGroup = null
                     )
                 }
             }
@@ -408,12 +416,12 @@ class NewsHomeReaderViewModel(
                 _state.update {
                     it.copy(
                         isDeletingNewsFeedGroup = true,
-                        currentNewsFeedGroupName = action.newsFeedGroupName
+                        currentNewsFeedGroup = action.newsFeedGroup
                     )
                 }
             }
             is NewsHomeReaderAction.OnDeleteNewsfeedGroupOkClick -> {
-                deleteNewsFeedGroup(state.value.currentNewsFeedGroupName)
+                deleteNewsFeedGroup(state.value.currentNewsFeedGroup)
             }
 
             //
@@ -700,23 +708,24 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
         }
     }
 
-    private fun editNewsFeedGroup(oldFeedRootGroupName: String?, oldFeedGroupName: String, newNewsFeedGroupName: String) = viewModelScope.launch {
-        val getResult = newsFeedConfigurationRepository.getNewsFeedGroupByName(oldFeedRootGroupName, oldFeedGroupName)
-        if (getResult is Result.Success) {
-            val newsFeedGroup = getResult.data?.copy(name = newNewsFeedGroupName)?: NewsFeedGroup(name = newNewsFeedGroupName)
-            val upsertResult = newsFeedConfigurationRepository.upsertNewsFeedGroup(newsFeedGroup)
-            if (upsertResult is Result.Success) {
-                _state.update {
-                    it.copy(
-                        isEditingNewsFeedGroup = false,
-                        newsFeedGroups = upsertResult.data
-                    )
-                }
-            } else if (upsertResult is Result.Error) {
-                log.e("Could not upsertResult newsfeed group '$newNewsFeedGroupName'", upsertResult.throwable)
+    private fun editNewsFeedGroup(newsFeedGroup: NewsFeedGroup?, editedNewsFeedGroupName: String) = viewModelScope.launch {
+        val editResult = newsFeedConfigurationRepository.editNewsFeedGroup(newsFeedGroup, editedNewsFeedGroupName)
+        if (editResult is Result.Success) {
+            _state.update {
+                it.copy(
+                    isEditingNewsFeedGroup = false,
+                    newsFeedGroups = editResult.data
+                )
             }
-        } else if (getResult is Result.Error) {
-            log.e("Could not get old newsfeed group '$oldFeedGroupName'", getResult.throwable)
+        } else if (editResult is Result.Error) {
+            log.e("Could not get old newsfeed group '${newsFeedGroup?.name}'", editResult.throwable)
+            _state.update {
+                it.copy(
+                    isEditingNewsFeedGroup = false,
+                    uiMessage = editResult.error.toUiText(),
+                    uiMessageSeverity = Severity.Error
+                )
+            }
         }
     }
 
@@ -762,9 +771,9 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
         }
     }
 
-    private fun deleteNewsFeedGroup(newsFeedGroupName: String?) = viewModelScope.launch {
-        if (newsFeedGroupName != null) {
-            val deleteResult = newsFeedConfigurationRepository.deleteNewsFeedGroup(newsFeedGroupName)
+    private fun deleteNewsFeedGroup(newsFeedGroup: NewsFeedGroup?) = viewModelScope.launch {
+        if (newsFeedGroup != null) {
+            val deleteResult = newsFeedConfigurationRepository.deleteNewsFeedGroup(newsFeedGroup)
             if (deleteResult is Result.Success) {
                 _state.update {
                     it.copy(
@@ -774,7 +783,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                     )
                 }
             } else if (deleteResult is Result.Error) {
-                log.e("Could not add newsfeed group '$newsFeedGroupName'", deleteResult.throwable)
+                log.e("Could not add newsfeed group '${newsFeedGroup.name}'", deleteResult.throwable)
             }
         }
     }

@@ -38,7 +38,7 @@ fun NewsFeedConfigurationGroupDialog(
     val focusRequester = remember { FocusRequester() }
 
     if (state.isAddingNewsFeedGroup || state.isEditingNewsFeedGroup) {
-        var currentNewsFeedGroupName by remember { mutableStateOf<String>(state.originalNewsFeedGroupName?:"") }
+        var currentNewsFeedGroupName by remember { mutableStateOf<String>(state.originalNewsFeedGroup?.name?:"") }
         AlertDialog(
             modifier = Modifier
                 .border(1.dp, MaterialTheme.colorScheme.onSurface, MaterialTheme.shapes.small),
@@ -63,7 +63,7 @@ fun NewsFeedConfigurationGroupDialog(
                         .focusRequester(focusRequester)
                         .fillMaxWidth()
                         .height(70.dp),
-                    label = { Text(text = if (state.isAddingNewsFeedGroup) stringResource(Res.string.title_add_newsfeedgroup) else state.originalNewsFeedGroupName?:"") },
+                    label = { Text(text = if (state.isAddingNewsFeedGroup) stringResource(Res.string.title_add_newsfeedgroup) else state.originalNewsFeedGroup?.name?:"") },
                     value = currentNewsFeedGroupName,
                     shape = MaterialTheme.shapes.extraSmall,
                     onValueChange = { value -> currentNewsFeedGroupName = value },
@@ -83,7 +83,7 @@ fun NewsFeedConfigurationGroupDialog(
                     if (state.isAddingNewsFeedGroup) {
                         onAction(NewsHomeReaderAction.OnAddNewsFeedGroupOkClick(currentNewsFeedGroupName))
                     } else if (state.isEditingNewsFeedGroup) {
-                        onAction(NewsHomeReaderAction.OnEditNewsFeedGroupOkClick(state.originalRootNewsFeedGroupName, currentNewsFeedGroupName))
+                        onAction(NewsHomeReaderAction.OnEditNewsFeedGroupOkClick(state.originalNewsFeedGroup, currentNewsFeedGroupName))
                     }
                 }
             },

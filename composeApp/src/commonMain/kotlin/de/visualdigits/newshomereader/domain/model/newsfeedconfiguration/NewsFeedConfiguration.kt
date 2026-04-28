@@ -1,5 +1,6 @@
 package de.visualdigits.newshomereader.domain.model.newsfeedconfiguration
 
+import androidx.compose.runtime.Stable
 import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.AbstractConfiguration
 import de.visualdigits.common.domain.model.configuration.Field
@@ -23,20 +24,24 @@ import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import org.jetbrains.compose.resources.DrawableResource
 
+@Stable
 class NewsFeedConfiguration(
     fields: LinkedHashMap<NC, Field<*,*,NC>> = LinkedHashMap(),
     val newsFeedGroups: List<NewsFeedGroup>,
 ): AbstractConfiguration<NewsFeedConfiguration, NC>(fields) {
 
-    val newsFeedGroupMap: Map<String, Map<String, Map<String, NewsFeedItem>>>
-        get() {
-            return newsFeedGroups.associate { ng ->
-                Pair(ng.name, ng.subGroups.associate { sg ->
-                    Pair(sg.name, sg.newsFeeds.associateBy { f -> f.name!! }
-                    )
-                })
-            }
-        }
+    val mainNewsFeedGroupsMap: Map<String, NewsFeedGroup> = newsFeedGroups.associateBy { nfg -> nfg.name }
+
+    val subNewsFeedGroupsMap: Map<String, Map<String, NewsFeedGroup>> = newsFeedGroups.associate { nfg ->
+        Pair(nfg.name, nfg.subGroups.associateBy { sg -> sg.name })
+    }
+
+    val newsFeedItemsMap: Map<String, Map<String, Map<String, NewsFeedItem>>> = newsFeedGroups.associate { ng ->
+        Pair(ng.name, ng.subGroups.associate { sg ->
+            Pair(sg.name, sg.newsFeeds.associateBy { f -> f.name!! }
+            )
+        })
+    }
 
     override fun setupFields(): List<Field<*, *, NC>> {
         return listOf(
@@ -74,7 +79,7 @@ class NewsFeedConfiguration(
                     keyFactory = StringKeyFactory,
                     options = { configuration ->
                         val field = configuration.fields[NC.mainGroupName]
-                        newsFeedGroupMap[field?.value]
+                        newsFeedItemsMap[field?.value]
                             ?.keys
                             ?.map { nfg -> Triple<String, UiText?, DrawableResource?>(nfg, null, null) }
                             ?.sortedBy { t -> t.first }

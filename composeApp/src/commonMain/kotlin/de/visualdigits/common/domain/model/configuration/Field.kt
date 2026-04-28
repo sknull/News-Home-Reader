@@ -34,11 +34,11 @@ class Field<V : Any, S : Any, K : FieldKey<K>>(
 
     @Suppress("UNCHECKED_CAST")
     fun copyUnsafe(value: Any? = null): Field<V, S, K> {
-        return Field(descriptor.copy(), (value as? V)?:this.value, enabled, valid)
+        return Field(descriptor, (value as? V), enabled, valid)
     }
 
-    fun copy(value: V? = null): Field<V, S, K> {
-        return Field(descriptor, value?:this.value, enabled, valid)
+    fun copy(): Field<V, S, K> {
+        return Field(descriptor, value, enabled, valid)
     }
 
     @Suppress("UNCHECKED_CAST")

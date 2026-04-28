@@ -32,18 +32,4 @@ class EnumFieldDescriptor<V : Any, K : FieldKey<K>>(
     readOnly = readOnly,
     options = options,
     keyFactory = keyFactory
-) {
-    override fun copy(): EnumFieldDescriptor<V, K> {
-        return EnumFieldDescriptor(
-            fieldClass = fieldClass,
-            key = key,
-            label = label,
-            toolTip = toolTip,
-            visible = visible,
-            readOnly = readOnly,
-            options = options,
-            keyFactory = keyFactory
-        )
-    }
-}
-
+)

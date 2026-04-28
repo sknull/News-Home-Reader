@@ -43,6 +43,4 @@ abstract class AbstractFieldDescriptor<V : Any, S : Any, K : FieldKey<K>>(
 
     /** A factory class which handles conversion to and from string values. */
     val keyFactory: KeyFactory<V>
-) {
-    abstract fun copy(): AbstractFieldDescriptor<V, S, K>
-}
+)

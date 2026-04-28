@@ -6,6 +6,7 @@ import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
 import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import nl.adaptivity.xmlutil.core.impl.multiplatform.InputStream
@@ -139,14 +140,13 @@ sealed interface NewsHomeReaderAction {
     //
     @Immutable
     data class OnEditNewsfeedGroupGroupClick(
-        val originalRootNewsFeedGroupName: String?,
-        val originalNewsFeedGroupName: String,
+        val originalNewsFeedGroup: NewsFeedGroup,
     ) : NewsHomeReaderAction
 
     @Immutable
     data class OnEditNewsFeedGroupOkClick(
-        val oldFeedRootGroupName: String?,
-        val newsFeedGroupName: String
+        val originalNewsFeedGroup: NewsFeedGroup?,
+        val editedNewsFeedGroupName: String
     ) : NewsHomeReaderAction
 
     @Immutable
@@ -154,7 +154,7 @@ sealed interface NewsHomeReaderAction {
 
     @Immutable
     data class OnAddNewsfeedGroupGroupClick(
-        val parentNewsFeedGroupName: String? = null,
+        val newsFeedGroupName: String? = null,
     ) : NewsHomeReaderAction
 
     @Immutable
@@ -167,7 +167,7 @@ sealed interface NewsHomeReaderAction {
 
     @Immutable
     data class OnDeleteNewsfeedGroupClick(
-        val newsFeedGroupName: String
+        val newsFeedGroup: NewsFeedGroup
     ) : NewsHomeReaderAction
 
     @Immutable

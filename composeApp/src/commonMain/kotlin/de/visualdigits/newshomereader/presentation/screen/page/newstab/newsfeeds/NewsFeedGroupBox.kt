@@ -52,7 +52,7 @@ fun NewsFeedGroupBox(
                         padding = 2.dp,
                         leadingIcon = painterResource(Res.drawable.icon_edit_24px)
                     ) {
-                        onAction(NewsHomeReaderAction.OnEditNewsfeedGroupGroupClick(state.originalRootNewsFeedGroupName,newsFeedGroup.name))
+                        onAction(NewsHomeReaderAction.OnEditNewsfeedGroupGroupClick(newsFeedGroup))
                     }
 
                     IndicatorButton(
@@ -62,7 +62,7 @@ fun NewsFeedGroupBox(
                         padding = 2.dp,
                         leadingIcon = painterResource(Res.drawable.icon_delete_24px)
                     ) {
-                        onAction(NewsHomeReaderAction.OnDeleteNewsfeedGroupClick(newsFeedGroup.name))
+                        onAction(NewsHomeReaderAction.OnDeleteNewsfeedGroupClick(newsFeedGroup))
                     }
 
                     IndicatorButton(
@@ -72,7 +72,7 @@ fun NewsFeedGroupBox(
                         padding = 2.dp,
                         leadingIcon = painterResource(Res.drawable.icon_add_notes_24px)
                     ) {
-                        onAction(NewsHomeReaderAction.OnAddNewsfeedGroupGroupClick(parentNewsFeedGroupName = newsFeedGroup.name))
+                        onAction(NewsHomeReaderAction.OnAddNewsfeedGroupGroupClick(newsFeedGroupName = newsFeedGroup.name))
                     }
                 }
             }
@@ -98,7 +98,7 @@ fun NewsFeedGroupBox(
                         padding = 2.dp,
                         leadingIcon = painterResource(Res.drawable.icon_add_notes_24px)
                     ) {
-                        onAction(NewsHomeReaderAction.OnAddNewsfeedGroupGroupClick(parentNewsFeedGroupName = newsFeedGroup.parentGroupName))
+                        onAction(NewsHomeReaderAction.OnAddNewsfeedGroupGroupClick(newsFeedGroupName = newsFeedGroup.parentGroupName))
                     }
 
                     IndicatorButton(

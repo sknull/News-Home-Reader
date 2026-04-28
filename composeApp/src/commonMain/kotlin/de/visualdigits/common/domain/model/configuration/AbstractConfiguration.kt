@@ -51,7 +51,7 @@ abstract class AbstractConfiguration<T : AbstractConfiguration<T, K>, K : FieldK
             if (f.descriptor.key == key) {
                 newFields[f.descriptor.key] = f.copyUnsafe(f.fromString(value))
             } else {
-                newFields[f.descriptor.key] = f.copyUnsafe()
+                newFields[f.descriptor.key] = f.copy()
             }
         }
 

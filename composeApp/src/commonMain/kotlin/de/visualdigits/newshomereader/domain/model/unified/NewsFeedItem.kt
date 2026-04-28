@@ -1,14 +1,12 @@
 package de.visualdigits.newshomereader.domain.model.unified
 
-import androidx.compose.runtime.Immutable
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.io.File
 
 @Serializable
-@Immutable
 data class NewsFeedItem(
-    var mainGroupName: String? = null,
+    val mainGroupName: String,
     var subGroupName: String? = null,
     val name: String? = null,
     val imageUrl: String? = null,

@@ -14,7 +14,7 @@ data class NewsFeedGroup(
     val subGroups: List<NewsFeedGroup> = listOf()
 ) {
     init {
-        newsFeeds.forEach { f -> f.subGroupName = name }
+        newsFeeds.forEach { f ->  f.subGroupName = name }
         subGroups.forEach { sc -> sc.parentGroupName = name }
     }
 

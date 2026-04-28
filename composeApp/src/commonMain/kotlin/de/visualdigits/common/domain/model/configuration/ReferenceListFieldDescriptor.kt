@@ -34,17 +34,4 @@ class ReferenceListFieldDescriptor<V : Any, K : FieldKey<K>>(
     readOnly = readOnly,
     options = options as (AbstractConfiguration<*, *>) -> List<Triple<String, UiText?, DrawableResource?>>,
     keyFactory = keyFactory
-) {
-    override fun copy(): ReferenceListFieldDescriptor<V, K> {
-        return ReferenceListFieldDescriptor(
-            fieldClass = fieldClass,
-            key = key,
-            label = label,
-            toolTip = toolTip,
-            visible = visible,
-            readOnly = readOnly,
-            options = options,
-            keyFactory = keyFactory
-        )
-    }
-}
+)

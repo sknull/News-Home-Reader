@@ -34,18 +34,4 @@ class FileFieldDescriptor<K : FieldKey<K>>(
     readOnly = readOnly,
     options = options,
     keyFactory = FileKeyFactory
-) {
-    override fun copy(): FileFieldDescriptor<K> {
-        return FileFieldDescriptor(
-            key = key,
-            label = label,
-            toolTip = toolTip,
-            visible = visible,
-            readOnly = readOnly,
-            options = options,
-            fileMode = fileMode,
-            startDirectory = startDirectory
-        )
-    }
-}
-
+)

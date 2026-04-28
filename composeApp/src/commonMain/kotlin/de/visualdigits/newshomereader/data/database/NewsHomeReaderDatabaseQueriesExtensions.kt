@@ -9,9 +9,8 @@ import de.visualdigits.newshomereader.SettingsEntity
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
-import kotlinx.coroutines.withContext
 
-fun NewsHomeReaderDatabaseQueries.getNewsFeedGroups(): List<NewsFeedGroup> {
+fun NewsHomeReaderDatabaseQueries.getAllNewsFeedGroups(): List<NewsFeedGroup> {
     val childrenByParent = getAllNewsFeedGroupEntities()
         .executeAsList()
         .groupBy { it.parentId }

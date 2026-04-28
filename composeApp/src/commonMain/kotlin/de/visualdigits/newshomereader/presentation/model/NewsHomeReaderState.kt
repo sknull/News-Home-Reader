@@ -64,21 +64,21 @@ data class NewsHomeReaderState(
     val isEditMode: Boolean = false,
     val onlySubscribedFeeds: Boolean = false,
 
+    val parentNewsFeedGroupName: String? = null,
     val originalNewsFeedConfiguration: NewsFeedConfiguration? = null,
     val editedNewsFeedConfiguration: NewsFeedConfiguration? = null,
     val isEditingNewsFeedGroup: Boolean = false,
     val isAddingNewsFeedGroup: Boolean = false,
     val isDeletingNewsFeedGroup: Boolean = false,
 
+    val currentNewsFeedGroup: NewsFeedGroup? = null,
     val originalNewsFeedGroup: NewsFeedGroup? = null,
+    val editedNewsFeedGroup: NewsFeedGroup? = null,
+
     val isEditingNewsFeedConfiguration: Boolean = false,
     val isAddingNewsFeedConfiguration: Boolean = false,
     val isDeletingNewsFeedConfiguration: Boolean = false,
+
     val deleteNewsFeedItem: NewsFeedItem? = null,
 
-    val parentNewsFeedGroupName: String? = null,
-    val originalRootNewsFeedGroupName: String? = null,
-    val originalNewsFeedGroupName: String? = null,
-    val currentRootNewsFeedGroupName: String? = null,
-    val currentNewsFeedGroupName: String? = null
 )

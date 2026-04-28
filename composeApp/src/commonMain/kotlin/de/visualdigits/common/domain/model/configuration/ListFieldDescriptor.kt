@@ -34,18 +34,4 @@ open class ListFieldDescriptor<F : Any, K : FieldKey<K>>(
     readOnly = readOnly,
     options = options,
     keyFactory = keyFactory
-) {
-    override fun copy(): ListFieldDescriptor<F, K> {
-        return ListFieldDescriptor(
-            fieldClass = fieldClass,
-            key = key,
-            label = label,
-            toolTip = toolTip,
-            visible = visible,
-            readOnly = readOnly,
-            options = options,
-            keyFactory = keyFactory as KeyFactory<MutableList<MutableList<F>>>
-        ) as ListFieldDescriptor<F, K>
-    }
-}
-
+)
