@@ -8,6 +8,7 @@
   <string name="choose_file">Datei auswählen</string>
   <string name="close">Schließen</string>
   <string name="delete">Löschen</string>
+  <string name="dialog_title_export_pdf">PDF Datei exportieren</string>
   <string name="dialog_title_export_opml">OPML Datei exportieren</string>
   <string name="dialog_title_import_opml">OPML Datei wählen</string>
   <string name="dialog_title_export_settings">Einstellungen exportieren</string>
@@ -43,14 +44,13 @@
   <string name="label_delete_scene">Szene löschen</string>
   <string name="label_displayTheme">Oberflächen Thema</string>
   <string name="label_feedName">Feed Name</string>
-  <string name="label_groupName">Gruppen Name</string>
+  <string name="label_maingroupName">Gruppen Name</string>
+  <string name="label_subgroupName">Untergruppen Name</string>
   <string name="label_hide_read">Gelesene Verstecken</string>
   <string name="label_hostUrl">Host URL</string>
   <string name="label_imageUrl">Icon URL</string>
-  <string name="label_export_opml">OPML Exportieren</string>
-  <string name="label_import_opml">OPML Importieren</string>
-  <string name="label_export_settings">Einstellungen Exportieren</string>
-  <string name="label_import_settings">Einstellungen Importieren</string>
+  <string name="label_opml">OPML</string>
+  <string name="label_settings">Einstellungen</string>
   <string name="label_keep_read_articles">Behalte gelesene Artikel</string>
   <string name="label_keep_unread_articles">Behalte ungelesene Artikel</string>
   <string name="label_language">Sprache</string>
@@ -101,6 +101,7 @@
   <string name="tooltip_mark_read_older_2">Markiert alle Artikel als gelesen, die älter als zwei Tage sind</string>
   <string name="tooltip_open_chat">Chat in externem Browser öffnen</string>
   <string name="tooltip_open_link">Artikel in externem Browser öffnen</string>
+  <string name="tooltip_export_pdf">Artikel als PDF exportieren</string>
   <string name="tooltip_refresh_interval">Zeitabstand in Minuten, in dem die Feeds aktualisiert werden</string>
   <string name="tooltip_refresh_newsfeed">News Feed neu laden.</string>
   <string name="tooltip_refresh_wifi_only">Aktualisiere Feeds nur, wenn eine kostenfreie Verbindung verfügbar ist.</string>

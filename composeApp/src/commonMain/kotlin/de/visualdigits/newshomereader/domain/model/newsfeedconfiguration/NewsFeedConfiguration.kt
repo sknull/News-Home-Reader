@@ -10,21 +10,33 @@ import de.visualdigits.common.domain.model.configuration.keyfactory.StringKeyFac
 import de.visualdigits.common.domain.model.configuration.keyfactory.StringListKeyFactory
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.label_feedName
-import de.visualdigits.compose.resources.label_groupName
 import de.visualdigits.compose.resources.label_imageUrl
+import de.visualdigits.compose.resources.label_maingroupName
 import de.visualdigits.compose.resources.label_stopWords
+import de.visualdigits.compose.resources.label_subgroupName
 import de.visualdigits.compose.resources.label_url
 import de.visualdigits.compose.resources.tooltip_feedName
 import de.visualdigits.compose.resources.tooltip_imageUrl
 import de.visualdigits.compose.resources.tooltip_stopWords
 import de.visualdigits.compose.resources.tooltip_url
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import org.jetbrains.compose.resources.DrawableResource
 
 class NewsFeedConfiguration(
     fields: LinkedHashMap<NC, Field<*,*,NC>> = LinkedHashMap(),
     val newsFeedGroups: List<NewsFeedGroup>,
 ): AbstractConfiguration<NewsFeedConfiguration, NC>(fields) {
+
+    val newsFeedGroupMap: Map<String, Map<String, Map<String, NewsFeedItem>>>
+        get() {
+            return newsFeedGroups.associate { ng ->
+                Pair(ng.name, ng.subGroups.associate { sg ->
+                    Pair(sg.name, sg.newsFeeds.associateBy { f -> f.name!! }
+                    )
+                })
+            }
+        }
 
     override fun setupFields(): List<Field<*, *, NC>> {
         return listOf(
@@ -41,13 +53,32 @@ class NewsFeedConfiguration(
             Field(
                 descriptor = ReferenceListFieldDescriptor(
                     fieldClass = String::class,
-                    key = NC.groupName,
-                    label = Res.string.label_groupName,
+                    key = NC.mainGroupName,
+                    label = Res.string.label_maingroupName,
                     keyFactory = StringKeyFactory,
-                    options = {
+                    options = { configuration ->
                         newsFeedGroups
                             .map { nfg -> Triple<String, UiText?, DrawableResource?>(nfg.name, null, null) }
                             .sortedBy { t -> t.first }
+                    }
+                ),
+                valid = { value ->
+                    (value as? String)?.isNotBlank() == true
+                }
+            ),
+            Field(
+                descriptor = ReferenceListFieldDescriptor(
+                    fieldClass = String::class,
+                    key = NC.subGroupName,
+                    label = Res.string.label_subgroupName,
+                    keyFactory = StringKeyFactory,
+                    options = { configuration ->
+                        val field = configuration.fields[NC.mainGroupName]
+                        newsFeedGroupMap[field?.value]
+                            ?.keys
+                            ?.map { nfg -> Triple<String, UiText?, DrawableResource?>(nfg, null, null) }
+                            ?.sortedBy { t -> t.first }
+                            ?:listOf()
                     }
                 ),
                 valid = { value ->

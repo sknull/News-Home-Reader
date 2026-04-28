@@ -23,7 +23,7 @@ fun Outline.toNewsFeedConfiguration(parent: Outline? = null, newsFeedGroups: Mut
         if (group != null) {
             val node = NewsFeedItem(
                 name = name,
-                parentGroupName = parentName,
+                mainGroupName = parentName,
                 imageUrl = imageUrl,
                 url = xmlUrl?:"",
                 stopWords = if (stopWords?.isNotEmpty() == true) stopWords.split(",") else listOf()

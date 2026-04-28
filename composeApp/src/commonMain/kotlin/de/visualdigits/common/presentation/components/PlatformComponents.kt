@@ -8,7 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.FileMode
@@ -66,8 +68,9 @@ expect fun Modifier.platformFocus(
 
 @Composable
 expect fun PlatformFileChooser(
-    label: String,
-    buttonTextStyle: TextStyle,
+    label: String? = null,
+    buttonTextStyle: TextStyle = MaterialTheme.typography.labelMedium,
+    buttonTextAlign: TextAlign = TextAlign.Center,
     title: String,
     fileMode: FileMode,
     options: List<String> = listOf(),
@@ -75,14 +78,18 @@ expect fun PlatformFileChooser(
     buttonColor: Color = MaterialTheme.colorScheme.surface,
     buttonWidth: Dp = 120.dp,
     buttonHeight: Dp = 50.dp,
+    leadingIcon: Painter? = null,
+    leadingIconTint: Color = MaterialTheme.colorScheme.onSurface,
+    toolTip: String? = null,
     onCancel: (() -> Unit)? = null,
     onOk: (String, InputStream) -> Unit
 )
 
 @Composable
 expect fun PlatformFileSaver(
-    label: String,
-    buttonTextStyle: TextStyle,
+    label: String? = null,
+    buttonTextStyle: TextStyle = MaterialTheme.typography.labelMedium,
+    buttonTextAlign: TextAlign = TextAlign.Center,
     title: String,
     fileMode: FileMode,
     suggestedFileName: String,
@@ -90,6 +97,9 @@ expect fun PlatformFileSaver(
     buttonColor: Color = MaterialTheme.colorScheme.surface,
     buttonWidth: Dp = 120.dp,
     buttonHeight: Dp = 50.dp,
+    leadingIcon: Painter? = null,
+    leadingIconTint: Color = MaterialTheme.colorScheme.onSurface,
+    toolTip: String? = null,
     onCancel: (() -> Unit)? = null,
     onOk: (String, OutputStream) -> Unit
 )

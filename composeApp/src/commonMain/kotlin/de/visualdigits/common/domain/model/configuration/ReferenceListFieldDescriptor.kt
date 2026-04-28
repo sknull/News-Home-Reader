@@ -22,7 +22,7 @@ class ReferenceListFieldDescriptor<V : Any, K : FieldKey<K>>(
     visible: Boolean = true,
     readOnly: Boolean = false,
 
-    options: () -> List<Triple<String, UiText?, DrawableResource?>> = { listOf() },
+    options: (AbstractConfiguration<*, *>) -> List<Triple<String, UiText?, DrawableResource?>> = { listOf() },
 
     keyFactory: KeyFactory<V>
 ): AbstractFieldDescriptor<V, V, K>(
@@ -32,6 +32,19 @@ class ReferenceListFieldDescriptor<V : Any, K : FieldKey<K>>(
     toolTip = toolTip,
     visible = visible,
     readOnly = readOnly,
-    options = options,
+    options = options as (AbstractConfiguration<*, *>) -> List<Triple<String, UiText?, DrawableResource?>>,
     keyFactory = keyFactory
-)
+) {
+    override fun copy(): ReferenceListFieldDescriptor<V, K> {
+        return ReferenceListFieldDescriptor(
+            fieldClass = fieldClass,
+            key = key,
+            label = label,
+            toolTip = toolTip,
+            visible = visible,
+            readOnly = readOnly,
+            options = options,
+            keyFactory = keyFactory
+        )
+    }
+}

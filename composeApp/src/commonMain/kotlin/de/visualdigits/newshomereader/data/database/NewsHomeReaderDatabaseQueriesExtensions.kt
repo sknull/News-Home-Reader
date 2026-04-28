@@ -6,7 +6,41 @@ import de.visualdigits.newshomereader.NewsFeedGroupEntity
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.NewsItemEntity
 import de.visualdigits.newshomereader.SettingsEntity
+import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
+import de.visualdigits.newshomereader.domain.model.errorhandling.Result
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
+import kotlinx.coroutines.withContext
 
+fun NewsHomeReaderDatabaseQueries.getNewsFeedGroups(): List<NewsFeedGroup> {
+    val childrenByParent = getAllNewsFeedGroupEntities()
+        .executeAsList()
+        .groupBy { it.parentId }
+    return try {
+        childrenByParent[null]
+            ?.map { rootEntity ->
+                buildNodeRecursive(rootEntity, childrenByParent)
+            } ?: emptyList()
+    } catch (e: Exception) {
+        Result.Error(DataError.Local.UNKNOWN, e)
+        listOf()
+    }
+}
+
+private fun buildNodeRecursive(
+    currentEntity: NewsFeedGroupEntity,
+    childrenByParent: Map<Long?, List<NewsFeedGroupEntity>>
+): NewsFeedGroup {
+    val subGroups = childrenByParent[currentEntity.id]?.map { childEntity ->
+        buildNodeRecursive(childEntity, childrenByParent)
+    } ?: emptyList()
+
+    return NewsFeedGroup(
+        id = currentEntity.id,
+        name = currentEntity.name,
+        newsFeeds = currentEntity.newsFeeds,
+        subGroups = subGroups
+    )
+}
 
 fun NewsHomeReaderDatabaseQueries.upsertNewsFeedGroup(newsFeedGroupEntity: NewsFeedGroupEntity) {
     insertNewsFeedGroupEntity(

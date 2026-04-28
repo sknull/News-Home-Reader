@@ -44,9 +44,7 @@ fun SettingsPage(
 
         Spacer(Modifier.height(16.dp))
 
-        SettingsMenuBar(
-            onAction = onAction
-        )
+        SettingsMenuBar(onAction = onAction)
 
         Spacer(Modifier.height(16.dp))
 
@@ -62,7 +60,7 @@ fun SettingsPage(
                     )
                 )
             },
-            configuration = state.settings,
+            configuration = { state.settings!! },
             state = state,
             onCancelClick = {
                 onAction(

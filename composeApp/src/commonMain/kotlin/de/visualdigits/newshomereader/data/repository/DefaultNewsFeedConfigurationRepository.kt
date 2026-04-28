@@ -1,10 +1,9 @@
 package de.visualdigits.newshomereader.data.repository
 
-import de.visualdigits.newshomereader.NewsFeedGroupEntity
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
+import de.visualdigits.newshomereader.data.database.getNewsFeedGroups
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedGroup
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedGroupEntity
-import de.visualdigits.newshomereader.data.database.upsertNewsFeed
 import de.visualdigits.newshomereader.data.database.upsertNewsFeedGroup
 import de.visualdigits.newshomereader.data.mapper.toNewsFeedConfiguration
 import de.visualdigits.newshomereader.data.mapper.toOpml
@@ -12,8 +11,8 @@ import de.visualdigits.newshomereader.data.model.opml.Opml
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.repository.NewsFeedConfigurationRepository
 import de.visualdigits.newshomereader.domain.util.decodeFromString
 import de.visualdigits.newshomereader.domain.util.encodeToString
@@ -33,34 +32,12 @@ class DefaultNewsFeedConfigurationRepository(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 
     override suspend fun getNewsFeedGroups(): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
-        val childrenByParent = dao.getAllNewsFeedGroupEntities()
-            .executeAsList()
-            .groupBy { it.parentId }
         try {
-            val data = childrenByParent[null]
-                ?.map { rootEntity ->
-                    buildNodeRecursive(rootEntity, childrenByParent)
-                } ?: emptyList()
+            val data = dao.getNewsFeedGroups()
             Result.Success(data)
         } catch (e: Exception) {
             Result.Error(DataError.Local.UNKNOWN, e)
         }
-    }
-
-    private fun buildNodeRecursive(
-        currentEntity: NewsFeedGroupEntity,
-        childrenByParent: Map<Long?, List<NewsFeedGroupEntity>>
-    ): NewsFeedGroup {
-        val subGroups = childrenByParent[currentEntity.id]?.map { childEntity ->
-            buildNodeRecursive(childEntity, childrenByParent)
-        } ?: emptyList()
-
-        return NewsFeedGroup(
-            id = currentEntity.id,
-            name = currentEntity.name,
-            newsFeeds = currentEntity.newsFeeds,
-            subGroups = subGroups
-        )
     }
 
     override suspend fun upsertNewsFeedGroup(newsFeedGroup: NewsFeedGroup): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
@@ -96,20 +73,14 @@ class DefaultNewsFeedConfigurationRepository(
 
     override suspend fun deleteNewsFeedItem(newsFeedItem: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         try {
-            val newsFeedGroupEntity = dao.getNewsFeedGroupEntityByName(newsFeedItem.parentGroupName!!, newsFeedItem.rootGroupName).executeAsOneOrNull()
+            val newsFeedGroupEntity = dao.getNewsFeedGroupEntityByName(
+                subGroupName = newsFeedItem.subGroupName!!,
+                mainGroupName = newsFeedItem.mainGroupName
+            ).executeAsOneOrNull()
             if (newsFeedGroupEntity != null) {
                 val newsFeeds = newsFeedGroupEntity.newsFeeds.toMutableList()
                 newsFeeds.removeIf { nf -> nf.name == newsFeedItem.name }
                 dao.upsertNewsFeedGroup(newsFeedGroupEntity.copy(newsFeeds = newsFeeds))
-                if (newsFeeds.isEmpty()) {
-                    deleteNewsFeedGroup(newsFeedGroupEntity.name)
-                    if (newsFeedGroupEntity.parentGroupName != null) {
-                        val rootEntity = dao.getNewsFeedGroupEntityByName(newsFeedGroupEntity.parentGroupName, null).executeAsOneOrNull()
-                        if (rootEntity != null && rootEntity.subGroups.isEmpty()) {
-                            deleteNewsFeedGroup(rootEntity.name)
-                        }
-                    }
-                }
             }
             Result.Success(dao.getAllNewsFeedGroupEntities().executeAsList().map { ni -> ni.toNewsFeedGroup() })
         } catch (e: Exception) {
@@ -129,8 +100,8 @@ class DefaultNewsFeedConfigurationRepository(
 
     override suspend fun upsertNewsFeedItem(newsFeedItem: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         try {
-            checkNotNull(newsFeedItem.parentGroupName) { "Newsfeeditem with name '${newsFeedItem.name}' has no group name" }
-            val newsFeedGroupEntity = dao.getNewsFeedGroupEntityByName(newsFeedItem.parentGroupName!!, newsFeedItem.rootGroupName).executeAsOneOrNull()
+            checkNotNull(newsFeedItem.subGroupName) { "Newsfeeditem with name '${newsFeedItem.name}' has no group name" }
+            val newsFeedGroupEntity = dao.getNewsFeedGroupEntityByName(newsFeedItem.subGroupName!!, newsFeedItem.mainGroupName).executeAsOneOrNull()
             if (newsFeedGroupEntity != null) {
                 val newsFeeds = newsFeedGroupEntity.newsFeeds.toMutableList()
                 newsFeeds.removeIf { nf -> nf.name == newsFeedItem.name }
@@ -144,18 +115,29 @@ class DefaultNewsFeedConfigurationRepository(
         }
     }
 
-    override suspend fun editNewsFeedItem(oldNewsFeedConfiguration: NewsFeedItem, newNewsFeedConfiguration: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
+    override suspend fun editNewsFeedItem(oldNewsFeedItem: NewsFeedItem, newNewsFeedItem: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         try {
-            val newsFeedGroupEntity = dao.getNewsFeedGroupEntityByName(oldNewsFeedConfiguration.parentGroupName!!, oldNewsFeedConfiguration.rootGroupName).executeAsOneOrNull()
-            if (newsFeedGroupEntity != null) {
-                val newsFeeds = newsFeedGroupEntity.newsFeeds.toMutableList()
-                newsFeeds.removeIf { nf -> nf.name == oldNewsFeedConfiguration.name }
-                if (newNewsFeedConfiguration.parentGroupName == oldNewsFeedConfiguration.parentGroupName) {
-                    newsFeeds += newNewsFeedConfiguration
-                    dao.upsertNewsFeedGroup(newsFeedGroupEntity.copy(newsFeeds = newsFeeds))
+            val oldNewsFeedGroupEntity = dao.getNewsFeedGroupEntityByName(
+                subGroupName = oldNewsFeedItem.subGroupName!!,
+                mainGroupName = oldNewsFeedItem.mainGroupName
+            ).executeAsOneOrNull()
+            val newNewsFeedGroupEntity = dao.getNewsFeedGroupEntityByName(
+                subGroupName = newNewsFeedItem.subGroupName!!,
+                mainGroupName = newNewsFeedItem.mainGroupName
+            ).executeAsOneOrNull()
+            if (newNewsFeedGroupEntity != null) {
+                if (oldNewsFeedGroupEntity != newNewsFeedGroupEntity) {
+                    val oldCopy = oldNewsFeedGroupEntity?.copy(newsFeeds = oldNewsFeedGroupEntity.newsFeeds - oldNewsFeedItem)
+                    val newCopy = newNewsFeedGroupEntity.copy(newsFeeds = newNewsFeedGroupEntity.newsFeeds + newNewsFeedItem)
+                    oldCopy?.also { g -> dao.upsertNewsFeedGroup(g) }
+                    dao.upsertNewsFeedGroup(newCopy)
+                } else {
+                    dao.upsertNewsFeedGroup(newNewsFeedGroupEntity
+                        .copy(newsFeeds = newNewsFeedGroupEntity.newsFeeds - oldNewsFeedItem + newNewsFeedItem))
                 }
             }
-            Result.Success(dao.getAllNewsFeedGroupEntities().executeAsList().map { ni -> ni.toNewsFeedGroup() })
+            val data = dao.getNewsFeedGroups()
+            Result.Success(data)
         } catch (e: Exception) {
             log.e("Error while deleting group", e)
             Result.Error(DataError.Local.SERIALIZATION, e)

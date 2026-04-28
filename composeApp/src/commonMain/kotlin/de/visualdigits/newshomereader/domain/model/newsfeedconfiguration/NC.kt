@@ -5,7 +5,8 @@ import de.visualdigits.common.domain.model.configuration.FieldKey
 enum class NC : FieldKey<NC> {
 
     feedName,
-    groupName,
+    mainGroupName,
+    subGroupName,
     imageUrl,
     url,
     stopWords,

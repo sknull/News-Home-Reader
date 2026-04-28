@@ -32,7 +32,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.KeyValue
+import de.visualdigits.common.domain.model.configuration.AbstractConfiguration
 import de.visualdigits.common.domain.model.configuration.Field
+import de.visualdigits.common.domain.model.configuration.FieldKey
 import de.visualdigits.common.presentation.components.PlatformToolTip
 import de.visualdigits.common.presentation.components.util.minimizedLabelHalfHeight
 import org.jetbrains.compose.resources.DrawableResource
@@ -46,7 +48,8 @@ import org.jetbrains.compose.resources.stringResource
 fun ComboBox(
     modifier: Modifier = Modifier,
     textStyle: TextStyle,
-    field: Field<*,*,*>,
+    configuration: AbstractConfiguration<*,*>,
+    fieldKey: FieldKey<*>,
     fieldHeight: Dp = Dp.Unspecified,
     enabled: Boolean = true,
     focusedBorderColor: Color = MaterialTheme.colorScheme.outline,
@@ -55,8 +58,9 @@ fun ComboBox(
     options: List<Triple<String, StringResource?, DrawableResource?>>? = null,
     onValueChange: (KeyValue) -> Unit,
 ) {
+    val field = configuration.fields[fieldKey]?:error("No field with key '$fieldKey'")
     var expanded by remember { mutableStateOf(false) }
-    val asString = field.currentOption().second?.asString()?:field.currentOption().first
+    val asString = field.currentOption(configuration)?.second?.asString()?:field.currentOption(configuration)?.first?:""
     val textFieldState = rememberTextFieldState(asString)
     LaunchedEffect(asString) {
         textFieldState.edit {
@@ -90,7 +94,7 @@ fun ComboBox(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
-                options?: field.descriptor.options().forEach { option ->
+                options?: field.descriptor.options(configuration).forEach { option ->
                     val text = option.second?.asString() ?:""
                     DropdownMenuItem(
                         modifier = Modifier

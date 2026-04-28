@@ -4,7 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import de.visualdigits.common.domain.model.FileMode
 import de.visualdigits.common.presentation.components.button.IndicatorButton
@@ -16,8 +18,9 @@ import javax.swing.filechooser.FileNameExtensionFilter
 
 @Composable
 actual fun PlatformFileChooser(
-    label: String,
+    label: String?,
     buttonTextStyle: TextStyle,
+    buttonTextAlign: TextAlign,
     title: String,
     fileMode: FileMode,
     options: List<String>,
@@ -25,6 +28,9 @@ actual fun PlatformFileChooser(
     buttonColor: Color,
     buttonWidth: Dp,
     buttonHeight: Dp,
+    leadingIcon: Painter?,
+    leadingIconTint: Color,
+    toolTip: String?,
     onCancel: (() -> Unit)?,
     onOk: (String, InputStream) -> Unit
 ) {
@@ -54,8 +60,12 @@ actual fun PlatformFileChooser(
         height = buttonHeight,
         text = label,
         textStyle = buttonTextStyle,
+        textAlign = buttonTextAlign,
         buttonColor = buttonColor,
         shape = buttonShape,
+        leadingIcon = leadingIcon,
+        leadingIconTint = leadingIconTint,
+        toolTip = toolTip,
     ) {
         val result = chooser.showOpenDialog(null)
         if (result == JFileChooser.APPROVE_OPTION) {

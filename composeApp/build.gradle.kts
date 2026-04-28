@@ -145,6 +145,7 @@ kotlin {
             implementation(libs.ksoup.core)
 
             implementation(libs.html.converter)
+            implementation(libs.charlex.pdf)
 
             implementation(libs.sqldelight.coroutines)
             implementation(libs.sqlite.bundled)

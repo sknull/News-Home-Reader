@@ -230,6 +230,9 @@ sealed interface NewsHomeReaderAction {
         val subscribe: Boolean
     ): NewsHomeReaderAction
 
+    data class OnOnlySubscribedFeeds(
+        val onlySubscribedFeeds: Boolean
+    ): NewsHomeReaderAction
 
     //
     //

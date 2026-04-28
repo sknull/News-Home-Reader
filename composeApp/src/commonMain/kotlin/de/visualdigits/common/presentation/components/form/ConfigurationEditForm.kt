@@ -28,6 +28,7 @@ import de.visualdigits.common.domain.model.color
 import de.visualdigits.common.domain.model.configuration.AbstractConfiguration
 import de.visualdigits.common.domain.model.configuration.AbstractFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.Field
+import de.visualdigits.common.domain.model.configuration.FieldKey
 import de.visualdigits.common.domain.model.configuration.ListFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.SpacerFieldDescriptor
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
@@ -60,12 +61,12 @@ fun ConfigurationEditForm(
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     space: Dp = MaterialTheme.shapes.gap,
     onValueChange: (KeyValue) -> Unit,
-    configuration: AbstractConfiguration<*,*>?,
+    configuration: () -> AbstractConfiguration<*,*>,
     state: NewsHomeReaderState,
     onCancelClick: () -> Unit,
     onOkClick: () -> Unit,
     onAction: (NewsHomeReaderAction) -> Unit,
-    deleteAllowed: (AbstractFieldDescriptor<*,*,*>, String) -> Boolean = { _,_ -> true }
+    deleteAllowed: (AbstractFieldDescriptor<*,*,*>?, String) -> Boolean = { _,_ -> true }
 ) {
     PlatformVerticalScrollbarBox(
         boxModifier = modifier
@@ -87,18 +88,22 @@ fun ConfigurationEditForm(
                     horizontalArrangement = Arrangement.spacedBy(space),
                     verticalArrangement = Arrangement.spacedBy(space)
                 ) {
-                    configuration
-                        ?.fields
-                        ?.filter { (_, field) -> field.descriptor.visible }
-                        ?.values
-                        ?.forEach { field ->
+                    val configuration1 = configuration()
+                    val fields = configuration1
+                        .fields
+                    val filter = fields
+                        .filter { (_, field) -> field.descriptor.visible }
+                    val values = filter
+                        .values
+                    values
+                        .forEach { field ->
                             Box(
                                 modifier = Modifier
                                     .width(300.dp)
                             ) {
                                 EditableField(
-                                    configuration = configuration,
-                                    field = field,
+                                    configuration = configuration1,
+                                    fieldKey = field.descriptor.key,
                                     fieldHeight = fieldHeight,
                                     space = space,
                                     unfocusedBorderColor = unfocusedBorderColor,
@@ -156,7 +161,7 @@ fun ConfigurationEditForm(
 @Composable
 private fun EditableField(
     configuration: AbstractConfiguration<*,*>,
-    field: Field<*,*,*>,
+    fieldKey: FieldKey<*>,
     fieldHeight: Dp,
     space: Dp,
     unfocusedBorderColor: Color,
@@ -167,16 +172,17 @@ private fun EditableField(
     containerShape: Shape,
     textStyle: TextStyle,
     onValueChange: (KeyValue) -> Unit,
-    deleteAllowed: (AbstractFieldDescriptor<*,*,*>, String) -> Boolean
+    deleteAllowed: (AbstractFieldDescriptor<*,*,*>?, String) -> Boolean
 ) {
-    val isEditable = !field.descriptor.readOnly
-    if (field.valid(field.value)) Color.Unspecified else Severity.Error.color()
+    val field = configuration.fields[fieldKey]
+    val isEditable = !(field?.descriptor?.readOnly?:false)
+    if (field?.valid(field.value) == true) Color.Unspecified else Severity.Error.color()
 
-    when(field.descriptor) {
+    when(field?.descriptor) {
         is ListFieldDescriptor -> {
             EditableList(
                 configuration = configuration,
-                field = field as Field<MutableList<*>, *, *>,
+                fieldKey = fieldKey,
                 fieldHeight = fieldHeight,
                 space = space,
                 focusedBorderColor = focusedBorderColor,
@@ -204,7 +210,7 @@ private fun EditableField(
                 modifier = Modifier
                     .fillMaxWidth(),
                 configuration = configuration,
-                field = field,
+                fieldKey = fieldKey,
                 fieldHeight = fieldHeight,
                 focusedBorderColor = focusedBorderColor,
                 unfocusedBorderColor = unfocusedBorderColor,

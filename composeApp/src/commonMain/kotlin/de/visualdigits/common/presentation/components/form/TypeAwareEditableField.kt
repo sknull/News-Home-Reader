@@ -18,7 +18,7 @@ import de.visualdigits.common.domain.model.KeyValue
 import de.visualdigits.common.domain.model.color
 import de.visualdigits.common.domain.model.configuration.AbstractConfiguration
 import de.visualdigits.common.domain.model.configuration.EnumFieldDescriptor
-import de.visualdigits.common.domain.model.configuration.Field
+import de.visualdigits.common.domain.model.configuration.FieldKey
 import de.visualdigits.common.domain.model.configuration.FileFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.ReferenceListFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
@@ -31,8 +31,8 @@ import java.io.File
 @Composable
 fun TypeAwareEditableField(
     modifier: Modifier = Modifier,
-    configuration: AbstractConfiguration<*,*>?,
-    field: Field<*,*,*>,
+    configuration: AbstractConfiguration<*,*>,
+    fieldKey: FieldKey<*>,
     currentValue: String? = null,
     fieldHeight: Dp = Dp.Unspecified,
     focusedBorderColor: Color = MaterialTheme.colorScheme.outline,
@@ -47,6 +47,7 @@ fun TypeAwareEditableField(
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
 ) {
+    val field = configuration.fields[fieldKey]?:error("No field with key '$fieldKey'")
     val value = currentValue?:field.stringValue()
     val scope = rememberCoroutineScope()
     val focusRequester = remember { FocusRequester() }
@@ -80,7 +81,8 @@ fun TypeAwareEditableField(
                     modifier = modifier
                         .focusRequester(focusRequester),
                     textStyle = textStyle,
-                    field = field,
+                    configuration = configuration,
+                    fieldKey = fieldKey,
                     fieldHeight = fieldHeight,
                     enabled = enabled,
                     focusedBorderColor = focusedBorderColor,
@@ -110,7 +112,7 @@ fun TypeAwareEditableField(
                 fileMode = field.descriptor.fileMode,
                 titleDirectories = stringResource((Res.string.choose_directory)),
                 titleFiles = stringResource((Res.string.choose_file)),
-                options = field.descriptor.options(),
+                options = field.descriptor.options(configuration),
                 startDirectory = (field.value as? File) ?: field.descriptor.startDirectory(configuration),
                 onOk = { file: File ->
                     onValueChange(

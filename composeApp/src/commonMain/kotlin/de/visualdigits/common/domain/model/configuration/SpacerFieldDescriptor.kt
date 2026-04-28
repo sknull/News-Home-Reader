@@ -19,4 +19,10 @@ class SpacerFieldDescriptor<K : FieldKey<K>>(
     readOnly = true,
     options = { listOf() },
     keyFactory = StringKeyFactory
-)
+) {
+    override fun copy(): SpacerFieldDescriptor<K> {
+        return SpacerFieldDescriptor(
+            key = key
+        )
+    }
+}

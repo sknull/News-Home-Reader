@@ -23,5 +23,15 @@ class IntFieldDescriptor<K : FieldKey<K>>(
     readOnly = readOnly,
     options = { listOf() },
     keyFactory = IntKeyFactory,
-)
+) {
+    override fun copy(): IntFieldDescriptor<K> {
+        return IntFieldDescriptor(
+            key = key,
+            label = label,
+            toolTip = toolTip,
+            visible = visible,
+            readOnly = readOnly
+        )
+    }
+}
 

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.UriHandler
@@ -30,11 +31,13 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun NewsArticleMenuBar(
+    newsItem: NewsItem,
+    newsArticle: FullArticle,
     uriHandler: UriHandler,
-    currentNewsItem: NewsItem,
-    currentNewsArticle: FullArticle?,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -63,10 +66,10 @@ fun NewsArticleMenuBar(
             leadingIconTint = MaterialTheme.colorScheme.onSurface,
             toolTip = stringResource(Res.string.tooltip_open_link),
         ) {
-            uriHandler.openUri(currentNewsItem.link)
+            uriHandler.openUri(newsItem.link)
         }
 
-        currentNewsArticle?.discussionUrl?.also { link ->
+        newsArticle.discussionUrl?.also { link ->
             IndicatorButton(
                 modifier = Modifier,
                 width = 50.dp,
@@ -77,7 +80,7 @@ fun NewsArticleMenuBar(
             ) {
                 uriHandler.openUri(
                     makeUrlAbsolute(
-                        currentNewsItem.link,
+                        newsItem.link,
                         link
                     )
                 )

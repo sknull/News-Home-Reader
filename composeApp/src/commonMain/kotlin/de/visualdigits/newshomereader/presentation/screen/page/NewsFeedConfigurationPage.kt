@@ -51,7 +51,7 @@ fun NewsFeedConfigurationPage(
                     )
                 )
             },
-            configuration = state.editedNewsFeedConfiguration,
+            configuration = { state.editedNewsFeedConfiguration!! },
             state = state,
             onCancelClick = {
                 onAction(

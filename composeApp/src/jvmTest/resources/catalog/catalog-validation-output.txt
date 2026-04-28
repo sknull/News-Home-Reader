@@ -1,8 +1,5 @@
 Bildung & Gesellschaft
   Allgemeines
-SLF4J(W): No SLF4J providers were found.
-SLF4J(W): Defaulting to no-operation (NOP) logger implementation
-SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
     Theosophie-Blog: Der andere Blick!: 2026-04-26 09:49:52
     Syreality - Erschaffe Deine eigene Realität: 2026-04-21 18:47:50
     Lernen mit Angela: 2026-04-20 09:26:21

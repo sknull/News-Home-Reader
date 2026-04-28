@@ -88,8 +88,8 @@ fun NewsFeedGroupEntity.toNewsFeedGroup(): NewsFeedGroup {
 fun NewsFeedCatalogItem.toNewsFeedItem(): NewsFeedItem {
     return NewsFeedItem(
         name = name,
-        rootGroupName = parentCategory?.parentCategory?.name,
-        parentGroupName = parentCategory?.name,
+        mainGroupName = parentCategory?.parentCategory?.name,
+        subGroupName = parentCategory?.name,
         url = url
     )
 }
@@ -108,7 +108,8 @@ fun NewsFeedCatalogCategory.toNewsFeedGroup(): NewsFeedGroup {
 fun NewsFeedConfiguration.toNewsFeedItem(): NewsFeedItem {
     return NewsFeedItem(
         name = get<String>(NC.feedName),
-        parentGroupName = get<String>(NC.groupName),
+        mainGroupName = get<String>(NC.mainGroupName),
+        subGroupName = get<String>(NC.subGroupName),
         imageUrl = get<String>(NC.imageUrl),
         url = get<String>(NC.url),
         stopWords = get<List<String>>(NC.stopWords)
@@ -118,7 +119,8 @@ fun NewsFeedConfiguration.toNewsFeedItem(): NewsFeedItem {
 fun NewsFeedItem.toNewsFeedConfiguration(newsFeedGroups: List<NewsFeedGroup>): NewsFeedConfiguration {
     val newsFeedConfiguration = NewsFeedConfiguration(newsFeedGroups = newsFeedGroups)
     newsFeedConfiguration.set(NC.feedName, name)
-    newsFeedConfiguration.set(NC.groupName, parentGroupName)
+    newsFeedConfiguration.set(NC.mainGroupName, mainGroupName)
+    newsFeedConfiguration.set(NC.subGroupName, subGroupName)
     newsFeedConfiguration.set(NC.imageUrl, imageUrl)
     newsFeedConfiguration.set(NC.url, url)
     newsFeedConfiguration.set(NC.stopWords, stopWords)

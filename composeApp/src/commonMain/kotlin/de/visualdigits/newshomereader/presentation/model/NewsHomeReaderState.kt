@@ -62,6 +62,7 @@ data class NewsHomeReaderState(
     val collapsibleState: Map<String, Boolean> = mapOf(),
 
     val isEditMode: Boolean = false,
+    val onlySubscribedFeeds: Boolean = false,
 
     val originalNewsFeedConfiguration: NewsFeedConfiguration? = null,
     val editedNewsFeedConfiguration: NewsFeedConfiguration? = null,

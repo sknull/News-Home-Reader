@@ -24,7 +24,7 @@ class FileFieldDescriptor<K : FieldKey<K>>(
         File(System.getProperty("user.home"))
     },
 
-    options: () -> List<Triple<String, UiText?, DrawableResource?>> = { listOf() },
+    options: (AbstractConfiguration<*, *>) -> List<Triple<String, UiText?, DrawableResource?>> = { listOf() },
 ): AbstractFieldDescriptor<File, File, K>(
     fieldClass = File::class,
     key = key,
@@ -34,5 +34,18 @@ class FileFieldDescriptor<K : FieldKey<K>>(
     readOnly = readOnly,
     options = options,
     keyFactory = FileKeyFactory
-)
+) {
+    override fun copy(): FileFieldDescriptor<K> {
+        return FileFieldDescriptor(
+            key = key,
+            label = label,
+            toolTip = toolTip,
+            visible = visible,
+            readOnly = readOnly,
+            options = options,
+            fileMode = fileMode,
+            startDirectory = startDirectory
+        )
+    }
+}
 

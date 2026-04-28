@@ -38,10 +38,10 @@ fun NewsContent(
                 scrollPosition = viewModel.scrollPosition,
                 maxWidth = mw,
                 maxImageSize = maxImageSize,
+                newsItem = state.currentNewsItem,
                 newsArticle = state.currentNewsArticle,
                 settings = state.settings,
                 uriHandler = uriHandler,
-                newsItem = state.currentNewsItem,
                 state = state,
                 onAction = onAction,
                 connectivityManager = connectivityManager

@@ -10,6 +10,8 @@ class Field<V : Any, S : Any, K : FieldKey<K>>(
     val valid: (value: Any?) -> Boolean = { _ -> true }
 ) {
 
+    var configuration: AbstractConfiguration<*,*>? = null
+
     override fun toString(): String {
         return "${descriptor.label} [${descriptor.fieldClass.simpleName}]: $value"
     }
@@ -22,20 +24,20 @@ class Field<V : Any, S : Any, K : FieldKey<K>>(
         return descriptor.keyFactory.stringValue(value)
     }
 
-    fun currentOption(): Triple<String, UiText?, DrawableResource?> {
+    fun currentOption(configuration: AbstractConfiguration<*,*>): Triple<String, UiText?, DrawableResource?>? {
         val sv = stringValue()?.uppercase()
-        val options = descriptor.options()
+        val options = descriptor.options(configuration)
         return options
             .find { o -> o.first.uppercase() == sv }
-            ?:options.first()
+            ?:options.firstOrNull()
     }
 
     @Suppress("UNCHECKED_CAST")
     fun copyUnsafe(value: Any? = null): Field<V, S, K> {
-        return Field(descriptor, (value as? V)?:this.value, enabled, valid)
+        return Field(descriptor.copy(), (value as? V)?:this.value, enabled, valid)
     }
 
-    fun copy(value: V?): Field<V, S, K> {
+    fun copy(value: V? = null): Field<V, S, K> {
         return Field(descriptor, value?:this.value, enabled, valid)
     }
 

@@ -8,8 +8,8 @@ import java.io.File
 @Serializable
 @Immutable
 data class NewsFeedItem(
-    var rootGroupName: String? = null,
-    var parentGroupName: String? = null,
+    var mainGroupName: String? = null,
+    var subGroupName: String? = null,
     val name: String? = null,
     val imageUrl: String? = null,
     val url: String? = null,
@@ -33,7 +33,7 @@ data class NewsFeedItem(
     }
 
     val rootLine: String
-        get() = "${rootGroupName?.let{"${it}_"}}${parentGroupName?.let{"${it}_"}}$name"
+        get() = "${mainGroupName?.let{"${it}_"}}${subGroupName?.let{"${it}_"}}$name"
 
     override fun toString(): String {
         return "$name: $url"

@@ -52,10 +52,10 @@ fun NewsArticleCard(
     scrollPosition: MutableMap<String, Pair<Int, Int?>>,
     maxWidth: Dp,
     maxImageSize: Int?,
-    newsArticle: FullArticle?,
+    newsItem: NewsItem,
+    newsArticle: FullArticle,
     settings: Settings?,
     uriHandler: UriHandler,
-    newsItem: NewsItem,
     state: NewsHomeReaderState,
     onAction: (NewsHomeReaderAction) -> Unit,
     connectivityManager: ConnectivityManager
@@ -73,9 +73,9 @@ fun NewsArticleCard(
             val displayTheme = settings?.get<DisplayThemeEnum>(SK.displayTheme) ?: DisplayThemeEnum.LIGHT
 
             NewsArticleMenuBar(
+                newsItem = newsItem,
+                newsArticle = newsArticle,
                 uriHandler = uriHandler,
-                currentNewsItem = newsItem,
-                currentNewsArticle = newsArticle,
                 onAction = onAction
             )
 

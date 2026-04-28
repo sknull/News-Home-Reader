@@ -12,6 +12,7 @@ abstract class AbstractConfiguration<T : AbstractConfiguration<T, K>, K : FieldK
             val setupFields = setupFields()
             setupFields.forEach { f ->
                 fields[f.descriptor.key] = f
+                f.configuration = this
             }
         }
     }
@@ -55,6 +56,7 @@ abstract class AbstractConfiguration<T : AbstractConfiguration<T, K>, K : FieldK
         }
 
         val createInstance = createInstance(newFields)
+        createInstance.fields.values.forEach { field -> field.configuration = createInstance }
         return createInstance
     }
 }

@@ -275,7 +275,7 @@ WHERE id = :id;
 
 getNewsFeedGroupEntityByName:
 SELECT * FROM NewsFeedGroupEntity
-WHERE name = :name AND parentGroupName = :parentGroupName;
+WHERE name = :subGroupName AND parentGroupName = :mainGroupName;
 
 deleteNewsFeedGroupEntity:
 DELETE FROM NewsFeedGroupEntity

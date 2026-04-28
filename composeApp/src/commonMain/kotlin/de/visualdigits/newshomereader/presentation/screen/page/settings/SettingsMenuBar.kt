@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import de.visualdigits.common.domain.model.FileMode
 import de.visualdigits.common.presentation.components.PlatformFileChooser
 import de.visualdigits.common.presentation.components.PlatformFileSaver
@@ -14,12 +15,13 @@ import de.visualdigits.compose.resources.dialog_title_export_opml
 import de.visualdigits.compose.resources.dialog_title_export_settings
 import de.visualdigits.compose.resources.dialog_title_import_opml
 import de.visualdigits.compose.resources.dialog_title_import_settings
-import de.visualdigits.compose.resources.label_export_opml
-import de.visualdigits.compose.resources.label_export_settings
-import de.visualdigits.compose.resources.label_import_opml
-import de.visualdigits.compose.resources.label_import_settings
+import de.visualdigits.compose.resources.icon_download_24px
+import de.visualdigits.compose.resources.icon_upload_24px
+import de.visualdigits.compose.resources.label_opml
+import de.visualdigits.compose.resources.label_settings
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.style.gap
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
@@ -35,47 +37,55 @@ fun SettingsMenuBar(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
     ) {
         PlatformFileChooser(
-            label = stringResource(Res.string.label_import_opml),
+            label = stringResource(Res.string.label_opml),
             buttonTextStyle = MaterialTheme.typography.bodySmall,
+            buttonTextAlign = TextAlign.Start,
             title = stringResource(Res.string.dialog_title_import_opml),
             fileMode = FileMode.FILES_ONLY,
             buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+            leadingIcon = painterResource(Res.drawable.icon_download_24px),
         ) { fileName, ins ->
             onAction(NewsHomeReaderAction.OnOpmlImport(fileName, ins))
         }
 
         PlatformFileSaver(
-            label = stringResource(Res.string.label_export_opml),
+            label = stringResource(Res.string.label_opml),
             buttonTextStyle = MaterialTheme.typography.bodySmall,
+            buttonTextAlign = TextAlign.Start,
             title = stringResource(Res.string.dialog_title_export_opml),
             fileMode = FileMode.FILES_ONLY,
             suggestedFileName = "newshomereader-export_${
                 OffsetDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
             }.opml",
             buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+            leadingIcon = painterResource(Res.drawable.icon_upload_24px),
         ) { fileName, outs ->
             onAction(NewsHomeReaderAction.OnOpmlExport(fileName, outs))
         }
 
         PlatformFileChooser(
-            label = stringResource(Res.string.label_import_settings),
+            label = stringResource(Res.string.label_settings),
             buttonTextStyle = MaterialTheme.typography.bodySmall,
+            buttonTextAlign = TextAlign.Start,
             title = stringResource(Res.string.dialog_title_import_settings),
             fileMode = FileMode.FILES_ONLY,
             buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+            leadingIcon = painterResource(Res.drawable.icon_download_24px),
         ) { fileName, ins ->
             onAction(NewsHomeReaderAction.OnSettingsImport(fileName, ins))
         }
 
         PlatformFileSaver(
-            label = stringResource(Res.string.label_export_settings),
+            label = stringResource(Res.string.label_settings),
             buttonTextStyle = MaterialTheme.typography.bodySmall,
+            buttonTextAlign = TextAlign.Start,
             title = stringResource(Res.string.dialog_title_export_settings),
             fileMode = FileMode.FILES_ONLY,
             suggestedFileName = "newshomereader-settings${
                 OffsetDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
             }.json",
             buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+            leadingIcon = painterResource(Res.drawable.icon_upload_24px),
         ) { fileName, outs ->
             onAction(NewsHomeReaderAction.OnSettingsExport(fileName, outs))
         }

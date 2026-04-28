@@ -39,8 +39,10 @@ abstract class AbstractFieldDescriptor<V : Any, S : Any, K : FieldKey<K>>(
      *  For fields which are represented by a combobox or editable list this should generate the
      *  available values rendered in the UI.
      */
-    var options: () -> List<Triple<String, UiText?, DrawableResource?>> = { listOf() },
+    var options: (AbstractConfiguration<*, *>) -> List<Triple<String, UiText?, DrawableResource?>> = { listOf() },
 
     /** A factory class which handles conversion to and from string values. */
     val keyFactory: KeyFactory<V>
-)
+) {
+    abstract fun copy(): AbstractFieldDescriptor<V, S, K>
+}

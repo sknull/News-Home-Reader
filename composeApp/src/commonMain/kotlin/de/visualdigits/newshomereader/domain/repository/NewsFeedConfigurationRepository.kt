@@ -30,7 +30,7 @@ interface NewsFeedConfigurationRepository {
 
     suspend fun deleteNewsFeedItem(newsFeedItem: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local>
 
-    suspend fun upsertNewsFeedItem(newsFeedConfiguration: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local>
+    suspend fun upsertNewsFeedItem(newsFeedItem: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local>
 
-    suspend fun editNewsFeedItem(oldNewsFeedConfiguration: NewsFeedItem, newNewsFeedConfiguration: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local>
+    suspend fun editNewsFeedItem(oldNewsFeedItem: NewsFeedItem, newNewsFeedItem: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local>
 }

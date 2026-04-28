@@ -7,8 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import de.visualdigits.common.domain.model.FileMode
 import de.visualdigits.common.presentation.components.button.IndicatorButton
@@ -18,8 +20,9 @@ import java.io.InputStream
 
 @Composable
 actual fun PlatformFileChooser(
-    label: String,
+    label: String?,
     buttonTextStyle: TextStyle,
+    buttonTextAlign: TextAlign,
     title: String,
     fileMode: FileMode,
     options: List<String>,
@@ -27,6 +30,9 @@ actual fun PlatformFileChooser(
     buttonColor: Color,
     buttonWidth: Dp,
     buttonHeight: Dp,
+    leadingIcon: Painter?,
+    leadingIconTint: Color,
+    toolTip: String?,
     onCancel: (() -> Unit)?,
     onOk: (String, InputStream) -> Unit
 ) {
@@ -65,8 +71,12 @@ actual fun PlatformFileChooser(
         height = buttonHeight,
         text = label,
         textStyle = buttonTextStyle,
+        textAlign = buttonTextAlign,
         shape = buttonShape,
-        buttonColor = buttonColor
+        buttonColor = buttonColor,
+        leadingIcon = leadingIcon,
+        leadingIconTint = leadingIconTint,
+        toolTip = toolTip,
     ) {
         launcher.launch("*/*")
     }

@@ -23,5 +23,15 @@ class StringFieldDescriptor<K : FieldKey<K>>(
     readOnly = readOnly,
     options = { listOf() },
     keyFactory = StringKeyFactory
-)
+) {
+    override fun copy(): StringFieldDescriptor<K> {
+        return StringFieldDescriptor(
+            key = key,
+            label = label,
+            toolTip = toolTip,
+            visible = visible,
+            readOnly = readOnly
+        )
+    }
+}
 

@@ -69,7 +69,31 @@ fun NewsFeedCatalog(
         state,
         onAction = onAction
     ) {
-        catalog?.categories?.sortedBy { c -> c.name.lowercase() }?.map { mainCategory ->
+        val categories = if (state.onlySubscribedFeeds) {
+            catalog?.categories?.mapNotNull { category ->
+                val feeds = category.feeds.filter { feed -> rootLines.contains(feed.rootLine) }
+                val subCategories = category.subCategories.mapNotNull { subCategory ->
+                    val subFeeds = subCategory.feeds.filter { feed -> rootLines.contains(feed.rootLine) }
+                    if (subFeeds.isNotEmpty()) {
+                        subCategory.copy(feeds = subFeeds)
+                    } else {
+                        null
+                    }
+                }
+                if (subCategories.isNotEmpty()) {
+                    category.copy(
+                        subCategories = subCategories,
+                        feeds = feeds
+                    )
+                } else {
+                    null
+                }
+            }
+        } else {
+            catalog?.categories
+        }
+
+        categories?.sortedBy { c -> c.name.lowercase() }?.map { mainCategory ->
             Pair("catalog_category_${mainCategory.name}", @Composable {
                 VerticalCollapsibleBox(
                     modifier = Modifier
@@ -185,17 +209,7 @@ fun NewsFeedCatalog(
                                                     )
                                                 )
                                             },
-                                            colors = ListItemDefaults.colors().copy(
-//                                                                    containerColor = TODO(),
-//                                                                    headlineColor = MaterialTheme.colorScheme.onSurface,
-//                                                                    leadingIconColor = TODO(),
-//                                                                    overlineColor = TODO(),
-//                                                                    supportingTextColor = MaterialTheme.colorScheme.onSecondaryContainer,
-//                                                                    trailingIconColor = TODO(),
-//                                                                    disabledHeadlineColor = TODO(),
-//                                                                    disabledLeadingIconColor = TODO(),
-//                                                                    disabledTrailingIconColor = TODO()
-                                            ),
+                                            colors = ListItemDefaults.colors(),
                                         )
                                     }
                                 }
