@@ -38,6 +38,7 @@ import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.nio.charset.StandardCharsets
 import java.time.Duration
 import java.time.OffsetDateTime
 import java.time.temporal.ChronoUnit
@@ -130,7 +131,7 @@ class DefaultFeedRepository(
                     log.i("Refreshing newsfeed '${newsFeedConfiguration.name}', loadArticles=$loadArticles...")
                     try {
                         val response = newsFeedConfiguration.url?.let { u -> httpClient.get(urlString = u) }
-                        val xml = response?.bodyAsText()
+                        val xml = response?.bodyAsText(StandardCharsets.ISO_8859_1)
                         readFromString(newsFeedConfiguration.name, xml)
                     } catch (e: Exception) {
                         log.e("Could not load feed '${newsFeedConfiguration.name}'", e)
@@ -199,7 +200,7 @@ class DefaultFeedRepository(
         try {
             val updatedNewsFeed = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                 val response = httpClient.get(urlString = url)
-                val xml = response.bodyAsText()
+                val xml = response?.bodyAsText(StandardCharsets.ISO_8859_1)
                 val newsFeed = readFromString(feedName, xml)
 
                 val totalItems = (newsFeed?.items?.size?:0) + 1
