@@ -1,7 +1,6 @@
 package de.visualdigits.newshomereader.repository
 
 import com.fleeksoft.ksoup.Ksoup
-import com.fleeksoft.ksoup.parser.Parser
 import de.visualdigits.newshomereader.data.mapper.toNewsFeed
 import de.visualdigits.newshomereader.data.model.atom.Feed
 import de.visualdigits.newshomereader.data.model.rdf.Rdf
@@ -16,7 +15,7 @@ import de.visualdigits.newshomereader.domain.repository.FeedRepository
 import de.visualdigits.newshomereader.domain.util.decodeFromString
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
-import io.ktor.client.statement.bodyAsText
+import io.ktor.client.statement.readRawBytes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
@@ -32,7 +31,7 @@ class MockFeedRepository(
         feedName: String,
         file: File
     ): NewsFeed? {
-        return readFromString(feedName, file.readText())
+        return readFromBytes(feedName, file.readBytes())
     }
 
     override suspend fun getFeedItemsByNewsFeedName(feedName: String): Result<List<NewsItem>, DataError.Remote> {
@@ -78,8 +77,7 @@ class MockFeedRepository(
         progress: (Float, ProgressStage) -> Unit
     ): Result<Pair<NewsFeed?, Boolean>, DataError.Remote> {
         val response = httpClient.get(urlString = url)
-        val xml = response.bodyAsText()
-        return Result.Success(Pair(readFromString(feedName, xml), false))
+        return Result.Success(Pair(readFromBytes(feedName, response.readRawBytes()), false))
     }
 
     override suspend fun prefetchImages(
@@ -89,14 +87,19 @@ class MockFeedRepository(
         return Result.Success(Unit)
     }
 
-    override suspend fun readFromString(
+
+    override suspend fun readFromBytes(
         feedName: String?,
-        xml: String?
-    ): NewsFeed = withContext(Dispatchers.IO) {
-        checkNotNull(xml) { "No xml given" }
+        bytes: ByteArray?
+    ): NewsFeed? = withContext(Dispatchers.IO) {
+        checkNotNull(feedName) { "No feed name given" }
+        checkNotNull(bytes) { "No xml given" }
+        val head = bytes.take(200).toByteArray().decodeToString()
+        val charsetName = Regex("""encoding=["'](.*?)["']""").find(head)?.groupValues?.get(1) ?: "UTF-8"
+        val xml = bytes.toString(charset(charsetName))
 
         val feedType = Ksoup
-            .parse(html = xml, baseUri = "", parser = Parser.xmlParser())
+            .parse(html = xml, baseUri = "", parser = com.fleeksoft.ksoup.parser.Parser.xmlParser())
             .root()
             .select("> *")
             .firstOrNull()
@@ -108,17 +111,19 @@ class MockFeedRepository(
         when (feedType) {
             "rss" -> {
                 val rss = decodeFromString<Rss>(xml)
-                rss.toNewsFeed(feedName!!)
+                rss.toNewsFeed(feedName)
             }
             "rdf" -> {
                 val rdf = decodeFromString<Rdf>(xml)
-                rdf.toNewsFeed(feedName!!)
+                rdf.toNewsFeed(feedName)
             }
             "feed" -> {
                 val feed = decodeFromString<Feed>(xml)
-                feed.toNewsFeed(feedName!!)
+                feed.toNewsFeed(feedName)
             }
-            else -> error("Unsupported feed type '$feedType'")
+            else -> {
+                null // Unsupported feed type
+            }
         }
     }
 }

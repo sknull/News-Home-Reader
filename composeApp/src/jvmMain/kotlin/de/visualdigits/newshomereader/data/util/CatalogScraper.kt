@@ -12,6 +12,7 @@ import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
+import io.ktor.client.statement.readRawBytes
 import kotlinx.coroutines.delay
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -274,6 +275,22 @@ object CatalogScraper {
             val response = httpClient
                 .get(urlString = url)
             response.bodyAsText()
+        } catch (e: Exception) {
+            log.e("Could not read from url '$url' [${e.message}]")
+            null
+        }
+    }
+
+    /**
+     * Helper method to read text from an url using ok http client.
+     *
+     * @param httpClient The OkHttpClient to use for scraping.
+     */
+    suspend fun readUrlAsRawBytes(httpClient: HttpClient, url: String): ByteArray? {
+        return try {
+            val response = httpClient
+                .get(urlString = url)
+            response.readRawBytes()
         } catch (e: Exception) {
             log.e("Could not read from url '$url' [${e.message}]")
             null

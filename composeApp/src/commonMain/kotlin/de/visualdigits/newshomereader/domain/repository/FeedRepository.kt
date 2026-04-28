@@ -61,8 +61,8 @@ interface FeedRepository {
         progress: (Float, ProgressStage) -> Unit
     ): Result<Unit, DataError.Remote>
 
-    suspend fun readFromString(
+    suspend fun readFromBytes(
         feedName: String?,
-        xml: String?
+        bytes: ByteArray?
     ): NewsFeed?
 }

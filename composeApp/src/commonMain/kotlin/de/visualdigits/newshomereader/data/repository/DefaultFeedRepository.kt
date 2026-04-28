@@ -26,7 +26,7 @@ import de.visualdigits.newshomereader.domain.repository.FeedRepository
 import de.visualdigits.newshomereader.domain.util.decodeFromString
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
-import io.ktor.client.statement.bodyAsText
+import io.ktor.client.statement.readRawBytes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.async
@@ -38,7 +38,6 @@ import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.nio.charset.StandardCharsets
 import java.time.Duration
 import java.time.OffsetDateTime
 import java.time.temporal.ChronoUnit
@@ -131,8 +130,7 @@ class DefaultFeedRepository(
                     log.i("Refreshing newsfeed '${newsFeedConfiguration.name}', loadArticles=$loadArticles...")
                     try {
                         val response = newsFeedConfiguration.url?.let { u -> httpClient.get(urlString = u) }
-                        val xml = response?.bodyAsText(StandardCharsets.ISO_8859_1)
-                        readFromString(newsFeedConfiguration.name, xml)
+                        readFromBytes(newsFeedConfiguration.name, response?.readRawBytes())
                     } catch (e: Exception) {
                         log.e("Could not load feed '${newsFeedConfiguration.name}'", e)
                         null
@@ -200,8 +198,7 @@ class DefaultFeedRepository(
         try {
             val updatedNewsFeed = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                 val response = httpClient.get(urlString = url)
-                val xml = response?.bodyAsText(StandardCharsets.ISO_8859_1)
-                val newsFeed = readFromString(feedName, xml)
+                val newsFeed = readFromBytes(feedName, response.readRawBytes())
 
                 val totalItems = (newsFeed?.items?.size?:0) + 1
                 val totalSteps = totalItems * (if (loadArticles) 2 else 1)
@@ -341,15 +338,18 @@ class DefaultFeedRepository(
         feedName: String,
         file: File
     ): NewsFeed? = withContext(Dispatchers.IO) {
-        readFromString(feedName, file.readText())
+        readFromBytes(feedName, file.readBytes())
     }
 
-    override suspend fun readFromString(
+    override suspend fun readFromBytes(
         feedName: String?,
-        xml: String?
+        bytes: ByteArray?
     ): NewsFeed? = withContext(Dispatchers.IO) {
         checkNotNull(feedName) { "No feed name given" }
-        checkNotNull(xml) { "No xml given" }
+        checkNotNull(bytes) { "No xml given" }
+        val head = bytes.take(200).toByteArray().decodeToString()
+        val charsetName = Regex("""encoding=["'](.*?)["']""").find(head)?.groupValues?.get(1) ?: "UTF-8"
+        val xml = bytes.toString(charset(charsetName))
 
         val feedType = Ksoup
             .parse(html = xml, baseUri = "", parser = com.fleeksoft.ksoup.parser.Parser.xmlParser())

@@ -1,6 +1,6 @@
 package de.visualdigits.newshomereader.data.util
 
-import de.visualdigits.newshomereader.data.util.CatalogScraper.readUrl
+import de.visualdigits.newshomereader.data.util.CatalogScraper.readUrlAsRawBytes
 import de.visualdigits.newshomereader.data.util.CatalogScraper.scrapeToFile
 import de.visualdigits.newshomereader.data.util.CatalogValidator.applyValidationToCatalog
 import de.visualdigits.newshomereader.data.util.CatalogValidator.createValidationReport
@@ -65,8 +65,8 @@ class CatalogScraperTest : KoinTest {
     @Disabled("Only for manual execution")
     fun testReadFeed() {
         runBlocking {
-            val xml = readUrl(httpClient, "https://feeds.feedburner.com/blogspot/rkEL")
-            val newsFeed = feedRepository.readFromString("TEST", xml)
+            val bytes = readUrlAsRawBytes(httpClient, "https://feeds.feedburner.com/blogspot/rkEL")
+            val newsFeed = feedRepository.readFromBytes("TEST", bytes)
             println(newsFeed)
         }
     }

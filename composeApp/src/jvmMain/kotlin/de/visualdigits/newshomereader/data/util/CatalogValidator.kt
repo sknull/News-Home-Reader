@@ -1,6 +1,6 @@
 package de.visualdigits.newshomereader.data.util
 
-import de.visualdigits.newshomereader.data.util.CatalogScraper.readUrl
+import de.visualdigits.newshomereader.data.util.CatalogScraper.readUrlAsRawBytes
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalog
 import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
@@ -52,8 +52,8 @@ object CatalogValidator {
                     output(validationOutputFile, "  ${subCategory.name}")
                     val feeds = subCategory.feeds.mapNotNull { feed ->
                         try {
-                            val xml = readUrl(httpClient, feed.url)
-                            val newsFeed = feedRepository.readFromString(feed.name, xml) // contains logic to read and normalize diverse feeds of type rss, rdf and atom
+                            val bytes = readUrlAsRawBytes(httpClient, feed.url)
+                            val newsFeed = feedRepository.readFromBytes(feed.name, bytes) // contains logic to read and normalize diverse feeds of type rss, rdf and atom
                             if (newsFeed != null) {
                                 val updated = newsFeed.updated
                                 if (updated.isBefore(thresholdDate)) {
