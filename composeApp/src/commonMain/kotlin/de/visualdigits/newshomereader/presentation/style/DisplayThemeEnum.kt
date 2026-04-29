@@ -11,6 +11,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import de.visualdigits.common.domain.model.StringResourceEnumerable
 import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.keyfactory.KeyFactory
+import de.visualdigits.common.domain.util.copy
 import de.visualdigits.common.presentation.components.StudioClockColors
 import de.visualdigits.common.presentation.components.defaultStudioClockColors
 import org.jetbrains.compose.resources.DrawableResource
@@ -35,39 +36,7 @@ enum class DisplayThemeEnum(
         isDark = true,
         uiText = UiText.DynamicString("Anthracite"),
         drawableResourceId = null,
-        colorScheme = darkColorScheme(
-            primary = Color(0xFF3C3F40),
-            onPrimary = Color(0xFFFFFFFF),
-            onPrimaryContainer = Color(0xFFFFFFFF),
-
-            secondary = Color(0xFF313030),
-            onSecondary = Color(0xFFFFFFFF),
-
-            secondaryContainer = Color(0xFFE1E1E1),
-            onSecondaryContainer = Color(0xFF9A9A9A),
-
-            background = Color(0xFF3C3F40),
-            onBackground = Color(0xFFFFFFFF),
-
-            surface = Color.Transparent,
-            onSurface = Color(0xFF868686), // deco color
-
-            inverseSurface = Color(0xFFFFFFFF),
-            surfaceContainer = Color(0xFFFFFFFF),
-            surfaceContainerHigh = Color.Transparent,
-            surfaceContainerLow = Color.Transparent,
-            surfaceContainerLowest = Color(0xFF373737),
-            surfaceDim = Color(0xFF393939),
-
-            error = Color(0xffff002a),
-            onError = Color(0xFFFFFFFF),
-            errorContainer = Color(0xffff002a),
-            onErrorContainer = Color(0xFFFFFFFF),
-
-            outline = Color(0xFFFFFFFF),
-
-            primaryFixed = Color(0xAA000000),
-        ),
+        colorScheme = createAnthraciteTheme(spotColor = Color(0xFF868686)),
         textLinkStyles = TextLinkStyles(
             style = SpanStyle(
                 color = Color(0xFF868686),
@@ -75,53 +44,14 @@ enum class DisplayThemeEnum(
             )
         ),
         textColor = Color(0xFFFFFFFF),
-        studioClockColors = StudioClockColors(
-            colorHours = Color(0xFF868686),
-            colorMinutes = Color(0xFFC6C2C2),
-            colorSeconds = Color(0xFF868686),
-            colorTime = Color(0xFF868686),
-            colorDate = Color(0xFFC6C2C2),
-            colorBackground = Color(0xdd000000),
-        )
+        studioClockColors = createStudioClockColors(spotColor = Color(0xFF868686)),
     ),
 
     ANTHRACITE_ORANGE(
         isDark = true,
         uiText = UiText.DynamicString("Anthracite Orange"),
         drawableResourceId = null,
-        colorScheme = darkColorScheme(
-            primary = Color(0xFF3C3F40),
-            onPrimary = Color(0xFFFFFFFF),
-            onPrimaryContainer = Color(0xFFFFFFFF),
-
-            secondary = Color(0xFF313030),
-            onSecondary = Color(0xFFFFFFFF),
-
-            secondaryContainer = Color(0xFFE1E1E1),
-            onSecondaryContainer = Color(0xFF9A9A9A),
-
-            background = Color(0xFF3C3F40),
-            onBackground = Color(0xFFFFFFFF),
-
-            surface = Color.Transparent,
-            onSurface = Color(0xFFE67A2A), // deco color
-
-            inverseSurface = Color(0xFFFFFFFF),
-            surfaceContainer = Color(0xFFFFFFFF),
-            surfaceContainerHigh = Color.Transparent,
-            surfaceContainerLow = Color.Transparent,
-            surfaceContainerLowest = Color(0xFF373737),
-            surfaceDim = Color(0xFF393939),
-
-            error = Color(0xffff002a),
-            onError = Color(0xFFFFFFFF),
-            errorContainer = Color(0xffff002a),
-            onErrorContainer = Color(0xFFFFFFFF),
-
-            outline = Color(0xFFFFFFFF),
-
-            primaryFixed = Color(0xAA000000),
-        ),
+        colorScheme = createAnthraciteTheme(spotColor = Color(0xFFE67A2A)),
         textLinkStyles = TextLinkStyles(
             style = SpanStyle(
                 color = Color(0xFFE67A2A),
@@ -129,53 +59,14 @@ enum class DisplayThemeEnum(
             )
         ),
         textColor = Color(0xFFFFFFFF),
-        studioClockColors = StudioClockColors(
-            colorHours = Color(0xFFC96012),
-            colorMinutes = Color(0xFFDCA175),
-            colorSeconds = Color(0xFFC96012),
-            colorTime = Color(0xFFC96012),
-            colorDate = Color(0xFFDCA175),
-            colorBackground = Color(0xdd000000),
-        )
+        studioClockColors = createStudioClockColors(spotColor = Color(0xFFE67A2A)),
     ),
 
     ANTHRACITE_BLUE(
         isDark = true,
         uiText = UiText.DynamicString("Anthracite Blue"),
         drawableResourceId = null,
-        colorScheme = darkColorScheme(
-            primary = Color(0xFF3C3F40),
-            onPrimary = Color(0xFFFFFFFF),
-            onPrimaryContainer = Color(0xFFFFFFFF),
-
-            secondary = Color(0xFF313030),
-            onSecondary = Color(0xFFFFFFFF),
-
-            secondaryContainer = Color(0xFFE1E1E1),
-            onSecondaryContainer = Color(0xFF9A9A9A),
-
-            background = Color(0xFF3C3F40),
-            onBackground = Color(0xFFFFFFFF),
-
-            surface = Color.Transparent,
-            onSurface = Color(0xFF439DDE), // deco color
-
-            inverseSurface = Color(0xFFFFFFFF),
-            surfaceContainer = Color(0xFFFFFFFF),
-            surfaceContainerHigh = Color.Transparent,
-            surfaceContainerLow = Color.Transparent,
-            surfaceContainerLowest = Color(0xFF373737),
-            surfaceDim = Color(0xFF393939),
-
-            error = Color(0xffff002a),
-            onError = Color(0xFFFFFFFF),
-            errorContainer = Color(0xffff002a),
-            onErrorContainer = Color(0xFFFFFFFF),
-
-            outline = Color(0xFFFFFFFF),
-
-            primaryFixed = Color(0xAA000000),
-        ),
+        colorScheme = createAnthraciteTheme(spotColor = Color(0xFF439DDE)),
         textLinkStyles = TextLinkStyles(
             style = SpanStyle(
                 color = Color(0xFF439DDE),
@@ -183,14 +74,52 @@ enum class DisplayThemeEnum(
             )
         ),
         textColor = Color(0xFFFFFFFF),
-        studioClockColors = StudioClockColors(
-            colorHours = Color(0xFF0077D0),
-            colorMinutes = Color(0xFF439DDE),
-            colorSeconds = Color(0xFF0077D0),
-            colorTime = Color(0xFF0077D0),
-            colorDate = Color(0xFF439DDE),
-            colorBackground = Color(0xdd000000),
-        )
+        studioClockColors = createStudioClockColors(spotColor = Color(0xFF439DDE)),
+    ),
+
+    ANTHRACITE_GREEN(
+        isDark = true,
+        uiText = UiText.DynamicString("Anthracite Green"),
+        drawableResourceId = null,
+        colorScheme = createAnthraciteTheme(spotColor = Color(0xFF43DE58)),
+        textLinkStyles = TextLinkStyles(
+            style = SpanStyle(
+                color = Color(0xFF43DE58),
+                textDecoration = TextDecoration.Underline
+            )
+        ),
+        textColor = Color(0xFFFFFFFF),
+        studioClockColors = createStudioClockColors(spotColor = Color(0xFF43DE58)),
+    ),
+
+    ANTHRACITE_PURPLE(
+        isDark = true,
+        uiText = UiText.DynamicString("Anthracite Purple"),
+        drawableResourceId = null,
+        colorScheme = createAnthraciteTheme(spotColor = Color(0xFF7E43DE)),
+        textLinkStyles = TextLinkStyles(
+            style = SpanStyle(
+                color = Color(0xFF7E43DE),
+                textDecoration = TextDecoration.Underline
+            )
+        ),
+        textColor = Color(0xFFFFFFFF),
+        studioClockColors = createStudioClockColors(spotColor = Color(0xFF7E43DE)),
+    ),
+
+    ANTHRACITE_YELLOW(
+        isDark = true,
+        uiText = UiText.DynamicString("Anthracite Yellow"),
+        drawableResourceId = null,
+        colorScheme = createAnthraciteTheme(spotColor = Color(0xFFFCD03E)),
+        textLinkStyles = TextLinkStyles(
+            style = SpanStyle(
+                color = Color(0xFFFCD03E),
+                textDecoration = TextDecoration.Underline
+            )
+        ),
+        textColor = Color(0xFFFFFFFF),
+        studioClockColors = createStudioClockColors(spotColor = Color(0xFFFCD03E)),
     ),
 
     DARK(
@@ -309,3 +238,46 @@ enum class DisplayThemeEnum(
         }
     }
 }
+
+private fun createAnthraciteTheme(spotColor: Color): ColorScheme = darkColorScheme(
+    primary = Color(0xFF3C3F40),
+    onPrimary = Color(0xFFFFFFFF),
+    onPrimaryContainer = Color(0xFFFFFFFF),
+
+    secondary = Color(0xFF313030),
+    onSecondary = Color(0xFFFFFFFF),
+
+    secondaryContainer = Color(0xFFE1E1E1),
+    onSecondaryContainer = Color(0xFF9A9A9A),
+
+    background = Color(0xFF3C3F40),
+    onBackground = Color(0xFFFFFFFF),
+
+    surface = Color.Transparent,
+    onSurface = spotColor, // deco color
+
+    inverseSurface = Color(0xFFFFFFFF),
+    surfaceContainer = Color(0xFFFFFFFF),
+    surfaceContainerHigh = Color.Transparent,
+    surfaceContainerLow = Color.Transparent,
+    surfaceContainerLowest = Color(0xFF373737),
+    surfaceDim = Color(0xFF393939),
+
+    error = Color(0xffff002a),
+    onError = Color(0xFFFFFFFF),
+    errorContainer = Color(0xffff002a),
+    onErrorContainer = Color(0xFFFFFFFF),
+
+    outline = Color(0xFFFFFFFF),
+
+    primaryFixed = Color(0xAA000000),
+)
+
+private fun createStudioClockColors(spotColor: Color): StudioClockColors = StudioClockColors(
+    colorHours = spotColor,
+    colorMinutes = spotColor.copy(saturation = 0.3f, value = 0.8f),
+    colorSeconds = spotColor,
+    colorTime = spotColor,
+    colorDate = spotColor.copy(saturation = 0.3f, value = 0.8f),
+    colorBackground = Color(0xdd000000),
+)

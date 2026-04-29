@@ -28,7 +28,7 @@ class DefaultSettingsRepository(
     private val dao: NewsHomeReaderDatabaseQueries
 ): SettingsRepository {
 
-    private val log = Logger.withTag("this")
+    private val log = Logger.withTag("DefaultSettingsRepository")
 
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 
