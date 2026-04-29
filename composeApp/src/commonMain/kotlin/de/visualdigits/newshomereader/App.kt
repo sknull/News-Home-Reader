@@ -3,9 +3,9 @@ package de.visualdigits.newshomereader
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import coil3.compose.setSingletonImageLoaderFactory
-import de.visualdigits.newshomereader.data.repository.ConnectivityManager
+import de.visualdigits.common.domain.model.platform.PlatformType
+import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.newshomereader.data.repository.ImageCache
-import de.visualdigits.newshomereader.domain.model.platform.PlatformType
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.screen.page.MainPage
 import org.koin.compose.koinInject

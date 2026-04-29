@@ -151,6 +151,7 @@ kotlin {
             implementation(libs.sqlite.bundled)
 
             implementation(libs.compose.colorpicker)
+            implementation(libs.stephans.kmp.components)
         }
 
         commonTest.dependencies {

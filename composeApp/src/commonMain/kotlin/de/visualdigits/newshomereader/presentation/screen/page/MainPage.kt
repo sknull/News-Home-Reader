@@ -26,9 +26,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.UiText
-import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.typography
 import de.visualdigits.common.presentation.components.BindBackHandler
+import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.container.ErrorCard
 import de.visualdigits.common.presentation.components.container.FlexibleSearchBar
 import de.visualdigits.common.presentation.model.CommonAction
@@ -37,7 +37,7 @@ import de.visualdigits.compose.resources.icon_close_24px
 import de.visualdigits.compose.resources.icon_delete_24px
 import de.visualdigits.compose.resources.icon_search_24px
 import de.visualdigits.compose.resources.title_search
-import de.visualdigits.newshomereader.data.repository.ConnectivityManager
+import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
@@ -54,7 +54,6 @@ fun MainPage(
     viewModel: NewsHomeReaderViewModel,
     connectivityManager: ConnectivityManager
 ) {
-
     val state by viewModel.state.collectAsState()
     val displayTheme = state.settings?.get<DisplayThemeEnum>(SK.displayTheme) ?: DisplayThemeEnum.LIGHT
     val maxImageSize = state.settings?.get<Int>(SK.maxImageSize) ?: 1200

@@ -10,10 +10,10 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
+import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.newshomereader.data.repository.FeedScheduler
-import de.visualdigits.newshomereader.domain.model.platform.PlatformType
+import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import kotlinx.coroutines.flow.combine

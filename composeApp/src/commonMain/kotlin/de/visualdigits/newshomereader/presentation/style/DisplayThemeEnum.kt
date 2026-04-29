@@ -1,14 +1,16 @@
-package de.visualdigits.common.domain.model.configuration.keyfactory
+package de.visualdigits.newshomereader.presentation.style
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.style.TextDecoration
 import de.visualdigits.common.domain.model.StringResourceEnumerable
 import de.visualdigits.common.domain.model.UiText
+import de.visualdigits.common.domain.model.configuration.keyfactory.KeyFactory
 import de.visualdigits.common.presentation.components.StudioClockColors
 import de.visualdigits.common.presentation.components.defaultStudioClockColors
 import org.jetbrains.compose.resources.DrawableResource
@@ -17,9 +19,10 @@ enum class DisplayThemeEnum(
     override val uiText: UiText,
     override val drawableResourceId: DrawableResource?,
     val colorScheme: ColorScheme,
-    val textLinkStyles:TextLinkStyles,
+    val textLinkStyles: TextLinkStyles,
     val textColor: Color,
     val studioClockColors: StudioClockColors,
+    val backgroundImage: Painter? = null,
     val isDark: Boolean // consider as dark theme for android
 ) : StringResourceEnumerable<DisplayThemeEnum> {
 

@@ -4,6 +4,8 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import co.touchlab.kermit.Logger
 import com.fleeksoft.ksoup.Ksoup
+import de.visualdigits.common.domain.model.errorhandling.Result
+import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeed
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedEntity
@@ -16,7 +18,6 @@ import de.visualdigits.newshomereader.data.model.atom.Feed
 import de.visualdigits.newshomereader.data.model.rdf.Rdf
 import de.visualdigits.newshomereader.data.model.rss.Rss
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
-import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem

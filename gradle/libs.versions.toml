@@ -33,10 +33,9 @@ version-material3 = "1.9.0"
 version-navigation-compose = "2.9.2"
 version-proguardGradle = "7.9.1"
 version-skikoAwtRuntimeWindowsX64 = "0.9.47" # DO NOT UPGRADE FOR NOW
-
 version-sqldelight = "2.3.2"
 version-sqlite = "2.6.2"
-
+version-stephans-kmp-components = "1.0.0"
 
 [libraries]
 androidx-tv-material = { group = "androidx.tv", name = "tv-material", version.ref = "tvMaterial" }
@@ -104,6 +103,7 @@ sqldelight-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "version-sqldelight" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "version-sqlite" }
 
+stephans-kmp-components = { module = "de.visualdigits.kmp:stephans-kmp-components", version.ref = "version-stephans-kmp-components" }
 compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "version-colorpicker" }
 
 essence = { module = "de.visualdigits:essence", version.ref = "version-essence" }

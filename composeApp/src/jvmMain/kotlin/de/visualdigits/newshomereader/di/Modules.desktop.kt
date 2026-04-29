@@ -1,8 +1,8 @@
 package de.visualdigits.newshomereader.di
 
 import co.touchlab.kermit.Logger
+import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.newshomereader.data.database.DriverFactory
-import de.visualdigits.newshomereader.data.repository.ConnectivityManager
 import de.visualdigits.newshomereader.data.repository.FeedScheduler
 import de.visualdigits.newshomereader.data.repository.ImageCache
 import io.ktor.client.HttpClient

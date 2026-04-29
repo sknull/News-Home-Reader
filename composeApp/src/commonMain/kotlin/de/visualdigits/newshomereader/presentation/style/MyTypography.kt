@@ -1,4 +1,4 @@
-package de.visualdigits.common.domain.model.configuration.keyfactory
+package de.visualdigits.newshomereader.presentation.style
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.graphics.Color

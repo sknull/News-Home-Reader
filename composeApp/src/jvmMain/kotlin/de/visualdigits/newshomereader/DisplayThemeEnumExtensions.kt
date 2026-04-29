@@ -2,7 +2,7 @@ package de.visualdigits.newshomereader
 
 import com.formdev.flatlaf.FlatDarculaLaf
 import com.formdev.flatlaf.FlatLightLaf
-import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
+import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import javax.swing.LookAndFeel
 
 val DisplayThemeEnum.laf: LookAndFeel

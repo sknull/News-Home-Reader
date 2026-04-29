@@ -15,6 +15,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
+import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_counter_1_24px
@@ -25,7 +26,6 @@ import de.visualdigits.compose.resources.tooltip_mark_read_all
 import de.visualdigits.compose.resources.tooltip_mark_read_older_1
 import de.visualdigits.compose.resources.tooltip_mark_read_older_2
 import de.visualdigits.compose.resources.tooltip_refresh_newsfeed
-import de.visualdigits.newshomereader.data.repository.ConnectivityManager
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState

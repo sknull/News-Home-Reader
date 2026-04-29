@@ -6,10 +6,7 @@ import de.visualdigits.common.domain.model.configuration.EnumFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.Field
 import de.visualdigits.common.domain.model.configuration.IntFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
-import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.IntKeyFactory
-import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
-import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.label_displayTheme
 import de.visualdigits.compose.resources.label_hide_read
@@ -28,6 +25,9 @@ import de.visualdigits.compose.resources.tooltip_language
 import de.visualdigits.compose.resources.tooltip_load_articles
 import de.visualdigits.compose.resources.tooltip_refresh_interval
 import de.visualdigits.compose.resources.tooltip_refresh_wifi_only
+import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
+import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
+import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.newshomereader.domain.model.type.Language
 
 class Settings(
