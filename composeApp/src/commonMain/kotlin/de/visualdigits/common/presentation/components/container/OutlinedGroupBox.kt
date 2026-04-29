@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,17 +13,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.Dp
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.color
 import de.visualdigits.common.presentation.components.PlatformToolTip
-import de.visualdigits.newshomereader.presentation.style.gap
 
 
 @Composable
 fun OutlinedGroupBox(
+    modifier: Modifier = Modifier,
     label: String,
     toolTip: String? = null,
-    modifier: Modifier = Modifier,
+    space: Dp,
+    toolTipBackgroundColor: Color,
+    toolTipShape: Shape,
     unfocusedBorderColor: Color,
     focusedBorderColor: Color,
     buttonShape: Shape,
@@ -33,11 +35,16 @@ fun OutlinedGroupBox(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
 
-    PlatformToolTip(toolTip, content = {
+    PlatformToolTip(
+        text = toolTip,
+        space = space,
+        shape = toolTipShape,
+        backgroundColor = toolTipBackgroundColor
+    ) {
         BasicTextField(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(top = MaterialTheme.shapes.gap),
+                .padding(top = space),
             value = "",
             onValueChange = { },
             readOnly = true,
@@ -49,7 +56,7 @@ fun OutlinedGroupBox(
                     innerTextField = {
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .fillMaxWidth(),
                         ) {
                             content()
                         }
@@ -62,7 +69,7 @@ fun OutlinedGroupBox(
                     interactionSource = interactionSource,
                     colors = OutlinedTextFieldDefaults.colors(
                         unfocusedBorderColor = if (valid() == true) unfocusedBorderColor else Severity.Error.color(),
-                        focusedBorderColor = focusedBorderColor
+                        focusedBorderColor = focusedBorderColor,
                     ),
                     container = {
                         OutlinedTextFieldDefaults.Container(
@@ -71,13 +78,13 @@ fun OutlinedGroupBox(
                             interactionSource = interactionSource,
                             colors = OutlinedTextFieldDefaults.colors(
                                 unfocusedBorderColor = if (valid() == true) unfocusedBorderColor else Severity.Error.color(),
-                                focusedBorderColor = focusedBorderColor
+                                focusedBorderColor = focusedBorderColor,
                             ),
                             shape = buttonShape,
                         )
-                    }
+                    },
                 )
-            }
+            },
         )
-    })
+    }
 }

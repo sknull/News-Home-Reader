@@ -47,6 +47,9 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3Api::class)
 fun ComboBox(
     modifier: Modifier = Modifier,
+    space: Dp,
+    toolTipBackgroundColor: Color,
+    toolTipShape: Shape,
     textStyle: TextStyle,
     configuration: AbstractConfiguration<*,*>,
     fieldKey: FieldKey<*>,
@@ -79,6 +82,9 @@ fun ComboBox(
                 modifier = modifier
                     .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
                     .exposedDropdownSize(),
+                space = space,
+                toolTipBackgroundColor = toolTipBackgroundColor,
+                toolTipShape = toolTipShape,
                 textStyle = textStyle,
                 fieldHeight = fieldHeight,
                 field = field,
@@ -137,6 +143,9 @@ fun ComboBox(
     } else {
         InnerTextField(
             modifier = modifier,
+            space = space,
+            toolTipBackgroundColor = toolTipBackgroundColor,
+            toolTipShape = toolTipShape,
             textStyle = textStyle,
             fieldHeight = fieldHeight,
             field = field,
@@ -154,6 +163,9 @@ fun ComboBox(
 @OptIn(ExperimentalMaterial3Api::class)
 private fun InnerTextField(
     modifier: Modifier,
+    space: Dp,
+    toolTipBackgroundColor: Color,
+    toolTipShape: Shape,
     fieldHeight: Dp,
     textStyle: TextStyle,
     field: Field<*,*,*>,
@@ -166,9 +178,12 @@ private fun InnerTextField(
 ) {
     val halfHeight = minimizedLabelHalfHeight(textStyle)
 
-    val toolTip = field.descriptor.toolTip?.let { t -> stringResource(t) }
+    val toolTip = field.descriptor.toolTip?.let { t -> t.asString() }
     PlatformToolTip(
-        text = toolTip
+        text = toolTip,
+        space = space,
+        backgroundColor = toolTipBackgroundColor,
+        shape = toolTipShape
     ) {
         OutlinedTextField(
             modifier = modifier
@@ -177,7 +192,7 @@ private fun InnerTextField(
             textStyle = textStyle.copy(fontSize = textStyle.fontSize * 0.8f),
             label = {
                 Text(
-                    text = stringResource(field.descriptor.label),
+                    text = field.descriptor.label.asString(),
                     style = MaterialTheme.typography.bodySmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis

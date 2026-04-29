@@ -12,10 +12,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import co.touchlab.kermit.Logger
 import de.visualdigits.common.domain.model.FileMode
 import de.visualdigits.common.presentation.components.button.IndicatorButton
-import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
-import java.io.File
 import java.io.InputStream
 
 @Composable
@@ -36,7 +35,7 @@ actual fun PlatformFileChooser(
     onCancel: (() -> Unit)?,
     onOk: (String, InputStream) -> Unit
 ) {
-    val log = kermitLogger("PlatformFileChooser")
+    val log = Logger.withTag("PlatformFileChooser")
 
     val context = LocalContext.current
 

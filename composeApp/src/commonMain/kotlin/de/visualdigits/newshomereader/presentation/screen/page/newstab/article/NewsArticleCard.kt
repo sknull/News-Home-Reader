@@ -31,6 +31,7 @@ import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
+import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_timelapse_24px
 import de.visualdigits.newshomereader.data.repository.ConnectivityManager
@@ -57,6 +58,7 @@ fun NewsArticleCard(
     settings: Settings?,
     uriHandler: UriHandler,
     state: NewsHomeReaderState,
+    onCommonAction: (CommonAction) -> Unit,
     onAction: (NewsHomeReaderAction) -> Unit,
     connectivityManager: ConnectivityManager
 ) {
@@ -82,6 +84,7 @@ fun NewsArticleCard(
             PlatformVerticalScrollbarBox(
                 boxModifier = Modifier
                     .fillMaxWidth(),
+                backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
                 scrollbarModifier = Modifier
                     .clip(MaterialTheme.shapes.small)
                     .fillMaxHeight()
@@ -89,8 +92,8 @@ fun NewsArticleCard(
                     .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
                 "newsarticle_${newsArticle?.itemId}",
                 scrollPosition = scrollPosition,
-                state,
-                onAction
+                collapsibleState = state.collapsibleState,
+                onCommonAction
             ) {
                 listOf(
                     Pair("feed_name", @Composable {

@@ -1,7 +1,7 @@
 package de.visualdigits.common.domain.model.configuration
 
+import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.keyfactory.StringKeyFactory
-import org.jetbrains.compose.resources.StringResource
 
 /**
  * Represents a field which is rendered as a text field in the UI.
@@ -9,8 +9,8 @@ import org.jetbrains.compose.resources.StringResource
 class StringFieldDescriptor<K : FieldKey<K>>(
     key: K,
 
-    label: StringResource,
-    toolTip: StringResource? = null,
+    label: UiText,
+    toolTip: UiText? = null,
 
     visible: Boolean = true,
     readOnly: Boolean = false,

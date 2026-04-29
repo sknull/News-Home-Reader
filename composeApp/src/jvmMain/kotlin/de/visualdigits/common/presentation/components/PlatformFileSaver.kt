@@ -8,12 +8,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import co.touchlab.kermit.Logger
 import de.visualdigits.common.domain.model.FileMode
 import de.visualdigits.common.presentation.components.button.IndicatorButton
-import de.visualdigits.compose.resources.Res
-import de.visualdigits.compose.resources.save
-import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
-import org.jetbrains.compose.resources.stringResource
 import java.io.File
 import java.io.OutputStream
 import java.nio.file.Paths
@@ -22,6 +19,7 @@ import javax.swing.JFileChooser
 @Composable
 actual fun PlatformFileSaver(
     label: String?,
+    labelSaveButton: String?,
     buttonTextStyle: TextStyle,
     buttonTextAlign: TextAlign,
     title: String,
@@ -37,7 +35,7 @@ actual fun PlatformFileSaver(
     onCancel: (() -> Unit)?,
     onOk: (String, OutputStream) -> Unit
 ) {
-    val log = kermitLogger("PlatformFileSaver")
+    val log = Logger.withTag("PlatformFileSaver")
 
     val saveDirectory = Paths.get(System.getProperty("user.home"), ".newshomereader", "backup").toFile()
     if (!saveDirectory.exists()) {
@@ -51,7 +49,7 @@ actual fun PlatformFileSaver(
         selectedFile = File(saveDirectory, suggestedFileName)
         fileSelectionMode = mode
         dialogTitle = title
-        approveButtonText = stringResource(Res.string.save)
+        approveButtonText = labelSaveButton
     }
 
     IndicatorButton(

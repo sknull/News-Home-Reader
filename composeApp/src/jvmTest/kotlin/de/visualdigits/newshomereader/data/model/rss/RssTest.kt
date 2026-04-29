@@ -4,8 +4,8 @@ import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedEntity
 import de.visualdigits.newshomereader.data.model.applicationjson.AppJsonDto
 import de.visualdigits.newshomereader.di.platformModule
 import de.visualdigits.newshomereader.di.sharedModule
-import de.visualdigits.newshomereader.domain.model.errorhandling.onError
-import de.visualdigits.newshomereader.domain.model.errorhandling.onSuccess
+import de.visualdigits.common.domain.model.errorhandling.onError
+import de.visualdigits.common.domain.model.errorhandling.onSuccess
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
 import de.visualdigits.newshomereader.domain.repository.FeedRepository

@@ -3,7 +3,6 @@ package de.visualdigits.common.domain.model.configuration
 import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.keyfactory.KeyFactory
 import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.StringResource
 import kotlin.reflect.KClass
 
 /**
@@ -21,10 +20,10 @@ abstract class AbstractFieldDescriptor<V : Any, S : Any, K : FieldKey<K>>(
     val key: K,
 
     /** A string resource id used to render the label in th UI. */
-    val label: StringResource,
+    val label: UiText,
 
     /** A string resource id used to render a tooltip in the UI (if any). */
-    val toolTip: StringResource? = null,
+    val toolTip: UiText? = null,
 
     /**
      * Determines whether the field should be rendered in the UI at all.

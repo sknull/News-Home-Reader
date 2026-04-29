@@ -1,4 +1,4 @@
-package de.visualdigits.newshomereader.presentation.util
+package de.visualdigits.common.presentation.components.util
 
 import androidx.compose.ui.Modifier
 

@@ -4,7 +4,6 @@ import de.visualdigits.common.domain.model.FileMode
 import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.keyfactory.FileKeyFactory
 import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.StringResource
 import java.io.File
 
 /**
@@ -13,8 +12,8 @@ import java.io.File
 class FileFieldDescriptor<K : FieldKey<K>>(
     key: K,
 
-    label: StringResource,
-    toolTip: StringResource? = null,
+    label: UiText,
+    toolTip: UiText? = null,
 
     visible: Boolean = true,
     readOnly: Boolean = false,

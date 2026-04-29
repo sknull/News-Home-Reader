@@ -11,7 +11,7 @@ import androidx.compose.ui.window.rememberWindowState
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
-import de.visualdigits.common.domain.model.configuration.keyfactory.RefreshIntervalEnum
+import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.common.domain.service.getPlatformLogWriters
 import de.visualdigits.newshomereader.data.repository.FeedScheduler
 import de.visualdigits.newshomereader.di.platformModule

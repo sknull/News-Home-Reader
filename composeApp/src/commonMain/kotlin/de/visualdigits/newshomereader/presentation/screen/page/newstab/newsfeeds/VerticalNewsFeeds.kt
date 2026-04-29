@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
+import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.newshomereader.data.repository.ConnectivityManager
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
@@ -28,13 +29,10 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.screen.page.newstab.item.NewsItemCard
 import de.visualdigits.newshomereader.presentation.screen.page.newstab.newslist.NewsListMenuBar
 import de.visualdigits.newshomereader.presentation.style.gap
-import kotlin.collections.forEach
-import kotlin.collections.plus
 
 @Composable
 fun VerticalNewsFeeds(
     scrollPosition: MutableMap<String, Pair<Int, Int?>>,
-    onAction: (NewsHomeReaderAction) -> Unit,
     state: NewsHomeReaderState,
     connectivityManager: ConnectivityManager,
     maxWidth: Dp,
@@ -42,19 +40,22 @@ fun VerticalNewsFeeds(
     maxImageSize: Int?,
     settings: Settings?,
     uriHandler: UriHandler,
-    chunks: Int
+    chunks: Int,
+    onCommonAction: (CommonAction) -> Unit,
+    onAction: (NewsHomeReaderAction) -> Unit
 ) {
     PlatformVerticalScrollbarBox(
         boxModifier = Modifier
             .fillMaxSize(),
+        backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
         scrollbarModifier = Modifier
             .clip(MaterialTheme.shapes.small)
             .width(10.dp)
             .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
         "newsfeed_navigation",
         scrollPosition = scrollPosition,
-        state,
-        onAction
+        collapsibleState = state.collapsibleState,
+        onCommonAction
     ) {
         val bool = state.collapsibleState["group_newsfeeds_navigation"]
         if (bool == true) {

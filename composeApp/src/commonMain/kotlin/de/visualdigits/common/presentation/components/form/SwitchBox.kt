@@ -1,6 +1,5 @@
 package de.visualdigits.common.presentation.components.form
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,12 +29,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.presentation.components.util.minimizedLabelHalfHeight
-import de.visualdigits.newshomereader.presentation.style.gap
-import de.visualdigits.newshomereader.presentation.util.conditional
+import de.visualdigits.common.presentation.components.util.conditional
 
 @Composable
 fun SwitchBox(
     modifier: Modifier = Modifier,
+    space: Dp = 8.dp,
     label: String,
     value: Any?,
     enabled: Boolean = true,
@@ -81,7 +80,7 @@ fun SwitchBox(
             state = textFieldState,
             leadingIcon = {
                 Row {
-                    Spacer(Modifier.width(MaterialTheme.shapes.gap * 2))
+                    Spacer(Modifier.width(space * 2))
                     Switch(
                         checked = checked,
                         onCheckedChange = { v ->

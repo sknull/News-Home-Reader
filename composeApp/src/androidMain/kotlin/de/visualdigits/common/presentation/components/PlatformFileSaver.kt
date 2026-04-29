@@ -12,14 +12,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import co.touchlab.kermit.Logger
 import de.visualdigits.common.domain.model.FileMode
 import de.visualdigits.common.presentation.components.button.IndicatorButton
-import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import java.io.OutputStream
 
 @Composable
 actual fun PlatformFileSaver(
     label: String?,
+    labelSaveButton: String?,
     buttonTextStyle: TextStyle,
     buttonTextAlign: TextAlign,
     title: String,
@@ -36,7 +37,7 @@ actual fun PlatformFileSaver(
     onOk: (String, OutputStream) -> Unit
 ) {
     val context = LocalContext.current
-    val log = kermitLogger("PlatformFileSaver")
+    val log = Logger.withTag("PlatformFileSaver")
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.CreateDocument("*/*")

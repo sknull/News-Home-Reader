@@ -14,6 +14,8 @@ import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.common.presentation.components.container.VerticalCollapsibleBox
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_add_notes_24px
+import de.visualdigits.compose.resources.icon_arrow_drop_down_24px
+import de.visualdigits.compose.resources.icon_arrow_right_24px
 import de.visualdigits.compose.resources.icon_delete_24px
 import de.visualdigits.compose.resources.icon_docs_add_on_24px
 import de.visualdigits.compose.resources.icon_edit_24px
@@ -42,6 +44,8 @@ fun NewsFeedGroupBox(
             onAction(NewsHomeReaderAction.OnCollapsibleStateChange("group_${newsFeedGroup.name}", state))
         },
         isExpanded = state.collapsibleState["group_${newsFeedGroup.name}"] == true,
+        iconArrowRight = painterResource(Res.drawable.icon_arrow_right_24px),
+        iconArrowDown = painterResource(Res.drawable.icon_arrow_drop_down_24px),
         trailingIcon = {
             if (state.isEditMode) {
                 Row() {

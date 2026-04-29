@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import co.touchlab.kermit.Logger
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.CachePolicy
@@ -22,8 +23,7 @@ import coil3.request.crossfade
 import coil3.size.Size
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_hourglass_top_24px
-import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
-import de.visualdigits.newshomereader.presentation.util.conditional
+import de.visualdigits.common.presentation.components.util.conditional
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -36,7 +36,7 @@ fun NewsItemImage(
     maxImageSize: Int?
 ) {
 
-    val log = kermitLogger("NewsItemImage")
+    val log = Logger.withTag("NewsItemImage")
 
     val context = LocalPlatformContext.current
     val request = remember(url, maxImageSize) {

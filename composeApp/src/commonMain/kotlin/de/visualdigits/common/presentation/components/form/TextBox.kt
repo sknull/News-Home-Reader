@@ -20,8 +20,11 @@ import de.visualdigits.common.presentation.components.util.minimizedLabelHalfHei
 
 @Composable
 fun TextBox(
-    toolTip: String?,
     modifier: Modifier,
+    space: Dp,
+    toolTipBackgroundColor: Color,
+    toolTipShape: Shape,
+    toolTip: String?,
     focusRequester: FocusRequester,
     fieldHeight: Dp,
     textStyle: TextStyle,
@@ -29,11 +32,16 @@ fun TextBox(
     label: String,
     value: String?,
     buttonShape: Shape,
-    onValueChange: (String) -> Unit,
     finalUnfocusedBorderColor: Color,
-    focusedBorderColor: Color
+    focusedBorderColor: Color,
+    onValueChange: (String) -> Unit
 ) {
-    PlatformToolTip(toolTip, content = {
+    PlatformToolTip(
+        text = toolTip,
+        space = space,
+        backgroundColor = toolTipBackgroundColor,
+        shape = toolTipShape
+    ) {
         OutlinedTextField(
             modifier = modifier
                 .focusRequester(focusRequester)
@@ -59,5 +67,5 @@ fun TextBox(
                 cursorColor = MaterialTheme.colorScheme.onSurface
             )
         )
-    })
+    }
 }

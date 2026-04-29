@@ -1,9 +1,9 @@
 package de.visualdigits.newshomereader.data.repository
 
+import co.touchlab.kermit.Logger
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
-import de.visualdigits.common.domain.model.configuration.keyfactory.KeepArticlesEnum
-import de.visualdigits.newshomereader.domain.model.errorhandling.Result
-import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
+import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
+import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
 import de.visualdigits.newshomereader.domain.repository.NewsFeedConfigurationRepository
@@ -18,7 +18,7 @@ class NewsFeedWorker(
     private val settingsRepository: SettingsRepository,
 ) {
 
-    private val log = kermitLogger(this::class)
+    private val log = Logger.withTag("this")
 
     suspend fun execute(maxImageSize: Int) {
         val settingsResult = settingsRepository.getSettings()

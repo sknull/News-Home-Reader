@@ -13,6 +13,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -21,20 +22,21 @@ import de.visualdigits.common.domain.model.FileMode
 import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.presentation.components.PlatformToolTip
 import de.visualdigits.common.presentation.components.button.IndicatorButton
-import de.visualdigits.compose.resources.Res
-import de.visualdigits.compose.resources.icon_folder_open_24px
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
 import java.io.File
 
 @Composable
 fun FileChooserBox(
-    toolTip: String?,
     modifier: Modifier,
+    iconFolder: Painter,
+    space: Dp,
+    toolTipBackgroundColor: Color,
+    toolTipShape: Shape,
+    toolTip: String?,
     focusRequester: FocusRequester,
     fieldHeight: Dp,
     textStyle: TextStyle,
@@ -52,12 +54,17 @@ fun FileChooserBox(
     titleFiles: String,
     options: List<Triple<String, UiText?, DrawableResource?>>,
     startDirectory: File,
-    onOk: (File) -> Unit,
-    onValueChange: (String) -> Unit,
     finalUnfocusedBorderColor: Color,
-    focusedBorderColor: Color
+    focusedBorderColor: Color,
+    onValueChange: (String) -> Unit,
+    onOk: (File) -> Unit
 ) {
-    PlatformToolTip(toolTip, content = {
+    PlatformToolTip(
+        text = toolTip,
+        space = space,
+        backgroundColor = toolTipBackgroundColor,
+        shape = toolTipShape
+    ) {
         OutlinedTextField(
             modifier = modifier
                 .focusRequester(focusRequester)
@@ -80,7 +87,7 @@ fun FileChooserBox(
 
                 if (enabled) {
                     IndicatorButton(
-                        leadingIcon = painterResource(Res.drawable.icon_folder_open_24px),
+                        leadingIcon = iconFolder,
                         leadingIconTint = iconTint,
                         modifier = Modifier.padding(start = 5.dp),
                         shape = buttonShape,
@@ -110,5 +117,5 @@ fun FileChooserBox(
                 focusedBorderColor = focusedBorderColor
             )
         )
-    })
+    }
 }

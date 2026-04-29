@@ -2,9 +2,6 @@ package de.visualdigits.common.domain.model.configuration.keyfactory
 
 import de.visualdigits.common.domain.model.StringResourceEnumerable
 import de.visualdigits.common.domain.model.UiText
-import de.visualdigits.compose.resources.Res
-import de.visualdigits.compose.resources.`false`
-import de.visualdigits.compose.resources.`true`
 import org.jetbrains.compose.resources.DrawableResource
 
 enum class BooleanEnum(
@@ -13,8 +10,8 @@ enum class BooleanEnum(
     val booleanValue: Boolean
 ) : StringResourceEnumerable<BooleanEnum> {
 
-    TRUE(UiText.StringResourceId(Res.string.`true`),  null, true),
-    FALSE(UiText.StringResourceId(Res.string.`false`),  null, false),
+    TRUE(UiText.DynamicString("true"),  null, true),
+    FALSE(UiText.DynamicString("false"),  null, false),
     ;
 
     override fun toString(): String = name.lowercase()

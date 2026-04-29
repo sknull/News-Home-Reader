@@ -9,24 +9,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
-import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
-import de.visualdigits.newshomereader.presentation.style.gap
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
+import de.visualdigits.common.presentation.model.CommonAction
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 actual fun PlatformVerticalScrollbarBox(
     boxModifier: Modifier,
+    backgroundColor: Color,
     scrollbarModifier: Modifier,
     scrollbarId: String,
     scrollPosition: MutableMap<String, Pair<Int, Int?>>,
-    state: NewsHomeReaderState,
-    onAction: (NewsHomeReaderAction) -> Unit,
+    collapsibleState: Map<String, Boolean>,
+    onCommonAction: (CommonAction) -> Unit,
+    space: Dp,
     rows: () -> List<Pair<String, @Composable () -> Unit>>
 ) {
     val items = rows()
@@ -38,7 +39,7 @@ actual fun PlatformVerticalScrollbarBox(
         )
 
         LaunchedEffect(items.size) { // Reagiert, wenn sich die Anzahl der Items (Menü an/aus) ändert
-            if (state.collapsibleState["group_newsfeeds_navigation"] == true) {
+            if (collapsibleState["group_newsfeeds_navigation"] == true) {
                 lazyListState.animateScrollToItem(0)
             }
         }
@@ -49,15 +50,15 @@ actual fun PlatformVerticalScrollbarBox(
             }
                 .collectLatest { (index, offset) ->
                     // Wir schicken beide Werte (als Pair) an dein ViewModel
-                    onAction(NewsHomeReaderAction.OnScrollPositionChange(scrollbarId, index, offset))
+                    onCommonAction(CommonAction.OnScrollPositionChange(scrollbarId, index, offset))
                 }
         }
         LazyColumn(
             modifier = boxModifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surfaceContainerLow)
-                .padding(MaterialTheme.shapes.gap),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
+                .background(backgroundColor)
+                .padding(space),
+            verticalArrangement = Arrangement.spacedBy(space),
             state = lazyListState
         ) {
             items(

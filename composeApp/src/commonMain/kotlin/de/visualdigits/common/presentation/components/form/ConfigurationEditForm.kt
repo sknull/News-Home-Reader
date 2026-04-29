@@ -19,36 +19,37 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.KeyValue
+import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.color
 import de.visualdigits.common.domain.model.configuration.AbstractConfiguration
 import de.visualdigits.common.domain.model.configuration.AbstractFieldDescriptor
-import de.visualdigits.common.domain.model.configuration.Field
 import de.visualdigits.common.domain.model.configuration.FieldKey
 import de.visualdigits.common.domain.model.configuration.ListFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.SpacerFieldDescriptor
+import de.visualdigits.common.domain.model.form.EditableListResources
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
 import de.visualdigits.common.presentation.components.button.IndicatorButton
-import de.visualdigits.compose.resources.Res
-import de.visualdigits.compose.resources.cancel
-import de.visualdigits.compose.resources.icon_cancel_24px
-import de.visualdigits.compose.resources.icon_check_small_24px
-import de.visualdigits.compose.resources.ok
-import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
-import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
-import de.visualdigits.newshomereader.presentation.style.gap
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.stringResource
+import de.visualdigits.common.presentation.model.CommonAction
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConfigurationEditForm(
     modifier: Modifier = Modifier,
+    titleChooseDirectory: UiText,
+    titleChooseFile: UiText,
+    iconFolder: Painter,
+    editableListResources: EditableListResources,
+    tooltipOk: UiText,
+    iconOk: Painter,
+    tooltipCancel: UiText,
+    iconCancel: Painter,
     scrollPosition: MutableMap<String, Pair<Int, Int?>>,
     scrollbarId: String,
     fieldHeight: Dp = Dp.Unspecified,
@@ -59,18 +60,19 @@ fun ConfigurationEditForm(
     buttonColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
     containerShape: Shape = MaterialTheme.shapes.small,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
-    space: Dp = MaterialTheme.shapes.gap,
+    space: Dp = 8.dp,
     onValueChange: (KeyValue) -> Unit,
     configuration: () -> AbstractConfiguration<*,*>,
-    state: NewsHomeReaderState,
+    collapsibleState: Map<String, Boolean>,
     onCancelClick: () -> Unit,
     onOkClick: () -> Unit,
-    onAction: (NewsHomeReaderAction) -> Unit,
+    onCommonAction: (CommonAction) -> Unit,
     deleteAllowed: (AbstractFieldDescriptor<*,*,*>?, String) -> Boolean = { _,_ -> true }
 ) {
     PlatformVerticalScrollbarBox(
         boxModifier = modifier
             .fillMaxWidth(),
+        backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
         scrollbarModifier = Modifier
             .clip(MaterialTheme.shapes.small)
             .fillMaxHeight()
@@ -78,8 +80,8 @@ fun ConfigurationEditForm(
             .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
         scrollbarId,
         scrollPosition = scrollPosition,
-        state,
-        onAction
+        collapsibleState = collapsibleState,
+        onCommonAction = onCommonAction
     ) {
         listOf(
             Pair("fields", @Composable {
@@ -103,6 +105,10 @@ fun ConfigurationEditForm(
                             ) {
                                 EditableField(
                                     configuration = configuration1,
+                                    titleChooseDirectory = titleChooseDirectory,
+                                    titleChooseFile = titleChooseFile,
+                                    iconFolder = iconFolder,
+                                    editableListResources = editableListResources,
                                     fieldKey = field.descriptor.key,
                                     fieldHeight = fieldHeight,
                                     space = space,
@@ -132,23 +138,23 @@ fun ConfigurationEditForm(
                     Spacer(Modifier.weight(1f))
 
                     IndicatorButton(
-                        toolTip = stringResource(Res.string.cancel),
+                        toolTip = tooltipCancel.asString(),
                         width = 50.dp,
                         height = 50.dp,
                         buttonColor = buttonColor,
                         shape = buttonShape,
-                        leadingIcon = painterResource(Res.drawable.icon_cancel_24px),
+                        leadingIcon = iconCancel,
                         leadingIconTint = iconTint,
                         onClick = onCancelClick
                     )
 
                     IndicatorButton(
-                        toolTip = stringResource(Res.string.ok),
+                        toolTip = tooltipOk.asString(),
                         width = 50.dp,
                         height = 50.dp,
                         buttonColor = buttonColor,
                         shape = buttonShape,
-                        leadingIcon = painterResource(Res.drawable.icon_check_small_24px),
+                        leadingIcon = iconOk,
                         leadingIconTint = iconTint,
                         onClick = onOkClick
                     )
@@ -161,6 +167,10 @@ fun ConfigurationEditForm(
 @Composable
 private fun EditableField(
     configuration: AbstractConfiguration<*,*>,
+    titleChooseDirectory: UiText,
+    titleChooseFile: UiText,
+    iconFolder: Painter,
+    editableListResources: EditableListResources,
     fieldKey: FieldKey<*>,
     fieldHeight: Dp,
     space: Dp,
@@ -181,6 +191,10 @@ private fun EditableField(
     when(field?.descriptor) {
         is ListFieldDescriptor -> {
             EditableList(
+                titleChooseDirectory = titleChooseDirectory,
+                titleChooseFile = titleChooseFile,
+                iconFolder = iconFolder,
+                resources = editableListResources,
                 configuration = configuration,
                 fieldKey = fieldKey,
                 fieldHeight = fieldHeight,
@@ -209,6 +223,9 @@ private fun EditableField(
             TypeAwareEditableField(
                 modifier = Modifier
                     .fillMaxWidth(),
+                titleChooseDirectory = titleChooseDirectory,
+                titleChooseFile = titleChooseFile,
+                iconFolder = iconFolder,
                 configuration = configuration,
                 fieldKey = fieldKey,
                 fieldHeight = fieldHeight,

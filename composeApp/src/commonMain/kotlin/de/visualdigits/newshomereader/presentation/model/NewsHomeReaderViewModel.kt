@@ -2,12 +2,14 @@ package de.visualdigits.newshomereader.presentation.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
-import de.visualdigits.common.domain.model.configuration.keyfactory.KeepArticlesEnum
-import de.visualdigits.common.domain.model.configuration.keyfactory.RefreshIntervalEnum
+import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
+import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum
+import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.error_local_wrong_filetype
 import de.visualdigits.generated.AppVersion
@@ -15,10 +17,9 @@ import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedConfigurati
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedItem
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
-import de.visualdigits.newshomereader.domain.model.errorhandling.Result
-import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
-import de.visualdigits.newshomereader.domain.model.errorhandling.onError
-import de.visualdigits.newshomereader.domain.model.errorhandling.onSuccess
+import de.visualdigits.common.domain.model.errorhandling.Result
+import de.visualdigits.common.domain.model.errorhandling.onError
+import de.visualdigits.common.domain.model.errorhandling.onSuccess
 import de.visualdigits.newshomereader.domain.model.errorhandling.toUiText
 import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NC
 import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NewsFeedConfiguration
@@ -28,8 +29,8 @@ import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
 import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
 import de.visualdigits.newshomereader.domain.repository.CatalogRepository
@@ -67,7 +68,7 @@ class NewsHomeReaderViewModel(
     val catalogRepository: CatalogRepository,
 ) : ViewModel() {
 
-    private val log = kermitLogger(this::class)
+    private val log = Logger.withTag("this")
 
     val scrollPosition: MutableMap<String, Pair<Int, Int?>> = mutableMapOf()
     var platformType: PlatformType = PlatformType.unknown
@@ -121,6 +122,15 @@ class NewsHomeReaderViewModel(
                 }
             }
             .launchIn(viewModelScope)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun onCommonAction(action: CommonAction) {
+        when (action) {
+            is CommonAction.OnScrollPositionChange -> {
+                scrollPosition[action.id] = Pair(action.position, action.offset)
+            }
+        }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -516,10 +526,6 @@ class NewsHomeReaderViewModel(
                     )
                 }
                 filterCatalog(action.text)
-            }
-
-            is NewsHomeReaderAction.OnScrollPositionChange -> {
-                scrollPosition[action.id] = Pair(action.position, action.offset)
             }
 
             is NewsHomeReaderAction.OnLanguageSelected -> {

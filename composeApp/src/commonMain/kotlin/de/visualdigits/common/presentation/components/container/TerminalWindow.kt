@@ -28,22 +28,23 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import de.visualdigits.common.domain.model.color
 import de.visualdigits.common.presentation.components.PlatformLazyVerticalScrollbar
-import de.visualdigits.newshomereader.domain.model.errorhandling.LogMessage
-import de.visualdigits.newshomereader.presentation.style.gap
+import de.visualdigits.common.domain.model.errorhandling.LogMessage
 
 
 @Composable
 fun TerminalWindow(
     modifier: Modifier = Modifier,
+    space: Dp = 8.dp,
     shapeContainer: Shape,
     title: String,
     listData: () -> List<LogMessage>,
     backGroundColor: Color = MaterialTheme.colorScheme.primaryFixed,
-    containerShape: Shape = RoundedCornerShape(MaterialTheme.shapes.gap),
+    containerShape: Shape = RoundedCornerShape(space),
 ) {
     val listState = rememberLazyListState()
     val interactionSource = remember { MutableInteractionSource() }
@@ -70,23 +71,23 @@ fun TerminalWindow(
                     .height(30.dp),
                 border = BorderStroke(1.dp, Color.White),
                 color = Color(0xffffffff),
-                shape = RoundedCornerShape(topStart = MaterialTheme.shapes.gap, topEnd = MaterialTheme.shapes.gap)
+                shape = RoundedCornerShape(topStart = space, topEnd = space)
             ) {
                 Text(
                     text = title,
                     color = Color.Black,
                     style = MaterialTheme.typography.titleSmall,
                     modifier = Modifier
-                        .padding(horizontal = MaterialTheme.shapes.gap)
+                        .padding(horizontal = space)
                 )
             }
 
             Box(modifier = Modifier.fillMaxSize()) {
                 LazyColumn(
                     state = listState,
-                    contentPadding = PaddingValues(MaterialTheme.shapes.gap),
+                    contentPadding = PaddingValues(space),
                     modifier = Modifier
-                        .padding(MaterialTheme.shapes.gap)
+                        .padding(space)
                         .fillMaxSize()
                 ) {
                     items(

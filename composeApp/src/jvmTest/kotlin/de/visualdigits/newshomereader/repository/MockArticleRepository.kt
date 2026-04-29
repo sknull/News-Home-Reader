@@ -5,7 +5,7 @@ import de.visualdigits.essence.Essence
 import de.visualdigits.newshomereader.data.mapper.toAppJson
 import de.visualdigits.newshomereader.data.model.applicationjson.AppJsonDto
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
-import de.visualdigits.newshomereader.domain.model.errorhandling.Result
+import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository

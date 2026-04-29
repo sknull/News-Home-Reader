@@ -5,17 +5,16 @@ import androidx.compose.foundation.TooltipArea
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import de.visualdigits.newshomereader.presentation.style.gap
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
@@ -24,6 +23,9 @@ actual fun PlatformToolTip(
     textStyle: TextStyle,
     modifier: Modifier,
     shadowSize: Dp,
+    space: Dp,
+    backgroundColor: Color,
+    shape: Shape,
     content: @Composable () -> Unit
 ) {
     if (text != null) {
@@ -34,7 +36,7 @@ actual fun PlatformToolTip(
                     modifier = Modifier
                         .shadow(
                             elevation = shadowSize,
-                            shape = MaterialTheme.shapes.small,
+                            shape = shape,
                             spotColor = Color.Black,
                             ambientColor = Color.White
                         )
@@ -44,9 +46,9 @@ actual fun PlatformToolTip(
                         text = text,
                         style = textStyle,
                         modifier = Modifier
-                            .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+                            .background(backgroundColor)
                             .border(0.5.dp, Color.Black)
-                            .padding(MaterialTheme.shapes.gap)
+                            .padding(space)
                     )
                 }
             },

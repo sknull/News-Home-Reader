@@ -1,10 +1,10 @@
 package de.visualdigits.newshomereader.di
 
+import co.touchlab.kermit.Logger
 import de.visualdigits.newshomereader.data.database.DriverFactory
 import de.visualdigits.newshomereader.data.repository.ConnectivityManager
 import de.visualdigits.newshomereader.data.repository.FeedScheduler
 import de.visualdigits.newshomereader.data.repository.ImageCache
-import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.okhttp.OkHttp
@@ -16,7 +16,7 @@ import io.ktor.http.HttpHeaders
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-val log = kermitLogger("HttpClient")
+val log = Logger.withTag("HttpClient")
 
 actual val platformModule: Module
     get() = module {

@@ -3,7 +3,7 @@ package de.visualdigits.newshomereader.data.repository
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalog
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
-import de.visualdigits.newshomereader.domain.model.errorhandling.Result
+import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.repository.CatalogRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO

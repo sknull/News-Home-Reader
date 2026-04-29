@@ -2,6 +2,7 @@ package de.visualdigits.newshomereader.data.repository
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import co.touchlab.kermit.Logger
 import com.fleeksoft.ksoup.Ksoup
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeed
@@ -15,8 +16,7 @@ import de.visualdigits.newshomereader.data.model.atom.Feed
 import de.visualdigits.newshomereader.data.model.rdf.Rdf
 import de.visualdigits.newshomereader.data.model.rss.Rss
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
-import de.visualdigits.newshomereader.domain.model.errorhandling.Result
-import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
+import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
@@ -51,7 +51,7 @@ class DefaultFeedRepository(
     val articleRepository: ArticleRepository,
 ) : FeedRepository {
 
-    private val log = kermitLogger(this::class)
+    private val log = Logger.withTag("this")
 
     override suspend fun getFeedItemsByNewsFeedName(feedName: String): Result<List<NewsItem>, DataError.Remote> = withContext(Dispatchers.IO) {
         try {

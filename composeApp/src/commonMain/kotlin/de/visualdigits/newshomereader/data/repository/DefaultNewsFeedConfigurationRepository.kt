@@ -1,5 +1,6 @@
 package de.visualdigits.newshomereader.data.repository
 
+import co.touchlab.kermit.Logger
 import de.visualdigits.newshomereader.NewsFeedGroupEntity
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.data.database.getAllNewsFeedGroups
@@ -10,8 +11,7 @@ import de.visualdigits.newshomereader.data.mapper.toNewsFeedConfiguration
 import de.visualdigits.newshomereader.data.mapper.toOpml
 import de.visualdigits.newshomereader.data.model.opml.Opml
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
-import de.visualdigits.newshomereader.domain.model.errorhandling.Result
-import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
+import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.repository.NewsFeedConfigurationRepository
@@ -28,7 +28,7 @@ class DefaultNewsFeedConfigurationRepository(
     private val dao: NewsHomeReaderDatabaseQueries
 ) : NewsFeedConfigurationRepository {
 
-    private val log = kermitLogger(DefaultNewsFeedConfigurationRepository::class)
+    private val log = Logger.withTag("DefaultNewsFeedConfigurationRepository")
 
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 

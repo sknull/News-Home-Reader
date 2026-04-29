@@ -38,16 +38,13 @@ import de.visualdigits.common.presentation.components.PlatformToolTip
 import de.visualdigits.common.presentation.components.modifier.indicator
 import de.visualdigits.common.presentation.components.modifier.ledRing
 import de.visualdigits.common.presentation.components.platformFocus
-import de.visualdigits.compose.resources.Res
-import de.visualdigits.compose.resources.add_hint
 import de.visualdigits.newshomereader.presentation.style.buttonsFlat
-import de.visualdigits.newshomereader.presentation.style.gap
-import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun IndicatorButton(
     modifier: Modifier = Modifier,
+    space: Dp = 8.dp,
     text: String? = null,
     maxLines: Int = 1,
     textColor: Color = MaterialTheme.colorScheme.onSurface,
@@ -139,7 +136,12 @@ fun IndicatorButton(
             Alignment.Center -> listOf(padding * 3, padding * 3, padding * 3, padding * 3)
             else -> listOf(padding, padding, padding, padding)
         }
-        PlatformToolTip(toolTip, content = {
+        PlatformToolTip(
+            text = toolTip,
+            space = space,
+            shape = MaterialTheme.shapes.small,
+            backgroundColor = MaterialTheme.colorScheme.surfaceContainerLowest
+        ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -155,13 +157,13 @@ fun IndicatorButton(
                         Icon(
                             modifier = Modifier,
                             painter = leadingIcon,
-                            contentDescription = stringResource(Res.string.add_hint),
+                            contentDescription = null,
                             tint = if (enabled) leadingIconTint else leadingIconTintDisabled
                         )
-                        if (text != null) Spacer(Modifier.width(MaterialTheme.shapes.gap))
+                        if (text != null) Spacer(Modifier.width(space))
                     } else if (leadingImage != null) {
                         leadingImage()
-                        if (text != null) Spacer(Modifier.width(MaterialTheme.shapes.gap))
+                        if (text != null) Spacer(Modifier.width(space))
                     }
 
                     if (text?.isNotEmpty() == true) {
@@ -179,16 +181,16 @@ fun IndicatorButton(
                     }
 
                     if (trailingIcon != null) {
-                        if (text != null || leadingIcon != null) Spacer(Modifier.width(MaterialTheme.shapes.gap))
+                        if (text != null || leadingIcon != null) Spacer(Modifier.width(space))
                         Icon(
                             modifier = Modifier,
                             painter = trailingIcon,
-                            contentDescription = stringResource(Res.string.add_hint),
+                            contentDescription = null,
                             tint = if (enabled) trailingIconTint else trailingIconTintDisabled
                         )
                     }
                 }
             }
-        })
+        }
     }
 }

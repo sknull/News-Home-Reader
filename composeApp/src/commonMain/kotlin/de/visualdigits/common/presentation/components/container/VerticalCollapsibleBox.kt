@@ -23,24 +23,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.UiPlatform
 import de.visualdigits.common.presentation.components.androidPlatform
 import de.visualdigits.common.presentation.components.platformFocus
-import de.visualdigits.compose.resources.Res
-import de.visualdigits.compose.resources.icon_arrow_drop_down_24px
-import de.visualdigits.compose.resources.icon_arrow_right_24px
-import de.visualdigits.newshomereader.presentation.style.gap
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun VerticalCollapsibleBox(
     modifier: Modifier = Modifier,
+    iconArrowRight: Painter,
+    iconArrowDown: Painter,
+    space: Dp = 8.dp,
     title: String?,
     focusedBorderColor: Color = MaterialTheme.colorScheme.outline,
     unfocusedBorderColor: Color = MaterialTheme.colorScheme.onSurface,
@@ -55,6 +54,7 @@ fun VerticalCollapsibleBox(
     if (androidPlatform() == UiPlatform.UI_MODE_TYPE_TELEVISION) {
         VerticalCollapsibleBoxTv(
             modifier = modifier,
+            space = space,
             title = title,
             backgroundColor = backgroundColor,
             shape = shape,
@@ -64,6 +64,9 @@ fun VerticalCollapsibleBox(
     } else {
         VerticalCollapsibleBoxFull(
             modifier = modifier,
+            iconArrowRight = iconArrowRight,
+            iconArrowDown = iconArrowDown,
+            space = space,
             title = title,
             unfocusedBorderColor = unfocusedBorderColor,
             focusedBorderColor = focusedBorderColor,
@@ -81,6 +84,9 @@ fun VerticalCollapsibleBox(
 @Composable
 fun VerticalCollapsibleBoxFull(
     modifier: Modifier = Modifier,
+    iconArrowRight: Painter,
+    iconArrowDown: Painter,
+    space: Dp = 9.dp,
     title: String?,
     unfocusedBorderColor: Color,
     focusedBorderColor: Color,
@@ -118,7 +124,7 @@ fun VerticalCollapsibleBoxFull(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
+                        verticalArrangement = Arrangement.spacedBy(space),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         // header row
@@ -129,13 +135,13 @@ fun VerticalCollapsibleBoxFull(
                                 .clickable {
                                     onStateChange(!isExpanded)
                                 },
-                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
+                            horizontalArrangement = Arrangement.spacedBy(space),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             title?.let { t ->
                                 Text(
                                     modifier = Modifier
-                                        .padding(MaterialTheme.shapes.gap),
+                                        .padding(space),
                                     text = t,
                                     style = MaterialTheme.typography.titleSmall
                                 )
@@ -146,16 +152,16 @@ fun VerticalCollapsibleBoxFull(
                             if (isExpanded) {
                                 Icon(
                                     modifier = Modifier
-                                        .padding(MaterialTheme.shapes.gap),
-                                    painter = painterResource(Res.drawable.icon_arrow_drop_down_24px),
+                                        .padding(space),
+                                    painter = iconArrowDown,
                                     contentDescription = null,
                                     tint = iconTint
                                 )
                             } else {
                                 Icon(
                                     modifier = Modifier
-                                        .padding(MaterialTheme.shapes.gap),
-                                    painter = painterResource(Res.drawable.icon_arrow_right_24px),
+                                        .padding(space),
+                                    painter = iconArrowRight,
                                     contentDescription = null,
                                     tint = iconTint
                                 )
@@ -167,7 +173,7 @@ fun VerticalCollapsibleBoxFull(
                         if (isExpanded) {
                             Box(
                                 modifier = Modifier
-                                    .padding(bottom = MaterialTheme.shapes.gap),
+                                    .padding(bottom = space),
                             ) {
                                 content()
                             }
@@ -204,6 +210,7 @@ fun VerticalCollapsibleBoxFull(
 @Composable
 fun VerticalCollapsibleBoxTv(
     modifier: Modifier = Modifier,
+    space: Dp = 8.dp,
     title: String?,
     backgroundColor: Color,
     shape: Shape,
@@ -214,20 +221,20 @@ fun VerticalCollapsibleBoxTv(
         modifier = modifier
             .background(backgroundColor, shape)
             .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+        verticalArrangement = Arrangement.spacedBy(space)
     ) {
         title?.let { t ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(MaterialTheme.shapes.gap)
+                    .padding(space)
                     .background(backgroundColor.copy(alpha = 0.4f), shape)
                     .platformFocus(),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                horizontalArrangement = Arrangement.spacedBy(space)
             ) {
                 Text(
                     modifier = Modifier
-                        .padding(MaterialTheme.shapes.gap),
+                        .padding(space),
                     text = t,
                     style = MaterialTheme.typography.titleSmall
                 )

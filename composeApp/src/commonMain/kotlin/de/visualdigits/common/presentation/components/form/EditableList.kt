@@ -34,35 +34,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.KeyValue
+import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.AbstractConfiguration
 import de.visualdigits.common.domain.model.configuration.AbstractFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.FieldKey
+import de.visualdigits.common.domain.model.form.EditableListResources
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbar
 import de.visualdigits.common.presentation.components.button.IndicatorButton
-import de.visualdigits.compose.resources.Res
-import de.visualdigits.compose.resources.add
-import de.visualdigits.compose.resources.add_hint
-import de.visualdigits.compose.resources.cancel
-import de.visualdigits.compose.resources.delete
-import de.visualdigits.compose.resources.edit
-import de.visualdigits.compose.resources.icon_add_24px
-import de.visualdigits.compose.resources.icon_cancel_24px
-import de.visualdigits.compose.resources.icon_delete_24px
-import de.visualdigits.compose.resources.icon_edit_24px
-import de.visualdigits.compose.resources.icon_file_save_24px
-import de.visualdigits.compose.resources.ok
-import de.visualdigits.newshomereader.presentation.style.gap
-import de.visualdigits.newshomereader.presentation.util.conditional
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.stringResource
+import de.visualdigits.common.presentation.components.util.conditional
 
 @Composable
 fun EditableList(
     modifier: Modifier = Modifier,
+    titleChooseDirectory: UiText,
+    titleChooseFile: UiText,
+    iconFolder: Painter,
+    resources: EditableListResources,
     configuration: AbstractConfiguration<*,*>,
     fieldKey: FieldKey<*>,
     fieldHeight: Dp = Dp.Unspecified,
@@ -96,7 +88,7 @@ fun EditableList(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(MaterialTheme.shapes.gap)
+            .padding(space)
             .border(1.dp, unfocusedBorderColor, buttonShape)
     ) {
         val scrollState = rememberScrollState(0)
@@ -110,7 +102,7 @@ fun EditableList(
         ) {
             Text(
                 modifier = Modifier,
-                text = field?.descriptor?.label?.let { r -> stringResource(r) } ?: "",
+                text = field?.descriptor?.label?.let { r -> r.asString() } ?: "",
                 style = MaterialTheme.typography.bodySmall,
             )
 
@@ -132,9 +124,9 @@ fun EditableList(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color.Transparent)
-                            .padding(start = MaterialTheme.shapes.gap, end = 0.dp),
+                            .padding(start = space, end = 0.dp),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                        horizontalArrangement = Arrangement.spacedBy(space)
                     ) {
                         Text(
                             text = item,
@@ -145,8 +137,8 @@ fun EditableList(
 
                         if (field?.enabled == true) {
                             IndicatorButton(
-                                leadingIcon = painterResource(Res.drawable.icon_edit_24px),
-                                toolTip = stringResource(Res.string.edit),
+                                leadingIcon = resources.iconEdit,
+                                toolTip = resources.toolTipEdit.asString(),
                                 width = 30.dp,
                                 height = 30.dp,
                                 onClick = {
@@ -157,8 +149,8 @@ fun EditableList(
                             )
 
                             IndicatorButton(
-                                leadingIcon = painterResource(Res.drawable.icon_delete_24px),
-                                toolTip = stringResource(Res.string.delete),
+                                leadingIcon = resources.iconDelete,
+                                toolTip = resources.toolTipDelete.asString(),
                                 width = 30.dp,
                                 height = 30.dp,
                                 enabled = allowDelete,
@@ -183,10 +175,10 @@ fun EditableList(
                     IndicatorButton(
                         modifier = Modifier
                             .align(Alignment.CenterEnd),
-                        text = stringResource(Res.string.add_hint),
+                        text = resources.hintAdd.asString(),
                         buttonColor = buttonColor,
                         shape = buttonShape,
-                        leadingIcon = painterResource(Res.drawable.icon_add_24px),
+                        leadingIcon = resources.iconAdd,
                         leadingIconTint = iconTint
                     ) {
                         editingIndex = null
@@ -205,7 +197,7 @@ fun EditableList(
                     .align(Alignment.CenterEnd)
                     .fillMaxHeight()
                     .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f))
-                    .width(MaterialTheme.shapes.gap),
+                    .width(space),
                 scrollState = scrollState
             )
         }
@@ -220,11 +212,14 @@ fun EditableList(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLowest.copy(alpha = 0.6f),
             shape = containerShape,
             onDismissRequest = { showDialog = false },
-            title = { Text(if (editingIndex == null) stringResource(Res.string.add) else stringResource(Res.string.edit)) },
+            title = { Text(if (editingIndex == null) resources.titleAdd.asString() else resources.titleEdit.asString()) },
             text = {
                 TypeAwareEditableField(
                     modifier = Modifier
                         .fillMaxWidth(),
+                    titleChooseDirectory = titleChooseDirectory,
+                    titleChooseFile = titleChooseFile,
+                    iconFolder = iconFolder,
                     configuration = configuration,
                     fieldKey = fieldKey,
                     currentValue = currentText,
@@ -244,10 +239,10 @@ fun EditableList(
             },
             confirmButton = {
                 IndicatorButton(
-                    text = stringResource(Res.string.ok),
+                    text = resources.labelOk.asString(),
                     buttonColor = buttonColor,
                     shape = buttonShape,
-                    leadingIcon = painterResource(Res.drawable.icon_file_save_24px),
+                    leadingIcon = resources.iconSaveFile,
                     leadingIconTint = iconTint
                 ) {
                     val previousValue = editingIndex?.let { i -> items[i] }
@@ -270,10 +265,10 @@ fun EditableList(
             },
             dismissButton = {
                 IndicatorButton(
-                    text = stringResource(Res.string.cancel),
+                    text = resources.labelCancel.asString(),
                     buttonColor = buttonColor,
                     shape = buttonShape,
-                    leadingIcon = painterResource(Res.drawable.icon_cancel_24px),
+                    leadingIcon = resources.iconCancel,
                     leadingIconTint = iconTint
                 ) {
                     items.update(previousItems)

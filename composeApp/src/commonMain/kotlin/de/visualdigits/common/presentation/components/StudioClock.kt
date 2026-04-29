@@ -23,10 +23,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.sp
 import de.visualdigits.common.domain.util.copy
 import de.visualdigits.common.domain.util.copyFactor
-import de.visualdigits.compose.resources.Res
-import de.visualdigits.compose.resources.digital_dream_skew_fat
 import kotlinx.coroutines.delay
-import org.jetbrains.compose.resources.Font
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -45,6 +42,7 @@ private val formatterDate = DateTimeFormatter.ofPattern("dd.MM.")
 @Composable
 fun StudioClock(
     modifier: Modifier = Modifier,
+    fontFamily: FontFamily,
     colors: StudioClockColors = defaultStudioClockColors,
     showSeconds: Boolean = true,
     showDate: Boolean = true
@@ -56,10 +54,6 @@ fun StudioClock(
     Box(
         modifier = modifier
     ) {
-        val fontFamily = FontFamily(
-            Font(Res.font.digital_dream_skew_fat)
-        )
-
         LaunchedEffect(Unit) {
             while (true) {
                 currentTime = System.currentTimeMillis()

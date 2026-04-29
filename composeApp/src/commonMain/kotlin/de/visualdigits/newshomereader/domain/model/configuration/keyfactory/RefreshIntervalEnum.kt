@@ -1,7 +1,8 @@
-package de.visualdigits.common.domain.model.configuration.keyfactory
+package de.visualdigits.newshomereader.domain.model.configuration.keyfactory
 
 import de.visualdigits.common.domain.model.StringResourceEnumerable
 import de.visualdigits.common.domain.model.UiText
+import de.visualdigits.common.domain.model.configuration.keyfactory.KeyFactory
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.label_15_minutes
 import de.visualdigits.compose.resources.label_30_minutes

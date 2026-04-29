@@ -15,8 +15,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.FileMode
 import de.visualdigits.common.domain.model.UiPlatform
-import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
-import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
+import de.visualdigits.common.presentation.model.CommonAction
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -26,11 +25,13 @@ expect fun BindBackHandler(isEnabled: Boolean, onBack: () -> Unit)
 @Composable
 expect fun PlatformVerticalScrollbarBox(
     boxModifier: Modifier = Modifier,
+    backgroundColor: Color,
     scrollbarModifier: Modifier = Modifier,
     scrollbarId: String,
     scrollPosition: MutableMap<String, Pair<Int, Int?>>,
-    state: NewsHomeReaderState,
-    onAction: (NewsHomeReaderAction) -> Unit,
+    collapsibleState: Map<String, Boolean>,
+    onCommonAction: (CommonAction) -> Unit,
+    space: Dp = 8.dp,
     rows: () -> List<Pair<String, @Composable () -> Unit>>
 )
 
@@ -54,6 +55,9 @@ expect fun PlatformToolTip(
     textStyle: TextStyle = MaterialTheme.typography.bodySmall,
     modifier: Modifier = Modifier,
     shadowSize: Dp = 5.dp,
+    space: Dp,
+    backgroundColor: Color,
+    shape: Shape,
     content: @Composable () -> Unit
 )
 
@@ -88,6 +92,7 @@ expect fun PlatformFileChooser(
 @Composable
 expect fun PlatformFileSaver(
     label: String? = null,
+    labelSaveButton: String? = null,
     buttonTextStyle: TextStyle = MaterialTheme.typography.labelMedium,
     buttonTextAlign: TextAlign = TextAlign.Center,
     title: String,

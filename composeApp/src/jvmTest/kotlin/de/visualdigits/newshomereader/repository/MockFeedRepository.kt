@@ -6,7 +6,7 @@ import de.visualdigits.newshomereader.data.model.atom.Feed
 import de.visualdigits.newshomereader.data.model.rdf.Rdf
 import de.visualdigits.newshomereader.data.model.rss.Rss
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
-import de.visualdigits.newshomereader.domain.model.errorhandling.Result
+import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem

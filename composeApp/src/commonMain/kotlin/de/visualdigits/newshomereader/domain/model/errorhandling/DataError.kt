@@ -1,5 +1,7 @@
 package de.visualdigits.newshomereader.domain.model.errorhandling
 
+import de.visualdigits.common.domain.model.errorhandling.AppError
+
 sealed interface DataError: AppError {
 
     enum class Remote: DataError {

@@ -1,8 +1,8 @@
 package de.visualdigits.newshomereader.data.util
 
+import co.touchlab.kermit.Logger
 import de.visualdigits.newshomereader.data.util.CatalogScraper.readUrlAsRawBytes
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalog
-import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.runBlocking
@@ -14,7 +14,7 @@ import java.time.temporal.ChronoUnit
 
 object CatalogValidator {
 
-    private val log = kermitLogger(CatalogScraper::class)
+    private val log = Logger.withTag("CatalogScraper")
 
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 

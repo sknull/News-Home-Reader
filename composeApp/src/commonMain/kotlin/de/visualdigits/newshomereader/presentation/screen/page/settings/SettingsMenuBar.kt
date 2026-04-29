@@ -19,6 +19,7 @@ import de.visualdigits.compose.resources.icon_download_24px
 import de.visualdigits.compose.resources.icon_upload_24px
 import de.visualdigits.compose.resources.label_opml
 import de.visualdigits.compose.resources.label_settings
+import de.visualdigits.compose.resources.save
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.style.gap
 import org.jetbrains.compose.resources.painterResource
@@ -50,6 +51,7 @@ fun SettingsMenuBar(
 
         PlatformFileSaver(
             label = stringResource(Res.string.label_opml),
+            labelSaveButton = stringResource(Res.string.save),
             buttonTextStyle = MaterialTheme.typography.bodySmall,
             buttonTextAlign = TextAlign.Start,
             title = stringResource(Res.string.dialog_title_export_opml),
@@ -77,6 +79,7 @@ fun SettingsMenuBar(
 
         PlatformFileSaver(
             label = stringResource(Res.string.label_settings),
+            labelSaveButton = stringResource(Res.string.save),
             buttonTextStyle = MaterialTheme.typography.bodySmall,
             buttonTextAlign = TextAlign.Start,
             title = stringResource(Res.string.dialog_title_export_settings),

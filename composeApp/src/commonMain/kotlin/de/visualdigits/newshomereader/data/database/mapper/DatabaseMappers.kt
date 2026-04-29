@@ -3,8 +3,8 @@ package de.visualdigits.newshomereader.data.database.mapper
 import app.cash.sqldelight.ColumnAdapter
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
-import de.visualdigits.common.domain.model.configuration.keyfactory.KeepArticlesEnum
-import de.visualdigits.common.domain.model.configuration.keyfactory.RefreshIntervalEnum
+import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
+import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.newshomereader.FullArticleEntity
 import de.visualdigits.newshomereader.NewsFeedEntity
 import de.visualdigits.newshomereader.NewsFeedGroupEntity
@@ -22,8 +22,8 @@ import de.visualdigits.newshomereader.domain.model.unified.FullArticle
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem
 import de.visualdigits.newshomereader.domain.model.unified.MediaType
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import kotlinx.serialization.json.Json
 import java.time.Instant

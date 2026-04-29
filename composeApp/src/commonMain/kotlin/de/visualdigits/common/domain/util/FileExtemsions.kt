@@ -1,8 +1,8 @@
 package de.visualdigits.common.domain.util
 
 import co.touchlab.kermit.Severity
-import de.visualdigits.newshomereader.domain.model.errorhandling.LogMessage
-import de.visualdigits.newshomereader.domain.model.errorhandling.LogMessage.Companion.log
+import de.visualdigits.common.domain.model.errorhandling.LogMessage
+import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
 import java.io.File
 
 fun File.copyToIfNotExists(

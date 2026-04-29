@@ -1,4 +1,4 @@
-package de.visualdigits.newshomereader.domain.model.errorhandling
+package de.visualdigits.common.domain.model.errorhandling
 
 import androidx.compose.runtime.Immutable
 

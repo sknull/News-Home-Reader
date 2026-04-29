@@ -3,7 +3,6 @@ package de.visualdigits.common.domain.model.configuration
 import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.keyfactory.KeyFactory
 import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.StringResource
 import kotlin.reflect.KClass
 
 /**
@@ -16,8 +15,8 @@ class ReferenceListFieldDescriptor<V : Any, K : FieldKey<K>>(
 
     key: K,
 
-    label: StringResource,
-    toolTip: StringResource? = null,
+    label: UiText,
+    toolTip: UiText? = null,
 
     visible: Boolean = true,
     readOnly: Boolean = false,

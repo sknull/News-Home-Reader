@@ -251,13 +251,6 @@ sealed interface NewsHomeReaderAction {
     ): NewsHomeReaderAction
 
     @Immutable
-    data class OnScrollPositionChange(
-        val id: String,
-        val position: Int,
-        val offset: Int? = null
-    ): NewsHomeReaderAction
-
-    @Immutable
     data class OnInitializeTabs(
         val tabLabels: List<StringResource>
     ): NewsHomeReaderAction

@@ -1,6 +1,5 @@
 package de.visualdigits.newshomereader.data.http
 
-import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpTimeout
@@ -16,7 +15,7 @@ import kotlinx.serialization.json.Json
 
 object HttpClientFactory {
 
-    private val log = kermitLogger("HttpClientFactory")
+    private val log = co.touchlab.kermit.Logger.withTag("HttpClientFactory")
 
     fun create(engine: HttpClientEngine): HttpClient {
         return HttpClient(engine) {

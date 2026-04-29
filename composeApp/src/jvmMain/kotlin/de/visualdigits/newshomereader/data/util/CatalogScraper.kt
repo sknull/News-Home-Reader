@@ -1,5 +1,6 @@
 package de.visualdigits.newshomereader.data.util
 
+import co.touchlab.kermit.Logger
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Document
 import com.fleeksoft.ksoup.nodes.Element
@@ -7,7 +8,6 @@ import com.fleeksoft.ksoup.nodes.TextNode
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalog
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogCategory
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
-import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
@@ -22,7 +22,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 object CatalogScraper {
 
-    private val log = kermitLogger(CatalogScraper::class)
+    private val log = Logger.withTag("CatalogScraper")
 
     /**
      * Scrape a catalog from https://www.rss-verzeichnis.de

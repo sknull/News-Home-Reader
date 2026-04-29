@@ -3,7 +3,6 @@ package de.visualdigits.common.presentation.components.container
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,24 +21,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import de.visualdigits.compose.resources.Res
-import de.visualdigits.compose.resources.icon_close_24px
-import de.visualdigits.compose.resources.icon_delete_24px
-import de.visualdigits.compose.resources.icon_search_24px
-import de.visualdigits.compose.resources.title_search
-import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
-import de.visualdigits.newshomereader.presentation.style.gap
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.stringResource
+import de.visualdigits.common.domain.model.UiText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FlexibleSearchBar(
     modifier: Modifier = Modifier,
-    state: NewsHomeReaderState,
+    titleSearch: UiText ,
+    iconClose: Painter,
+    iconDelete: Painter,
+    iconSearch: Painter,
+    space: Dp = 8.dp,
+    searchText: String,
     isLargeScreen: Boolean,
     onQueryChange: (String) -> Unit,
     content: @Composable ColumnScope.() -> Unit
@@ -50,16 +48,16 @@ fun FlexibleSearchBar(
     if (isLargeScreen) {
         DockedSearchBar(
             modifier = modifier
-                .padding(MaterialTheme.shapes.gap),
+                .padding(space),
             inputField = {
                 SearchBarDefaults.InputField(
-                    query = state.searchText,
+                    query = searchText,
                     onQueryChange = { v -> onQueryChange(v) },
                     onSearch = { expanded = false },
                     expanded = expanded,
                     onExpandedChange = { v -> expanded = v },
                     enabled = true,
-                    placeholder = { Text(stringResource(Res.string.title_search)) },
+                    placeholder = { "?" },
                     leadingIcon = {
                         Icon(
                             modifier = Modifier.pointerHoverIcon(PointerIcon.Hand)
@@ -67,19 +65,19 @@ fun FlexibleSearchBar(
                                 .clickable {
                                     expanded = !expanded
                                 },
-                            painter = painterResource(Res.drawable.icon_search_24px),
+                            painter = iconSearch,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onSurface
                         )
                     },
                     trailingIcon = {
-                        if (state.searchText.isNotEmpty()) {
+                        if (searchText.isNotEmpty()) {
                             IconButton(onClick = {
                                 onQueryChange("")
                                 expanded = false
                             }) {
                                 Icon(
-                                    painter = painterResource(Res.drawable.icon_delete_24px),
+                                    painter = iconDelete,
                                     contentDescription = null,
                                     tint = MaterialTheme.colorScheme.onSurface
                                 )
@@ -102,23 +100,23 @@ fun FlexibleSearchBar(
         SearchBar(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(horizontal = if (expanded) 0.dp else MaterialTheme.shapes.gap),
+                .padding(horizontal = if (expanded) 0.dp else space),
             inputField = {
                 SearchBarDefaults.InputField(
-                    query = state.searchText,
+                    query = searchText,
                     onQueryChange = { v -> onQueryChange(v) },
                     onSearch = { expanded = false },
                     expanded = expanded,
                     onExpandedChange = { v -> expanded = v },
                     enabled = true,
-                    placeholder = { Text(stringResource(Res.string.title_search)) },
+                    placeholder = { Text(titleSearch.asString()) },
                     leadingIcon = { Icon(
                         modifier = Modifier.pointerHoverIcon(PointerIcon.Hand)
                             .hoverable(interactionSource)
                             .clickable {
                                 expanded = !expanded
                             },
-                        painter = painterResource(Res.drawable.icon_search_24px),
+                        painter = iconSearch,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSurface
                     ) },
@@ -129,7 +127,7 @@ fun FlexibleSearchBar(
                                 expanded = false
                             }) {
                                 Icon(
-                                    painter = painterResource(Res.drawable.icon_close_24px),
+                                    painter = iconClose,
                                     contentDescription = null,
                                     tint = MaterialTheme.colorScheme.onSurface
                                 )

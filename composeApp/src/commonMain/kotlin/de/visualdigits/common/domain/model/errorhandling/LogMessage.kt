@@ -1,6 +1,7 @@
-package de.visualdigits.newshomereader.domain.model.errorhandling
+package de.visualdigits.common.domain.model.errorhandling
 
 import androidx.compose.runtime.Immutable
+import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import java.time.OffsetDateTime
 
@@ -25,7 +26,7 @@ data class LogMessage(
     @Suppress("NOTHING_TO_INLINE")
     companion object {
 
-        val log = kermitLogger(this::class)
+        val log = Logger.withTag("this")
 
         inline fun log(
             severity: Severity,

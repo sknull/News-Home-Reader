@@ -1,7 +1,7 @@
 package de.visualdigits.newshomereader.domain.repository
 
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
-import de.visualdigits.newshomereader.domain.model.errorhandling.Result
+import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import nl.adaptivity.xmlutil.core.impl.multiplatform.InputStream

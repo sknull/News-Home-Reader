@@ -10,11 +10,14 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.Enumerable
 import de.visualdigits.common.domain.model.KeyValue
+import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.color
 import de.visualdigits.common.domain.model.configuration.AbstractConfiguration
 import de.visualdigits.common.domain.model.configuration.EnumFieldDescriptor
@@ -22,15 +25,17 @@ import de.visualdigits.common.domain.model.configuration.FieldKey
 import de.visualdigits.common.domain.model.configuration.FileFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.ReferenceListFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
-import de.visualdigits.compose.resources.Res
-import de.visualdigits.compose.resources.choose_directory
-import de.visualdigits.compose.resources.choose_file
-import org.jetbrains.compose.resources.stringResource
 import java.io.File
 
 @Composable
 fun TypeAwareEditableField(
     modifier: Modifier = Modifier,
+    titleChooseDirectory: UiText,
+    titleChooseFile: UiText,
+    iconFolder: Painter,
+    space: Dp = 8.dp,
+    toolTipBackgroundColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest,
+    toolTipShape: Shape = MaterialTheme.shapes.extraSmall,
     configuration: AbstractConfiguration<*,*>,
     fieldKey: FieldKey<*>,
     currentValue: String? = null,
@@ -66,7 +71,7 @@ fun TypeAwareEditableField(
                 || field.descriptor.itemClass?.java?.let { fc -> Enumerable::class.java.isAssignableFrom(fc) } == true -> {
             if (field.descriptor.fieldClass == BooleanEnum::class) {
                 SwitchBox(
-                    label = stringResource(field.descriptor.label),
+                    label = field.descriptor.label.asString(),
                     value = field.value,
                     fieldHeight = fieldHeight,
                     focusedBorderColor = focusedBorderColor,
@@ -80,6 +85,9 @@ fun TypeAwareEditableField(
                 ComboBox(
                     modifier = modifier
                         .focusRequester(focusRequester),
+                    space = space,
+                    toolTipBackgroundColor = toolTipBackgroundColor,
+                    toolTipShape = toolTipShape,
                     textStyle = textStyle,
                     configuration = configuration,
                     fieldKey = fieldKey,
@@ -95,14 +103,18 @@ fun TypeAwareEditableField(
 
         field.descriptor is FileFieldDescriptor -> {
             FileChooserBox(
-                toolTip = field.descriptor.toolTip?.let { t -> stringResource(t) },
                 modifier = modifier,
+                iconFolder = iconFolder,
+                space = space,
+                toolTipBackgroundColor = toolTipBackgroundColor,
+                toolTipShape = toolTipShape,
+                toolTip = field.descriptor.toolTip?.let { t -> t.asString() },
                 focusRequester = focusRequester,
                 fieldHeight = fieldHeight,
                 textStyle = textStyle,
                 enabled = enabled,
                 value = value,
-                label = stringResource(field.descriptor.label),
+                label = field.descriptor.label.asString(),
                 leadingIcon = leadingIcon,
                 trailingIcon = trailingIcon,
                 iconTint = iconTint,
@@ -110,43 +122,44 @@ fun TypeAwareEditableField(
                 buttonColor = buttonColor,
                 scope = scope,
                 fileMode = field.descriptor.fileMode,
-                titleDirectories = stringResource((Res.string.choose_directory)),
-                titleFiles = stringResource((Res.string.choose_file)),
+                titleDirectories = titleChooseDirectory.asString(),
+                titleFiles = titleChooseFile.asString(),
                 options = field.descriptor.options(configuration),
                 startDirectory = (field.value as? File) ?: field.descriptor.startDirectory(configuration),
-                onOk = { file: File ->
-                    onValueChange(
-                        KeyValue(
-                            field.descriptor,
-                            file.canonicalPath
-                        )
-                    )
-                },
+                finalUnfocusedBorderColor = finalUnfocusedBorderColor,
+                focusedBorderColor = focusedBorderColor,
                 onValueChange = { value: String ->
                     onValueChange(KeyValue(field.descriptor, value))
-                },
-                finalUnfocusedBorderColor = finalUnfocusedBorderColor,
-                focusedBorderColor = focusedBorderColor
-            )
+                }
+            ) { file: File ->
+                onValueChange(
+                    KeyValue(
+                        field.descriptor,
+                        file.canonicalPath
+                    )
+                )
+            }
         }
 
         else -> {
             TextBox(
-                toolTip = field.descriptor.toolTip?.let { t -> stringResource(t) },
                 modifier = modifier,
+                space = space,
+                toolTipBackgroundColor = toolTipBackgroundColor,
+                toolTipShape = toolTipShape,
+                toolTip = field.descriptor.toolTip?.let { t -> t.asString() },
                 focusRequester = focusRequester,
                 fieldHeight = fieldHeight,
                 textStyle = textStyle,
                 enabled = enabled,
-                label = stringResource(field.descriptor.label),
+                label = field.descriptor.label.asString(),
                 value = value,
                 buttonShape = buttonShape,
-                onValueChange = { value: String ->
-                    onValueChange(KeyValue(field.descriptor, value))
-                },
                 finalUnfocusedBorderColor = finalUnfocusedBorderColor,
                 focusedBorderColor = focusedBorderColor
-            )
+            ) { value: String ->
+                onValueChange(KeyValue(field.descriptor, value))
+            }
         }
     }
 

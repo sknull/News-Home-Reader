@@ -21,13 +21,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.UriHandler
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
 import de.visualdigits.common.presentation.components.StudioClock
 import de.visualdigits.common.presentation.components.button.IndicatorButton
+import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.compose.resources.Res
+import de.visualdigits.compose.resources.digital_dream_skew_fat
 import de.visualdigits.compose.resources.icon_add_notes_24px
 import de.visualdigits.newshomereader.data.repository.ConnectivityManager
 import de.visualdigits.newshomereader.domain.model.settings.Settings
@@ -37,13 +40,12 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.screen.page.newstab.item.NewsItemCard
 import de.visualdigits.newshomereader.presentation.screen.page.newstab.newslist.NewsListMenuBar
 import de.visualdigits.newshomereader.presentation.style.gap
+import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
-import kotlin.collections.forEach
 
 @Composable
 fun HorizontalNewsFeeds(
     state: NewsHomeReaderState,
-    onAction: (NewsHomeReaderAction) -> Unit,
     scrollPosition: MutableMap<String, Pair<Int, Int?>>,
     displayTheme: DisplayThemeEnum,
     connectivityManager: ConnectivityManager,
@@ -52,7 +54,9 @@ fun HorizontalNewsFeeds(
     maxImageSize: Int?,
     settings: Settings?,
     uriHandler: UriHandler,
-    chunks: Int
+    chunks: Int,
+    onCommonAction: (CommonAction) -> Unit,
+    onAction: (NewsHomeReaderAction) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -98,14 +102,15 @@ fun HorizontalNewsFeeds(
                         PlatformVerticalScrollbarBox(
                             boxModifier = Modifier
                                 .width(500.dp),
+                            backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
                             scrollbarModifier = Modifier
                                 .clip(MaterialTheme.shapes.small)
                                 .width(10.dp)
                                 .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
                             "newsfeed_navigation",
                             scrollPosition = scrollPosition,
-                            state,
-                            onAction
+                            collapsibleState = state.collapsibleState,
+                            onCommonAction
                         ) {
                             state.newsFeedGroups.map { newsFeedGroup ->
                                 Pair("newsfeed_navigation_${newsFeedGroup.name}", @Composable {
@@ -120,6 +125,7 @@ fun HorizontalNewsFeeds(
                     modifier = Modifier
                         .width(200.dp)
                         .height(200.dp),
+                    fontFamily = FontFamily(Font(Res.font.digital_dream_skew_fat)),
                     showSeconds = false,
                     showDate = true,
                     colors = displayTheme.studioClockColors
@@ -142,6 +148,7 @@ fun HorizontalNewsFeeds(
             PlatformVerticalScrollbarBox(
                 boxModifier = Modifier
                     .fillMaxWidth(),
+                backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
                 scrollbarModifier = Modifier
                     .clip(MaterialTheme.shapes.small)
                     .fillMaxHeight()
@@ -149,8 +156,8 @@ fun HorizontalNewsFeeds(
                     .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
                 scrollbarId = "newsfeed_${state.currentFeedName}",
                 scrollPosition = scrollPosition,
-                state,
-                onAction
+                collapsibleState = state.collapsibleState,
+                onCommonAction
             ) {
                 rowData.map { (_, rowItems) ->
                     Pair(rowItems.joinToString("_") { item -> item.id.toString() }, @Composable {

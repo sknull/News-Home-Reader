@@ -34,11 +34,16 @@ import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
 import de.visualdigits.common.presentation.components.container.VerticalCollapsibleBox
+import de.visualdigits.common.presentation.model.CommonAction
+import de.visualdigits.compose.resources.Res
+import de.visualdigits.compose.resources.icon_arrow_drop_down_24px
+import de.visualdigits.compose.resources.icon_arrow_right_24px
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalog
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.gap
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun NewsFeedCatalog(
@@ -48,6 +53,7 @@ fun NewsFeedCatalog(
     state: NewsHomeReaderState,
     uriHandler: UriHandler,
     displayTheme: DisplayThemeEnum,
+    onCommonAction: (CommonAction) -> Unit,
     onAction: (NewsHomeReaderAction) -> Unit,
     onSubscriptionChanged: (NewsFeedCatalogItem, Boolean) -> Unit
 ) {
@@ -60,14 +66,15 @@ fun NewsFeedCatalog(
     PlatformVerticalScrollbarBox(
         boxModifier = modifier
             .fillMaxSize(),
+        backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
         scrollbarModifier = Modifier
             .fillMaxHeight()
             .width(10.dp)
             .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
         "catalog",
         scrollPosition = scrollPosition,
-        state,
-        onAction = onAction
+        collapsibleState = state.collapsibleState,
+        onCommonAction = onCommonAction
     ) {
         val categories = if (state.onlySubscribedFeeds) {
             catalog?.categories?.mapNotNull { category ->
@@ -103,6 +110,8 @@ fun NewsFeedCatalog(
                     unfocusedBorderColor = Color.Transparent,
                     backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
                     shape = MaterialTheme.shapes.small,
+                    iconArrowRight = painterResource(Res.drawable.icon_arrow_right_24px),
+                    iconArrowDown = painterResource(Res.drawable.icon_arrow_drop_down_24px),
                     onStateChange = { state ->
                         onAction(
                             NewsHomeReaderAction.OnCollapsibleStateChange(
@@ -128,6 +137,8 @@ fun NewsFeedCatalog(
                                 unfocusedBorderColor = Color.Transparent,
                                 backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
                                 shape = MaterialTheme.shapes.small,
+                                iconArrowRight = painterResource(Res.drawable.icon_arrow_right_24px),
+                                iconArrowDown = painterResource(Res.drawable.icon_arrow_drop_down_24px),
                                 onStateChange = { state ->
                                     onAction(
                                         NewsHomeReaderAction.OnCollapsibleStateChange(

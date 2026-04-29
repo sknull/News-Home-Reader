@@ -26,9 +26,7 @@ fun App(platformType: PlatformType) {
     val connectivityManager = koinInject<ConnectivityManager>()
 
     MainPage(
-        onAction = { action ->
-            viewModel.onAction(action)
-        },
+        viewModel = viewModel,
         connectivityManager = connectivityManager
     )
 }

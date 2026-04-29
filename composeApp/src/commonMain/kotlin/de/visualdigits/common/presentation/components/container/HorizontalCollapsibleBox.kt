@@ -24,8 +24,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.text.input.VisualTransformation
@@ -34,15 +34,14 @@ import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.UiPlatform
 import de.visualdigits.common.presentation.components.androidPlatform
 import de.visualdigits.common.presentation.components.platformFocus
-import de.visualdigits.compose.resources.Res
-import de.visualdigits.compose.resources.icon_arrow_drop_down_24px
-import de.visualdigits.compose.resources.icon_arrow_right_24px
-import de.visualdigits.newshomereader.presentation.style.gap
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun HorizontalCollapsibleBox(
     modifier: Modifier = Modifier,
+    iconArrowRight: Painter,
+    iconArrowDown: Painter,
+    space: Dp = 8.dp,
     focusedBorderColor: Color = MaterialTheme.colorScheme.outline,
     unfocusedBorderColor: Color = MaterialTheme.colorScheme.onSurface,
     backgroundColor: Color = MaterialTheme.colorScheme.surface,
@@ -57,6 +56,7 @@ fun HorizontalCollapsibleBox(
     if (androidPlatform() == UiPlatform.UI_MODE_TYPE_TELEVISION) {
         HorizontalCollapsibleBoxTv(
             modifier = modifier,
+            space = space,
             backgroundColor = backgroundColor,
             shape = shape,
             expandedWidth = expandedWidth,
@@ -67,6 +67,9 @@ fun HorizontalCollapsibleBox(
     } else {
         HorizontalCollapsibleBoxFull(
             modifier = modifier,
+            iconArrowRight = iconArrowRight,
+            iconArrowDown = iconArrowDown,
+            space = space,
             unfocusedBorderColor = unfocusedBorderColor,
             focusedBorderColor = focusedBorderColor,
             backgroundColor = backgroundColor,
@@ -84,6 +87,9 @@ fun HorizontalCollapsibleBox(
 @Composable
 fun HorizontalCollapsibleBoxFull(
     modifier: Modifier = Modifier,
+    iconArrowRight: Painter,
+    iconArrowDown: Painter,
+    space: Dp = 8.dp,
     unfocusedBorderColor: Color,
     focusedBorderColor: Color,
     backgroundColor: Color,
@@ -133,7 +139,7 @@ fun HorizontalCollapsibleBoxFull(
                         Column(
                             modifier = Modifier
                                 .background(MaterialTheme.colorScheme.surface)
-                                .padding(top = MaterialTheme.shapes.gap)
+                                .padding(top = space)
                                 .clip(shape)
                                 .width(50.dp)
                                 .fillMaxHeight(),
@@ -141,13 +147,13 @@ fun HorizontalCollapsibleBoxFull(
                         ) {
                             if (isExpanded) {
                                 Icon(
-                                    painter = painterResource(Res.drawable.icon_arrow_right_24px),
+                                    painter =iconArrowRight,
                                     contentDescription = null,
                                     tint = iconTint
                                 )
                             } else {
                                 Icon(
-                                    painter = painterResource(Res.drawable.icon_arrow_drop_down_24px),
+                                    painter = iconArrowDown,
                                     contentDescription = null,
                                     tint = iconTint
                                 )
@@ -189,6 +195,7 @@ fun HorizontalCollapsibleBoxFull(
 @Composable
 fun HorizontalCollapsibleBoxTv(
     modifier: Modifier = Modifier,
+    space: Dp = 8.dp,
     backgroundColor: Color,
     shape: Shape,
     expandedWidth: Dp,
@@ -201,7 +208,7 @@ fun HorizontalCollapsibleBoxTv(
             .width(expandedWidth)
             .height(height)
             .background(backgroundColor),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+        horizontalArrangement = Arrangement.spacedBy(space)
     ) {
         Column(
             modifier = Modifier

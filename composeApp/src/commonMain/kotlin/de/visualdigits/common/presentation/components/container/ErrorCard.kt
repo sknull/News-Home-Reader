@@ -14,24 +14,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.color
-import de.visualdigits.newshomereader.presentation.style.gap
 
 
 @Composable
 fun ErrorCard(
     errorMessage: UiText?,
     severity: Severity? = Severity.Error,
-    shapeContainer: Shape
+    shapeContainer: Shape,
+    space: Dp = 8.dp
 ) {
     if (errorMessage != null) {
         val color = severity?.color()?:Severity.Error.color()
         Card(
             modifier = Modifier
-                .padding(top = MaterialTheme.shapes.gap)
+                .padding(top = space)
                 .border(width = 1.dp, color = color, shape = shapeContainer)
                 .fillMaxWidth(),
             shape = shapeContainer,
@@ -52,6 +53,6 @@ fun ErrorCard(
             )
         }
 
-        Spacer(Modifier.height(MaterialTheme.shapes.gap).fillMaxWidth())
+        Spacer(Modifier.height(space).fillMaxWidth())
     }
 }

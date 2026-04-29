@@ -48,8 +48,8 @@ class NewsFeedConfiguration(
             Field(
                 descriptor = StringFieldDescriptor(
                     key = NC.feedName,
-                    label = Res.string.label_feedName,
-                    toolTip = Res.string.tooltip_feedName
+                    label = UiText.StringResourceId(Res.string.label_feedName),
+                    toolTip =  UiText.StringResourceId(Res.string.tooltip_feedName)
                 ),
                 valid = { value ->
                     (value as? String)?.isNotBlank() == true
@@ -59,7 +59,7 @@ class NewsFeedConfiguration(
                 descriptor = ReferenceListFieldDescriptor(
                     fieldClass = String::class,
                     key = NC.mainGroupName,
-                    label = Res.string.label_maingroupName,
+                    label =  UiText.StringResourceId(Res.string.label_maingroupName),
                     keyFactory = StringKeyFactory,
                     options = { configuration ->
                         newsFeedGroups
@@ -75,7 +75,7 @@ class NewsFeedConfiguration(
                 descriptor = ReferenceListFieldDescriptor(
                     fieldClass = String::class,
                     key = NC.subGroupName,
-                    label = Res.string.label_subgroupName,
+                    label =  UiText.StringResourceId(Res.string.label_subgroupName),
                     keyFactory = StringKeyFactory,
                     options = { configuration ->
                         val field = configuration.fields[NC.mainGroupName]
@@ -93,8 +93,8 @@ class NewsFeedConfiguration(
             Field(
                 descriptor = StringFieldDescriptor(
                     key = NC.url,
-                    label = Res.string.label_url,
-                    toolTip = Res.string.tooltip_url
+                    label =  UiText.StringResourceId(Res.string.label_url),
+                    toolTip =  UiText.StringResourceId(Res.string.tooltip_url)
                 ),
                 valid = { value ->
                     (value as? String)?.isNotBlank() == true
@@ -103,8 +103,8 @@ class NewsFeedConfiguration(
             Field(
                 descriptor = StringFieldDescriptor(
                     key = NC.imageUrl,
-                    label = Res.string.label_imageUrl,
-                    toolTip = Res.string.tooltip_imageUrl
+                    label =  UiText.StringResourceId(Res.string.label_imageUrl),
+                    toolTip =  UiText.StringResourceId(Res.string.tooltip_imageUrl)
                 ),
                 valid = { value ->
                     (value as? String)?.isNotBlank() == true
@@ -114,8 +114,8 @@ class NewsFeedConfiguration(
                 descriptor = ListFieldDescriptor(
                     fieldClass = String::class,
                     key = NC.stopWords,
-                    label = Res.string.label_stopWords,
-                    toolTip = Res.string.tooltip_stopWords,
+                    label =  UiText.StringResourceId(Res.string.label_stopWords),
+                    toolTip =  UiText.StringResourceId(Res.string.tooltip_stopWords),
                     keyFactory = StringListKeyFactory,
                 ),
                 valid = { _ -> true }

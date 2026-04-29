@@ -1,10 +1,10 @@
 package de.visualdigits.newshomereader.data.repository
 
+import co.touchlab.kermit.Logger
 import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
-import de.visualdigits.newshomereader.domain.model.errorhandling.kermitLogger
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +16,7 @@ import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import okio.Path.Companion.toPath
 
-private val log = kermitLogger("ImageCache")
+private val log = Logger.withTag("ImageCache")
 
 actual class ImageCache(
     private val context: PlatformContext,

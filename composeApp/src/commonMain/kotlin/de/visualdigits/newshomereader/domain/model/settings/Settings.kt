@@ -1,5 +1,6 @@
 package de.visualdigits.newshomereader.domain.model.settings
 
+import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.AbstractConfiguration
 import de.visualdigits.common.domain.model.configuration.EnumFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.Field
@@ -7,8 +8,8 @@ import de.visualdigits.common.domain.model.configuration.IntFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.DisplayThemeEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.IntKeyFactory
-import de.visualdigits.common.domain.model.configuration.keyfactory.KeepArticlesEnum
-import de.visualdigits.common.domain.model.configuration.keyfactory.RefreshIntervalEnum
+import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
+import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.label_displayTheme
 import de.visualdigits.compose.resources.label_hide_read
@@ -41,8 +42,8 @@ class Settings(
                 descriptor = EnumFieldDescriptor(
                     fieldClass = Language::class,
                     key = SK.language,
-                    label = Res.string.label_language,
-                    toolTip = Res.string.tooltip_language,
+                    label = UiText.StringResourceId(Res.string.label_language),
+                    toolTip =  UiText.StringResourceId(Res.string.tooltip_language),
                     options = { Language.entries.map { e -> Triple(e.name, e.uiText, e.drawableResourceId) } },
                     keyFactory = Language
                 ),
@@ -54,8 +55,8 @@ class Settings(
                 descriptor = EnumFieldDescriptor(
                     fieldClass = DisplayThemeEnum::class,
                     key = SK.displayTheme,
-                    label = Res.string.label_displayTheme,
-                    toolTip = Res.string.tooltip_displayTheme,
+                    label =  UiText.StringResourceId(Res.string.label_displayTheme),
+                    toolTip =  UiText.StringResourceId(Res.string.tooltip_displayTheme),
                     options = { DisplayThemeEnum.entries.map { e -> Triple(e.name, e.uiText, e.drawableResourceId) } },
                     keyFactory = DisplayThemeEnum
                 ),
@@ -67,8 +68,8 @@ class Settings(
                 descriptor = EnumFieldDescriptor(
                     fieldClass = RefreshIntervalEnum::class,
                     key = SK.refreshInterval,
-                    label = Res.string.label_refresh_interval,
-                    toolTip = Res.string.tooltip_refresh_interval,
+                    label =  UiText.StringResourceId(Res.string.label_refresh_interval),
+                    toolTip =  UiText.StringResourceId(Res.string.tooltip_refresh_interval),
                     options = { RefreshIntervalEnum.entries.map { e -> Triple(e.name, e.uiText, e.drawableResourceId) } },
                     keyFactory = RefreshIntervalEnum
                 ),
@@ -80,8 +81,8 @@ class Settings(
                 descriptor = EnumFieldDescriptor(
                     fieldClass = BooleanEnum::class,
                     key = SK.refreshWifiOnly,
-                    label = Res.string.label_refresh_wifi_only,
-                    toolTip = Res.string.tooltip_refresh_wifi_only,
+                    label =  UiText.StringResourceId(Res.string.label_refresh_wifi_only),
+                    toolTip =  UiText.StringResourceId(Res.string.tooltip_refresh_wifi_only),
                     options = { BooleanEnum.entries.map { e -> Triple(e.name, e.uiText, e.drawableResourceId) } },
                     keyFactory = BooleanEnum
                 ),
@@ -93,8 +94,8 @@ class Settings(
                 descriptor = EnumFieldDescriptor(
                     fieldClass = KeepArticlesEnum::class,
                     key = SK.keepReadArticles,
-                    label = Res.string.label_keep_read_articles,
-                    toolTip = Res.string.tooltip_keep_read_articles,
+                    label =  UiText.StringResourceId(Res.string.label_keep_read_articles),
+                    toolTip =  UiText.StringResourceId(Res.string.tooltip_keep_read_articles),
                     options = { KeepArticlesEnum.entries.map { e -> Triple(e.name, e.uiText, e.drawableResourceId) } },
                     keyFactory = KeepArticlesEnum
                 ),
@@ -106,8 +107,8 @@ class Settings(
                 descriptor = EnumFieldDescriptor(
                     fieldClass = KeepArticlesEnum::class,
                     key = SK.keepUnreadArticles,
-                    label = Res.string.label_keep_unread_articles,
-                    toolTip = Res.string.tooltip_keep_unread_articles,
+                    label =  UiText.StringResourceId(Res.string.label_keep_unread_articles),
+                    toolTip =  UiText.StringResourceId(Res.string.tooltip_keep_unread_articles),
                     options = { KeepArticlesEnum.entries.map { e -> Triple(e.name, e.uiText, e.drawableResourceId) } },
                     keyFactory = KeepArticlesEnum
                 ),
@@ -119,8 +120,8 @@ class Settings(
                 descriptor = EnumFieldDescriptor(
                     fieldClass = BooleanEnum::class,
                     key = SK.loadArticles,
-                    label = Res.string.label_load_articles,
-                    toolTip = Res.string.tooltip_load_articles,
+                    label =  UiText.StringResourceId(Res.string.label_load_articles),
+                    toolTip =  UiText.StringResourceId(Res.string.tooltip_load_articles),
                     options = { BooleanEnum.entries.map { e -> Triple(e.name, e.uiText, e.drawableResourceId) } },
                     keyFactory = BooleanEnum
                 ),
@@ -132,8 +133,8 @@ class Settings(
                 descriptor = EnumFieldDescriptor(
                     fieldClass = BooleanEnum::class,
                     key = SK.hideRead,
-                    label = Res.string.label_hide_read,
-                    toolTip = Res.string.tooltip_hide_read,
+                    label =  UiText.StringResourceId(Res.string.label_hide_read),
+                    toolTip =  UiText.StringResourceId(Res.string.tooltip_hide_read),
                     options = { BooleanEnum.entries.map { e -> Triple(e.name, e.uiText, e.drawableResourceId) } },
                     keyFactory = BooleanEnum
                 ),
@@ -146,7 +147,7 @@ class Settings(
                     fieldClass = Int::class,
                     visible = false,
                     key = SK.maxImageSize,
-                    label = Res.string.ok,
+                    label =  UiText.StringResourceId(Res.string.ok),
                     keyFactory = IntKeyFactory
                 ),
                 valid = { value -> value != null }
@@ -157,7 +158,7 @@ class Settings(
                 descriptor = IntFieldDescriptor(
                     visible = false,
                     key = SK.maxImageSize,
-                    label = Res.string.ok,
+                    label =  UiText.StringResourceId(Res.string.ok),
                 ),
                 valid = { value -> value != null }
             ),
@@ -168,7 +169,7 @@ class Settings(
                     visible = false,
                     fieldClass = BooleanEnum::class,
                     key = SK.feedsChanged,
-                    label = Res.string.ok,
+                    label =  UiText.StringResourceId(Res.string.ok),
                     keyFactory = BooleanEnum
                 ),
                 valid = { value -> value != null }

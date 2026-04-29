@@ -25,7 +25,6 @@ import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import de.visualdigits.common.domain.model.HsvColor
 import de.visualdigits.common.presentation.components.modifier.colorSwatch
-import de.visualdigits.newshomereader.presentation.style.gap
 
 
 @Composable
@@ -44,7 +43,7 @@ fun ColorPicker(
             .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.2f), shape)
             .width(size)
             .fillMaxHeight()
-            .padding(MaterialTheme.shapes.gap),
+            .padding(space),
         verticalArrangement = Arrangement.spacedBy(space),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

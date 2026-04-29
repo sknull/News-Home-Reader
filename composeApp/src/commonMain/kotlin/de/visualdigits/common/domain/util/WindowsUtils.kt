@@ -2,8 +2,8 @@ package de.visualdigits.common.domain.util
 
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.Table
-import de.visualdigits.newshomereader.domain.model.errorhandling.LogMessage
-import de.visualdigits.newshomereader.domain.model.errorhandling.LogMessage.Companion.log
+import de.visualdigits.common.domain.model.errorhandling.LogMessage
+import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
