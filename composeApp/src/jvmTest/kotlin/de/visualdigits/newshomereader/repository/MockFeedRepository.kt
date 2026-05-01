@@ -9,6 +9,7 @@ import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
@@ -38,7 +39,7 @@ class MockFeedRepository(
         return Result.Success(listOf())
     }
 
-    override fun observeFeedItems(feedName: String): Flow<List<NewsItem>> {
+    override fun observeFeedItems(newsFeedGroup: NewsFeedGroup?, newsFeedName: String?): Flow<List<NewsItem>> {
         return emptyFlow()
     }
 

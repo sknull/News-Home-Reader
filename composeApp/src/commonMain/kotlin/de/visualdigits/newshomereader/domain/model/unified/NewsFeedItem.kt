@@ -6,7 +6,7 @@ import java.io.File
 
 @Serializable
 data class NewsFeedItem(
-    val mainGroupName: String,
+    var mainGroupName: String,
     var subGroupName: String? = null,
     val name: String? = null,
     val imageUrl: String? = null,

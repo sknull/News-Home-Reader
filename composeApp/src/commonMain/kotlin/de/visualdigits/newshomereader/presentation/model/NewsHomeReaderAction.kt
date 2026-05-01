@@ -251,6 +251,12 @@ sealed interface NewsHomeReaderAction {
     ): NewsHomeReaderAction
 
     @Immutable
+    data class OnNewsFeedGroupCollapsibleStateChange(
+        val group: NewsFeedGroup,
+        val isExpanded: Boolean
+    ): NewsHomeReaderAction
+
+    @Immutable
     data class OnInitializeTabs(
         val tabLabels: List<StringResource>
     ): NewsHomeReaderAction

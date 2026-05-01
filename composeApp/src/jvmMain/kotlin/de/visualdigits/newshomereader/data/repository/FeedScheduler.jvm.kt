@@ -13,7 +13,7 @@ actual class FeedScheduler(
     private val newsFeedWorker: NewsFeedWorker,
 ) {
 
-    private val log = Logger.withTag("this")
+    private val log = Logger.withTag("FeedScheduler")
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private var job: Job? = null

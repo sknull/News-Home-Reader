@@ -154,7 +154,7 @@ fun HorizontalNewsFeeds(
                     .fillMaxHeight()
                     .width(10.dp)
                     .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
-                scrollbarId = "newsfeed_${state.currentFeedName}",
+                scrollbarId = "newsfeed_${state.currentNewsFeedName}",
                 scrollPosition = scrollPosition,
                 collapsibleState = state.collapsibleState,
                 onCommonAction
@@ -165,13 +165,14 @@ fun HorizontalNewsFeeds(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                         ) {
-                            rowItems.forEach { item ->
+                            rowItems.forEach { newsItem ->
                                 NewsItemCard(
                                     modifier = Modifier.weight(1f),
+                                    state = state,
                                     maxImageSize = maxImageSize,
+                                    newsItem = newsItem,
                                     settings = settings,
                                     uriHandler = uriHandler,
-                                    newsItem = item,
                                     onAction = onAction
                                 )
                             }

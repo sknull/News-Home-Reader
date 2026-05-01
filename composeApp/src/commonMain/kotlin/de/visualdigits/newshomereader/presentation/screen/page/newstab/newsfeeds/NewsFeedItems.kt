@@ -30,7 +30,7 @@ fun NewsFeedItems(
         modifier = Modifier
             .fillMaxWidth(),
     ) {
-        newsFeedGroup.newsFeeds.forEach { newsFeedConfiguration ->
+        newsFeedGroup.newsFeeds.forEach { newsFeedItem ->
             Row(
                 modifier = Modifier,
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
@@ -42,17 +42,17 @@ fun NewsFeedItems(
                     height = 50.dp,
                     indicatorPosition = Alignment.CenterStart,
                     indicatorColor = MaterialTheme.colorScheme.onSurface,
-                    text = newsFeedConfiguration.name,
+                    text = newsFeedItem.name,
                     textStyle = MaterialTheme.typography.bodySmall,
                     textAlign = TextAlign.Start,
                     buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
                     shape = MaterialTheme.shapes.extraSmall,
-                    selected = state.currentFeedName == newsFeedConfiguration.name
+                    selected = state.currentNewsFeedName == newsFeedItem.name
                 ) {
                     onAction(
                         NewsHomeReaderAction.OnNewsFeedClicked(
-                            feedName = newsFeedConfiguration.name,
-                            currentFeedIItem = newsFeedConfiguration
+                            feedName = newsFeedItem.name,
+                            currentFeedIItem = newsFeedItem
                         )
                     )
                 }
@@ -65,7 +65,7 @@ fun NewsFeedItems(
                         padding = 2.dp,
                         leadingIcon = painterResource(Res.drawable.icon_edit_24px)
                     ) {
-                        onAction(NewsHomeReaderAction.OnEditNewsFeedConfigurationClick(newsFeedConfiguration))
+                        onAction(NewsHomeReaderAction.OnEditNewsFeedConfigurationClick(newsFeedItem))
                     }
 
                     IndicatorButton(
@@ -75,7 +75,7 @@ fun NewsFeedItems(
                         padding = 2.dp,
                         leadingIcon = painterResource(Res.drawable.icon_delete_24px)
                     ) {
-                        onAction(NewsHomeReaderAction.OnDeleteNewsFeedConfigurationClick(newsFeedConfiguration))
+                        onAction(NewsHomeReaderAction.OnDeleteNewsFeedConfigurationClick(newsFeedItem))
                     }
                 }
             }

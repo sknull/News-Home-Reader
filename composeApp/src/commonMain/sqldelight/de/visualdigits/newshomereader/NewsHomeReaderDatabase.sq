@@ -277,6 +277,10 @@ getNewsFeedGroupEntityByName:
 SELECT * FROM NewsFeedGroupEntity
 WHERE name = :name AND parentGroupName = :parentGroupName;
 
+getNewsFeedGroupEntityByParentName:
+SELECT * FROM NewsFeedGroupEntity
+WHERE parentGroupName = :parentGroupName;
+
 deleteNewsFeedGroupEntity:
 DELETE FROM NewsFeedGroupEntity
 WHERE id = :id;

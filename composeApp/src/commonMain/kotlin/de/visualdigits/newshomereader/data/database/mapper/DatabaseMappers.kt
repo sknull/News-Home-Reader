@@ -115,14 +115,15 @@ fun NewsFeedCatalogCategory.toNewsFeedGroup(): NewsFeedGroup {
 }
 
 fun NewsFeedConfiguration.toNewsFeedItem(): NewsFeedItem {
-    return NewsFeedItem(
+    val newsFeedItem = NewsFeedItem(
         name = get<String>(NC.feedName),
-        mainGroupName = get<String>(NC.mainGroupName)?:error("No main group given"),
+        mainGroupName = get<String>(NC.mainGroupName) ?: error("No main group given"),
         subGroupName = get<String>(NC.subGroupName),
         imageUrl = get<String>(NC.imageUrl),
         url = get<String>(NC.url),
         stopWords = get<List<String>>(NC.stopWords)
     )
+    return newsFeedItem
 }
 
 fun NewsFeedItem.toNewsFeedConfiguration(newsFeedGroups: List<NewsFeedGroup>): NewsFeedConfiguration {

@@ -22,8 +22,10 @@ data class NewsHomeReaderState(
 
     val newsFeedGroups: List<NewsFeedGroup> = listOf(),
 
+    val currentNewsFeedGroup: NewsFeedGroup? = null,
+
     val currentNewsFeedItem: NewsFeedItem? = null,
-    val currentFeedName: String? = null,
+    val currentNewsFeedName: String? = null,
     val currentNewsItems: List<NewsItem> = listOf(),
     val visibleNewsItems: List<NewsItem> = listOf(),
 
@@ -71,7 +73,7 @@ data class NewsHomeReaderState(
     val isAddingNewsFeedGroup: Boolean = false,
     val isDeletingNewsFeedGroup: Boolean = false,
 
-    val currentNewsFeedGroup: NewsFeedGroup? = null,
+    val currentNewsFeedGroupToDelete: NewsFeedGroup? = null,
     val originalNewsFeedGroup: NewsFeedGroup? = null,
     val editedNewsFeedGroup: NewsFeedGroup? = null,
 
@@ -80,5 +82,20 @@ data class NewsHomeReaderState(
     val isDeletingNewsFeedConfiguration: Boolean = false,
 
     val deleteNewsFeedItem: NewsFeedItem? = null,
+) {
 
-)
+    val lookupNewsFeedGroupMap
+        get() = newsFeedGroups.flatMap { mainGroup ->
+        mainGroup.subGroups.flatMap { subGroup ->
+            subGroup.newsFeeds.map { it.name?.trim()?.lowercase() to subGroup }
+        } + mainGroup.newsFeeds.map { it.name?.trim()?.lowercase() to mainGroup }
+    }.toMap()
+
+    val lookupNewsFeedMap
+        get() = newsFeedGroups.flatMap { mainGroup ->
+        mainGroup.subGroups.flatMap { subGroup ->
+            subGroup.newsFeeds.map { it.name?.trim()?.lowercase() to it }
+        } + mainGroup.newsFeeds.map { it.name?.trim()?.lowercase() to it }
+    }.toMap()
+
+}

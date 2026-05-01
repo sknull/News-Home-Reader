@@ -166,7 +166,10 @@ class DefaultNewsFeedConfigurationRepository(
     override suspend fun setNewsFeedGroups(newsFeedGroups: List<NewsFeedGroup>): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         try {
             newsFeedGroups.forEach { newsFeedGroup ->
-                val groupEntity = dao.getNewsFeedGroupEntityByName(newsFeedGroup.name, newsFeedGroup.parentGroupName).executeAsOneOrNull()
+                val groupEntity = dao.getNewsFeedGroupEntityByName(
+                    name = newsFeedGroup.name,
+                    parentGroupName = newsFeedGroup.parentGroupName
+                ).executeAsOneOrNull()
                 if (groupEntity != null) {
                     val existingSubGroups = groupEntity.subGroups.map { sg -> sg.name }
                     newsFeedGroup.subGroups

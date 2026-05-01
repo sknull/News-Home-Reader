@@ -28,3 +28,9 @@ plugins {
 }
 
 include(":composeApp")
+includeBuild("../Stephans-KMP-Components") {
+    dependencySubstitution {
+        substitute(module("de.visualdigits.kmp:stephans-kmp-components"))
+            .using(project(":library"))
+    }
+}

@@ -35,6 +35,8 @@ private fun buildNodeRecursive(
 
     return NewsFeedGroup(
         id = currentEntity.id,
+        parentId = currentEntity.parentId,
+        parentGroupName = currentEntity.parentGroupName,
         name = currentEntity.name,
         newsFeeds = currentEntity.newsFeeds,
         subGroups = subGroups

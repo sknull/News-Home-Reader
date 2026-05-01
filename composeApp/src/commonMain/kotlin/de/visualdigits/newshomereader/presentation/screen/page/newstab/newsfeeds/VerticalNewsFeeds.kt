@@ -98,10 +98,11 @@ fun VerticalNewsFeeds(
                     rowItems.forEach { item ->
                         NewsItemCard(
                             modifier = Modifier.weight(1f),
+                            state = state,
                             maxImageSize = maxImageSize,
+                            newsItem = item,
                             settings = settings,
                             uriHandler = uriHandler,
-                            newsItem = item,
                             onAction = onAction
                         )
                     }

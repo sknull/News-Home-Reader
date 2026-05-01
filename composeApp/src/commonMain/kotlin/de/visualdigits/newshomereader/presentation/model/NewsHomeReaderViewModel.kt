@@ -17,7 +17,6 @@ import de.visualdigits.generated.AppVersion
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedConfiguration
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedItem
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
-import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
@@ -37,21 +36,26 @@ import de.visualdigits.newshomereader.domain.repository.CatalogRepository
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
 import de.visualdigits.newshomereader.domain.repository.NewsFeedConfigurationRepository
 import de.visualdigits.newshomereader.domain.repository.SettingsRepository
+import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.InputStream
 import java.io.OutputStream
 import java.time.OffsetDateTime
@@ -68,7 +72,7 @@ class NewsHomeReaderViewModel(
     val catalogRepository: CatalogRepository,
 ) : ViewModel() {
 
-    private val log = Logger.withTag("this")
+    private val log = Logger.withTag("NewsHomeReaderViewModel")
 
     val scrollPosition: MutableMap<String, Pair<Int, Int?>> = mutableMapOf()
     var platformType: PlatformType = PlatformType.unknown
@@ -82,33 +86,37 @@ class NewsHomeReaderViewModel(
         log.i("Application started")
 
         _state
-            .map { it.currentFeedName }
+            .map { it.currentNewsFeedGroup to it.currentNewsFeedName }
             .distinctUntilChanged()
-            .flatMapLatest { feedName ->
-                if (!feedName.isNullOrBlank()) {
-                    feedRepository.observeFeedItems(feedName)
+            .flatMapLatest { (newsFeedGroup, newsFeedName) ->
+                if (newsFeedGroup != null || !newsFeedName.isNullOrBlank()) {
+                    feedRepository.observeFeedItems(newsFeedGroup, newsFeedName)
                         .debounce(150.milliseconds)
+                        .flowOn(Dispatchers.IO)
                         .map { items ->
-                            // ALLES im Hintergrund vorbereiten
-                            withContext(Dispatchers.Default) {
+                            coroutineScope {
+                                // do thhe heavy lifting in the default thread
                                 val enriched = items.map { newsItem ->
-                                    val articleResult = articleRepository.getFullArticle(newsItem.id)
-                                    if (articleResult is Result.Success) {
-                                        newsItem.copy(newsArticle = articleResult.data)
-                                    } else {
-                                        newsItem
+                                    async {
+                                        val articleResult = articleRepository.getFullArticle(newsItem.id)
+                                        if (articleResult is Result.Success) {
+                                            newsItem.copy(newsArticle = articleResult.data)
+                                        } else {
+                                            newsItem
+                                        }
                                     }
-                                }
+                                }.awaitAll()
 
-                                // Auch das Filtern/Sichtbarkeit im Hintergrund berechnen
-                                val hideRead = _state.value.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
-                                val newsFeedConfiguration = _state.value.currentNewsFeedItem
-                                val visible = calculateVisibleNewsItems(enriched, hideRead, newsFeedConfiguration)
+                                // fetch current settings
+                                val currentState = _state.value
+                                val hideRead = currentState.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
+                                val newsFeedItem = currentState.currentNewsFeedItem
 
-                                // Paar aus beidem zurückgeben
+                                val visible = calculateVisibleNewsItems(enriched, hideRead, newsFeedItem)
                                 enriched to visible
                             }
                         }
+                        .flowOn(Dispatchers.Default) // do calulations on default thread
                 } else {
                     flowOf(emptyList<NewsItem>() to emptyList())
                 }
@@ -395,7 +403,7 @@ class NewsHomeReaderViewModel(
                     it.copy(
                         parentNewsFeedGroupName = action.newsFeedGroupName,
                         originalNewsFeedGroup = null,
-                        currentNewsFeedGroup = null,
+                        currentNewsFeedGroupToDelete = null,
                         isAddingNewsFeedGroup = true
                     )
                 }
@@ -418,7 +426,7 @@ class NewsHomeReaderViewModel(
                 _state.update {
                     it.copy(
                         isDeletingNewsFeedGroup = false,
-                        currentNewsFeedGroup = null
+                        currentNewsFeedGroupToDelete = null
                     )
                 }
             }
@@ -426,12 +434,12 @@ class NewsHomeReaderViewModel(
                 _state.update {
                     it.copy(
                         isDeletingNewsFeedGroup = true,
-                        currentNewsFeedGroup = action.newsFeedGroup
+                        currentNewsFeedGroupToDelete = action.newsFeedGroup
                     )
                 }
             }
             is NewsHomeReaderAction.OnDeleteNewsfeedGroupOkClick -> {
-                deleteNewsFeedGroup(state.value.currentNewsFeedGroup)
+                deleteNewsFeedGroup(state.value.currentNewsFeedGroupToDelete)
             }
 
             //
@@ -499,6 +507,16 @@ class NewsHomeReaderViewModel(
                 _state.update {
                     it.copy(
                         collapsibleState = it.collapsibleState + (action.id to action.isExpanded)
+                    )
+                }
+            }
+
+            is NewsHomeReaderAction.OnNewsFeedGroupCollapsibleStateChange -> {
+                _state.update {
+                    it.copy(
+                        currentNewsFeedGroup = if (action.isExpanded) action.group else null,
+                        currentNewsFeedName = if (action.isExpanded) state.value.currentNewsFeedName else null,
+                        collapsibleState = it.collapsibleState + ("group_${action.group.name}" to action.isExpanded)
                     )
                 }
             }
@@ -601,8 +619,7 @@ class NewsHomeReaderViewModel(
 
     private fun maintainSubscription(newsFeedCatalogItem: NewsFeedCatalogItem, subscribe: Boolean) = viewModelScope.launch {
         if (subscribe) {
-            val subCategory = newsFeedCatalogItem.parentCategory
-            val mainCategory = subCategory?.parentCategory
+            val mainCategory = newsFeedCatalogItem.parentCategory?.parentCategory
             val persistedMainGroup = if (mainCategory != null) {
                 val addResult = addGroup(
                     NewsFeedGroup(
@@ -620,13 +637,23 @@ class NewsHomeReaderViewModel(
             } else {
                 null
             }
+
+            val subCategory = newsFeedCatalogItem.parentCategory
             val persistedSubGroup = if (subCategory != null) {
                 val addResult = addGroup(
-                    NewsFeedGroup(
-                        parentId = persistedMainGroup?.id,
-                        parentGroupName = mainCategory?.name,
-                        name = subCategory.name,
-                    )
+                    if (persistedMainGroup != null) {
+                        NewsFeedGroup(
+                            parentId = persistedMainGroup.id,
+                            parentGroupName = mainCategory?.name,
+                            name = subCategory.name,
+                        )
+                    } else {
+                        NewsFeedGroup(
+                            parentId = null,
+                            parentGroupName = null,
+                            name = subCategory.name,
+                        )
+                    }
                 )
                 if (addResult is Result.Success) {
                     addResult.data
@@ -640,7 +667,8 @@ class NewsHomeReaderViewModel(
                 null
             }
             val result = upsertNewsFeedItem(newsFeedCatalogItem.toNewsFeedItem().copy(
-                subGroupName = persistedSubGroup?.name,
+                mainGroupName = if (persistedMainGroup != null) persistedMainGroup.name else persistedSubGroup?.name?:error("No main group given"),
+                subGroupName = if (persistedMainGroup != null) persistedSubGroup?.name else null,
             ))
             if (result is Result.Success) {
                 refreshNewsFeeds()
@@ -759,7 +787,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                             visibleNewsItems = calculateVisibleNewsItems(
                                 newsItems = it.currentNewsItems,
                                 hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-                                newNewsFeedConfiguration = newEntity
+                                newsFeedItem = newEntity
                             )
                         )
                     }
@@ -802,6 +830,89 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
         }
     }
 
+    private fun refreshNewsFeed(
+        feedName: String?,
+        url: String?
+    ) = viewModelScope.launch {
+        _state.update {
+            it.copy(
+                isLoading = true,
+            )
+        }
+        scrollPosition["newsfeed_$feedName"] = Pair(0, 0)
+        val wifiOnly = state.value.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
+        val loadArticles = state.value.settings?.get<BooleanEnum>(SK.loadArticles)?.booleanValue?:false
+        val keepReadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue?:30
+        val keepUnreadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepUnreadArticles)?.longValue?:30
+        val maxImageSize = state.value.settings?.get<Int>(SK.maxImageSize)?:1200
+        feedName?.also { fn ->
+            url?.also { u ->
+                val feedResult = feedRepository.refreshNewsFeed(
+                    feedName = fn,
+                    url = u,
+                    wifiOnly = wifiOnly,
+                    keepReadArticlesInDays = keepReadArticles,
+                    keepUnreadArticlesInDays = keepUnreadArticles,
+                    maxImageSize = maxImageSize,
+                    loadArticles = loadArticles
+                ) { progress, progressStage ->
+                    viewModelScope.launch {
+                        _state.update {
+                            it.copy(
+                                currentProgress = progress,
+                                progressStage = progressStage
+                            )
+                        }
+                    }
+                }
+                if (feedResult is Result.Success) {
+                    val (newsFeed, changed) = feedResult.data
+                    _state.update {
+                        it.copy(
+                            currentNewsFeedName = fn,
+                            currentProgress = 0.0f,
+                            progressStage = ProgressStage.NONE,
+                            currentNewsItems = newsFeed?.items?.toList()?:listOf(), // force repaint
+                            visibleNewsItems = calculateVisibleNewsItems(
+                                newsItems = newsFeed?.items ?: listOf(),
+                                hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
+                                newsFeedItem = it.currentNewsFeedItem
+                            ),
+                            currentNewsArticle = null,
+                            isLoading = false,
+                            uiMessage = null,
+                            uiMessageSeverity = null
+                        )
+                    }
+                    prefetchImages(changed, listOfNotNull(newsFeed))
+                        .onSuccess {
+                            _state.update {
+                                it.copy(
+                                    isLoading = false,
+                                    currentProgress = 0.0f,
+                                    progressStage = ProgressStage.NONE,
+                                )
+                            }
+                        }
+                        .onError { _, throwable ->
+                            log.e("Could not prefetch images", throwable)
+                        }
+                } else if (feedResult is Result.Error) {
+                    log.e("Could not load feed '$feedName'", feedResult.throwable)
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            currentProgress = 0.0f,
+                            progressStage = ProgressStage.NONE,
+                            uiMessage = feedResult.error.toUiText(),
+                            uiMessageSeverity = Severity.Error
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     private fun refreshNewsFeeds() = viewModelScope.launch {
         val result = newsFeedConfigurationRepository.getNewsFeedGroups()
         if (result is Result.Success) {
@@ -813,7 +924,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
             if (newsFeedResult is Result.Success) {
                 val (newsFeeds, changed) = newsFeedResult.data
                 _state.update {
-                    val currentNewsItems = newsFeeds.find { nf -> nf.feedName == it.currentFeedName }?.items ?: listOf()
+                    val currentNewsItems = newsFeeds.find { nf -> nf.feedName == it.currentNewsFeedName }?.items ?: listOf()
                     it.copy(
                         isLoading = false,
                         currentProgress = 0.0f,
@@ -825,7 +936,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                         visibleNewsItems = calculateVisibleNewsItems(
                             newsItems = currentNewsItems,
                             hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-                            newNewsFeedConfiguration = it.currentNewsFeedItem
+                            newsFeedItem = it.currentNewsFeedItem
                         ),
                         newsFeedGroups = newsFeedGroups
                     )
@@ -960,7 +1071,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                 if (newsFeedResult is Result.Success) {
                     val (newsFeeds, changed) = newsFeedResult.data
                     _state.update {
-                        val currentNewsItems = newsFeeds.find { nf -> nf.feedName == it.currentFeedName }?.items ?: listOf()
+                        val currentNewsItems = newsFeeds.find { nf -> nf.feedName == it.currentNewsFeedName }?.items ?: listOf()
                         it.copy(
                             isLoading = false,
                             currentProgress = 0.0f,
@@ -972,7 +1083,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                             visibleNewsItems = calculateVisibleNewsItems(
                                 newsItems = currentNewsItems,
                                 hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-                                newNewsFeedConfiguration = it.currentNewsFeedItem
+                                newsFeedItem = it.currentNewsFeedItem
                             ),
                             newsFeedGroups = newsFeedGroups
                         )
@@ -1096,89 +1207,6 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                 }
             }
         )
-    }
-
-    private fun refreshNewsFeed(
-        feedName: String?,
-        url: String?
-    ) = viewModelScope.launch {
-        _state.update {
-            it.copy(
-                isLoading = true,
-            )
-        }
-        scrollPosition["newsfeed_$feedName"] = Pair(0, 0)
-        val wifiOnly = state.value.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
-        val loadArticles = state.value.settings?.get<BooleanEnum>(SK.loadArticles)?.booleanValue?:false
-        val keepReadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue?:30
-        val keepUnreadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepUnreadArticles)?.longValue?:30
-        val maxImageSize = state.value.settings?.get<Int>(SK.maxImageSize)?:1200
-        feedName?.also { fn ->
-            url?.also { u ->
-                val feedResult = feedRepository.refreshNewsFeed(
-                    feedName = fn,
-                    url = u,
-                    wifiOnly = wifiOnly,
-                    keepReadArticlesInDays = keepReadArticles,
-                    keepUnreadArticlesInDays = keepUnreadArticles,
-                    maxImageSize = maxImageSize,
-                    loadArticles = loadArticles
-                ) { progress, progressStage ->
-                    viewModelScope.launch {
-                        _state.update {
-                            it.copy(
-                                currentProgress = progress,
-                                progressStage = progressStage
-                            )
-                        }
-                    }
-                }
-                if (feedResult is Result.Success) {
-                    val (newsFeed, changed) = feedResult.data
-                    _state.update {
-                        it.copy(
-                            currentFeedName = fn,
-                            currentProgress = 0.0f,
-                            progressStage = ProgressStage.NONE,
-                            currentNewsItems = newsFeed?.items?.toList()?:listOf(), // force repaint
-                            visibleNewsItems = calculateVisibleNewsItems(
-                                newsItems = newsFeed?.items ?: listOf(),
-                                hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-                                newNewsFeedConfiguration = it.currentNewsFeedItem
-                            ),
-                            currentNewsArticle = null,
-                            isLoading = false,
-                            uiMessage = null,
-                            uiMessageSeverity = null
-                        )
-                    }
-                    prefetchImages(changed, listOfNotNull(newsFeed))
-                        .onSuccess {
-                            _state.update {
-                                it.copy(
-                                    isLoading = false,
-                                    currentProgress = 0.0f,
-                                    progressStage = ProgressStage.NONE,
-                                )
-                            }
-                        }
-                        .onError { _, throwable ->
-                            log.e("Could not prefetch images", throwable)
-                        }
-                } else if (feedResult is Result.Error) {
-                    log.e("Could not load feed '$feedName'", feedResult.throwable)
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            currentProgress = 0.0f,
-                            progressStage = ProgressStage.NONE,
-                            uiMessage = feedResult.error.toUiText(),
-                            uiMessageSeverity = Severity.Error
-                        )
-                    }
-                }
-            }
-        }
     }
 
     private suspend fun prefetchImages(
@@ -1307,10 +1335,10 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
         }
 
         newsFeedConfigurationRepository.getNewsFeedGroups()
-            .onSuccess { newsFeedConfiguration ->
+            .onSuccess { newsFeedGroups ->
                 _state.update {
                     it.copy(
-                        newsFeedGroups = newsFeedConfiguration,
+                        newsFeedGroups = newsFeedGroups,
                         isLoading = false,
                         currentProgress = 0.0f,
                         progressStage = ProgressStage.NONE,
@@ -1339,7 +1367,8 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
     ) = viewModelScope.launch {
         _state.update {
             it.copy(
-                currentFeedName = feedName,
+                currentNewsFeedName = feedName,
+                currentNewsFeedGroup = null,
                 currentNewsFeedItem = currentFeedItem,
                 currentNewsArticle = null,
                 isLoading = false,
@@ -1372,7 +1401,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                         visibleNewsItems = calculateVisibleNewsItems(
                             newsItems = newsItems,
                             hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false,
-                            newNewsFeedConfiguration = it.currentNewsFeedItem
+                            newsFeedItem = it.currentNewsFeedItem
                         ),
                     )
                 }
@@ -1413,7 +1442,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                     visibleNewsItems = calculateVisibleNewsItems(
                         newsItems = currentNewsItems,
                         hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false,
-                        newNewsFeedConfiguration = it.currentNewsFeedItem
+                        newsFeedItem = it.currentNewsFeedItem
                     ),
                     isLoading = false,
                     currentProgress = 0.0f,
@@ -1453,7 +1482,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                         visibleNewsItems = calculateVisibleNewsItems(
                             newsItems = it.currentNewsItems,
                             hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false,
-                            newNewsFeedConfiguration =it.currentNewsFeedItem
+                            newsFeedItem =it.currentNewsFeedItem
                         ),
                         isLoading = false,
                         currentProgress = 0.0f,
@@ -1507,8 +1536,8 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
         }
     }
 
-    private fun calculateVisibleNewsItems(newsItems: List<NewsItem>, hideRead: Boolean, newNewsFeedConfiguration: NewsFeedItem?): List<NewsItem> {
-        val stopWords = newNewsFeedConfiguration?.stopWords?:listOf()
+    private fun calculateVisibleNewsItems(newsItems: List<NewsItem>, hideRead: Boolean, newsFeedItem: NewsFeedItem?): List<NewsItem> {
+        val stopWords = newsFeedItem?.stopWords?:listOf()
         val sortedByDescending = newsItems
             .filter { item -> (!hideRead || !item.isRead)
                     && item.title.nostop(stopWords)

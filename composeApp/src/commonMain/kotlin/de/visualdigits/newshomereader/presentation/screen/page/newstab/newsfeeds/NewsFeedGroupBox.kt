@@ -41,7 +41,7 @@ fun NewsFeedGroupBox(
         backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
         shape = MaterialTheme.shapes.small,
         onStateChange = { state ->
-            onAction(NewsHomeReaderAction.OnCollapsibleStateChange("group_${newsFeedGroup.name}", state))
+            onAction(NewsHomeReaderAction.OnNewsFeedGroupCollapsibleStateChange(newsFeedGroup, state))
         },
         isExpanded = state.collapsibleState["group_${newsFeedGroup.name}"] == true,
         iconArrowRight = painterResource(Res.drawable.icon_arrow_right_24px),

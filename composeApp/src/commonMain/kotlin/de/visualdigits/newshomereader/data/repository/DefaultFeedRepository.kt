@@ -20,10 +20,12 @@ import de.visualdigits.newshomereader.data.model.rss.Rss
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
+import de.visualdigits.newshomereader.domain.repository.NewsFeedConfigurationRepository
 import de.visualdigits.newshomereader.domain.util.decodeFromString
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
@@ -34,7 +36,11 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
@@ -49,10 +55,10 @@ class DefaultFeedRepository(
     private val dao: NewsHomeReaderDatabaseQueries,
     private val connectivityManager: ConnectivityManager,
     private val imageCache: ImageCache,
-    val articleRepository: ArticleRepository,
+    private val articleRepository: ArticleRepository,
 ) : FeedRepository {
 
-    private val log = Logger.withTag("this")
+    private val log = Logger.withTag("DefaultFeedRepository")
 
     override suspend fun getFeedItemsByNewsFeedName(feedName: String): Result<List<NewsItem>, DataError.Remote> = withContext(Dispatchers.IO) {
         try {
@@ -67,17 +73,42 @@ class DefaultFeedRepository(
         }
     }
 
-    override fun observeFeedItems(feedName: String): Flow<List<NewsItem>> {
-        val newsFeed = dao.getNewsFeedByFeedName(feedName).executeAsOneOrNull()?.toNewsFeed()
-
-        return dao.getAllNewsItemsByFeedName(feedName.trim().lowercase())
-            .asFlow()
-            .mapToList(Dispatchers.IO)
-            .map { newsItemEntities ->
-                newsItemEntities.map { newsItemEntity ->
-                    newsItemEntity.toNewsItem().copy(newsFeed = newsFeed)
-                }
+    override fun observeFeedItems(newsFeedGroup: NewsFeedGroup?, newsFeedName: String?): Flow<List<NewsItem>> {
+        val allFlows = buildList {
+            newsFeedGroup?.let { newsFeedGroup ->
+                dao.getNewsFeedGroupEntityByName(newsFeedGroup.name, newsFeedGroup.parentGroupName).executeAsOneOrNull()
+                    ?.let { newsFeedGroupEntity ->
+                        val names = dao.getNewsFeedGroupEntityByParentName(newsFeedGroupEntity.name)
+                            .executeAsList()
+                            .flatMap { subGroupEntity ->
+                                subGroupEntity.newsFeeds.map { nf -> nf.name }
+                            } + newsFeedGroupEntity.newsFeeds.map { it.name }
+                        addAll(names.map { observeNesFeedItems(it) })
+                    }
             }
+            newsFeedName?.let { add(observeNesFeedItems(it)) }
+        }
+
+        return when {
+            allFlows.isNotEmpty() -> combine(allFlows) { it.flatMap { list -> list } }
+            else -> flowOf(emptyList())
+        }
+    }
+
+    private fun observeNesFeedItems(newsFeedName: String?): Flow<List<NewsItem>> {
+        val newsItems = if (newsFeedName != null) {
+            val newsFeed = dao.getNewsFeedByFeedName(newsFeedName).executeAsOneOrNull()?.toNewsFeed()
+            dao.getAllNewsItemsByFeedName(newsFeedName.trim().lowercase())
+                .asFlow()
+                .mapToList(Dispatchers.IO)
+                .onStart { emit(emptyList()) }
+                .map { newsItemEntities ->
+                    newsItemEntities.map { newsItemEntity ->
+                        newsItemEntity.toNewsItem().copy(newsFeed = newsFeed)
+                    }
+                }
+        } else emptyFlow()
+        return newsItems
     }
 
     override suspend fun upsertNewsFeed(newsFeed: NewsFeed): Result<Unit, DataError.Local> = withContext(Dispatchers.IO) {

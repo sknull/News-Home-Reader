@@ -49,7 +49,18 @@ fun NewsListMenuBar(
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (state.currentFeedName != null) {
+        if (state.currentNewsFeedName != null || state.currentNewsFeedGroup != null) {
+            val path = mutableListOf<String>()
+            if (state.currentNewsFeedGroup?.parentGroupName != null) {
+                path.add(state.currentNewsFeedGroup.parentGroupName!!)
+            }
+            if (state.currentNewsFeedGroup?.name != null) {
+                path.add(state.currentNewsFeedGroup.name!!)
+            }
+            if (state.currentNewsFeedName != null) {
+                path.add(state.currentNewsFeedName)
+            }
+            val feedPath = path.joinToString(" / ")
             IndicatorButton(
                 modifier = Modifier,
                 width = 30.dp,
@@ -97,12 +108,12 @@ fun NewsListMenuBar(
                     leadingIconTint = MaterialTheme.colorScheme.onSurface,
                     toolTip = stringResource(Res.string.tooltip_refresh_newsfeed),
                 ) {
-                    onAction(NewsHomeReaderAction.OnNewsFeedRefresh(state.currentFeedName, state.currentNewsFeedItem?.url))
+                    onAction(NewsHomeReaderAction.OnNewsFeedRefresh(state.currentNewsFeedName, state.currentNewsFeedItem?.url))
                 }
             }
 
             Text(
-                text = state.currentFeedName,
+                text = feedPath,
                 style = if (maxWidth > 600.dp) MaterialTheme.typography.headlineMedium else  MaterialTheme.typography.headlineSmall,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis

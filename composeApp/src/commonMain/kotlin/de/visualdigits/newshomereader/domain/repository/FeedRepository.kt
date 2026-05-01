@@ -4,6 +4,7 @@ import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +21,7 @@ interface FeedRepository {
         feedName: String
     ): Result<List<NewsItem>, DataError.Remote>
 
-    fun observeFeedItems(feedName: String): Flow<List<NewsItem>>
+    fun observeFeedItems(newsFeedGroup: NewsFeedGroup?, newsFeedName: String?): Flow<List<NewsItem>>
 
     suspend fun upsertNewsFeed(
         newsFeed: NewsFeed
