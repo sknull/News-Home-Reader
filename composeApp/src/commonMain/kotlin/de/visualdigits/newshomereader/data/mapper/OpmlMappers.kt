@@ -8,36 +8,47 @@ import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 
 fun Opml.toNewsFeedConfiguration(): List<NewsFeedGroup> {
-    return body?.outlines
-        ?.flatMap { outline ->
-            outline.toNewsFeedConfiguration(null)
-        }
-        ?: listOf()
-}
-
-fun Outline.toNewsFeedConfiguration(parent: Outline? = null, newsFeedGroups: MutableMap<String, NewsFeedGroup> = mutableMapOf()): List<NewsFeedGroup> {
-    val name = title?.replace("\n", "")?.trim() ?: ""
-    if (outlines.isEmpty()) {
-        val parentName = parent?.title?.replace("\n", "")?.trim() ?: ""
-        val group = newsFeedGroups[parentName]
-        if (group != null) {
-            val node = NewsFeedItem(
-                name = name,
-                mainGroupName = parentName,
-                imageUrl = imageUrl,
-                url = xmlUrl?:"",
-                stopWords = if (stopWords?.isNotEmpty() == true) stopWords.split(",") else listOf()
+    val mainGroups = body?.outlines
+        ?.map { mainGroupOutline ->
+            val newsFeedItems = mainGroupOutline.outlines
+                .filter { o -> o.outlines.isEmpty()}
+                .map { feedOutline ->
+                    NewsFeedItem(
+                        mainGroupName = feedOutline.title?:"",
+                        name = feedOutline.title,
+                        imageUrl = feedOutline.imageUrl,
+                        url = feedOutline.xmlUrl,
+                        stopWords = if (feedOutline.stopWords?.isNotEmpty() == true) feedOutline.stopWords.split(",").map { s -> s.trim() } else listOf()
+                    )
+                }
+            val subGroups = mainGroupOutline.outlines
+                .filter { o -> o.outlines.isNotEmpty()}
+                .map { subGroupOutline ->
+                val newsFeedItems = subGroupOutline.outlines
+                    .filter { o -> o.outlines.isEmpty()}
+                    .map { feedOutline ->
+                        NewsFeedItem(
+                            mainGroupName = feedOutline.title?:"",
+                            name = feedOutline.title,
+                            imageUrl = feedOutline.imageUrl,
+                            url = feedOutline.xmlUrl,
+                            stopWords = if (feedOutline.stopWords?.isNotEmpty() == true) feedOutline.stopWords.split(",").map { s -> s.trim() } else listOf()
+                        )
+                    }
+                NewsFeedGroup(
+                    name = subGroupOutline.title?:"",
+                    parentGroupName = mainGroupOutline.title,
+                    newsFeeds = newsFeedItems,
+                )
+            }
+            NewsFeedGroup(
+                name = mainGroupOutline.title?:"",
+                newsFeeds = newsFeedItems,
+                subGroups = subGroups
             )
-            newsFeedGroups[parentName] = group.copy(
-                newsFeeds = group.newsFeeds + node
-            )
-        }
-    } else {
-        newsFeedGroups.computeIfAbsent(name) { NewsFeedGroup(name = name) }
-        outlines.forEach { o -> o.toNewsFeedConfiguration(this, newsFeedGroups) }
-    }
+        } ?: listOf()
 
-    return newsFeedGroups.values.toList()
+    return mainGroups
 }
 
 fun List<NewsFeedGroup>.toOpml(): Opml {
@@ -47,18 +58,19 @@ fun List<NewsFeedGroup>.toOpml(): Opml {
             title = "NewsHomeReader"
         ),
         body = Body(
-            outlines = this.map { group ->
+            outlines = this.map { mainGroup ->
                 Outline(
-                    title = group.name,
-                    text = group.name,
-                    outlines = group.newsFeeds.map { item ->
+                    title = mainGroup.name,
+                    text = mainGroup.name,
+                    outlines = mainGroup.newsFeeds.map { newsFeed ->
+                        createNewsFeedOutline(newsFeed)
+                    } + mainGroup.subGroups.map { subGroup ->
                         Outline(
-                            title = item.name,
-                            text = item.name,
-                            xmlUrl = item.url,
-                            type = "rss",
-                            imageUrl = item.imageUrl,
-                            stopWords = if (item.stopWords?.isNotEmpty() == true) item.stopWords.filter { sw -> sw.isNotEmpty() }.joinToString(",") else null
+                            title = subGroup.name,
+                            text = subGroup.name,
+                            outlines = subGroup.newsFeeds.map { newsFeed ->
+                                createNewsFeedOutline(newsFeed)
+                            }
                         )
                     }
                 )
@@ -66,3 +78,14 @@ fun List<NewsFeedGroup>.toOpml(): Opml {
         )
     )
 }
+
+private fun createNewsFeedOutline(newsFeed: NewsFeedItem): Outline = Outline(
+    title = newsFeed.name,
+    text = newsFeed.name,
+    xmlUrl = newsFeed.url,
+    type = "rss",
+    imageUrl = newsFeed.imageUrl,
+    stopWords = if (newsFeed.stopWords?.isNotEmpty() == true) newsFeed.stopWords.filter { sw -> sw.isNotEmpty() }
+        .joinToString(",") else null,
+)
+

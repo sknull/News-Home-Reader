@@ -41,7 +41,7 @@ import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
-import de.visualdigits.newshomereader.presentation.screen.page.newstab.NewsContent
+import de.visualdigits.newshomereader.presentation.screen.page.newstab.newsfeeds.NewsContent
 import de.visualdigits.newshomereader.presentation.screen.page.settings.SettingsPage
 import de.visualdigits.newshomereader.presentation.style.MyShapes
 import de.visualdigits.newshomereader.presentation.style.gap

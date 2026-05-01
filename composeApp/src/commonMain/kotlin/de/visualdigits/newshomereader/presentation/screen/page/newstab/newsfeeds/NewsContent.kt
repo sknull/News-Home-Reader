@@ -1,4 +1,4 @@
-package de.visualdigits.newshomereader.presentation.screen.page.newstab
+package de.visualdigits.newshomereader.presentation.screen.page.newstab.newsfeeds
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,7 +15,6 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.screen.page.newstab.article.NewsArticleCard
-import de.visualdigits.newshomereader.presentation.screen.page.newstab.newsfeeds.NewsFeeds
 import de.visualdigits.newshomereader.presentation.style.gap
 
 @Composable

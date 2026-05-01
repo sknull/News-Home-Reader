@@ -277,7 +277,7 @@ getNewsFeedGroupEntityByName:
 SELECT * FROM NewsFeedGroupEntity
 WHERE name = :name AND parentGroupName = :parentGroupName;
 
-getNewsFeedGroupEntityByParentName:
+getNewsFeedGroupEntitiesByParentName:
 SELECT * FROM NewsFeedGroupEntity
 WHERE parentGroupName = :parentGroupName;
 

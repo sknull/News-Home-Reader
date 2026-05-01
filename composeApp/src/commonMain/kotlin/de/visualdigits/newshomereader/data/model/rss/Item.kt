@@ -15,8 +15,8 @@ data class Item(
     @XmlElement(true) val identifier: String? = null,
     @XmlElement(true) val id: String? = null,
 
-    @XmlElement(true) @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("date") val date: OffsetDateTime = OffsetDateTime.now(), // first publish date time
-    @XmlElement(true) @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("pubDate") val pubDate: OffsetDateTime = OffsetDateTime.now(), // update date time or first publish date time when date is empty
+    @XmlElement(true) @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("date") val date: OffsetDateTime? = null, // first publish date time
+    @XmlElement(true) @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("pubDate") val pubDate: OffsetDateTime? = null, // update date time or first publish date time when date is empty
 
     @XmlElement(true) val about: String? = null,
     @XmlElement(true) val creator: String? = null,

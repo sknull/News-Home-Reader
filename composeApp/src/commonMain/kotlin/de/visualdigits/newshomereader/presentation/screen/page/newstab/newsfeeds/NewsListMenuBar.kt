@@ -1,4 +1,4 @@
-package de.visualdigits.newshomereader.presentation.screen.page.newstab.newslist
+package de.visualdigits.newshomereader.presentation.screen.page.newstab.newsfeeds
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

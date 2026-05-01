@@ -32,7 +32,8 @@ fun NewsFeeds(
         else -> 1
     }
     val rowData = remember(state.visibleNewsItems, chunks) {
-        state.visibleNewsItems.chunked(chunks).map { rowItems ->
+        state.visibleNewsItems
+            .chunked(chunks).map { rowItems ->
             val rowKey = rowItems.joinToString("_") { it.identifier }
             rowKey to rowItems
         }

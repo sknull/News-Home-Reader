@@ -166,26 +166,28 @@ class DefaultNewsFeedConfigurationRepository(
     override suspend fun setNewsFeedGroups(newsFeedGroups: List<NewsFeedGroup>): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         try {
             newsFeedGroups.forEach { newsFeedGroup ->
-                val groupEntity = dao.getNewsFeedGroupEntityByName(
+                var groupEntity = dao.getNewsFeedGroupEntityByName(
                     name = newsFeedGroup.name,
                     parentGroupName = newsFeedGroup.parentGroupName
                 ).executeAsOneOrNull()
-                if (groupEntity != null) {
-                    val existingSubGroups = groupEntity.subGroups.map { sg -> sg.name }
-                    newsFeedGroup.subGroups
-                        .filter { nfg -> !existingSubGroups.contains(nfg.name) }
-                        .forEach { sg ->
-                            val existingSubGroup = dao.getNewsFeedGroupEntityByName(sg.name, sg.parentGroupName).executeAsOneOrNull()
-                            val subGroup = if (existingSubGroup != null) {
-                                val existingFeedNames = existingSubGroup.newsFeeds.map { f -> f.name }
-                                existingSubGroup.copy(newsFeeds = sg.newsFeeds.filter { nf -> !existingFeedNames.contains(nf.name) })
-                            } else {
-                                sg.toNewsFeedGroupEntity()
-                            }
-                            dao.upsertNewsFeedGroup(subGroup)
-                        }
+                if (groupEntity == null) {
+                    groupEntity = dao.upsertNewsFeedGroup(newsFeedGroup.toNewsFeedGroupEntity())
                 }
-                dao.upsertNewsFeedGroup(newsFeedGroup.toNewsFeedGroupEntity())
+                val existingSubGroups = dao.getNewsFeedGroupEntitiesByParentName(newsFeedGroup.name)
+                    .executeAsList()
+                    .map { sg -> sg.name }
+                newsFeedGroup.subGroups
+                    .filter { nfg -> !existingSubGroups.contains(nfg.name) }
+                    .forEach { sg ->
+                        val existingSubGroup = dao.getNewsFeedGroupEntityByName(sg.name, sg.parentGroupName).executeAsOneOrNull()
+                        val subGroup = if (existingSubGroup != null) {
+                            val existingFeedNames = existingSubGroup.newsFeeds.map { f -> f.name }
+                            existingSubGroup.copy(newsFeeds = sg.newsFeeds.filter { nf -> !existingFeedNames.contains(nf.name) })
+                        } else {
+                            sg.toNewsFeedGroupEntity().copy(parentId = groupEntity.id)
+                        }
+                        dao.upsertNewsFeedGroup(subGroup)
+                    }
             }
             Result.Success(dao.getAllNewsFeedGroups())
         } catch (e: Exception) {
@@ -208,10 +210,7 @@ class DefaultNewsFeedConfigurationRepository(
 
     override suspend fun saveNewsFeedGroups(outs: OutputStream): Result<Unit, DataError.Local> = withContext(dispatcher) {
         try {
-            val opml = dao.getAllNewsFeedGroupEntities()
-                .executeAsList()
-                .map { nfg -> nfg.toNewsFeedGroup()}
-                .toOpml()
+            val opml = dao.getAllNewsFeedGroups().toOpml()
             val xml = encodeToString(Opml.serializer(), opml)
             outs.writer().use { writer ->
                 writer.write(xml)

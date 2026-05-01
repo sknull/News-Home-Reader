@@ -43,7 +43,7 @@ private fun buildNodeRecursive(
     )
 }
 
-fun NewsHomeReaderDatabaseQueries.upsertNewsFeedGroup(newsFeedGroupEntity: NewsFeedGroupEntity) {
+fun NewsHomeReaderDatabaseQueries.upsertNewsFeedGroup(newsFeedGroupEntity: NewsFeedGroupEntity): NewsFeedGroupEntity {
     insertNewsFeedGroupEntity(
         parentId = newsFeedGroupEntity.parentId,
         parentGroupName = newsFeedGroupEntity.parentGroupName,
@@ -51,6 +51,8 @@ fun NewsHomeReaderDatabaseQueries.upsertNewsFeedGroup(newsFeedGroupEntity: NewsF
         newsFeeds = newsFeedGroupEntity.newsFeeds,
         subGroups = newsFeedGroupEntity.subGroups
     )
+
+    return getNewsFeedGroupEntityByName(name = newsFeedGroupEntity.name, parentGroupName = newsFeedGroupEntity.parentGroupName).executeAsOne()
 }
 
 fun NewsHomeReaderDatabaseQueries.upsertSettings(settingsEntity: SettingsEntity) {
@@ -149,7 +151,7 @@ fun NewsHomeReaderDatabaseQueries.upsertNewsItem(newsItemEntity: NewsItemEntity,
 
     val existingNewsItemEntity = getNewsItemByFeedNameAndIdentifier(cleanFeed, cleanIdentifier).executeAsOneOrNull()
     return if (existingNewsItemEntity != null) {
-        if (forceUpdate || normalizedItem.updatedMillis > existingNewsItemEntity.updatedMillis) {
+        if (forceUpdate || normalizedItem.publishedMillis > existingNewsItemEntity.publishedMillis) {
             val toUpdate = normalizedItem.copy(id = existingNewsItemEntity.id)
             updateNewsItem(toUpdate)
             Pair(toUpdate, existingNewsItemEntity.isEqualTo(newsItemEntity))

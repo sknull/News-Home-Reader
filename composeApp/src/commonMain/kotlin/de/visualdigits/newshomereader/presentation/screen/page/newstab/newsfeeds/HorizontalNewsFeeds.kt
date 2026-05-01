@@ -38,7 +38,6 @@ import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.screen.page.newstab.item.NewsItemCard
-import de.visualdigits.newshomereader.presentation.screen.page.newstab.newslist.NewsListMenuBar
 import de.visualdigits.newshomereader.presentation.style.gap
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource

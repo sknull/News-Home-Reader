@@ -78,7 +78,7 @@ class DefaultFeedRepository(
             newsFeedGroup?.let { newsFeedGroup ->
                 dao.getNewsFeedGroupEntityByName(newsFeedGroup.name, newsFeedGroup.parentGroupName).executeAsOneOrNull()
                     ?.let { newsFeedGroupEntity ->
-                        val names = dao.getNewsFeedGroupEntityByParentName(newsFeedGroupEntity.name)
+                        val names = dao.getNewsFeedGroupEntitiesByParentName(newsFeedGroupEntity.name)
                             .executeAsList()
                             .flatMap { subGroupEntity ->
                                 subGroupEntity.newsFeeds.map { nf -> nf.name }
