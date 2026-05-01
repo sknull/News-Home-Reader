@@ -73,7 +73,12 @@ fun VerticalNewsFeeds(
                     verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                 ) {
                     state.newsFeedGroups.forEach { newsFeedGroup ->
-                        NewsFeedGroupBox(newsFeedGroup, onAction, state)
+                        NewsFeedGroupBox(
+                            newsFeedGroup = newsFeedGroup,
+                            onAction = onAction,
+                            state = state,
+                            maxImageSize = maxImageSize
+                        )
                     }
                 }
             }))

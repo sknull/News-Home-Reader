@@ -878,7 +878,6 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                                 hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
                                 newsFeedItem = it.currentNewsFeedItem
                             ),
-                            currentNewsArticle = null,
                             isLoading = false,
                             uiMessage = null,
                             uiMessageSeverity = null
@@ -930,8 +929,6 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                         currentProgress = 0.0f,
                         progressStage = ProgressStage.NONE,
                         isEditingSettings = false,
-                        currentNewsItem = null,
-                        currentNewsArticle = null,
                         currentNewsItems = currentNewsItems,
                         visibleNewsItems = calculateVisibleNewsItems(
                             newsItems = currentNewsItems,
@@ -1077,8 +1074,6 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                             currentProgress = 0.0f,
                             progressStage = ProgressStage.NONE,
                             isEditingSettings = false,
-                            currentNewsItem = null,
-                            currentNewsArticle = null,
                             currentNewsItems = currentNewsItems,
                             visibleNewsItems = calculateVisibleNewsItems(
                                 newsItems = currentNewsItems,

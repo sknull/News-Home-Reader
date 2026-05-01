@@ -68,8 +68,6 @@ fun MediaItemButtons(
                                     val url = thumbnail.url.firstOrNull()
                                     if (url != null) {
                                         NewsItemImage(
-                                            modifier = Modifier
-                                                .clip(MaterialTheme.shapes.extraSmall),
                                             url = url,
                                             height = 90.dp,
                                             contentDescription = thumbnail.description ?: "",

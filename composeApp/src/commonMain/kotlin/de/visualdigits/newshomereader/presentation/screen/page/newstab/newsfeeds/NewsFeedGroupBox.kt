@@ -29,7 +29,8 @@ import org.jetbrains.compose.resources.painterResource
 fun NewsFeedGroupBox(
     newsFeedGroup: NewsFeedGroup,
     onAction: (NewsHomeReaderAction) -> Unit,
-    state: NewsHomeReaderState
+    state: NewsHomeReaderState,
+    maxImageSize: Int?
 ) {
     VerticalCollapsibleBox(
         modifier = Modifier
@@ -88,10 +89,20 @@ fun NewsFeedGroupBox(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
         ) {
             newsFeedGroup.subGroups.forEach { subNewsFeedGroup ->
-                NewsFeedGroupBox(subNewsFeedGroup, onAction, state)
+                NewsFeedGroupBox(
+                    newsFeedGroup = subNewsFeedGroup,
+                    onAction = onAction,
+                    state = state,
+                    maxImageSize = maxImageSize
+                )
             }
 
-            NewsFeedItems(newsFeedGroup, state, onAction)
+            NewsFeedItems(
+                newsFeedGroup = newsFeedGroup,
+                state = state,
+                maxImageSize = maxImageSize,
+                onAction = onAction
+            )
 
             if (state.isEditMode) {
                 Row() {

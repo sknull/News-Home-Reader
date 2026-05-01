@@ -5,10 +5,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -37,6 +39,7 @@ import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
+import de.visualdigits.newshomereader.domain.util.getFaviconUrl
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.gap
@@ -82,7 +85,11 @@ fun NewsItemCard(
             image = newsItem.newsArticle?.articleImage?:""
         }
         if (image.isNotEmpty()) {
-            NewsItemImage(url = image, contentDescription = newsItem.imageCaption, maxImageSize = maxImageSize)
+            NewsItemImage(
+                url = image,
+                contentDescription = newsItem.imageCaption,
+                maxImageSize = maxImageSize
+            )
         }
 
         Column(
@@ -91,23 +98,49 @@ fun NewsItemCard(
                 .padding(MaterialTheme.shapes.gap),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
         ) {
-            if (state.currentNewsFeedGroup != null) {
-                Text(
-                    text = newsItem.newsFeed?.feedName?:"",
-                    style = MaterialTheme.typography.titleSmall,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "${newsItem.updated.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}",
-                    style = MaterialTheme.typography.bodySmall
-                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    val feedName = newsItem.newsFeed?.feedName
+                    state.lookupNewsFeedMap[feedName?.trim()?.lowercase()]?.url?.let { url ->
+                        Box(
+                            modifier = Modifier
+                                .width(30.dp)
+                                .height(30.dp)
+                        ) {
+                            NewsItemImage(
+                                modifier = Modifier,
+                                url = url.getFaviconUrl(48),
+                                width = 30.dp,
+                                height = 30.dp,
+                                contentDescription = feedName ?: "",
+                                maxImageSize = maxImageSize,
+                                showLoadingIcon = false
+                            )
+                        }
+                    }
+
+                    Column() {
+                        if (state.currentNewsFeedGroup != null) {
+                            Text(
+                                text = feedName ?:"",
+                                style = MaterialTheme.typography.titleSmall,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                        Text(
+                            text = "${newsItem.updated.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+                }
                 Spacer(Modifier.width(MaterialTheme.shapes.gap))
                 if (newsItem.newsArticle?.videoItems?.isNotEmpty() == true) {
                     Icon(

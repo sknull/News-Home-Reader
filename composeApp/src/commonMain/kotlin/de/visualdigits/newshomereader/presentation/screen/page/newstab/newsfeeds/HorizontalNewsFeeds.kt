@@ -113,7 +113,12 @@ fun HorizontalNewsFeeds(
                         ) {
                             state.newsFeedGroups.map { newsFeedGroup ->
                                 Pair("newsfeed_navigation_${newsFeedGroup.name}", @Composable {
-                                    NewsFeedGroupBox(newsFeedGroup, onAction, state)
+                                    NewsFeedGroupBox(
+                                        newsFeedGroup = newsFeedGroup,
+                                        onAction = onAction,
+                                        state = state,
+                                        maxImageSize = maxImageSize
+                                    )
                                 })
                             }
                         }

@@ -33,7 +33,8 @@ fun NewsItemImage(
     width: Dp? = null,
     height: Dp? = null,
     contentDescription: String,
-    maxImageSize: Int?
+    maxImageSize: Int?,
+    showLoadingIcon: Boolean = true
 ) {
 
     val log = Logger.withTag("NewsItemImage")
@@ -63,13 +64,15 @@ fun NewsItemImage(
             .fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
-        Icon(
-            modifier = Modifier
-                .size(48.dp),
-            painter = painterResource(Res.drawable.icon_hourglass_top_24px),
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurface
-        )
+        if (showLoadingIcon) {
+            Icon(
+                modifier = Modifier
+                    .size(48.dp),
+                painter = painterResource(Res.drawable.icon_hourglass_top_24px),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurface
+            )
+        }
 
         AsyncImage(
             modifier = modifier

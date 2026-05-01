@@ -39,8 +39,10 @@ import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
+import de.visualdigits.newshomereader.domain.util.getFaviconUrl
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
+import de.visualdigits.newshomereader.presentation.screen.page.newstab.item.NewsItemImage
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
 import org.jetbrains.compose.resources.painterResource
@@ -90,19 +92,43 @@ fun NewsArticleCard(
                     .fillMaxHeight()
                     .width(10.dp)
                     .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
-                "newsarticle_${newsArticle?.itemId}",
+                "newsarticle_${newsArticle.itemId}",
                 scrollPosition = scrollPosition,
                 collapsibleState = state.collapsibleState,
                 onCommonAction
             ) {
                 listOf(
                     Pair("feed_name", @Composable {
-                        newsItem.newsFeed?.feedName?.let { fn ->
-                            Text(
-                                modifier = Modifier,
-                                text = fn,
-                                style = if (maxWidth > 600.dp) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleSmall
-                            )
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            val feedName = newsItem.newsFeed?.feedName
+                            state.lookupNewsFeedMap[feedName?.trim()?.lowercase()]?.url?.let { url ->
+                                Box(
+                                    modifier = Modifier
+                                        .width(24.dp)
+                                        .height(24.dp)
+                                ) {
+                                    NewsItemImage(
+                                        modifier = Modifier,
+                                        url = url.getFaviconUrl(48),
+                                        width = 24.dp,
+                                        height = 24.dp,
+                                        contentDescription = feedName ?: "",
+                                        maxImageSize = maxImageSize,
+                                        showLoadingIcon = false
+                                    )
+                                }
+                            }
+
+                            newsItem.newsFeed?.feedName?.let { fn ->
+                                Text(
+                                    modifier = Modifier,
+                                    text = fn,
+                                    style = if (maxWidth > 600.dp) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleSmall
+                                )
+                            }
                         }
                     }),
                     Pair("title", @Composable {
@@ -132,7 +158,7 @@ fun NewsArticleCard(
                                 tint = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
-                                text = "${newsArticle?.readingTime} Min.",
+                                text = "${newsArticle.readingTime} Min.",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
@@ -149,8 +175,7 @@ fun NewsArticleCard(
                         val wifiOnly = settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
                         if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                             MediaItemButtons(
-                                mediaItems = (newsArticle?.videoItems ?: listOf()) + (newsArticle?.audioItems
-                                    ?: listOf()),
+                                mediaItems = newsArticle.videoItems + newsArticle.audioItems,
                                 uriHandler = uriHandler,
                                 newsItem = newsItem
                             )
@@ -184,7 +209,7 @@ fun NewsArticleCard(
                         Text(
                             modifier = Modifier,
                             text = htmlToAnnotatedString(
-                                html = newsArticle?.html ?: "",
+                                html = newsArticle.html,
                                 style = HtmlStyle(
                                     textLinkStyles = displayTheme.textLinkStyles
                                 ),

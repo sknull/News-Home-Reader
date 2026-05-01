@@ -1,6 +1,7 @@
 package de.visualdigits.newshomereader.presentation.screen.page.newstab.newsfeeds
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.Dp
@@ -9,6 +10,7 @@ import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.domain.model.settings.Settings
+import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 
@@ -31,11 +33,17 @@ fun NewsFeeds(
         maxWidth > 500.dp -> 2
         else -> 1
     }
+    val lastValidRowData = remember { mutableStateOf<List<Pair<String, List<NewsItem>>>>(emptyList()) }
     val rowData = remember(state.visibleNewsItems, chunks) {
-        state.visibleNewsItems
-            .chunked(chunks).map { rowItems ->
-            val rowKey = rowItems.joinToString("_") { it.identifier }
-            rowKey to rowItems
+        if (state.visibleNewsItems.isNotEmpty()) {
+            val newData = state.visibleNewsItems.chunked(chunks).map { rowItems ->
+                val rowKey = rowItems.joinToString("_") { it.identifier }
+                rowKey to rowItems
+            }
+            lastValidRowData.value = newData
+            newData
+        } else {
+            lastValidRowData.value
         }
     }
 
