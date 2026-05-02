@@ -1,5 +1,6 @@
 package de.visualdigits.newshomereader.data.database
 
+import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.FullArticleEntity
 import de.visualdigits.newshomereader.NewsFeedEntity
 import de.visualdigits.newshomereader.NewsFeedGroupEntity
@@ -7,7 +8,6 @@ import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.NewsItemEntity
 import de.visualdigits.newshomereader.SettingsEntity
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
-import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 
 fun NewsHomeReaderDatabaseQueries.getAllNewsFeedGroups(): List<NewsFeedGroup> {

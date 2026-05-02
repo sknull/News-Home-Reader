@@ -1,7 +1,7 @@
 package de.visualdigits.newshomereader.data.http
 
-import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.common.domain.model.errorhandling.Result
+import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
 import io.ktor.client.network.sockets.SocketTimeoutException

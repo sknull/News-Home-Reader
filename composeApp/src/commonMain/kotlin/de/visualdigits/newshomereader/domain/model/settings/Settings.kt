@@ -25,10 +25,10 @@ import de.visualdigits.compose.resources.tooltip_language
 import de.visualdigits.compose.resources.tooltip_load_articles
 import de.visualdigits.compose.resources.tooltip_refresh_interval
 import de.visualdigits.compose.resources.tooltip_refresh_wifi_only
-import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.newshomereader.domain.model.type.Language
+import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 
 class Settings(
     fields: LinkedHashMap<SK, Field<*,*,SK>> = LinkedHashMap()

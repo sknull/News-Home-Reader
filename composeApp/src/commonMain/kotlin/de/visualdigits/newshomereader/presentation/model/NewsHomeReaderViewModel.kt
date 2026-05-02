@@ -515,7 +515,7 @@ class NewsHomeReaderViewModel(
                 _state.update {
                     it.copy(
                         currentNewsFeedGroup = if (action.isExpanded) action.group else null,
-                        currentNewsFeedName = if (action.isExpanded) state.value.currentNewsFeedName else null,
+                        currentNewsFeedName = null,
                         collapsibleState = it.collapsibleState + ("group_${action.group.name}" to action.isExpanded)
                     )
                 }

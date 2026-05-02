@@ -7,7 +7,6 @@ import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.newshomereader.data.repository.ImageCache
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
-import de.visualdigits.newshomereader.presentation.screen.page.MainPage
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -25,7 +24,7 @@ fun App(platformType: PlatformType) {
     viewModel.platformType = platformType
     val connectivityManager = koinInject<ConnectivityManager>()
 
-    MainPage(
+    _root_ide_package_.de.visualdigits.newshomereader.presentation.page.MainPage(
         viewModel = viewModel,
         connectivityManager = connectivityManager
     )

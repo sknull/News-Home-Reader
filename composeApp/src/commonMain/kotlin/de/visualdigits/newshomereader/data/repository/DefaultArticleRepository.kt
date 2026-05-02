@@ -2,6 +2,7 @@ package de.visualdigits.newshomereader.data.repository
 
 import co.touchlab.kermit.Logger
 import com.fleeksoft.ksoup.Ksoup
+import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.essence.Essence
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.data.database.mapper.toFullArticle
@@ -10,7 +11,6 @@ import de.visualdigits.newshomereader.data.database.upsertFullArticle
 import de.visualdigits.newshomereader.data.mapper.toAppJson
 import de.visualdigits.newshomereader.data.model.applicationjson.AppJsonDto
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
-import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository

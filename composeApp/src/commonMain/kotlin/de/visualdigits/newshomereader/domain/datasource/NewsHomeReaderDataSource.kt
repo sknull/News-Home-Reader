@@ -1,7 +1,7 @@
 package de.visualdigits.newshomereader.domain.datasource
 
-import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.common.domain.model.errorhandling.Result
+import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 
 interface NewsHomeReaderDataSource {
 
