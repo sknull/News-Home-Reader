@@ -221,11 +221,6 @@ val stringListAdapter = object : ColumnAdapter<List<String>, String> {
     override fun encode(value: List<String>): String = value.joinToString(",")
 }
 
-val intAdapter = object : ColumnAdapter<Int, Long> {
-    override fun decode(databaseValue: Long): Int = databaseValue.toInt()
-    override fun encode(value: Int): Long = value.toLong()
-}
-
 val newsFeedsAdapter = object : ColumnAdapter<List<NewsFeedItem>, String> {
     override fun decode(databaseValue: String): List<NewsFeedItem> =
         if (databaseValue.isEmpty()) listOf() else Json.decodeFromString(databaseValue)

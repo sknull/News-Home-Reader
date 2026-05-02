@@ -55,7 +55,7 @@ class DefaultNewsFeedConfigurationRepository(
         try {
             checkNotNull(newsFeedGroup) { "NewsFeedGroup is null" }
             dao.upsertNewsFeedGroup(newsFeedGroup.toNewsFeedGroupEntity())
-            Result.Success(dao.getNewsFeedGroupEntityByName(newsFeedGroup.name!!, newsFeedGroup.parentGroupName).executeAsOneOrNull()?.toNewsFeedGroup())
+            Result.Success(dao.getNewsFeedGroupEntityByName(newsFeedGroup.name, newsFeedGroup.parentGroupName).executeAsOneOrNull()?.toNewsFeedGroup())
         } catch (e: Exception) {
             log.e("Error while upserting group", e)
             Result.Error(DataError.Local.SERIALIZATION, e)

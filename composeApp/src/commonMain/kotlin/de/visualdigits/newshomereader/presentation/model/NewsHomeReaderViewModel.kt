@@ -288,7 +288,7 @@ class NewsHomeReaderViewModel(
                                 )
                             }
                         }
-                        .onError { local, throwable ->
+                        .onError { _, throwable ->
                             log.e("Could not add newsfeed item '${newsFeedItem?.name}'", throwable)
                         }
                 }
@@ -331,7 +331,7 @@ class NewsHomeReaderViewModel(
                                 )
                             }
                         }
-                        .onError { local, throwable ->
+                        .onError { _, throwable ->
                             log.e("Could not add newsfeed configuration '${state.value.deleteNewsFeedItem?.name}'", throwable)
                         }
                 }
@@ -608,11 +608,6 @@ class NewsHomeReaderViewModel(
 
             is Result.Error -> {
                 log.e("Could not add newsfeed group '$newsFeedGroupName'", addResult.throwable)
-                null
-            }
-
-            else -> {
-                null
             }
         }
     }
@@ -681,6 +676,7 @@ class NewsHomeReaderViewModel(
                             )
                         }
                     }.onError { error, throwable ->
+                        log.e("Could not get newsfeed groups", throwable)
                         _state.update {
                             it.copy(
                                 isLoading = false,
@@ -792,7 +788,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                         )
                     }
                 }
-                .onError { error, throwable ->
+                .onError { _, throwable ->
                     log.e("Could not modify newsfeed configuration from '${oldEntity.name}' to '${newEntity.name}'", throwable)
                 }
         } else {
@@ -984,6 +980,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                     }
                 }
                 .onError { error, throwable ->
+                    log.e("Could not import settings", throwable)
                     _state.update {
                         it.copy(
                             isLoading = false,
@@ -1025,6 +1022,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                         }
                     }
                     .onError { error, throwable ->
+                        log.e("Could not export settings", throwable)
                         _state.update {
                             it.copy(
                                 isLoading = false,
@@ -1342,7 +1340,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                     )
                 }
             }
-            .onError { local, throwable ->
+            .onError { _, throwable ->
                 log.e("Could not get settings", throwable)
                 _state.update {
                     it.copy(

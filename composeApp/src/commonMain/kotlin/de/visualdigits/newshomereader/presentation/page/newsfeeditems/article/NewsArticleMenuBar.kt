@@ -36,8 +36,6 @@ fun NewsArticleMenuBar(
     uriHandler: UriHandler,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
     Row(
         modifier = Modifier
             .fillMaxWidth()

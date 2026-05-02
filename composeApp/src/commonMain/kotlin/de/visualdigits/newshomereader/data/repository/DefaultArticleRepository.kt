@@ -85,6 +85,7 @@ class DefaultArticleRepository(
                     appJsonDto
                 }
         } catch (e: Exception) {
+            log.e("Could not read article", e)
             null
         }
 

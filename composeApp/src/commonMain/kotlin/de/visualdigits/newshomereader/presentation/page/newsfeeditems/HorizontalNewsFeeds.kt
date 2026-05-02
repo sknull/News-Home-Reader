@@ -105,7 +105,7 @@ fun HorizontalNewsFeeds(
                         }
 
                         PlatformVerticalScrollbarBox(
-                            boxModifier = Modifier
+                            modifier = Modifier
                                 .width(500.dp),
                             backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
                             scrollbarModifier = Modifier
@@ -164,7 +164,7 @@ fun HorizontalNewsFeeds(
             )
 
             PlatformVerticalScrollbarBox(
-                boxModifier = Modifier
+                modifier = Modifier
                     .fillMaxWidth(),
                 backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
                 scrollbarModifier = Modifier

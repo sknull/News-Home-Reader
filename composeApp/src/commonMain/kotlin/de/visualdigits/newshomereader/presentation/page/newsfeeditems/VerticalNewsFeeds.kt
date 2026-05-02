@@ -50,7 +50,7 @@ fun VerticalNewsFeeds(
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
     PlatformVerticalScrollbarBox(
-        boxModifier = Modifier
+        modifier = Modifier
             .fillMaxSize(),
         backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
         scrollbarModifier = Modifier

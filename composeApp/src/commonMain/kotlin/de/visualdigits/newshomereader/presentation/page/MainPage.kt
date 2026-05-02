@@ -101,7 +101,7 @@ fun MainPage(
                     shapeContainer = MaterialTheme.shapes.small
                 )
 
-                _root_ide_package_.de.visualdigits.newshomereader.presentation.page.MainMenuBar(
+                MainMenuBar(
                     state = state,
                     onAction = onAction,
                     connectivityManager = connectivityManager

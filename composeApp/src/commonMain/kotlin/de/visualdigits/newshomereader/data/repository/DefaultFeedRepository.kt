@@ -172,7 +172,7 @@ class DefaultFeedRepository(
                 val totalSteps = newsFeeds.size + newsItems.size * (if (loadArticles) 2 else 1)
                 currentStep.set(0)
 
-                val (persistedItems, changedNewsItems) = dao.transactionWithResult {
+                val (persistedItems, _) = dao.transactionWithResult {
                     val persistedNewsFeeds = newsFeeds.map { newsFeed ->
                         persistNewsFeed(newsFeed, totalSteps, progress)
                     }

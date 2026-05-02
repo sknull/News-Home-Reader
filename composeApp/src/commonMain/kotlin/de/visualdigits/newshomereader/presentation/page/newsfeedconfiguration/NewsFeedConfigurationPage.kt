@@ -93,7 +93,6 @@ fun NewsFeedConfigurationPage(
                 )
             },
             configuration = { state.editedNewsFeedConfiguration!! },
-            collapsibleState = state.collapsibleState,
             onCancelClick = {
                 onAction(
                     if (state.isAddingNewsFeedConfiguration) {

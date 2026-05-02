@@ -128,7 +128,7 @@ fun NewsListMenuBar(
                             url = url.getFaviconUrl(48),
                             width = 30.dp,
                             height = 30.dp,
-                            contentDescription = state.currentNewsFeedName ?: "",
+                            contentDescription = state.currentNewsFeedName,
                             maxImageSize = 48,
                             showLoadingIcon = false
                         )

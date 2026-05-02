@@ -64,7 +64,7 @@ fun NewsFeedCatalog(
     }
 
     PlatformVerticalScrollbarBox(
-        boxModifier = modifier
+        modifier = modifier
             .fillMaxSize(),
         backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
         scrollbarModifier = Modifier

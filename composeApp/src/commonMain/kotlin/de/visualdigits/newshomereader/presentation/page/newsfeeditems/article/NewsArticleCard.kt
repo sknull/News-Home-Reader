@@ -84,7 +84,7 @@ fun NewsArticleCard(
             )
 
             PlatformVerticalScrollbarBox(
-                boxModifier = Modifier
+                modifier = Modifier
                     .fillMaxWidth(),
                 backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
                 scrollbarModifier = Modifier

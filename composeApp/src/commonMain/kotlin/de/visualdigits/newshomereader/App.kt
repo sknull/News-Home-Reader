@@ -17,7 +17,7 @@ fun App(platformType: PlatformType) {
     val imageCache = koinInject<ImageCache>()
     val viewModel = koinViewModel<NewsHomeReaderViewModel>()
 
-    setSingletonImageLoaderFactory { context ->
+    setSingletonImageLoaderFactory { _ ->
         imageCache.getImageLoader()
     }
 

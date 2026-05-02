@@ -102,7 +102,6 @@ fun SettingsPage(
                 )
             },
             configuration = { state.settings!! },
-            collapsibleState = state.collapsibleState,
             onCancelClick = {
                 onAction(
                     NewsHomeReaderAction.OnEditSettingsCancelClick()

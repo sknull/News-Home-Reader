@@ -84,18 +84,10 @@ data class NewsHomeReaderState(
     val deleteNewsFeedItem: NewsFeedItem? = null,
 ) {
 
-    val lookupNewsFeedGroupMap
-        get() = newsFeedGroups.flatMap { mainGroup ->
-        mainGroup.subGroups.flatMap { subGroup ->
-            subGroup.newsFeeds.map { it.name?.trim()?.lowercase() to subGroup }
-        } + mainGroup.newsFeeds.map { it.name?.trim()?.lowercase() to mainGroup }
-    }.toMap()
-
     val lookupNewsFeedMap
         get() = newsFeedGroups.flatMap { mainGroup ->
         mainGroup.subGroups.flatMap { subGroup ->
             subGroup.newsFeeds.map { it.name?.trim()?.lowercase() to it }
         } + mainGroup.newsFeeds.map { it.name?.trim()?.lowercase() to it }
     }.toMap()
-
 }
