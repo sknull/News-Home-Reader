@@ -6,13 +6,18 @@ Select directory
 Select file
 Close
 Delete
+Export OPML File
+Export PDF File
+Export Settings File
 Choose OPML File
+Choose Settings File
 Edit
 Edit...
 The hard drive is full.
 File not found.
 Result could not be analyzed.
 An unknown error occurred during a local operation.
+The filetype is not supported.
 Internet connection interrupted.
 The request has timed out.
 Result could not be analyzed.
@@ -40,21 +45,25 @@ Feed Name
 Hide Read items
 Host URL
 Image URL
-Import OPML
 Keep Read Articles
 Keep Unread Articles
 Language
 Prefetch Articles
+Group Name
+OPML
 Refresh Interval
 Refresh Wifi Only.
 Scene name
+Settings
 Stop Words
+Sub Group Name
 Feed URL
 German
 English
 About
 Help
 OK
+Save
 Search
 Search...
 Show Details...
@@ -63,13 +72,21 @@ Output
 News
 Shelly Status
 Studio Clock
+Add Newsfeed
+Add Newsfeed Group
 Delete Element
+Delete Newsfeed
+Delete Newsfeed Group
+Edit Newsfeed
+Edit Newsfeed Group
 Info
+Search
 Settings
 Add scene...
 Back
 Delete Scene...
 Defines the look and feel of the UI
+Export article as PDF
 Feed Name. Should be one short word which is used as the internal key
 Hide read articles in the news list
 The URL of the synch server

@@ -4,6 +4,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,6 +31,7 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.page.navigation.NewsFeedGroupBox
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.NewsItemCard
 import de.visualdigits.newshomereader.presentation.style.gap
+import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 
 /**
  * Renders the news item card for a given newsfeed
@@ -56,17 +58,18 @@ fun VerticalNewsFeeds(
         scrollbarModifier = Modifier
             .clip(MaterialTheme.shapes.small)
             .width(10.dp)
-            .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
-        "newsfeed_navigation",
+            .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+        scrollbarStyle = scrollbarStyle(),
+        scrollbarId = "newsfeed_navigation",
         scrollPosition = scrollPosition,
+        onCommonAction = onCommonAction,
         scrollToTop = { lazyListState ->
             LaunchedEffect(state.collapsibleState["group_newsfeeds_navigation"]) {
                 if (state.collapsibleState["group_newsfeeds_navigation"] == true) {
                     lazyListState.animateScrollToItem(0)
                 }
             }
-        },
-        onCommonAction = onCommonAction
+        }
     ) {
         val bool = state.collapsibleState["group_newsfeeds_navigation"]
         if (bool == true) {
@@ -75,13 +78,7 @@ fun VerticalNewsFeeds(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.surfaceContainerLow)
-                        .padding(MaterialTheme.shapes.gap)
-                        .animateContentSize(
-                            animationSpec = spring(
-                                dampingRatio = Spring.DampingRatioNoBouncy,
-                                stiffness = Spring.StiffnessLow
-                            )
-                        ),
+                        .padding(MaterialTheme.shapes.gap),
                     verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                 ) {
                     state.newsFeedGroups

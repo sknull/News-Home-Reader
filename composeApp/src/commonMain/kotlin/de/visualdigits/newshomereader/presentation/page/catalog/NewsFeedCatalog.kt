@@ -1,6 +1,5 @@
 package de.visualdigits.newshomereader.presentation.page.catalog
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.hoverable
@@ -8,7 +7,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
@@ -43,6 +42,7 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.presentation.style.gap
+import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -66,12 +66,12 @@ fun NewsFeedCatalog(
     PlatformVerticalScrollbarBox(
         modifier = modifier
             .fillMaxSize(),
-        backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
         scrollbarModifier = Modifier
-            .fillMaxHeight()
+            .clip(MaterialTheme.shapes.small)
             .width(10.dp)
-            .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
-        "catalog",
+            .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+        scrollbarStyle = scrollbarStyle(),
+        scrollbarId = "catalog",
         scrollPosition = scrollPosition,
         onCommonAction = onCommonAction
     ) {

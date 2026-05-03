@@ -12,13 +12,15 @@ import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.domain.service.getPlatformLogWriters
+import de.visualdigits.compose.resources.Res
+import de.visualdigits.compose.resources.favicon_alternative
 import de.visualdigits.newshomereader.data.repository.FeedScheduler
 import de.visualdigits.newshomereader.di.platformModule
 import de.visualdigits.newshomereader.di.sharedModule
-import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
+import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -28,6 +30,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.startKoin
 import java.awt.Window
 import javax.swing.SwingUtilities
@@ -96,7 +99,7 @@ fun main() {
                 exitApplication()
             },
             title = "News Home Reader",
-//            icon = painterResource(Res.drawable.Msfs2024Tools),
+            icon = painterResource(Res.drawable.favicon_alternative),
             state = state
         ) {
             App(PlatformType.jvm)

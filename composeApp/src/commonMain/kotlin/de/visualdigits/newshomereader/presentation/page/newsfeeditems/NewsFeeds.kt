@@ -38,7 +38,7 @@ fun NewsFeeds(
     }
     val lastValidRowData = remember { mutableStateOf<List<Pair<String, List<NewsItem>>>>(emptyList()) }
     val rowData = remember(state.visibleNewsItems, chunks) {
-        if (state.visibleNewsItems.isNotEmpty()) {
+        if (state.visibleNewsItems.isNotEmpty() || state.clearVisibleNewsItems) {
             val newData = state.visibleNewsItems.chunked(chunks).map { rowItems ->
                 val rowKey = rowItems.joinToString("_") { it.identifier }
                 rowKey to rowItems

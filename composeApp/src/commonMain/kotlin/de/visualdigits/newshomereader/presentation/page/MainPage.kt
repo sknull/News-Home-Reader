@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
-import de.visualdigits.common.domain.model.configuration.keyfactory.typography
 import de.visualdigits.common.presentation.components.BindBackHandler
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.container.ErrorCard
@@ -33,6 +32,7 @@ import de.visualdigits.newshomereader.presentation.page.settings.SettingsPage
 import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.presentation.style.MyShapes
 import de.visualdigits.newshomereader.presentation.style.gap
+import de.visualdigits.newshomereader.presentation.style.typography
 import kotlin.math.max
 
 @OptIn(ExperimentalMaterial3Api::class)

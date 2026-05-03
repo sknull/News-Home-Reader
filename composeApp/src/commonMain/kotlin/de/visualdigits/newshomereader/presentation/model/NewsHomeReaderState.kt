@@ -22,12 +22,14 @@ data class NewsHomeReaderState(
 
     val newsFeedGroups: List<NewsFeedGroup> = listOf(),
 
+    val previousNewsFeedGroup: NewsFeedGroup? = null,
     val currentNewsFeedGroup: NewsFeedGroup? = null,
 
     val currentNewsFeedItem: NewsFeedItem? = null,
     val currentNewsFeedName: String? = null,
     val currentNewsItems: List<NewsItem> = listOf(),
     val visibleNewsItems: List<NewsItem> = listOf(),
+    val clearVisibleNewsItems: Boolean = false,
 
     val currentNewsItem: NewsItem? = null,
     val currentNewsArticle: FullArticle? = null,

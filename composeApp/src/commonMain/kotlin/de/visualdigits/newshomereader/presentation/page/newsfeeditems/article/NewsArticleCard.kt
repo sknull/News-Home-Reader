@@ -1,6 +1,6 @@
 package de.visualdigits.newshomereader.presentation.page.newsfeeditems.article
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,6 +44,7 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.NewsItemImage
 import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.presentation.style.gap
+import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
 import org.jetbrains.compose.resources.painterResource
 import java.time.format.DateTimeFormatter
@@ -86,15 +87,14 @@ fun NewsArticleCard(
             PlatformVerticalScrollbarBox(
                 modifier = Modifier
                     .fillMaxWidth(),
-                backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
                 scrollbarModifier = Modifier
                     .clip(MaterialTheme.shapes.small)
-                    .fillMaxHeight()
                     .width(10.dp)
-                    .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
-                "newsarticle_${newsArticle.itemId}",
+                    .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                scrollbarStyle = scrollbarStyle(),
+                scrollbarId = "newsarticle_${newsArticle.itemId}",
                 scrollPosition = scrollPosition,
-                onCommonAction
+                onCommonAction = onCommonAction
             ) {
                 listOf(
                     Pair("feed_name", @Composable {
@@ -178,6 +178,7 @@ fun NewsArticleCard(
                                 uriHandler = uriHandler,
                                 newsItem = newsItem
                             )
+                            Spacer(Modifier.size(MaterialTheme.shapes.gap * 2))
                         }
                     }),
                     Pair("summary", @Composable {

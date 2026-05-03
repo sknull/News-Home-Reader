@@ -4,6 +4,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,6 +42,7 @@ import de.visualdigits.newshomereader.presentation.page.navigation.NewsFeedGroup
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.NewsItemCard
 import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.presentation.style.gap
+import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 
@@ -72,13 +74,7 @@ fun HorizontalNewsFeeds(
         if (state.collapsibleState["group_newsfeeds_navigation"] == true) {
             Box(
                 modifier = Modifier
-                    .fillMaxHeight()
-                    .animateContentSize(
-                        animationSpec = spring(
-                            dampingRatio = Spring.DampingRatioNoBouncy,
-                            stiffness = Spring.StiffnessLow
-                        )
-                    ),
+                    .fillMaxHeight(),
                 contentAlignment = Alignment.BottomCenter
             ) {
                 Box(
@@ -107,34 +103,34 @@ fun HorizontalNewsFeeds(
                         PlatformVerticalScrollbarBox(
                             modifier = Modifier
                                 .width(500.dp),
-                            backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
                             scrollbarModifier = Modifier
                                 .clip(MaterialTheme.shapes.small)
                                 .width(10.dp)
-                                .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
-                            "newsfeed_navigation",
+                                .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                            scrollbarStyle = scrollbarStyle(),
+                            scrollbarId = "newsfeed_navigation",
                             scrollPosition = scrollPosition,
+                            onCommonAction = onCommonAction,
                             scrollToTop = { lazyListState ->
                                 LaunchedEffect(state.collapsibleState["group_newsfeeds_navigation"]) {
                                     if (state.collapsibleState["group_newsfeeds_navigation"] == true) {
                                         lazyListState.animateScrollToItem(0)
                                     }
                                 }
-                            },
-                            onCommonAction = onCommonAction
+                            }
                         ) {
                             state.newsFeedGroups
                                 .sortedBy { nfg -> nfg.name }
                                 .map { newsFeedGroup ->
-                                Pair("newsfeed_navigation_${newsFeedGroup.name}", @Composable {
-                                    NewsFeedGroupBox(
-                                        newsFeedGroup = newsFeedGroup,
-                                        onAction = onAction,
-                                        state = state,
-                                        maxImageSize = maxImageSize
-                                    )
-                                })
-                            }
+                                    Pair("newsfeed_navigation_${newsFeedGroup.name}", @Composable {
+                                        NewsFeedGroupBox(
+                                            newsFeedGroup = newsFeedGroup,
+                                            onAction = onAction,
+                                            state = state,
+                                            maxImageSize = maxImageSize
+                                        )
+                                    })
+                                }
                         }
                     }
                 }
@@ -166,15 +162,14 @@ fun HorizontalNewsFeeds(
             PlatformVerticalScrollbarBox(
                 modifier = Modifier
                     .fillMaxWidth(),
-                backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
                 scrollbarModifier = Modifier
                     .clip(MaterialTheme.shapes.small)
-                    .fillMaxHeight()
                     .width(10.dp)
-                    .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f)),
+                    .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                scrollbarStyle = scrollbarStyle(),
                 scrollbarId = "newsfeed_${state.currentNewsFeedName}",
                 scrollPosition = scrollPosition,
-                onCommonAction
+                onCommonAction = onCommonAction
             ) {
                 rowData.map { (_, rowItems) ->
                     Pair(rowItems.joinToString("_") { item -> item.id.toString() }, @Composable {

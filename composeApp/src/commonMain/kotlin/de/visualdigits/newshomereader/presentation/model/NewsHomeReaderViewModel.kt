@@ -512,11 +512,19 @@ class NewsHomeReaderViewModel(
             }
 
             is NewsHomeReaderAction.OnNewsFeedGroupCollapsibleStateChange -> {
+                // keep collapsible box open when user switches from single feed to group
                 _state.update {
+                    val stayInGroup = !action.isExpanded && it.currentNewsFeedName != null && it.previousNewsFeedGroup == it.currentNewsFeedGroup
                     it.copy(
-                        currentNewsFeedGroup = if (action.isExpanded) action.group else null,
+                        previousNewsFeedGroup = it.currentNewsFeedGroup,
+                        currentNewsFeedGroup = if (action.isExpanded || stayInGroup) action.group else null,
+                        clearVisibleNewsItems = if (stayInGroup) false else !action.isExpanded,
                         currentNewsFeedName = null,
-                        collapsibleState = it.collapsibleState + ("group_${action.group.name}" to action.isExpanded)
+                        collapsibleState = it.collapsibleState + if (stayInGroup) {
+                            ("group_${action.group.name}" to true)
+                        } else {
+                            ("group_${action.group.name}" to action.isExpanded)
+                        }
                     )
                 }
             }

@@ -1,12 +1,14 @@
 package de.visualdigits.newshomereader.presentation.page.newsfeeditems.article
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -14,7 +16,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.dropShadow
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.platform.UriHandler
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.compose.resources.Res
@@ -46,80 +54,93 @@ fun MediaItemButtons(
             .sortedByDescending { mi -> mi.uploadDate }
             .forEach { mediaItem ->
                 if (mediaItem.url?.isNotEmpty() == true) {
-                    IndicatorButton(
-                        modifier = Modifier
-                            .clip(MaterialTheme.shapes.extraSmall),
-                        padding = 0.dp,
-                        textStyle = MaterialTheme.typography.bodySmall,
-                        buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
-                        maxLines = Int.MAX_VALUE,
-                        width = 200.dp,
-                        height = 200.dp,
-                        leadingImage = {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
-                            ) {
-                                if (mediaItem.thumbnails.isNotEmpty()) {
-                                    val thumbnail = mediaItem.thumbnails
-                                        .minBy { ti -> ti.width ?: 0 }
-
-                                    val url = thumbnail.url.firstOrNull()
-                                    if (url != null) {
-                                        NewsItemImage(
-                                            url = url,
-                                            height = 90.dp,
-                                            contentDescription = thumbnail.description ?: "",
-                                            maxImageSize = thumbnail.width
-                                        )
-                                    }
-                                }
-
+                    Box(
+                        modifier = modifier
+                            .dropShadow(
+                                shape = RoundedCornerShape(20.dp),
+                                shadow = Shadow(
+                                    radius = 6.dp,
+                                    spread = 2.dp,
+                                    color = Color.Black.copy(alpha = 0.2f),
+                                    offset = DpOffset(2.dp, 2.dp)
+                                )
+                            )
+                    ) {
+                        IndicatorButton(
+                            modifier = Modifier
+                                .clip(MaterialTheme.shapes.extraSmall),
+                            padding = 0.dp,
+                            textStyle = MaterialTheme.typography.bodySmall,
+                            buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+                            maxLines = Int.MAX_VALUE,
+                            width = 200.dp,
+                            height = 200.dp,
+                            leadingImage = {
                                 Column(
                                     modifier = Modifier
-                                        .padding(5.dp),
+                                        .fillMaxSize(),
                                     verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                                 ) {
-                                    Text(
-                                        text = "${mediaItem.uploadDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}",
-                                        style = MaterialTheme.typography.bodySmall
-                                    )
+                                    if (mediaItem.thumbnails.isNotEmpty()) {
+                                        val thumbnail = mediaItem.thumbnails
+                                            .minBy { ti -> ti.width ?: 0 }
 
-                                    Row(
-                                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
-                                        verticalAlignment = Alignment.Top
-                                    ) {
-                                        if (mediaItem.type == MediaType.video) {
-                                            Icon(
-                                                painter = painterResource(Res.drawable.icon_videocam_24px),
-                                                contentDescription = null,
-                                                tint = MaterialTheme.colorScheme.onSurface
-                                            )
-
-                                        } else {
-                                            Icon(
-                                                painter = painterResource(Res.drawable.icon_volume_up_24px),
-                                                contentDescription = null,
-                                                tint = MaterialTheme.colorScheme.onSurface
+                                        val url = thumbnail.url.firstOrNull()
+                                        if (url != null) {
+                                            NewsItemImage(
+                                                url = url,
+                                                height = 90.dp,
+                                                contentDescription = thumbnail.description ?: "",
+                                                maxImageSize = thumbnail.width
                                             )
                                         }
+                                    }
 
+                                    Column(
+                                        modifier = Modifier
+                                            .padding(5.dp),
+                                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                                    ) {
                                         Text(
-                                            text = mediaItem.headline ?: "",
+                                            text = "${mediaItem.uploadDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}",
                                             style = MaterialTheme.typography.bodySmall
                                         )
+
+                                        Row(
+                                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
+                                            verticalAlignment = Alignment.Top
+                                        ) {
+                                            if (mediaItem.type == MediaType.video) {
+                                                Icon(
+                                                    painter = painterResource(Res.drawable.icon_videocam_24px),
+                                                    contentDescription = null,
+                                                    tint = MaterialTheme.colorScheme.onSurface
+                                                )
+
+                                            } else {
+                                                Icon(
+                                                    painter = painterResource(Res.drawable.icon_volume_up_24px),
+                                                    contentDescription = null,
+                                                    tint = MaterialTheme.colorScheme.onSurface
+                                                )
+                                            }
+
+                                            Text(
+                                                text = mediaItem.headline ?: "",
+                                                style = MaterialTheme.typography.bodySmall
+                                            )
+                                        }
                                     }
                                 }
                             }
-                        }
-                    ) {
-                        uriHandler.openUri(
-                            makeUrlAbsolute(
-                                newsItem.link,
-                                mediaItem.url
+                        ) {
+                            uriHandler.openUri(
+                                makeUrlAbsolute(
+                                    newsItem.link,
+                                    mediaItem.url
+                                )
                             )
-                        )
+                        }
                     }
                 }
             }

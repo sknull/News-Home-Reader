@@ -1,19 +1,24 @@
 package de.visualdigits.newshomereader.presentation.style
 
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.StringResourceEnumerable
 import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.keyfactory.KeyFactory
 import de.visualdigits.common.domain.util.copy
 import de.visualdigits.common.presentation.components.StudioClockColors
 import de.visualdigits.common.presentation.components.defaultStudioClockColors
+import de.visualdigits.common.presentation.model.PlatformScrollbarStyle
 import org.jetbrains.compose.resources.DrawableResource
 
 enum class DisplayThemeEnum(
@@ -166,7 +171,7 @@ enum class DisplayThemeEnum(
             )
         ),
         textColor = Color(0xFFFFFFFF),
-        studioClockColors = defaultStudioClockColors
+        studioClockColors = createStudioClockColors(Color(0xff3b84eb))
     ),
 
     LIGHT(
@@ -213,7 +218,7 @@ enum class DisplayThemeEnum(
             )
         ),
         textColor = Color(0xFF000000),
-        studioClockColors = defaultStudioClockColors
+        studioClockColors = createStudioClockColors(Color(0xff3b84eb))
     )
     ;
 
@@ -280,4 +285,14 @@ private fun createStudioClockColors(spotColor: Color): StudioClockColors = Studi
     colorTime = spotColor,
     colorDate = spotColor.copy(saturation = 0.3f, value = 0.8f),
     colorBackground = Color(0xdd000000),
+)
+
+@Composable
+fun scrollbarStyle() = PlatformScrollbarStyle(
+    minimalHeight = 16.dp,
+    thickness = 8.dp,
+    shape = RoundedCornerShape(4.dp),
+    hoverDurationMillis = 300,
+    unhoverColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+    hoverColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
 )

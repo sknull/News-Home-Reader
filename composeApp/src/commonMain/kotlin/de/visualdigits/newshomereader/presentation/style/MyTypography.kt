@@ -1,21 +1,30 @@
 package de.visualdigits.newshomereader.presentation.style
 
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import de.visualdigits.compose.resources.Res
+import de.visualdigits.compose.resources.Roboto_Black
+import de.visualdigits.compose.resources.Roboto_Bold
+import de.visualdigits.compose.resources.Roboto_Regular
+import org.jetbrains.compose.resources.Font
 
-
+@Composable
 fun typography(
     textColor: Color,
     sizeFactor: Float
 ): Typography {
+    val fontFamilyRegular = FontFamily(Font(Res.font.Roboto_Regular))
+    val fontFamilyBold = FontFamily(Font(Res.font.Roboto_Bold))
+    val fontFamilyBlack = FontFamily(Font(Res.font.Roboto_Black))
     return Typography(
         headlineSmall = TextStyle(
-            fontFamily = FontFamily.SansSerif,
+            fontFamily = fontFamilyBlack,
             fontWeight = FontWeight.Black,
             fontSize = 18.sp * sizeFactor,
             lineHeight = 1.5.em,
@@ -23,7 +32,7 @@ fun typography(
             color = textColor
         ),
         headlineMedium = TextStyle(
-            fontFamily = FontFamily.SansSerif,
+            fontFamily = fontFamilyBlack,
             fontWeight = FontWeight.Black,
             fontSize = 24.sp * sizeFactor,
             lineHeight = 1.5.em,
@@ -31,7 +40,7 @@ fun typography(
             color = textColor
         ),
         headlineLarge = TextStyle(
-            fontFamily = FontFamily.SansSerif,
+            fontFamily = fontFamilyBlack,
             fontWeight = FontWeight.Black,
             fontSize = 30.sp * sizeFactor,
             lineHeight = 1.5.em,
@@ -40,7 +49,7 @@ fun typography(
         ),
 
         titleSmall = TextStyle(
-            fontFamily = FontFamily.SansSerif,
+            fontFamily = fontFamilyBold,
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp * sizeFactor,
             lineHeight = 1.2.em,
@@ -48,7 +57,7 @@ fun typography(
             color = textColor
         ),
         titleMedium = TextStyle(
-            fontFamily = FontFamily.SansSerif,
+            fontFamily = fontFamilyBold,
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp * sizeFactor,
             lineHeight = 1.2.em,
@@ -56,7 +65,7 @@ fun typography(
             color = textColor
         ),
         titleLarge = TextStyle(
-            fontFamily = FontFamily.SansSerif,
+            fontFamily = fontFamilyBold,
             fontWeight = FontWeight.Bold,
             fontSize = 24.sp * sizeFactor,
             lineHeight = 1.2.em,
@@ -65,7 +74,7 @@ fun typography(
         ),
 
         bodySmall = TextStyle(
-            fontFamily = FontFamily.SansSerif,
+            fontFamily = fontFamilyRegular,
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp * sizeFactor,
             lineHeight = 1.2.em,
@@ -73,7 +82,7 @@ fun typography(
             color = textColor
         ),
         bodyMedium = TextStyle(
-            fontFamily = FontFamily.SansSerif,
+            fontFamily = fontFamilyRegular,
             fontWeight = FontWeight.Normal,
             fontSize = 18.sp * sizeFactor,
             lineHeight = 1.2.em,
@@ -81,7 +90,7 @@ fun typography(
             color = textColor
         ),
         bodyLarge = TextStyle(
-            fontFamily = FontFamily.SansSerif,
+            fontFamily = fontFamilyRegular,
             fontWeight = FontWeight.Normal,
             fontSize = 24.sp * sizeFactor,
             lineHeight = 1.2.em,
@@ -90,7 +99,7 @@ fun typography(
         ),
 
         displaySmall = TextStyle(
-            fontFamily = FontFamily.SansSerif,
+            fontFamily = fontFamilyRegular,
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp * sizeFactor,
             lineHeight = 1.2.em,
@@ -98,7 +107,7 @@ fun typography(
             color = textColor
         ),
         displayMedium = TextStyle(
-            fontFamily = FontFamily.SansSerif,
+            fontFamily = fontFamilyRegular,
             fontWeight = FontWeight.Normal,
             fontSize = 18.sp * sizeFactor,
             lineHeight = 1.2.em,
@@ -106,7 +115,7 @@ fun typography(
             color = textColor
         ),
         displayLarge = TextStyle(
-            fontFamily = FontFamily.SansSerif,
+            fontFamily = fontFamilyRegular,
             fontWeight = FontWeight.Normal,
             fontSize = 24.sp * sizeFactor,
             lineHeight = 1.2.em,
@@ -115,7 +124,7 @@ fun typography(
         ),
 
         labelSmall = TextStyle(
-            fontFamily = FontFamily.SansSerif,
+            fontFamily = fontFamilyBold,
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp * sizeFactor,
             lineHeight = 1.2.em,
@@ -123,7 +132,7 @@ fun typography(
             color = textColor
         ),
         labelMedium = TextStyle(
-            fontFamily = FontFamily.SansSerif,
+            fontFamily = fontFamilyBold,
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp * sizeFactor,
             lineHeight = 1.2.em,
@@ -131,7 +140,7 @@ fun typography(
             color = textColor
         ),
         labelLarge = TextStyle(
-            fontFamily = FontFamily.SansSerif,
+            fontFamily = fontFamilyBold,
             fontWeight = FontWeight.Bold,
             fontSize = 24.sp * sizeFactor,
             lineHeight = 1.2.em,

@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.gradle.pdf)
     alias(libs.plugins.sqlDelight)
     id("com.google.devtools.ksp") version "2.3.6"
+    `maven-publish`
 }
 
 version = "1.0.0"
@@ -235,6 +236,24 @@ android {
     }
 }
 
+publishing {
+    publications {
+        // Kotlin Multiplatform registriert seine Veröffentlichungen automatisch.
+        // Wir müssen hier normalerweise nichts manuell hinzufügen.
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/sknull/News-Home-Reader")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
+
 configurations.all {
     exclude(group = "org.jetbrains.compose.material", module = "material-desktop")
 }
@@ -271,7 +290,7 @@ compose.desktop {
             )
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             windows {
-//                iconFile.set(project.file("src/commonMain/composeResources/drawable/Msfs2024Tools.ico"))
+                iconFile.set(project.file("src/commonMain/composeResources/drawable/favicon_alternative.ico"))
             }
 
 //            buildTypes {

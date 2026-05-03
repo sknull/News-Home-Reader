@@ -6,13 +6,18 @@ Verzeichnis auswählen
 Datei auswählen
 Schließen
 Löschen
-OPML Datei Wählen
+OPML Datei exportieren
+PDF Datei exportieren
+Einstellungen exportieren
+OPML Datei wählen
+Einstellungen wählen
 Bearbeiten
 Bearbeiten...
 Die Festplatte ist voll.
 Datei nicht gefunden.
 Ergebnis konnte nicht analysiert werden.
 Bei einem lokalen Vorgang ist ein unbekannter Fehler aufgetreten.
+Der Dateityp wird nicht unterstützt.
 Internetverbindung unterbrochen.
 Die Anfrage ist abgelaufen.
 Ergebnis konnte nicht analysiert werden.
@@ -40,21 +45,25 @@ Feed Name
 Gelesene Verstecken
 Host URL
 Icon URL
-OPML Importieren
 Behalte gelesene Artikel
 Behalte ungelesene Artikel
 Sprache
 Artikel vorladen
+Gruppen Name
+OPML
 Aktualisierungsintervall
 Nur im Wlan aktualisieren.
 Szenen Name
+Einstellungen
 Stop Words
+Untergruppen Name
 Feed URL
 Deutsch
 Englisch
 Über
 Hilfe
 Ok
+Speichern
 Suchen
 Suchen...
 Details anzeigen...
@@ -63,13 +72,21 @@ Ausgabe
 Nachrichten
 Shelly Status
 Studio Uhr
+Neuen Newsfeed Erstellen
+Neue Gruppe erstellen
 Element löschen
+Newsfeed löschen
+Gruppe löschen
+Newsfeed bearbeiten
+Gruppe bearbeiten
 Info
+Suchen
 Einstellungen
 Neue Szene...
 Zurück
 Szene löschen...
 Definiert wie die Oberfläche angezeigt wird
+Artikel als PDF exportieren
 Feed Name. Sollte ein kurzes Wort sein. Es wird als interner Schlüssel verwendet
 Verstecke gelesene artikel in der Nachrichtenliste
 Die URL des Synchronisations servers

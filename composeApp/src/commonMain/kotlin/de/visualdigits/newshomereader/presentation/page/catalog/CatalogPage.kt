@@ -2,10 +2,12 @@ package de.visualdigits.newshomereader.presentation.page.catalog
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
@@ -24,7 +26,8 @@ fun CatalogPage(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(end = 4.dp),
     ) {
         CatalogSearchBar(
             state = state,
