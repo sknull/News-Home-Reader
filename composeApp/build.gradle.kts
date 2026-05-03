@@ -1,4 +1,5 @@
 import de.visualdigits.translation.util.TranslationUtil
+import org.gradle.api.internal.artifacts.ivyservice.resolveengine.result.ComponentSelectionReasons.requested
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -416,6 +417,11 @@ dependencies {
 
 configurations.all {
     resolutionStrategy {
+        dependencySubstitution {
+            substitute(module("com.fleeksoft.ksoup:ksoup-jvm"))
+                .using(module("com.fleeksoft.ksoup:ksoup:${libs.versions.version.ksoup}"))
+        }
+
         val versionOkHttp = libs.versions.version.okhttp
         val versionOkio = libs.versions.version.okio
 

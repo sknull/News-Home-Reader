@@ -11,16 +11,21 @@ pluginManagement {
     }
 }
 
+val gprProps = java.util.Properties().apply {
+    val file = File(rootDir, "local.properties")
+    if (file.exists()) load(file.inputStream())
+}
+
 dependencyResolutionManagement {
     repositories {
         google()
-        mavenLocal()
+//        mavenLocal()
         mavenCentral()
         maven {
             url = uri("https://maven.pkg.github.com/sknull/essence")
             credentials {
                 username = "sknull"
-                password = System.getenv("PERSONAL_ACCESS_TOKEN")
+                password = System.getenv("PERSONAL_ACCESS_TOKEN") ?: gprProps.getProperty("gpr.key")
             }
             content {
                 includeGroup("de.visualdigits")
