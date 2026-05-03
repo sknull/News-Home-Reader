@@ -75,5 +75,5 @@ jobs:
       - name: Upload Aciidoc
         uses: actions/upload-artifact@v4
         with:
-          name: Android-Debug-APK
+          name: Asciidoc-PDF
           path: News-Home-Reader/composeApp/build/asciidoc/*.pdf
