@@ -143,7 +143,9 @@ kotlin {
 
             implementation(libs.kermit)
 
-            implementation(libs.essence)
+            implementation("de.visualdigits:essence:${libs.versions.version.essence.get()}") {
+                exclude(group = "com.fleeksoft.ksoup", module = "ksoup-jvm")
+            }
             implementation(libs.ksoup.core)
 
             implementation(libs.html.converter)
@@ -417,9 +419,11 @@ dependencies {
 
 configurations.all {
     resolutionStrategy {
-        dependencySubstitution {
-            substitute(module("com.fleeksoft.ksoup:ksoup-jvm"))
-                .using(module("com.fleeksoft.ksoup:ksoup:${libs.versions.version.ksoup}"))
+        if (name.contains("android", ignoreCase = true)) {
+            resolutionStrategy.dependencySubstitution {
+                substitute(module("com.fleeksoft.ksoup:ksoup-jvm"))
+                    .using(module("com.fleeksoft.ksoup:ksoup:${libs.versions.version.ksoup.get()}"))
+            }
         }
 
         val versionOkHttp = libs.versions.version.okhttp
