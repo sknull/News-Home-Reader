@@ -16,6 +16,7 @@ plugins {
 }
 
 version = "1.0.0-SNAPSHOT"
+val numericVersion = version.toString().split("-").first() // for desktop packaging
 
 buildscript {
     dependencies {
@@ -278,7 +279,7 @@ compose.desktop {
 
         nativeDistributions {
             packageName = "de.visualdigits.newshomereader"
-            packageVersion = project.version.toString()
+            packageVersion = numericVersion
             includeAllModules = false
             modules(
                 "java.instrument",
