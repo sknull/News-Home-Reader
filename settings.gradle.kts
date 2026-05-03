@@ -11,10 +11,6 @@ pluginManagement {
     }
 }
 
-val githubToken: String = System.getenv("PERSONAL_ACCESS_TOKEN")
-    ?: System.getenv("GITHUB_TOKEN")
-    ?: ""
-
 dependencyResolutionManagement {
     repositories {
         google()
@@ -23,8 +19,8 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://maven.pkg.github.com/sknull/essence")
             credentials {
-                username = System.getenv("GITHUB_ACTOR") ?: "sknull"
-                password = githubToken
+                username = "sknull"
+                password = System.getenv("PERSONAL_ACCESS_TOKEN")
             }
             content {
                 includeGroup("de.visualdigits")
