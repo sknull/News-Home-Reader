@@ -1,4 +1,4 @@
-package de.visualdigits.common.domain.model.errorhandling
+package de.visualdigits.newshomereader.domain.model.errorhandling
 
 import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.compose.resources.Res
