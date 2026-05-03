@@ -42,6 +42,7 @@ jobs:
 
       - name: Run Tests
         run: ./gradlew test jvmTest
+        working-directory: News-Home-Reader
 
       - name: Build Artifacts
         run: ./gradlew zip assembleDebug
