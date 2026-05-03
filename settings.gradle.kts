@@ -17,7 +17,7 @@ dependencyResolutionManagement {
         mavenLocal()
         mavenCentral()
         maven {
-            url = uri("https://maven.pkg.github.com/sknull/essence")
+            url = uri("https://github.com/sknull/essence")
             credentials {
                 username = "sknull"
                 password = System.getenv("PERSONAL_ACCESS_TOKEN")
