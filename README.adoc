@@ -11,7 +11,9 @@ image::art/NewsHomeReader_Banner.jpg[]
 
 == Status
 
-image:https://github.com/sknull/News-Home-Reader/actions/workflows/publish.yml/badge.svg[news-homereader CI,link=https://github.com/sknull/News-Home-Reader/actions/workflows/publish.yml]
+Version 0.0.1-SNAPSHOT
+
+image:https://github.com/sknull/News-Home-Reader/actions/workflows/publish.yml/badge.svg[News Home Reader CI,link=https://github.com/sknull/News-Home-Reader/actions/workflows/publish.yml]
 
 == About
 

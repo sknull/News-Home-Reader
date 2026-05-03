@@ -1,5 +1,4 @@
 import de.visualdigits.translation.util.TranslationUtil
-import org.gradle.api.internal.artifacts.ivyservice.resolveengine.result.ComponentSelectionReasons.requested
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -16,7 +15,7 @@ plugins {
     `maven-publish`
 }
 
-version = "1.0.0"
+version = "1.0.0-SNAPSHOT"
 
 buildscript {
     dependencies {
