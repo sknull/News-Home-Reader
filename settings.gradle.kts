@@ -16,6 +16,16 @@ dependencyResolutionManagement {
         google()
         mavenLocal()
         mavenCentral()
+        maven {
+            url = uri("https://github.com")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR") ?: "sknull"
+                password = System.getenv("GITHUB_TOKEN") ?: System.getenv("PERSONAL_ACCESS_TOKEN")
+            }
+            content {
+                includeGroup("de.visualdigits")
+            }
+        }
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven("https://maven.pkg.jetbrains.space")
         maven("https://central.sonatype.com/repository/maven-snapshots/")
