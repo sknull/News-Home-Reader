@@ -15,6 +15,10 @@ val gprProps = java.util.Properties().apply {
     val file = File(rootDir, "local.properties")
     if (file.exists()) load(file.inputStream())
 }
+val githubToken: String = System.getenv("PERSONAL_ACCESS_TOKEN")
+    ?: System.getenv("GITHUB_TOKEN")
+    ?: gprProps.getProperty("gpr.key") // Deine local.properties
+    ?: ""
 
 dependencyResolutionManagement {
     repositories {
@@ -25,7 +29,7 @@ dependencyResolutionManagement {
             url = uri("https://maven.pkg.github.com/sknull/essence")
             credentials {
                 username = "sknull"
-                password = System.getenv("PERSONAL_ACCESS_TOKEN") ?: gprProps.getProperty("gpr.key")
+                password = githubToken
             }
             content {
                 includeGroup("de.visualdigits")

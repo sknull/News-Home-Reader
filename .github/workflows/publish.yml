@@ -43,6 +43,7 @@ jobs:
       - name: Run Tests
         working-directory: News-Home-Reader
         env:
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           GITHUB_ACTOR: sknull
         run: |
