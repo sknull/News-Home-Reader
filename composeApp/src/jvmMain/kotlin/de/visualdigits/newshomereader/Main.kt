@@ -13,7 +13,7 @@ import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.domain.service.getPlatformLogWriters
 import de.visualdigits.compose.resources.Res
-import de.visualdigits.compose.resources.favicon_alternative
+import de.visualdigits.compose.resources.favicon
 import de.visualdigits.newshomereader.data.repository.FeedScheduler
 import de.visualdigits.newshomereader.di.platformModule
 import de.visualdigits.newshomereader.di.sharedModule
@@ -99,7 +99,7 @@ fun main() {
                 exitApplication()
             },
             title = "News Home Reader",
-            icon = painterResource(Res.drawable.favicon_alternative),
+            icon = painterResource(Res.drawable.favicon),
             state = state
         ) {
             App(PlatformType.jvm)

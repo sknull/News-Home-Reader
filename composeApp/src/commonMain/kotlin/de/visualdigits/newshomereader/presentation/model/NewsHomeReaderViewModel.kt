@@ -1397,6 +1397,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                     it.copy(
                         isLoading = false,
                         currentProgress = 0.0f,
+                        clearVisibleNewsItems = days == 0L,
                         progressStage = ProgressStage.NONE,
                         currentNewsItems = newsItems,
                         visibleNewsItems = calculateVisibleNewsItems(

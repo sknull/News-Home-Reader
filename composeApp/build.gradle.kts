@@ -41,16 +41,20 @@ data class AppVersion(
     val version: String = "${appVersion.get()}",
 ) : Comparable<AppVersion> {
 
-    val coordinates: List<Int> = version
+    val numericParts: List<Int> = version
+        .substringBefore("-")
         .split(".")
         .map { v -> v.toInt() }
 
     override fun compareTo(other: AppVersion): Int {
-        var c = coordinates[0].compareTo(other.coordinates[0])
+        var c = numericParts[0].compareTo(other.numericParts[0])
         var index = 1
         while (c == 0 && index < 3) {
-            c = coordinates[index].compareTo(other.coordinates[index])
+            c = numericParts[index].compareTo(other.numericParts[index])
             index++
+        }
+        if (c == 0 && version.contains("-")) {
+            c = -1
         }
         
         return c
@@ -62,11 +66,11 @@ data class AppVersion(
 
         other as AppVersion
 
-        return coordinates == other.coordinates
+        return numericParts == other.numericParts
     }
 
     override fun hashCode(): Int {
-        return coordinates.hashCode()
+        return numericParts.hashCode()
     }
 }""")
     }
@@ -293,7 +297,7 @@ compose.desktop {
             )
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             windows {
-                iconFile.set(project.file("src/commonMain/composeResources/drawable/favicon_alternative.ico"))
+                iconFile.set(project.file("src/commonMain/composeResources/drawable/favicon.ico"))
             }
 
 //            buildTypes {
