@@ -246,22 +246,21 @@ android {
 publishing {
     publications {
         create<MavenPublication>("binaryRelease") {
-            // Deine Koordinaten
             groupId = "de.visualdigits.kmp"
             artifactId = "news-home-reader"
-            version = "${project.version}"
+            version = project.version.toString()
 
-            artifact(file("${layout.buildDirectory.asFile.get()}/outputs/apk/debug/NewsHomeReader-debug.apk")) {
+            artifact(file("build/outputs/apk/debug/NewsHomeReader-debug.apk")) {
                 extension = "apk"
                 classifier = "android"
             }
 
-            artifact(file("${layout.buildDirectory.asFile.get()}/distributions/NewsHomeReader-${project.version}.zip")) {
+            artifact(file("build/distributions/NewsHomeReader-$version.zip")) {
                 extension = "zip"
                 classifier = "desktop"
             }
 
-            artifact(file("${layout.buildDirectory.asFile.get()}/asciidoc/README.pdf")) {
+            artifact(file("build/asciidoc/README.pdf")) {
                 extension = "pdf"
                 classifier = "docs"
             }

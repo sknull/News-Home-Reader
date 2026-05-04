@@ -53,23 +53,12 @@ jobs:
           chmod +x gradlew
           ./gradlew clean test jvmTest --no-configuration-cache
 
-      - name: Build Artifacts
-        working-directory: News-Home-Reader
-        env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          GITHUB_ACTOR: sknull
-        run: |
-          chmod +x gradlew
-          ./gradlew zip assembleDebug
-
-      - name: Publish to GitHub Packages
+      - name: Build and Publish Binaries
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         working-directory: News-Home-Reader
         env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           GITHUB_ACTOR: sknull
         run: |
           chmod +x gradlew
-          ./gradlew publishBinaryReleasePublicationToGitHubPackagesRepository
+          ./gradlew zip assembleDebug publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache
