@@ -40,9 +40,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          # Aktiviert den Schreibzugriff auf den Cache auch für Pull Requests
           cache-read-only: false
-          # Hilft dabei, Snapshots (wie deine essence lib) besser zu cachen
           cache-encryption-key: ${{ secrets.Gradle_Encryption_Key }}
 
       - name: Run Tests

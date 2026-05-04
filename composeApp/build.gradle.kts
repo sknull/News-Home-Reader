@@ -249,7 +249,7 @@ publishing {
             // Deine Koordinaten
             groupId = "de.visualdigits.kmp"
             artifactId = "news-home-reader"
-            version = "1.0.0-SNAPSHOT" // Oder deine dynamische Version
+            version = "${project.version}"
 
             artifact(file("composeApp/build/outputs/apk/debug/composeApp-debug.apk")) {
                 extension = "apk"
@@ -399,7 +399,7 @@ tasks.register<Zip>("zip") {
 
     from(layout.buildDirectory.dir("compose/binaries/main/app"))
     from(tasks.asciidoctorPdf.map { it.outputDir }) {
-        include("README.pdf") // oder "**/*.pdf"
+        include("README.pdf")
         into("de.visualdigits.newshomereader")
     }
 
