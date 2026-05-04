@@ -243,45 +243,6 @@ android {
     }
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("binaryRelease") {
-            groupId = "de.visualdigits.kmp"
-            artifactId = "news-home-reader"
-            version = project.version.toString()
-
-            artifact(file("build/outputs/apk/debug/NewsHomeReader-debug.apk")) {
-                extension = "apk"
-                classifier = "android"
-                builtBy("assembleDebug")
-            }
-
-            val zipTask = tasks.named<Zip>("zip")
-            artifact(zipTask.map { it.archiveFile }) {
-                extension = "zip"
-                classifier = "desktop"
-            }
-
-            val pdfTask = tasks.named<org.asciidoctor.gradle.jvm.pdf.AsciidoctorPdfTask>("asciidoctorPdf")
-            artifact(pdfTask.map { File(it.outputDir, "README.pdf") }) {
-                extension = "pdf"
-                classifier = "docs"
-            }
-        }
-    }
-
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/sknull/News-Home-Reader")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
-}
-
 tasks.withType<PublishToMavenRepository> {
     dependsOn("assembleDebug", "zip")
 }
@@ -470,5 +431,44 @@ configurations.all {
         val versionIo = libs.versions.version.kotlinx.io.core.get()
         force("org.jetbrains.kotlinx:kotlinx-io-core:$versionIo")
         force("org.jetbrains.kotlinx:kotlinx-io-bytestring:$versionIo")
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("binaryRelease") {
+            groupId = "de.visualdigits.kmp"
+            artifactId = "news-home-reader"
+            version = project.version.toString()
+
+            artifact(file("build/outputs/apk/debug/NewsHomeReader-debug.apk")) {
+                extension = "apk"
+                classifier = "android"
+                builtBy("assembleDebug")
+            }
+
+            val zipTask = tasks.named<Zip>("zip")
+            artifact(zipTask.map { it.archiveFile }) {
+                extension = "zip"
+                classifier = "desktop"
+            }
+
+            val pdfTask = tasks.named<org.asciidoctor.gradle.jvm.pdf.AsciidoctorPdfTask>("asciidoctorPdf")
+            artifact(pdfTask.map { File(it.outputDir, "README.pdf") }) {
+                extension = "pdf"
+                classifier = "docs"
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/sknull/News-Home-Reader")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
     }
 }
