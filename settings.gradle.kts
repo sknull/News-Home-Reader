@@ -23,9 +23,6 @@ val githubToken: String = System.getenv("PERSONAL_ACCESS_TOKEN")
 dependencyResolutionManagement {
     repositories {
         google()
-//        if (System.getenv("GITHUB_ACTIONS") != "true") {
-//            mavenLocal()
-//        }
         mavenCentral()
         maven {
             url = uri("https://maven.pkg.github.com/sknull/essence")

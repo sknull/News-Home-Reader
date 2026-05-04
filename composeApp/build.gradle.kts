@@ -324,7 +324,8 @@ tasks.asciidoctorPdf {
             mapOf(
                 "imagesdir" to rootDir.absolutePath,
                 "source-highlighter" to "rouge",
-                "icons" to "font"
+                "icons" to "font",
+//                "allow-uri-read" to true
             )
         )
     }

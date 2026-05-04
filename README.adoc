@@ -13,7 +13,16 @@ image::art/NewsHomeReader_Banner.jpg[]
 
 Version 0.0.1-SNAPSHOT
 
+ifndef::backend-pdf[]
 image:https://github.com/sknull/News-Home-Reader/actions/workflows/publish.yml/badge.svg[News Home Reader CI,link=https://github.com/sknull/News-Home-Reader/actions/workflows/publish.yml]
+image:https://shields.io[Android]
+image:https://shields.io[Desktop]
+endif::[]
+
+== Downloads
+- *Android:* `news-home-reader-android-debug.apk`
+- *Desktop:* `news-home-reader-desktop.zip`
+- *Docs:* `news-home-reader-docs.pdf`
 
 == About
 
@@ -32,8 +41,6 @@ use it on your windows desktop (sorry I have no apple devices so I cannot test t
 please have a look into the installation section below how to build the app yourself.
 
 == Installation
-
-=== Download Zip
 
 === Build Yourself
 
