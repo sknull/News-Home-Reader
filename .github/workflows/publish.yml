@@ -67,6 +67,10 @@ jobs:
 
       - name: Publish to GitHub Packages
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: ./gradlew publishBinaryReleasePublicationToGitHubPackagesRepository
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GITHUB_ACTOR: sknull
+        run: |
+          chmod +x gradlew
+          ./gradlew publishBinaryReleasePublicationToGitHubPackagesRepository
