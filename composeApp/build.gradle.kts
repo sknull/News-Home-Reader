@@ -251,17 +251,17 @@ publishing {
             artifactId = "news-home-reader"
             version = "${project.version}"
 
-            artifact(file("composeApp/build/outputs/apk/debug/composeApp-debug.apk")) {
+            artifact(file("composeApp/build/outputs/apk/debug/NewsHomeReader-debug.apk")) {
                 extension = "apk"
                 classifier = "android"
             }
 
-            artifact(file("composeApp/build/distributions/News-Home-Reader-1.0.0.zip")) {
+            artifact(file("composeApp/build/distributions/NewsHomeReader-${project.version}.zip")) {
                 extension = "zip"
                 classifier = "desktop"
             }
 
-            artifact(file("composeApp/build/asciidoc/documentation.pdf")) {
+            artifact(file("composeApp/build/asciidoc/README.pdf")) {
                 extension = "pdf"
                 classifier = "docs"
             }
