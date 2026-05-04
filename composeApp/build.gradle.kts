@@ -251,17 +251,17 @@ publishing {
             artifactId = "news-home-reader"
             version = "${project.version}"
 
-            artifact(file("build/outputs/apk/debug/NewsHomeReader-debug.apk")) {
+            artifact(file("${layout.buildDirectory.asFile.get()}/outputs/apk/debug/NewsHomeReader-debug.apk")) {
                 extension = "apk"
                 classifier = "android"
             }
 
-            artifact(file("build/distributions/NewsHomeReader-${project.version}.zip")) {
+            artifact(file("${layout.buildDirectory.asFile.get()}/distributions/NewsHomeReader-${project.version}.zip")) {
                 extension = "zip"
                 classifier = "desktop"
             }
 
-            artifact(file("build/asciidoc/README.pdf")) {
+            artifact(file("${layout.buildDirectory.asFile.get()}/asciidoc/README.pdf")) {
                 extension = "pdf"
                 classifier = "docs"
             }
