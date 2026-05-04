@@ -253,14 +253,17 @@ publishing {
             artifact(file("build/outputs/apk/debug/NewsHomeReader-debug.apk")) {
                 extension = "apk"
                 classifier = "android"
+                builtBy("assembleDebug")
             }
 
-            artifact(file("build/distributions/NewsHomeReader-$version.zip")) {
+            val zipTask = tasks.named<Zip>("zip")
+            artifact(zipTask.map { it.archiveFile }) {
                 extension = "zip"
                 classifier = "desktop"
             }
 
-            artifact(file("build/asciidoc/README.pdf")) {
+            val pdfTask = tasks.named<org.asciidoctor.gradle.jvm.pdf.AsciidoctorPdfTask>("asciidoctorPdf")
+            artifact(pdfTask.map { File(it.outputDir, "README.pdf") }) {
                 extension = "pdf"
                 classifier = "docs"
             }
@@ -277,6 +280,10 @@ publishing {
             }
         }
     }
+}
+
+tasks.withType<PublishToMavenRepository> {
+    dependsOn("assembleDebug", "zip")
 }
 
 configurations.all {

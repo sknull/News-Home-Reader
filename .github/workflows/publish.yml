@@ -61,4 +61,4 @@ jobs:
           GITHUB_ACTOR: sknull
         run: |
           chmod +x gradlew
-          ./gradlew zip assembleDebug publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache
+          ./gradlew publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache
