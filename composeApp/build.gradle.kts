@@ -448,7 +448,7 @@ publishing {
             }
 
             val zipTask = tasks.named<Zip>("zip")
-            artifact(zipTask.map { it.archiveFile }) {
+            artifact(zipTask.flatMap { it.archiveFile }) {
                 extension = "zip"
                 classifier = "desktop"
             }
