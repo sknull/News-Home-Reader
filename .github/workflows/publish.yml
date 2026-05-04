@@ -65,20 +65,8 @@ jobs:
           chmod +x gradlew
           ./gradlew zip assembleDebug
 
-      - name: Upload Desktop App
-        uses: actions/upload-artifact@v4
-        with:
-          name: Desktop-App-Zip
-          path: News-Home-Reader/composeApp/build/distributions/*.zip
-
-      - name: Upload Android APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: Android-Debug-APK
-          path: News-Home-Reader/composeApp/build/outputs/apk/debug/*.apk
-
-      - name: Upload Aciidoc
-        uses: actions/upload-artifact@v4
-        with:
-          name: Asciidoc-PDF
-          path: News-Home-Reader/composeApp/build/asciidoc/*.pdf
+      - name: Publish to GitHub Packages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: ./gradlew publishBinaryReleasePublicationToGitHubPackagesRepository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

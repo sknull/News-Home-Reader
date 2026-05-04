@@ -245,8 +245,27 @@ android {
 
 publishing {
     publications {
-        // Kotlin Multiplatform registriert seine Veröffentlichungen automatisch.
-        // Wir müssen hier normalerweise nichts manuell hinzufügen.
+        create<MavenPublication>("binaryRelease") {
+            // Deine Koordinaten
+            groupId = "de.visualdigits.kmp"
+            artifactId = "news-home-reader"
+            version = "1.0.0-SNAPSHOT" // Oder deine dynamische Version
+
+            artifact(file("composeApp/build/outputs/apk/debug/composeApp-debug.apk")) {
+                extension = "apk"
+                classifier = "android"
+            }
+
+            artifact(file("composeApp/build/distributions/News-Home-Reader-1.0.0.zip")) {
+                extension = "zip"
+                classifier = "desktop"
+            }
+
+            artifact(file("composeApp/build/asciidoc/documentation.pdf")) {
+                extension = "pdf"
+                classifier = "docs"
+            }
+        }
     }
 
     repositories {
