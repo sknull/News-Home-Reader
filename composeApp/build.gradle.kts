@@ -441,7 +441,8 @@ publishing {
             artifactId = "news-home-reader"
             version = project.version.toString()
 
-            artifact(file("build/outputs/apk/debug/NewsHomeReader-debug.apk")) {
+            val apkFileProvider = layout.buildDirectory.file("outputs/apk/debug/NewsHomeReader-debug.apk")
+            artifact(apkFileProvider) {
                 extension = "apk"
                 classifier = "android"
                 builtBy("assembleDebug")
