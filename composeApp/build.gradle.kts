@@ -445,19 +445,21 @@ publishing {
             artifact(apkFileProvider) {
                 extension = "apk"
                 classifier = "android"
-                builtBy("assembleDebug")
+                builtBy(tasks.matching { it.name == "assembleDebug" })
             }
 
             val zipTask = tasks.named<Zip>("zip")
             artifact(zipTask.flatMap { it.archiveFile }) {
                 extension = "zip"
                 classifier = "desktop"
+                builtBy(zipTask)
             }
 
             val pdfTask = tasks.named<org.asciidoctor.gradle.jvm.pdf.AsciidoctorPdfTask>("asciidoctorPdf")
             artifact(pdfTask.map { File(it.outputDir, "README.pdf") }) {
                 extension = "pdf"
                 classifier = "docs"
+                builtBy(pdfTask)
             }
         }
     }
