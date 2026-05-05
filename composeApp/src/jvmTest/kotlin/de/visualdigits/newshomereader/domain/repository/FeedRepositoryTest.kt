@@ -5,12 +5,14 @@ import de.visualdigits.newshomereader.di.testModule
 import de.visualdigits.common.domain.model.errorhandling.onError
 import de.visualdigits.common.domain.model.errorhandling.onSuccess
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.koin.test.KoinTest
 import org.koin.test.inject
 import org.koin.test.junit5.KoinTestExtension
 
+@Disabled("Only for local testing")
 class FeedRepositoryTest : KoinTest {
 
     private val repository: FeedRepository by inject()

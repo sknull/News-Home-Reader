@@ -6,6 +6,7 @@ import de.visualdigits.common.domain.model.errorhandling.onError
 import de.visualdigits.common.domain.model.errorhandling.onSuccess
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.koin.test.KoinTest
@@ -13,7 +14,7 @@ import org.koin.test.inject
 import org.koin.test.junit5.KoinTestExtension
 import java.time.OffsetDateTime
 
-//@Disabled("Only for local testing")
+@Disabled("Only for local testing")
 class ArticleRepositoryTest : KoinTest {
 
     private val repository: ArticleRepository by inject()
