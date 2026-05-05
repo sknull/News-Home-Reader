@@ -26,7 +26,7 @@ endif::[]
 
 == About
 
-News Home Reader is a simple yet powerful news reader which supports feeds of type
+News Home Reader is a simple yet powerful newsreader which supports feeds of type
 atom, rdf and rss.
 
 It can cache full articles along with their images while you are at home for offline use
@@ -43,12 +43,15 @@ Please have a look into the installation section below how to build the app your
 
 === Features
 
+News Home Reader is a privacy first newsreader which means that new items and articles are stored only on your device. Synchronization of read news items is only performed within your Wi-Fi zone at home. For now only WebDAV is supported to store the synchronization file, which is just a simple JSON file.
+
 - Reading from Atom, RDF and RSS feeds
 - Scraping full articles from the respective website including video, audio and image items when provided within metadata
+- Caching articles and images on your device so you can read your news completely offline without internat traffic when outside your home
 - Identical App provided for Android and Desktop (currently Windows, Linux distro will be provided asap)
 - Synchronization of read news items across devices using WebDAV. While your devices are in your WLAN a little sync file is written to your webDav host and used across the devices
 - Export and Import of OPML to get started with a setup from another reader
-- Export and import of your settings. As the password is stored encrypted and the masterkey is device specific, you might export your settings on one device and import it on another, but you have to reenter the password afterwards
+- Export and import of your settings. As the password is stored encrypted and the master key is device specific, you might export your settings on one device and import it on another, but you have to reenter the password afterward
 - Inbuilt Newsfeed catalog with german feeds from https://www.rss-verzeichnis.de/
 
 == Installation
@@ -59,18 +62,43 @@ To compile the executable on your local machine just check out the project somew
 
 [source]
 ----
-./gradlew createDistributable
+./gradlew zip assembleDebug
 ----
 
-When the build finished successfully you find the final directory in directory
+==== Directories
 
-    <PROJECT_ROOT>/composeApp/build/compose/binaries/main/app/de.visualdigits.msfs2024liverytools
+When the build finished successfully you find the final directory in directories
+
+===== Windows Binary
+[source]
+----
+<PROJECT_ROOT>/composeApp/build/compose/binaries/main/app/de.visualdigits.newshomereader
+----
 
 Copy the whole directory somewhere. The exe file is just a wrapper to a java main.
 Of course you can rename the folder to whatever you like.
-You may then just doubleclick on the exe file and you are good to go.
+You may then just double-click on the exe file, and you are good to go.
+Besides the exe you find this readme as a pdf file.
 
-==== Preliminaries for this:
+===== Windows zip file
+[source]
+----
+<PROJECT_ROOT>/composeApp/build/distributions/NewsHomeReader_<VERSION>.zip
+----
+
+This contains the above directory as a zipped file.
+
+===== Android apk
+[source]
+----
+<PROJECT_ROOT>/composeApp/build/outputs/apk/debug/NewsHomeReader_debug.apk
+----
+
+This is an unsigned apk file which you can install on android devices.
+You have to allow installation from unknown locations. Also you have to let
+scan the apk file on every install or update.
+
+==== Preliminaries for building on your machine
 
 - Temurin 21 JDK
 - Wix Toolset
@@ -80,7 +108,7 @@ You may then just doubleclick on the exe file and you are good to go.
 
 I highly recommend to make use of a JDK manager I use scoop for this.
 
-To install scoop on your machine just open a powershell and issue:
+To install scoop on your machine just open a PowerShell and issue:
 
 [source]
 ----

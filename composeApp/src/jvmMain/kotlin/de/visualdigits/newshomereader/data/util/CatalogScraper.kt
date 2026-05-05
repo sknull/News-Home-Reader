@@ -53,7 +53,7 @@ object CatalogScraper {
             }
         }
         val targetFile =
-            File(directory, "catalog.json")
+            File(directory, "catalog_rss-verzeichnis.json")
         targetFile.writeText(json)
     }
 

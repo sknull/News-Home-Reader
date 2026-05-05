@@ -13,7 +13,7 @@ class DefaultCatalogRepository : CatalogRepository {
 
     override suspend fun loadCatalog(): Result<NewsFeedCatalog, DataError.Local> = withContext(Dispatchers.IO) {
         try {
-            val bytes = Res.readBytes("files/catalog.json")
+            val bytes = Res.readBytes("files/catalog_rss-verzeichnis.json")
             val json = bytes.decodeToString()
             val newsFeedCatalog = Json.decodeFromString(NewsFeedCatalog.serializer(), json)
             Result.Success(newsFeedCatalog)
