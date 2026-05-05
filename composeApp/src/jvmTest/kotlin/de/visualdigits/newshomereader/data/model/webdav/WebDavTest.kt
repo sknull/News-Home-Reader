@@ -22,6 +22,7 @@ import io.ktor.http.contentType
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.koin.test.KoinTest
@@ -31,6 +32,7 @@ import java.io.File
 import kotlin.getValue
 import kotlin.time.Clock
 
+@Disabled("Only for local testing")
 class WebDavTest : KoinTest {
 
     private val settingsRepository by inject<SettingsRepository>()
