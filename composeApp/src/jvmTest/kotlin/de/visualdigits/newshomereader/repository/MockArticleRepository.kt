@@ -1,11 +1,11 @@
 package de.visualdigits.newshomereader.repository
 
 import com.fleeksoft.ksoup.Ksoup
+import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.essence.Essence
 import de.visualdigits.newshomereader.data.mapper.toAppJson
 import de.visualdigits.newshomereader.data.model.applicationjson.AppJsonDto
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
-import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
@@ -13,7 +13,6 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import java.io.File
 import kotlin.math.roundToLong
@@ -63,11 +62,11 @@ class MockArticleRepository(
             }
 
         val newsArticle = applicationJson
-            ?.find { script -> script.type?.lowercase() == "newsarticle" }
+            .find { script -> script.type?.lowercase() == "newsarticle" }
             ?:applicationJson
-                ?.filter { script -> script.graphs.isNotEmpty() }
-                ?.map { script -> script.graphs.find { g -> g.type?.lowercase() == "newsarticle" } }
-                ?.firstOrNull()
+                .filter { script -> script.graphs.isNotEmpty() }
+                .map { script -> script.graphs.find { g -> g.type?.lowercase() == "newsarticle" } }
+                .firstOrNull()
 
         val isFree = newsArticle?.isAccessibleForFree?:true
 
@@ -75,17 +74,14 @@ class MockArticleRepository(
         val commentCount = newsArticle?.commentCount?.toLong()?:0L
 
         val imageItems = applicationJson
-            ?.filter { script -> script.type?.lowercase() == "imageobject" }
-            ?.map { ao -> ao.toMediaItem() }
-            ?:listOf()
+            .filter { script -> script.type?.lowercase() == "imageobject" }
+            .map { ao -> ao.toMediaItem() }
         val audioItems = applicationJson
-            ?.filter { script -> script.type?.lowercase() == "audioobject" }
-            ?.map { ao -> ao.toMediaItem() }
-            ?:listOf()
+            .filter { script -> script.type?.lowercase() == "audioobject" }
+            .map { ao -> ao.toMediaItem() }
         val videoItems = applicationJson
-            ?.filter { script -> script.type?.lowercase() == "videoobject" }
-            ?.map { vo -> vo.toMediaItem() }
-            ?:listOf()
+            .filter { script -> script.type?.lowercase() == "videoobject" }
+            .map { vo -> vo.toMediaItem() }
 
         val imageDto = newsArticle
             ?.image
@@ -99,7 +95,7 @@ class MockArticleRepository(
         FullArticle(
             id = 1234,
             itemId = newsItem.id,
-            applicationJson = applicationJson?.map { a -> a.toAppJson() }?:listOf(),
+            applicationJson = applicationJson.map { a -> a.toAppJson() },
             html = html,
             imageItems = imageItems,
             videoItems = videoItems,

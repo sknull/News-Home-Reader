@@ -29,9 +29,12 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 import java.io.File
 
+val testHomeDirectory = File("E:\\temp\\.newshomereader")
+
 val testModule = module {
 
-    single(named("homeDirectory")) { File("E:\\temp\\.newshomereader").canonicalPath }
+    single(named("homeDirectory")) { testHomeDirectory.canonicalPath }
+
 
     single {
         val driver = get<DriverFactory>().createDriver(get<String>(named("homeDirectory")))

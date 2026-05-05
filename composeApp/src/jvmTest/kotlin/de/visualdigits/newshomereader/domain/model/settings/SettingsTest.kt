@@ -13,9 +13,13 @@ import org.koin.test.junit5.KoinTestExtension
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.data.database.mapper.toSettings
 import de.visualdigits.newshomereader.data.database.mapper.toSettingsEntity
+import de.visualdigits.newshomereader.di.testHomeDirectory
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.assertNotNull
+import java.io.File
 
+@Disabled("Only for local testing")
 class SettingsTest : KoinTest {
 
     private val settingsRepository by inject<SettingsRepository>()
@@ -29,6 +33,8 @@ class SettingsTest : KoinTest {
 
     @Test
     fun testSettingsCredentials() = runTest {
+        File(testHomeDirectory, "settings.db").delete()
+
         val setResult = settingsRepository.setSettings(Settings())
         assert(setResult is Result.Success)
 
