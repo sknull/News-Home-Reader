@@ -8,6 +8,8 @@ import java.io.OutputStream
 
 interface SettingsRepository {
 
+    var webDavUrl: String?
+
     suspend fun getSettings(): Result<Settings?, DataError.Local>
 
     suspend fun setSettings(settings: Settings): Result<Unit, DataError.Local>

@@ -42,6 +42,10 @@ fun Settings.toSettingsEntity(): SettingsEntity {
         lastMaxImageSize = get<Int>(SK.maxImageSize)?.toLong() ?: 1200L,
         keepReadArticles = get<KeepArticlesEnum>(SK.keepReadArticles)?.name ?: "DAYS_30",
         keepUnreadArticles = get<KeepArticlesEnum>(SK.keepUnreadArticles)?.name ?: "DAYS_30",
+        webDavUrl = get<String>(SK.webDavUrl) ?: "",
+        webDavDirectory = get<String>(SK.webDavDirectory) ?: "",
+        webDavUser = get<String>(SK.webDavUser) ?: "",
+        webDavPassword = get<String>(SK.webDavPassword) ?: "",
     )
     return settingsEntity
 }
@@ -58,6 +62,10 @@ fun SettingsEntity.toSettings(): Settings {
     settings.set(SK.maxImageSize, lastMaxImageSize)
     settings.set(SK.keepReadArticles, keepReadArticles)
     settings.set(SK.keepUnreadArticles, keepUnreadArticles)
+    settings.set(SK.webDavUrl, webDavUrl)
+    settings.set(SK.webDavDirectory, webDavDirectory)
+    settings.set(SK.webDavUser, webDavUser)
+    settings.set(SK.webDavPassword, webDavPassword)
 
     return settings
 }

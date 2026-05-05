@@ -29,7 +29,7 @@ data class NewsHomeReaderState(
     val currentNewsFeedName: String? = null,
     val currentNewsItems: List<NewsItem> = listOf(),
     val visibleNewsItems: List<NewsItem> = listOf(),
-    val clearVisibleNewsItems: Boolean = false,
+    val allowClearVisibleNewsItems: Boolean = false,
 
     val currentNewsItem: NewsItem? = null,
     val currentNewsArticle: FullArticle? = null,

@@ -8,6 +8,16 @@
   <string name="choose_file">Select file</string>
   <string name="close">Close</string>
   <string name="delete">Delete</string>
+
+  <string name="label_webDavUrl">WebDAV Url</string>
+  <string name="tooltip_webDavUrl">Url of your WebDAV host in form http://host:port</string>
+  <string name="label_webDavDirectory">WebDAV Directory</string>
+  <string name="tooltip_webDavDirectory">The directory on the host to use\nas it is not allowed to write into the root directory\nyou must specify this.</string>
+  <string name="label_webDavUser">WebDAV User</string>
+  <string name="tooltip_webDavUser">The username required to login to your WebDAV host</string>
+  <string name="label_webDavPassword">WebDAV Password</string>
+  <string name="tooltip_webDavPassword">The password required to login to your WebDAV host\n(will be encrypted in the database)</string>
+
   <string name="dialog_title_export_opml">Export OPML File</string>
   <string name="dialog_title_export_pdf">Export PDF File</string>
   <string name="dialog_title_export_settings">Export Settings File</string>

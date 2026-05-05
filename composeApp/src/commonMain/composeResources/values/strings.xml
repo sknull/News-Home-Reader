@@ -26,6 +26,16 @@
   <string name="error_remote_unknown">An unknown error occurred during a remote operation.</string>
   <string name="error_unknown_field">Field unknown in configuration.</string>
   <string name="false">False</string>
+
+  <string name="label_webDavUrl">WebDAV Url</string>
+  <string name="tooltip_webDavUrl">Url of your WebDAV host in form http://host:port</string>
+  <string name="label_webDavDirectory">WebDAV Directory</string>
+  <string name="tooltip_webDavDirectory">The directory on the host to use\nas it is not allowed to write into the root directory\nyou must specify this.</string>
+  <string name="label_webDavUser">WebDAV User</string>
+  <string name="tooltip_webDavUser">The username required to login to your WebDAV host</string>
+  <string name="label_webDavPassword">WebDAV Password</string>
+  <string name="tooltip_webDavPassword">The password required to login to your WebDAV host\n(will be encrypted in the database)</string>
+
   <string name="field_unset">Field is not defined.</string>
   <string name="label_10_minutes">10 Minutes</string>
   <string name="label_14_days">14 Days</string>

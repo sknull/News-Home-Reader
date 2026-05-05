@@ -32,6 +32,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.startKoin
+import org.koin.core.qualifier.named
 import java.awt.Window
 import javax.swing.SwingUtilities
 import javax.swing.UIManager
@@ -43,6 +44,7 @@ fun main() {
     }
     val viewModel: NewsHomeReaderViewModel = koinApp.koin.get()
     val scheduler: FeedScheduler = koinApp.koin.get()
+    val homeDirectoryPath = koinApp.koin.get<String>(named("homeDirectory"))
 
     CoroutineScope(Dispatchers.Default).launch {
         combine(
@@ -60,7 +62,7 @@ fun main() {
         }
     }
 
-    val writers = getPlatformLogWriters()
+    val writers = getPlatformLogWriters(homeDirectoryPath, "NewsHomeReader.log")
     Logger.setLogWriters(writers)
     Logger.setTag("NewsHomeReader")
     Logger.setMinSeverity(Severity.Info)

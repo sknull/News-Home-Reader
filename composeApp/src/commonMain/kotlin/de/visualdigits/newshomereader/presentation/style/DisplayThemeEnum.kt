@@ -17,7 +17,6 @@ import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.keyfactory.KeyFactory
 import de.visualdigits.common.domain.util.copy
 import de.visualdigits.common.presentation.components.StudioClockColors
-import de.visualdigits.common.presentation.components.defaultStudioClockColors
 import de.visualdigits.common.presentation.model.PlatformScrollbarStyle
 import org.jetbrains.compose.resources.DrawableResource
 

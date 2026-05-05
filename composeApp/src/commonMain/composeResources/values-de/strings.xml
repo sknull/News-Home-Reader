@@ -8,6 +8,16 @@
   <string name="choose_file">Datei auswählen</string>
   <string name="close">Schließen</string>
   <string name="delete">Löschen</string>
+
+  <string name="label_webDavUrl">WebDAV Url</string>
+  <string name="tooltip_webDavUrl">Die Url deines WebDAV hosts in der Form http://host:port</string>
+  <string name="label_webDavDirectory">WebDAV Unterordner</string>
+  <string name="tooltip_webDavDirectory">Der Unterordner auf dem webdav host. Das Rootdirectory hat keine Schreibrechte.\nDu musst einen freigegebenen Ordner angeben.</string>
+  <string name="label_webDavUser">WebDAV Benutzername</string>
+  <string name="tooltip_webDavUser">Der Benutzername zum Einloggen in deinen WebDAV host</string>
+  <string name="label_webDavPassword">WebDAV Passwort</string>
+  <string name="tooltip_webDavPassword">Das Passwort zum Einloggen in deinen WebDAV host\n(wird verschlüsselt in die Datenbank geschrieben)</string>
+
   <string name="dialog_title_export_opml">OPML Datei exportieren</string>
   <string name="dialog_title_export_pdf">PDF Datei exportieren</string>
   <string name="dialog_title_export_settings">Einstellungen exportieren</string>

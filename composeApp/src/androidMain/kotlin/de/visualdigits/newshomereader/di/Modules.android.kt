@@ -2,6 +2,9 @@ package de.visualdigits.newshomereader.di
 
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.newshomereader.data.database.DriverFactory
+import de.visualdigits.newshomereader.data.http.HttpClientFactory
+import de.visualdigits.newshomereader.data.model.AndroidCryptoBox
+import de.visualdigits.newshomereader.data.model.CryptoBox
 import de.visualdigits.newshomereader.data.repository.FeedScheduler
 import de.visualdigits.newshomereader.data.repository.FeedUpdateWorker
 import de.visualdigits.newshomereader.data.repository.ImageCache
@@ -17,10 +20,21 @@ import io.ktor.http.HttpHeaders
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.workmanager.dsl.worker
 import org.koin.core.module.Module
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import java.io.File
+
+actual val homeDirectory: String
+    get() = ""
 
 actual val platformModule: Module
     get() = module {
+        single(named("homeDirectoryPath")) {
+            File(System.getProperty("user.home"), ".newshomereader")
+        }
+
+        single<CryptoBox> { AndroidCryptoBox(get<String>(named("homeDirectory"))) }
+
         // http engine
         single<HttpClientEngine> {
             OkHttp.create {
@@ -35,33 +49,11 @@ actual val platformModule: Module
             }
         }
 
-        // global http client for all calls
         single {
-            HttpClient(get<HttpClientEngine>()) {
-                install(HttpTimeout) {
-                    requestTimeoutMillis = 15000
-                    connectTimeoutMillis = 10000
-                    socketTimeoutMillis = 15000
-                }
-                install(HttpRedirect) {
-                    checkHttpMethod = false
-                    allowHttpsDowngrade = true
-                }
-//                install(Logging) {
-//                    level = LogLevel.NONE
-//                    logger = object : Logger {
-//                        override fun log(message: String) {
-//                            log.d(message)
-//                        }
-//                    }
-//                }
-                followRedirects = true
-                defaultRequest {
-                    header(HttpHeaders.Accept, "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
-                    header(HttpHeaders.AcceptCharset, "utf-8")
-                    header(HttpHeaders.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/150.0")
-                }
-            }
+            HttpClientFactory.create(
+                engine = get(),
+                settingsRepositoryProvider = { get() } // Holt das SettingsRepository via Koin
+            )
         }
 
         single { NewsFeedWorker(get(), get(), get()) }

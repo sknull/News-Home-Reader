@@ -185,6 +185,7 @@ kotlin {
             implementation(libs.junit.jupiter.engine)
             implementation(libs.junit.platform.launcher)
             implementation(libs.koin.test)
+            implementation(libs.kotlinx.coroutines.test)
         }
     }
 }
@@ -406,6 +407,7 @@ tasks.register("joinUpdateTranslations") {
 }
 dependencies {
     implementation("io.ktor:ktor-client-encoding:3.4.2")
+    implementation("io.ktor:ktor-client-logging:3.4.3")
 }
 
 configurations.all {

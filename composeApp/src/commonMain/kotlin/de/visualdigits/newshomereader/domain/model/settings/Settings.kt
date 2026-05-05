@@ -5,6 +5,7 @@ import de.visualdigits.common.domain.model.configuration.AbstractConfiguration
 import de.visualdigits.common.domain.model.configuration.EnumFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.Field
 import de.visualdigits.common.domain.model.configuration.IntFieldDescriptor
+import de.visualdigits.common.domain.model.configuration.StringFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.IntKeyFactory
 import de.visualdigits.compose.resources.Res
@@ -16,6 +17,10 @@ import de.visualdigits.compose.resources.label_language
 import de.visualdigits.compose.resources.label_load_articles
 import de.visualdigits.compose.resources.label_refresh_interval
 import de.visualdigits.compose.resources.label_refresh_wifi_only
+import de.visualdigits.compose.resources.label_webDavDirectory
+import de.visualdigits.compose.resources.label_webDavPassword
+import de.visualdigits.compose.resources.label_webDavUrl
+import de.visualdigits.compose.resources.label_webDavUser
 import de.visualdigits.compose.resources.ok
 import de.visualdigits.compose.resources.tooltip_displayTheme
 import de.visualdigits.compose.resources.tooltip_hide_read
@@ -25,10 +30,16 @@ import de.visualdigits.compose.resources.tooltip_language
 import de.visualdigits.compose.resources.tooltip_load_articles
 import de.visualdigits.compose.resources.tooltip_refresh_interval
 import de.visualdigits.compose.resources.tooltip_refresh_wifi_only
+import de.visualdigits.compose.resources.tooltip_webDavDirectory
+import de.visualdigits.compose.resources.tooltip_webDavPassword
+import de.visualdigits.compose.resources.tooltip_webDavUrl
+import de.visualdigits.compose.resources.tooltip_webDavUser
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.newshomereader.domain.model.type.Language
 import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
+
+typealias EncryptedString = String;
 
 class Settings(
     fields: LinkedHashMap<SK, Field<*,*,SK>> = LinkedHashMap()
@@ -173,6 +184,54 @@ class Settings(
                     keyFactory = BooleanEnum
                 ),
                 valid = { value -> value != null }
+            ),
+
+            /** The webDav host URL. */
+            Field(
+                descriptor = StringFieldDescriptor(
+                    key = SK.webDavUrl,
+                    label = UiText.StringResourceId(Res.string.label_webDavUrl),
+                    toolTip = UiText.StringResourceId(Res.string.tooltip_webDavUrl),
+                ),
+                valid = { value ->
+                    (value as? String)?.isNotBlank() == true
+                }
+            ),
+
+            /** The webDav host Directory. */
+            Field(
+                descriptor = StringFieldDescriptor(
+                    key = SK.webDavDirectory,
+                    label = UiText.StringResourceId(Res.string.label_webDavDirectory),
+                    toolTip = UiText.StringResourceId(Res.string.tooltip_webDavDirectory),
+                ),
+                valid = { value ->
+                    (value as? String)?.isNotBlank() == true
+                }
+            ),
+
+            /** The webDav user name. */
+            Field(
+                descriptor = StringFieldDescriptor(
+                    key = SK.webDavUser,
+                    label = UiText.StringResourceId(Res.string.label_webDavUser),
+                    toolTip = UiText.StringResourceId(Res.string.tooltip_webDavUser),
+                ),
+                valid = { value ->
+                    (value as? String)?.isNotBlank() == true
+                }
+            ),
+
+            /** The webDav password. */
+            Field(
+                descriptor = StringFieldDescriptor(
+                    key = SK.webDavPassword,
+                    label = UiText.StringResourceId(Res.string.label_webDavPassword),
+                    toolTip = UiText.StringResourceId(Res.string.tooltip_webDavPassword),
+                ),
+                valid = { value ->
+                    (value as? String)?.isNotBlank() == true
+                }
             ),
         )
     }

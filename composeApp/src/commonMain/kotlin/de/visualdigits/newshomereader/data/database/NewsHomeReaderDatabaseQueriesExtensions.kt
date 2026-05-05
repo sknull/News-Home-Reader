@@ -74,7 +74,11 @@ fun NewsHomeReaderDatabaseQueries.insertSettings(settingsEntity: SettingsEntity)
         refreshWifiOnly = settingsEntity.refreshWifiOnly,
         lastMaxImageSize = settingsEntity.lastMaxImageSize,
         keepReadArticles = settingsEntity.keepReadArticles,
-        keepUnreadArticles = settingsEntity.keepUnreadArticles
+        keepUnreadArticles = settingsEntity.keepUnreadArticles,
+        webDavUrl = settingsEntity.webDavUrl,
+        webDavDirectory = settingsEntity.webDavDirectory,
+        webDavUser = settingsEntity.webDavUser,
+        webDavPassword = settingsEntity.webDavPassword,
     )
 }
 
@@ -89,6 +93,10 @@ fun NewsHomeReaderDatabaseQueries.updateSettings(settingsEntity: SettingsEntity)
         lastMaxImageSize = settingsEntity.lastMaxImageSize,
         keepReadArticles = settingsEntity.keepReadArticles,
         keepUnreadArticles = settingsEntity.keepUnreadArticles,
+        webDavUrl = settingsEntity.webDavUrl,
+        webDavDirectory = settingsEntity.webDavDirectory,
+        webDavUser = settingsEntity.webDavUser,
+        webDavPassword = settingsEntity.webDavPassword,
         id = settingsEntity.id
     )
 }

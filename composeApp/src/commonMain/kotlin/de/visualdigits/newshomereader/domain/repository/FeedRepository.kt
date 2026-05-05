@@ -28,8 +28,10 @@ interface FeedRepository {
     ): Result<Unit, DataError.Local>
 
     suspend fun markNewsItemsAsRead(
-        ids: List<Long>,
+        newsItems: List<NewsItem>,
     ): Result<Unit, DataError.Local>
+
+    suspend fun synchroniseReadNewsItems(): Result<Unit, DataError.Local>
 
     suspend fun upsertNewsItem(
         newsItem: NewsItem,

@@ -1,45 +1,77 @@
 package de.visualdigits.newshomereader.di
 
+import app.cash.sqldelight.ColumnAdapter
+import de.visualdigits.newshomereader.FullArticleEntity
+import de.visualdigits.newshomereader.NewsFeedEntity
+import de.visualdigits.newshomereader.NewsFeedGroupEntity
+import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
+import de.visualdigits.newshomereader.SettingsDatabase
+import de.visualdigits.newshomereader.SettingsDatabase.Companion.invoke
+import de.visualdigits.newshomereader.SettingsEntity
+import de.visualdigits.newshomereader.data.database.DriverFactory
+import de.visualdigits.newshomereader.data.database.mapper.applicationJsonAdapter
+import de.visualdigits.newshomereader.data.database.mapper.mediaItemAdapter
+import de.visualdigits.newshomereader.data.database.mapper.newsFeedsAdapter
+import de.visualdigits.newshomereader.data.database.mapper.stringListAdapter
+import de.visualdigits.newshomereader.data.database.mapper.subGroupsAdapter
+import de.visualdigits.newshomereader.data.http.HttpClientFactory
+import de.visualdigits.newshomereader.data.model.CryptoBox
+import de.visualdigits.newshomereader.data.repository.DefaultSettingsRepository
+import de.visualdigits.newshomereader.domain.model.settings.EncryptedString
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
+import de.visualdigits.newshomereader.domain.repository.SettingsRepository
 import de.visualdigits.newshomereader.repository.MockArticleRepository
 import de.visualdigits.newshomereader.repository.MockFeedRepository
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.HttpClientEngine
-import io.ktor.client.engine.okhttp.OkHttp
-import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.request.header
-import io.ktor.http.HttpHeaders
+import org.koin.core.module.dsl.singleOf
+import org.koin.core.qualifier.named
+import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.io.File
 
 val testModule = module {
-    single<HttpClientEngine> {
-        OkHttp.create {
-            config {
-                // limits parallel connections to avoid jam
-                dispatcher(okhttp3.Dispatcher().apply {
-                    maxRequestsPerHost = 4
-                })
-            }
-        }
-    }
+
+    single(named("homeDirectory")) { File("E:\\temp\\.newshomereader").canonicalPath }
+
     single {
-        HttpClient(get<HttpClientEngine>()) {
-            install(HttpTimeout) {
-                requestTimeoutMillis = 15000
-                connectTimeoutMillis = 10000
-                socketTimeoutMillis = 15000
-            }
-            defaultRequest {
-                header(HttpHeaders.AcceptCharset, "utf-8")
-                header(
-                    HttpHeaders.UserAgent,
-                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0"
-                )
-            }
+        val driver = get<DriverFactory>().createDriver(get<String>(named("homeDirectory")))
+
+        val cryptoBox = get<CryptoBox>()
+
+        val passwordAdapter = object : ColumnAdapter<EncryptedString, String> {
+            override fun decode(databaseValue: String): EncryptedString = cryptoBox.decrypt(databaseValue)
+            override fun encode(value: EncryptedString): String = cryptoBox.encrypt(value)
         }
+
+        SettingsDatabase(driver,
+            FullArticleEntityAdapter = FullArticleEntity.Adapter(
+                applicationJsonAdapter = applicationJsonAdapter,
+                imageItemsAdapter = mediaItemAdapter,
+                videoItemsAdapter = mediaItemAdapter,
+                audioItemsAdapter = mediaItemAdapter,
+            ),
+            NewsFeedEntityAdapter = NewsFeedEntity.Adapter(
+                keywordsAdapter = stringListAdapter
+            ),
+            NewsFeedGroupEntityAdapter = NewsFeedGroupEntity.Adapter(
+                newsFeedsAdapter = newsFeedsAdapter,
+                subGroupsAdapter = subGroupsAdapter
+            ),
+            SettingsEntityAdapter = SettingsEntity.Adapter(
+                webDavPasswordAdapter = passwordAdapter
+            )
+        )
     }
-    single<FeedRepository> { MockFeedRepository(get()) }
-    single<ArticleRepository> { MockArticleRepository(get()) }
+    single<NewsHomeReaderDatabaseQueries> {
+        get<SettingsDatabase>().newsHomeReaderDatabaseQueries
+    }
+
+    single { HttpClientFactory.create(
+        engine = get(),
+        settingsRepositoryProvider = { get<SettingsRepository>() }
+    )}
+
+    singleOf(::DefaultSettingsRepository).bind<SettingsRepository>()
+    singleOf(::MockFeedRepository).bind<FeedRepository>()
+    singleOf(::MockArticleRepository).bind<ArticleRepository>()
 }

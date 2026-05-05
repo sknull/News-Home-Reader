@@ -19,7 +19,6 @@ import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.form.EditableListResources
 import de.visualdigits.common.presentation.components.form.ConfigurationEditForm
 import de.visualdigits.common.presentation.model.CommonAction
-import de.visualdigits.common.presentation.model.defaultScrollbarStyle
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.add
 import de.visualdigits.compose.resources.add_hint

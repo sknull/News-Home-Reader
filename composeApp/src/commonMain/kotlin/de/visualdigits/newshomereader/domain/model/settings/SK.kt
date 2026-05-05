@@ -12,6 +12,10 @@ enum class SK : FieldKey<SK> {
     hideRead,
     keepReadArticles,
     keepUnreadArticles,
+    webDavUrl,
+    webDavDirectory,
+    webDavUser,
+    webDavPassword,
 
     maxImageSize,
     feedsChanged

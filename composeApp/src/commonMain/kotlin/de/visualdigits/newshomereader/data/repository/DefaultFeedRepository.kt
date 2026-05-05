@@ -4,6 +4,7 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import co.touchlab.kermit.Logger
 import com.fleeksoft.ksoup.Ksoup
+import com.fleeksoft.ksoup.parser.Parser
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
@@ -26,11 +27,11 @@ import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
 import de.visualdigits.newshomereader.domain.util.decodeFromString
+import de.visualdigits.newshomereader.domain.webdav.WebDavSyncService
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.readRawBytes
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -48,6 +49,7 @@ import java.time.Duration
 import java.time.OffsetDateTime
 import java.time.temporal.ChronoUnit
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.collections.map
 
 class DefaultFeedRepository(
     private val httpClient: HttpClient,
@@ -55,6 +57,7 @@ class DefaultFeedRepository(
     private val connectivityManager: ConnectivityManager,
     private val imageCache: ImageCache,
     private val articleRepository: ArticleRepository,
+    private val webDavSyncService: WebDavSyncService
 ) : FeedRepository {
 
     private val log = Logger.withTag("DefaultFeedRepository")
@@ -120,16 +123,52 @@ class DefaultFeedRepository(
         }
     }
 
-    override suspend fun markNewsItemsAsRead(ids: List<Long>): Result<Unit, DataError.Local> = withContext(Dispatchers.IO)  {
+    override suspend fun markNewsItemsAsRead(newsItems: List<NewsItem>): Result<Unit, DataError.Local> = withContext(Dispatchers.IO)  {
         try {
             dao.transaction {
-                ids.chunked(999).forEach { chunk ->
-                    dao.markNewsItemsAsRead(isRead = true, chunk)
+                newsItems
+                    .map { newsItem -> newsItem.id }
+                    .chunked(999).forEach { chunk ->
+                    dao.markNewsItemsAsReadById(isRead = true, chunk)
                 }
             }
             Result.Success(Unit)
         } catch (e: Exception) {
             log.e("Something went wrong during marking news item as read", e)
+            Result.Error(DataError.Local.UNKNOWN)
+        }
+    }
+
+    override suspend fun synchroniseReadNewsItems(): Result<Unit, DataError.Local> = withContext(Dispatchers.IO)  {
+        try {
+            val localReadNewsItems = dao.getReadNewsItems().executeAsList()
+            val syncResult = webDavSyncService.syncReadStatus(localReadNewsItems
+                .map { newsItem -> "${newsItem.feedName}||||${newsItem.identifier}" }.toSet())
+            if (syncResult is Result.Success) {
+                val identifiers = syncResult.data
+                    .mapNotNull { id ->
+                        val parts = id.split("||||")
+                        if (parts.size == 2) {
+                            Pair(parts[0], parts[1])
+                        } else {
+                            null
+                        }
+                    }
+                if (identifiers.isNotEmpty()) {
+                    dao.transaction {
+                        identifiers.forEach { identifier -> dao.markNewsItemsAsReadByFeedNameAndIdentifier(
+                            feedName = identifier.first,
+                            identifier = identifier.second
+                        ) }
+                    }
+                }
+            } else if (syncResult is Result.Error) {
+                log.e("Something went wrong while synchronizing read news items with webdav host", syncResult.throwable)
+                Result.Error(DataError.Local.UNKNOWN)
+            }
+            Result.Success(Unit)
+        } catch (e: Exception) {
+            log.e("Something went wrong while synchronizing read news items with webdav host", e)
             Result.Error(DataError.Local.UNKNOWN)
         }
     }
@@ -383,7 +422,7 @@ class DefaultFeedRepository(
         val xml = bytes.toString(charset(charsetName))
 
         val feedType = Ksoup
-            .parse(html = xml, baseUri = "", parser = com.fleeksoft.ksoup.parser.Parser.xmlParser())
+            .parse(html = xml, baseUri = "", parser = Parser.xmlParser())
             .root()
             .select("> *")
             .firstOrNull()

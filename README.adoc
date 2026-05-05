@@ -37,8 +37,19 @@ There is also an offline catalog on board which was produced from https://www.rs
 which you can use to find some interesting newsfeeds in German.
 
 Currently the app is not published on any appstore so if you wish to put it on your device or
-use it on your windows desktop (sorry I have no apple devices so I cannot test this nor support this platform)
-please have a look into the installation section below how to build the app yourself.
+use it on your windows desktop.
+Sorry I have no apple devices so I cannot test this nor support this platform.
+Please have a look into the installation section below how to build the app yourself.
+
+=== Features
+
+- Reading from Atom, RDF and RSS feeds
+- Scraping full articles from the respective website including video, audio and image items when provided within metadata
+- Identical App provided for Android and Desktop (currently Windows, Linux distro will be provided asap)
+- Synchronization of read news items across devices using WebDAV. While your devices are in your WLAN a little sync file is written to your webDav host and used across the devices
+- Export and Import of OPML to get started with a setup from another reader
+- Export and import of your settings. As the password is stored encrypted and the masterkey is device specific, you might export your settings on one device and import it on another, but you have to reenter the password afterwards
+- Inbuilt Newsfeed catalog with german feeds from https://www.rss-verzeichnis.de/
 
 == Installation
 

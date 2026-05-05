@@ -38,3 +38,4 @@ out/
 
 ### Kotlin ###
 .kotlin
+/composeApp/src/jvmTest/resources/webDav_credentials.json

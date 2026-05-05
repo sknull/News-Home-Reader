@@ -1,12 +1,12 @@
 package de.visualdigits.newshomereader.repository
 
 import com.fleeksoft.ksoup.Ksoup
+import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.data.mapper.toNewsFeed
 import de.visualdigits.newshomereader.data.model.atom.Feed
 import de.visualdigits.newshomereader.data.model.rdf.Rdf
 import de.visualdigits.newshomereader.data.model.rss.Rss
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
-import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
@@ -18,7 +18,6 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.readRawBytes
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.withContext
@@ -47,7 +46,11 @@ class MockFeedRepository(
         return Result.Success(Unit)
     }
 
-    override suspend fun markNewsItemsAsRead(ids: List<Long>): Result<Unit, DataError.Local> {
+    override suspend fun markNewsItemsAsRead(newsItems: List<NewsItem>): Result<Unit, DataError.Local> {
+        return Result.Success(Unit)
+    }
+
+    override suspend fun synchroniseReadNewsItems(): Result<Unit, DataError.Local> {
         return Result.Success(Unit)
     }
 

@@ -19,7 +19,6 @@ import de.visualdigits.newshomereader.domain.util.decodeFromString
 import de.visualdigits.newshomereader.domain.util.encodeToString
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import nl.adaptivity.xmlutil.core.impl.multiplatform.InputStream
 import nl.adaptivity.xmlutil.core.impl.multiplatform.OutputStream

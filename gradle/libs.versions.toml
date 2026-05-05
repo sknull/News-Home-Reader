@@ -28,6 +28,7 @@ version-kotlin-coroutines = "1.10.2"
 version-kotlinx-coroutines-swing="1.10.2"
 version-kotlinx-datetime = "0.7.1"
 version-kotlinx-io-core = "0.9.0"
+version-kotlinx-coroutines-test = "1.9.0"
 version-ktor = "3.4.3"
 version-material3 = "1.9.0"
 version-navigation-compose = "2.9.2"
@@ -42,6 +43,7 @@ androidx-tv-material = { group = "androidx.tv", name = "tv-material", version.re
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "version-kotlin" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "version-kotlinx-coroutines-test" }
 kotlin-xml-util = { module = "io.github.pdvrieze.xmlutil:core", version.ref = "version-kotlin-xml-util" }
 kotlin-xml-serialization = { module = "io.github.pdvrieze.xmlutil:serialization", version.ref = "version-kotlin-xml-util" }
 kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "version-kotlinx-coroutines-swing" }

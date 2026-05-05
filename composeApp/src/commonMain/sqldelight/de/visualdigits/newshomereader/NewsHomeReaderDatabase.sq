@@ -5,7 +5,7 @@ import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem;
 import kotlin.Boolean;
 import kotlin.String;
 import kotlin.collections.List;
-
+import de.visualdigits.newshomereader.domain.model.settings.EncryptedString;
 
 --
 -- SETTINGS
@@ -17,18 +17,22 @@ CREATE TABLE SettingsEntity (
     refreshInterval TEXT NOT NULL,
     refreshWifiOnly INTEGER AS Boolean NOT NULL DEFAULT 0,
     lastMaxImageSize INTEGER NOT NULL,
-    keepReadArticles TEXT NOT NULL DEFAULT 0,
-    keepUnreadArticles TEXT NOT NULL DEFAULT 0,
+    keepReadArticles TEXT NOT NULL,
+    keepUnreadArticles TEXT NOT NULL,
     loadArticles INTEGER AS Boolean NOT NULL DEFAULT 0,
-    hideRead INTEGER AS Boolean NOT NULL DEFAULT 0
+    hideRead INTEGER AS Boolean NOT NULL DEFAULT 0,
+    webDavUrl TEXT NOT NULL DEFAULT "",
+    webDavDirectory TEXT NOT NULL DEFAULT "",
+    webDavUser TEXT NOT NULL DEFAULT "",
+    webDavPassword TEXT AS EncryptedString NOT NULL DEFAULT ""
 );
 
 insertSettings:
 INSERT OR REPLACE INTO SettingsEntity (
     displayTheme, language, refreshInterval, refreshWifiOnly, lastMaxImageSize, keepReadArticles,
-    keepUnreadArticles, loadArticles, hideRead
+    keepUnreadArticles, loadArticles, hideRead, webDavUrl, webDavDirectory, webDavUser, webDavPassword
 )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 getSettingsById:
 SELECT * FROM SettingsEntity WHERE id = :id;
@@ -46,7 +50,11 @@ SET displayTheme = :displayTheme,
     keepReadArticles = :keepReadArticles,
     keepUnreadArticles = :keepUnreadArticles,
     loadArticles = :loadArticles,
-    hideRead = :hideRead
+    hideRead = :hideRead,
+    webDavUrl = :webDavUrl,
+    webDavDirectory = :webDavDirectory,
+    webDavUser = :webDavUser,
+    webDavPassword = :webDavPassword
 WHERE id IS :id;
 
 deleteSettings:
@@ -181,10 +189,19 @@ SET feedName = :feedName,
     isRead = :isRead
 WHERE id = :id;
 
-markNewsItemsAsRead:
+markNewsItemsAsReadById:
 UPDATE NewsItemEntity
 SET isRead = :isRead
 WHERE id IN :idList;
+
+markNewsItemsAsReadByFeedNameAndIdentifier:
+UPDATE NewsItemEntity
+SET isRead = 1
+WHERE feedName == :feedName AND identifier == :identifier;
+
+getReadNewsItems:
+SELECT * FROM NewsItemEntity
+WHERE isRead = 1;
 
 cleanupOldReadNewsItems:
 DELETE FROM NewsItemEntity

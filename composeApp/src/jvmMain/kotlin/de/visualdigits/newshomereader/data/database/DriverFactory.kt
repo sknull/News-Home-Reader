@@ -4,12 +4,10 @@ import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import de.visualdigits.newshomereader.SettingsDatabase
 import java.io.File
-import java.nio.file.Paths
 
 actual class DriverFactory {
-    actual fun createDriver(): SqlDriver {
-        val userHome = System.getProperty("user.home")
-        val dbDirectory = Paths.get(userHome, ".newshomereader").toFile()
+    actual fun createDriver(basePath: String): SqlDriver {
+        val dbDirectory = File(basePath)
         if (!dbDirectory.exists()) {
             dbDirectory.mkdirs()
         }

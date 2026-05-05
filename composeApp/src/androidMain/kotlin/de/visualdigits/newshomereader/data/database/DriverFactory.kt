@@ -11,7 +11,7 @@ actual class DriverFactory(
 ) {
     private val dbName = "settings.db"
 
-    actual fun createDriver(): SqlDriver {
+    actual fun createDriver(basePath: String): SqlDriver {
         // todo - remember to remove this later
 //        context.deleteDatabase(dbName)
 

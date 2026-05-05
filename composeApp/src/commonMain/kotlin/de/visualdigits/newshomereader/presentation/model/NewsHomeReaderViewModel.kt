@@ -40,7 +40,6 @@ import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -61,6 +60,7 @@ import java.io.OutputStream
 import java.time.OffsetDateTime
 import java.time.temporal.ChronoUnit
 import java.util.Locale
+import kotlin.collections.map
 import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
@@ -69,7 +69,7 @@ class NewsHomeReaderViewModel(
     val articleRepository: ArticleRepository,
     val settingsRepository: SettingsRepository,
     val newsFeedConfigurationRepository: NewsFeedConfigurationRepository,
-    val catalogRepository: CatalogRepository,
+    val catalogRepository: CatalogRepository
 ) : ViewModel() {
 
     private val log = Logger.withTag("NewsHomeReaderViewModel")
@@ -518,7 +518,7 @@ class NewsHomeReaderViewModel(
                     it.copy(
                         previousNewsFeedGroup = it.currentNewsFeedGroup,
                         currentNewsFeedGroup = if (action.isExpanded || stayInGroup) action.group else null,
-                        clearVisibleNewsItems = if (stayInGroup) false else !action.isExpanded,
+                        allowClearVisibleNewsItems = if (stayInGroup) false else !action.isExpanded,
                         currentNewsFeedName = null,
                         collapsibleState = it.collapsibleState + if (stayInGroup) {
                             ("group_${action.group.name}" to true)
@@ -1103,6 +1103,11 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                         .onError { _, throwable ->
                             log.e("Could not prefetch images", throwable)
                         }
+
+                    val syncResult = feedRepository.synchroniseReadNewsItems()
+                    if (syncResult is Result.Error) {
+                        log.e("WebDAV Sync failed", syncResult.throwable)
+                    }
                 } else if (newsFeedResult is Result.Error) {
                     log.e("Could not import OPML", newsFeedResult.throwable)
                     _state.update {
@@ -1322,6 +1327,11 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                     collapsibleState = mapOf("group_newsfeeds_navigation" to true)
                 )
             }
+
+            val syncResult = feedRepository.synchroniseReadNewsItems()
+            if (syncResult is Result.Error) {
+                log.e("WebDAV Sync failed", syncResult.throwable)
+            }
         } else if (result is Result.Error) {
             log.e("Could not load data", result.throwable)
             _state.update {
@@ -1369,6 +1379,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
         _state.update {
             it.copy(
                 currentNewsFeedName = feedName,
+                allowClearVisibleNewsItems = true,
                 currentNewsFeedGroup = null,
                 currentNewsFeedItem = currentFeedItem,
                 currentNewsArticle = null,
@@ -1378,6 +1389,11 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                 uiMessage = null,
                 uiMessageSeverity = null
             )
+        }
+
+        val syncResult = feedRepository.synchroniseReadNewsItems()
+        if (syncResult is Result.Error) {
+            log.e("WebDAV Sync failed", syncResult.throwable)
         }
     }
 
@@ -1391,35 +1407,39 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
         val newsItems = state.value.currentNewsItems
             .filter { newsItem -> newsItem.updated.isBefore(threshold) }
             .map { newsItem -> newsItem.copy(isRead = true) }
-        feedRepository.markNewsItemsAsRead(newsItems.map { newsItem -> newsItem.id })
-            .onSuccess {
-                _state.update {
-                    it.copy(
-                        isLoading = false,
-                        currentProgress = 0.0f,
-                        clearVisibleNewsItems = days == 0L,
-                        progressStage = ProgressStage.NONE,
-                        currentNewsItems = newsItems,
-                        visibleNewsItems = calculateVisibleNewsItems(
-                            newsItems = newsItems,
-                            hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false,
-                            newsFeedItem = it.currentNewsFeedItem
-                        ),
-                    )
-                }
+        val markResult = feedRepository.markNewsItemsAsRead(newsItems)
+        if (markResult is Result.Success) {
+            _state.update {
+                it.copy(
+                    isLoading = false,
+                    currentProgress = 0.0f,
+                    allowClearVisibleNewsItems = days == 0L,
+                    progressStage = ProgressStage.NONE,
+                    currentNewsItems = newsItems,
+                    visibleNewsItems = calculateVisibleNewsItems(
+                        newsItems = newsItems,
+                        hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
+                        newsFeedItem = it.currentNewsFeedItem
+                    ),
+                )
             }
-            .onError { error, throwable ->
-                log.e("Could not load article", throwable)
-                _state.update {
-                    it.copy(
-                        isLoading = false,
-                        currentProgress = 0.0f,
-                        progressStage = ProgressStage.NONE,
-                        uiMessage = error.toUiText(),
-                        uiMessageSeverity = Severity.Error
-                    )
-                }
+
+            val syncResult = feedRepository.synchroniseReadNewsItems()
+            if (syncResult is Result.Error) {
+                log.e("WebDAV Sync failed", syncResult.throwable)
             }
+        } else if (markResult is Result.Error) {
+            log.e("Could not load article", markResult.throwable)
+            _state.update {
+                it.copy(
+                    isLoading = false,
+                    currentProgress = 0.0f,
+                    progressStage = ProgressStage.NONE,
+                    uiMessage = markResult.error.toUiText(),
+                    uiMessageSeverity = Severity.Error
+                )
+            }
+        }
     }
 
     private fun loadArticle(newsItem: NewsItem) = viewModelScope.launch {
@@ -1428,11 +1448,9 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                 isLoading = true,
             )
         }
-        var copy = newsItem.copy(isRead = true)
-        feedRepository.upsertNewsItem(copy, true)
         val articleResult = articleRepository.readFullArticle(newsItem)
         if (articleResult is Result.Success) {
-            copy = copy.copy(newsArticle = articleResult.data.first)
+            val copy = newsItem.copy(newsArticle = articleResult.data.first)
             _state.update {
                 val currentNewsItems = it.currentNewsItems.map { ni ->
                     if (ni.id == newsItem.id) copy else ni
@@ -1464,6 +1482,15 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                     uiMessageSeverity = Severity.Error
                 )
             }
+        }
+        val markResult = feedRepository.markNewsItemsAsRead(listOf(newsItem))
+        if (markResult is Result.Success) {
+            val syncResult = feedRepository.synchroniseReadNewsItems()
+            if (syncResult is Result.Error) {
+                log.e("WebDAV Sync failed", syncResult.throwable)
+            }
+        } else if (markResult is Result.Error) {
+            log.e("Could not mark news item as read", markResult.throwable)
         }
     }
 

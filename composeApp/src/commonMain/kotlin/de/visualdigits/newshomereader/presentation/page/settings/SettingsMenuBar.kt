@@ -24,6 +24,8 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.style.gap
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
+import org.koin.core.qualifier.named
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
@@ -31,6 +33,8 @@ import java.time.format.DateTimeFormatter
 fun SettingsMenuBar(
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
+    val homeDirectoryPath: String = koinInject(qualifier = named("homeDirectory"))
+
     FlowRow(
         modifier = Modifier
             .fillMaxWidth(),
@@ -45,6 +49,7 @@ fun SettingsMenuBar(
             fileMode = FileMode.FILES_ONLY,
             buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             leadingIcon = painterResource(Res.drawable.icon_download_24px),
+            homeDirectoryPath = homeDirectoryPath,
         ) { fileName, ins ->
             onAction(NewsHomeReaderAction.OnOpmlImport(fileName, ins))
         }
@@ -61,6 +66,7 @@ fun SettingsMenuBar(
             }.opml",
             buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             leadingIcon = painterResource(Res.drawable.icon_upload_24px),
+            homeDirectoryPath = homeDirectoryPath,
         ) { fileName, outs ->
             onAction(NewsHomeReaderAction.OnOpmlExport(fileName, outs))
         }
@@ -73,6 +79,7 @@ fun SettingsMenuBar(
             fileMode = FileMode.FILES_ONLY,
             buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             leadingIcon = painterResource(Res.drawable.icon_download_24px),
+            homeDirectoryPath = homeDirectoryPath,
         ) { fileName, ins ->
             onAction(NewsHomeReaderAction.OnSettingsImport(fileName, ins))
         }
@@ -89,6 +96,7 @@ fun SettingsMenuBar(
             }.json",
             buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             leadingIcon = painterResource(Res.drawable.icon_upload_24px),
+            homeDirectoryPath = homeDirectoryPath,
         ) { fileName, outs ->
             onAction(NewsHomeReaderAction.OnSettingsExport(fileName, outs))
         }
