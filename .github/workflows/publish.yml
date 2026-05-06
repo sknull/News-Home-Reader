@@ -127,19 +127,25 @@ jobs:
           cache-read-only: false
           cache-encryption-key: ${{ secrets.Gradle_Encryption_Key }}
 
-      - name: Download All Artifacts
+      - name: Download Windows MSI
         uses: actions/download-artifact@v4
         with:
+          name: build-outputs-windows-latest
           path: News-Home-Reader
-          merge-multiple: true
+
+      - name: Download Ubuntu Binaries
+        uses: actions/download-artifact@v4
+        with:
+          name: build-outputs-ubuntu-latest
+          path: News-Home-Reader
 
       - name: Verify Files
         working-directory: News-Home-Reader
         run: |
-          echo "Suche MSI..."
-          find composeApp/build -name "*.msi"
-          echo "Suche DEB..."
-          find composeApp/build -name "*.deb"
+          echo "Prüfe Ordnerstruktur:"
+          ls -R composeApp/build/compose/binaries || echo "Keine Binaries gefunden!"
+          echo "Suche MSI:"
+          find . -name "*.msi"
 
       - name: Final Publish to GitHub Packages
         working-directory: News-Home-Reader
