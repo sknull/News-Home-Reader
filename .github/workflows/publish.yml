@@ -91,6 +91,7 @@ jobs:
             News-Home-Reader/composeApp/build/outputs/apk/
             News-Home-Reader/composeApp/build/distributions/
             News-Home-Reader/composeApp/build/asciidoc/
+          include-hidden-files: true
 
   publish:
     needs: build
@@ -143,7 +144,7 @@ jobs:
         working-directory: News-Home-Reader
         run: |
           echo "Prüfe Ordnerstruktur:"
-          ls -R composeApp/build/compose/binaries || echo "Keine Binaries gefunden!"
+          ls -R News-Home-Reader/composeApp/build/compose/binaries || echo "Nicht gefunden!"
           echo "Suche MSI:"
           find . -name "*.msi"
 

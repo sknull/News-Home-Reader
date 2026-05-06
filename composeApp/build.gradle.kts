@@ -469,12 +469,10 @@ publishing {
                     .walkTopDown()
                     .find { it.extension == "deb" }
             }
-            if (System.getProperty("os.name").contains("Linux", ignoreCase = true)) {
-                artifact(debProvider) {
-                    extension = "deb"
-                    classifier = "linux"
-                    builtBy(tasks.matching { it.name == "packageReleaseDeb" })
-                }
+            artifact(debProvider) {
+                extension = "deb"
+                classifier = "linux"
+                builtBy(tasks.matching { it.name == "packageReleaseDeb" })
             }
 
             val msiProvider = project.provider {
@@ -482,12 +480,10 @@ publishing {
                     .walkTopDown()
                     .find { it.extension == "msi" }
             }
-            if (System.getProperty("os.name").contains("Windows", ignoreCase = true)) {
-                artifact(msiProvider) {
-                    extension = "msi"
-                    classifier = "windows"
-                    builtBy(tasks.matching { it.name == "packageReleaseMsi" })
-                }
+            artifact(msiProvider) {
+                extension = "msi"
+                classifier = "windows"
+                builtBy(tasks.matching { it.name == "packageReleaseMsi" })
             }
         }
     }
