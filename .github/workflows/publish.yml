@@ -47,6 +47,12 @@ jobs:
           cache-read-only: false
           cache-encryption-key: ${{ secrets.Gradle_Encryption_Key }}
 
+      - name: Install Linux Build Tools
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fakeroot dpkg
+
       - name: Run Tests
         working-directory: News-Home-Reader
         shell: bash
@@ -54,6 +60,7 @@ jobs:
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           GITHUB_ACTOR: sknull
+          GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxMetaspaceSize=1g"
         run: |
           chmod +x gradlew
           ./gradlew clean test jvmTest --no-configuration-cache
