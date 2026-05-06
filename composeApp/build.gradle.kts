@@ -492,6 +492,7 @@ publishing {
                 }
             }
         }
+    }
 
     repositories {
         maven {
