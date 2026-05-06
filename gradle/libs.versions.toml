@@ -3,6 +3,7 @@ agp = "8.13.2"
 android-compileSdk = "36"
 android-minSdk = "26"
 android-targetSdk = "35" # DO NOT UPGRADE FOR NOW
+ktorClientEncoding = "3.4.2"
 tvMaterial = "1.0.1"
 
 version-androidx-activityCompose = "1.13.0"

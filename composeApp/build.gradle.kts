@@ -193,55 +193,6 @@ configurations.all {
     exclude(group = "ch.qos.logback", module = "logback-core")
 }
 
-base {
-    archivesName.set("NewsHomeReader")
-}
-
-android {
-    namespace = "de.visualdigits.newshomereader"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    defaultConfig {
-        applicationId = "de.visualdigits.newshomereader"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-            excludes += "META-INF/INDEX.LIST"
-            excludes += "META-INF/io.netty.versions.properties"
-
-            // Schließt ALLE plattformspezifischen Metadaten aus (Native, JS, Wasm)
-            excludes += "**/default/linkdata/**"
-            excludes += "**/default/manifest"
-            excludes += "**/default/module"
-//            excludes += "**/*.knm"
-//            excludes += "**/*.kotlin_metadata"
-
-            // Speziell für deinen neuen Fehler (JS/Wasm Pfade)
-            excludes += "jsAndWasmJsMain/**"
-            excludes += "wasmJsMain/**"
-            excludes += "jsMain/**"
-
-            pickFirsts.add("META-INF/kotlin-project-structure-metadata.json")
-            pickFirsts.add("META-INF/kotlinx-serialization-json.kotlin_module")
-            pickFirsts.add("META-INF/resource_loader.kotlin_module")
-        }
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-    }
-}
-
 tasks.withType<PublishToMavenRepository> {
     dependsOn("assembleDebug", "zip")
 }
@@ -260,42 +211,6 @@ tasks.withType<Tar> {
 
 tasks.withType<Zip> {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-compose.desktop {
-    application {
-        mainClass = "de.visualdigits.newshomereader.MainKt"
-
-        nativeDistributions {
-            packageName = "de.visualdigits.newshomereader"
-            packageVersion = numericVersion
-            includeAllModules = false
-            modules(
-                "java.instrument",
-                "jdk.unsupported",
-                "java.desktop",
-                "java.xml",
-                "java.naming",
-                "java.prefs",
-                "java.sql",
-                "java.net.http"
-            )
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            windows {
-                iconFile.set(project.file("src/commonMain/composeResources/drawable/favicon.ico"))
-            }
-
-//            buildTypes {
-//                release {
-//                    proguard {
-//                        configurationFiles.from(project.file("proguard-rules.pro"))
-//                        isEnabled.set(false)
-//                        optimize.set(false)
-//                    }
-//                }
-//            }
-        }
-    }
 }
 
 tasks.register("showDependencies") {
@@ -403,9 +318,90 @@ tasks.register("joinUpdateTranslations") {
         TranslationUtil.joinUpdateTranslation(projectRootDir)
     }
 }
-dependencies {
-    implementation("io.ktor:ktor-client-encoding:3.4.2")
-    implementation("io.ktor:ktor-client-logging:3.4.3")
+
+base {
+    archivesName.set("NewsHomeReader")
+}
+
+android {
+    namespace = "de.visualdigits.newshomereader"
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
+
+    defaultConfig {
+        applicationId = "de.visualdigits.newshomereader"
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        targetSdk = libs.versions.android.targetSdk.get().toInt()
+        versionCode = 1
+        versionName = "1.0"
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/INDEX.LIST"
+            excludes += "META-INF/io.netty.versions.properties"
+
+            // Schließt ALLE plattformspezifischen Metadaten aus (Native, JS, Wasm)
+            excludes += "**/default/linkdata/**"
+            excludes += "**/default/manifest"
+            excludes += "**/default/module"
+//            excludes += "**/*.knm"
+//            excludes += "**/*.kotlin_metadata"
+
+            // Speziell für deinen neuen Fehler (JS/Wasm Pfade)
+            excludes += "jsAndWasmJsMain/**"
+            excludes += "wasmJsMain/**"
+            excludes += "jsMain/**"
+
+            pickFirsts.add("META-INF/kotlin-project-structure-metadata.json")
+            pickFirsts.add("META-INF/kotlinx-serialization-json.kotlin_module")
+            pickFirsts.add("META-INF/resource_loader.kotlin_module")
+        }
+    }
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+}
+
+compose.desktop {
+    application {
+        mainClass = "de.visualdigits.newshomereader.MainKt"
+
+        nativeDistributions {
+            packageName = "de.visualdigits.newshomereader"
+            packageVersion = numericVersion
+            includeAllModules = false
+            modules(
+                "java.instrument",
+                "jdk.unsupported",
+                "java.desktop",
+                "java.xml",
+                "java.naming",
+                "java.prefs",
+                "java.sql",
+                "java.net.http"
+            )
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Rpm)
+            windows {
+                iconFile.set(project.file("src/commonMain/composeResources/drawable/favicon.ico"))
+            }
+
+            buildTypes {
+                release {
+                    proguard {
+//                        configurationFiles.from(project.file("proguard-rules.pro"))
+                        isEnabled.set(false)
+                        optimize.set(false)
+                    }
+                }
+            }
+        }
+    }
 }
 
 configurations.all {

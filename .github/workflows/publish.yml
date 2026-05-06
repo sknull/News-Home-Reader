@@ -3,17 +3,15 @@ name: News Home Reader CI
 on:
   push:
     branches: [ "main" ]
-#    paths:
-#      - 'library/**'
-#      - 'gradle/**'
-#      - '*.kts'
-
   pull_request:
     branches: [ "main" ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-and-deploy: # Name des Jobs
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
@@ -51,6 +49,7 @@ jobs:
 
       - name: Run Tests
         working-directory: News-Home-Reader
+        shell: bash
         env:
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -59,12 +58,30 @@ jobs:
           chmod +x gradlew
           ./gradlew clean test jvmTest --no-configuration-cache
 
-      - name: Build and Publish Binaries
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      - name: Build and Publish
         working-directory: News-Home-Reader
         env:
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           GITHUB_ACTOR: sknull
+        shell: bash
         run: |
           chmod +x gradlew
-          ./gradlew publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache
+          if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
+            # Linux baut alles UND publiziert nach GitHub Packages
+            ./gradlew packageReleaseDeb assembleDebug asciidoctorPdf publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache
+          else
+            # Windows baut NUR die MSI
+            ./gradlew packageReleaseMsi --no-configuration-cache
+          fi
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: NewsHomeReader-Binaries-${{ matrix.os }}
+          path: |
+            News-Home-Reader/composeApp/build/compose/binaries/main/deb/*.deb
+            News-Home-Reader/composeApp/build/compose/binaries/main/msi/*.msi
+            News-Home-Reader/composeApp/build/outputs/apk/debug/*.apk
+            News-Home-Reader/composeApp/build/asciidoc/*.pdf
+          if-no-files-found: warn
