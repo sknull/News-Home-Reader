@@ -439,45 +439,45 @@ publishing {
             artifactId = "news-home-reader"
             version = project.version.toString()
 
-            // 1. Android APK (Immer über den Provider, um auf assembleDebug zu warten)
+            // 1. Android, ZIP, PDF (bleiben wie gehabt)
             artifact(layout.buildDirectory.file("outputs/apk/debug/NewsHomeReader-debug.apk")) {
                 extension = "apk"
                 classifier = "android"
                 builtBy(tasks.matching { it.name == "assembleDebug" })
             }
-
-            // 2. Desktop ZIP (Über Provider)
-            val zipTask = tasks.named<Zip>("zip")
-            artifact(zipTask.flatMap { it.archiveFile }) {
+            artifact(tasks.named<Zip>("zip").flatMap { it.archiveFile }) {
                 extension = "zip"
                 classifier = "desktop"
             }
-
-            // 3. PDF (Über Provider)
-            val pdfTask = tasks.named<org.asciidoctor.gradle.jvm.pdf.AsciidoctorPdfTask>("asciidoctorPdf")
-            artifact(pdfTask.map { it.outputDir.resolve("README.pdf") }) {
+            artifact(tasks.named<org.asciidoctor.gradle.jvm.pdf.AsciidoctorPdfTask>("asciidoctorPdf").map { it.outputDir.resolve("README.pdf") }) {
                 extension = "pdf"
                 classifier = "docs"
             }
 
-            // 4. DEB - Wir suchen die Datei im bekannten Pfad
-            artifact(project.provider {
-                layout.buildDirectory.dir("compose/binaries/main/deb").get().asFile
-                    .walk().find { it.extension == "deb" }
-            }) {
-                extension = "deb"
-                classifier = "linux"
-                builtBy(tasks.matching { it.name == "packageReleaseDeb" })
+            // 2. Dynamische Suche für DEB und MSI
+            // Wir definieren die Verzeichnisse
+            val debDir = layout.buildDirectory.dir("compose/binaries/main/deb").get().asFile
+            val msiDir = layout.buildDirectory.dir("compose/binaries/main/msi").get().asFile
+
+            // Suche die Dateien (falls vorhanden)
+            val debFile = if (debDir.exists()) debDir.walk().find { it.extension == "deb" } else null
+            val msiFile = if (msiDir.exists()) msiDir.walk().find { it.extension == "msi" } else null
+
+            // Nur hinzufügen, wenn die Datei physisch auf dem Runner existiert
+            debFile?.let { file ->
+                artifact(file) {
+                    extension = "deb"
+                    classifier = "linux"
+                    builtBy(tasks.matching { it.name == "packageReleaseDeb" })
+                }
             }
 
-            // 5. MSI - Wir suchen die Datei im bekannten Pfad
-            artifact(project.provider {
-                layout.buildDirectory.dir("compose/binaries/main/msi").get().asFile
-                    .walk().find { it.extension == "msi" }
-            }) {
-                extension = "msi"
-                classifier = "windows"
-                builtBy(tasks.matching { it.name == "packageReleaseMsi" })
+            msiFile?.let { file ->
+                artifact(file) {
+                    extension = "msi"
+                    classifier = "windows"
+                    builtBy(tasks.matching { it.name == "packageReleaseMsi" })
+                }
             }
         }
     }

@@ -64,15 +64,15 @@ jobs:
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           GITHUB_ACTOR: sknull
+          GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxMetaspaceSize=1g"
         shell: bash
         run: |
-          chmod +x gradlew
           if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
-            # Linux baut alles UND publiziert nach GitHub Packages
-            ./gradlew zip packageReleaseDeb assembleDebug asciidoctorPdf publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache
+            chmod +x gradlew
+            ./gradlew packageReleaseDeb assembleDebug asciidoctorPdf publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache
           else
-            # Windows baut NUR die MSI
-            ./gradlew packageReleaseMsi --no-configuration-cache
+            # --no-daemon ist auf Windows-Runnern oft stabiler bei Speicherknappheit
+            ./gradlew zip packageReleaseMsi publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache --no-daemon
           fi
 
       - name: Upload Artifacts
