@@ -65,11 +65,11 @@ jobs:
           chmod +x gradlew
           ./gradlew clean test jvmTest --no-configuration-cache
 
-      - name: List All Generated Binaries
+      - name: Debug Path
         working-directory: News-Home-Reader
         run: |
-          echo "Suche nach allen ausführbaren Dateien im Build-Ordner:"
-          find composeApp/build/compose/binaries -maxdepth 5 \( -name "*.deb" -o -name "*.msi" \)
+          echo "Aktueller Ordner: $(pwd)"
+          ls -R composeApp/build/compose || echo "Build Ordner existiert noch nicht!"
 
       - name: Build and Publish
         working-directory: News-Home-Reader
