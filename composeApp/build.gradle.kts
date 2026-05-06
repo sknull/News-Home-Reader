@@ -464,26 +464,20 @@ publishing {
                 classifier = "docs"
             }
 
-            val debProvider = project.provider {
-                layout.buildDirectory.asFile.get()
-                    .walkTopDown()
-                    .find { it.extension == "deb" }
-            }
-            artifact(debProvider) {
-                extension = "deb"
-                classifier = "linux"
-                builtBy(tasks.matching { it.name == "packageReleaseDeb" })
+            val buildDir = layout.buildDirectory.asFile.get()
+
+            buildDir.walkTopDown().find { it.extension == "deb" }?.let { file ->
+                artifact(file) {
+                    extension = "deb"
+                    classifier = "linux"
+                }
             }
 
-            val msiProvider = project.provider {
-                layout.buildDirectory.asFile.get()
-                    .walkTopDown()
-                    .find { it.extension == "msi" }
-            }
-            artifact(msiProvider) {
-                extension = "msi"
-                classifier = "windows"
-                builtBy(tasks.matching { it.name == "packageReleaseMsi" })
+            buildDir.walkTopDown().find { it.extension == "msi" }?.let { file ->
+                artifact(file) {
+                    extension = "msi"
+                    classifier = "windows"
+                }
             }
         }
     }
