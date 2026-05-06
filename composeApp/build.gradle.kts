@@ -464,26 +464,34 @@ publishing {
                 classifier = "docs"
             }
 
-            artifact(project.provider {
-                val debDir = layout.buildDirectory.dir("compose/binaries/main/deb").get().asFile
-                // Wir suchen rekursiv, falls es in main-release oder deb gelandet ist
-                layout.buildDirectory.asFile.get().walk().find { it.extension == "deb" }
-            }) {
-                extension = "deb"
-                classifier = "linux"
-                builtBy(tasks.matching { it.name == "packageReleaseDeb" })
+            val debProvider = project.provider {
+                layout.buildDirectory.asFile.get()
+                    .walk()
+                    .filter { it.parentFile.name == "deb" }
+                    .find { it.extension == "deb" }
+            }
+            if (System.getProperty("os.name").contains("Linux", ignoreCase = true)) {
+                artifact(debProvider) {
+                    extension = "deb"
+                    classifier = "linux"
+                    builtBy(tasks.matching { it.name == "packageReleaseDeb" })
+                }
             }
 
-            artifact(project.provider {
-                val msiDir = layout.buildDirectory.dir("compose/binaries/main-release/msi").get().asFile
-                layout.buildDirectory.asFile.get().walk().find { it.extension == "msi" }
-            }) {
-                extension = "msi"
-                classifier = "windows"
-                builtBy(tasks.matching { it.name == "packageReleaseMsi" })
+            val msiProvider = project.provider {
+                layout.buildDirectory.asFile.get()
+                    .walk()
+                    .filter { it.parentFile.name == "msi" }
+                    .find { it.extension == "msi" }
+            }
+            if (System.getProperty("os.name").contains("Windows", ignoreCase = true)) {
+                artifact(msiProvider) {
+                    extension = "msi"
+                    classifier = "windows"
+                    builtBy(tasks.matching { it.name == "packageReleaseMsi" })
+                }
             }
         }
-    }
 
     repositories {
         maven {
