@@ -457,11 +457,14 @@ publishing {
             // 2. Dynamische Suche für DEB und MSI
             // Wir definieren die Verzeichnisse
             val debDir = layout.buildDirectory.dir("compose/binaries/main/deb").get().asFile
-            val msiDir = layout.buildDirectory.dir("compose/binaries/main/msi").get().asFile
+            val msiDir = layout.buildDirectory.dir("compose/binaries/main-release/msi").get().asFile
 
             // Suche die Dateien (falls vorhanden)
             val debFile = if (debDir.exists()) debDir.walk().find { it.extension == "deb" } else null
             val msiFile = if (msiDir.exists()) msiDir.walk().find { it.extension == "msi" } else null
+
+            println("DEBUG: Suche DEB in ${debDir.absolutePath} -> gefunden: ${debFile?.name ?: "NEIN"}")
+            println("DEBUG: Suche MSI in ${msiDir.absolutePath} -> gefunden: ${msiFile?.name ?: "NEIN"}")
 
             // Nur hinzufügen, wenn die Datei physisch auf dem Runner existiert
             debFile?.let { file ->

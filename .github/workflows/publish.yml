@@ -58,6 +58,12 @@ jobs:
           chmod +x gradlew
           ./gradlew clean test jvmTest --no-configuration-cache
 
+      - name: List All Generated Binaries
+        working-directory: News-Home-Reader
+        run: |
+          echo "Suche nach allen ausführbaren Dateien im Build-Ordner:"
+          find composeApp/build/compose/binaries -maxdepth 4 -name "*.deb" -o -nam
+
       - name: Build and Publish
         working-directory: News-Home-Reader
         env:
