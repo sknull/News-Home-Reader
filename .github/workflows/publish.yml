@@ -91,7 +91,6 @@ jobs:
             News-Home-Reader/composeApp/build/outputs/apk/
             News-Home-Reader/composeApp/build/distributions/
             News-Home-Reader/composeApp/build/asciidoc/
-            News-Home-Reader/composeApp/build/distributions/
 
   publish:
     needs: build
@@ -131,8 +130,16 @@ jobs:
       - name: Download All Artifacts
         uses: actions/download-artifact@v4
         with:
-          path: News-Home-Reader/composeApp/build
+          path: News-Home-Reader
           merge-multiple: true
+
+      - name: Verify Files
+        working-directory: News-Home-Reader
+        run: |
+          echo "Suche MSI..."
+          find composeApp/build -name "*.msi"
+          echo "Suche DEB..."
+          find composeApp/build -name "*.deb"
 
       - name: Final Publish to GitHub Packages
         working-directory: News-Home-Reader
