@@ -62,7 +62,7 @@ jobs:
         working-directory: News-Home-Reader
         run: |
           echo "Suche nach allen ausführbaren Dateien im Build-Ordner:"
-          find composeApp/build/compose/binaries -maxdepth 4 -name "*.deb" -o -nam
+          find composeApp/build/compose/binaries -maxdepth 5 \( -name "*.deb" -o -name "*.msi" \)
 
       - name: Build and Publish
         working-directory: News-Home-Reader
