@@ -65,29 +65,29 @@ jobs:
           chmod +x gradlew
           ./gradlew clean test jvmTest --no-configuration-cache
 
-      - name: Debug Path
-        working-directory: News-Home-Reader
-        run: |
-          echo "Aktueller Ordner: $(pwd)"
-          ls -R composeApp/build/compose || echo "Build Ordner existiert noch nicht!"
-
       - name: Build and Publish
         working-directory: News-Home-Reader
         env:
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           GITHUB_ACTOR: sknull
+          # Zwinge ihn hier zu den kleinen Werten, damit der Daemon nicht mit 4GB Amok läuft
+          GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2g -XX:MaxMetaspaceSize=512m"
         shell: bash
         run: |
           chmod +x gradlew
           if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
-            # xvfb-run simuliert ein Display, was oft für das Packaging nötig ist
-            # Wir rufen erst den Task einzeln auf, um Fehler besser zu sehen
-            xvfb-run ./gradlew packageReleaseDeb --info
-            ./gradlew assembleDebug asciidoctorPdf publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache
+            # ALLES in einem xvfb-Aufruf zusammenfassen
+            xvfb-run ./gradlew packageReleaseDeb assembleDebug asciidoctorPdf publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache --info
           else
             ./gradlew packageReleaseMsi publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache --no-daemon
           fi
+
+      - name: Debug Path
+        working-directory: News-Home-Reader
+        run: |
+          echo "Aktueller Ordner: $(pwd)"
+          ls -R composeApp/build/compose || echo "Build Ordner existiert noch nicht!"
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
