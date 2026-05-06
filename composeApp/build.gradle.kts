@@ -464,16 +464,18 @@ publishing {
                 classifier = "docs"
             }
 
-            val buildDir = layout.buildDirectory.asFile.get()
+            val rootDir = project.rootDir
 
-            buildDir.walkTopDown().find { it.extension == "deb" }?.let { file ->
+            val debFile = rootDir.walkTopDown().find { it.extension == "deb" }
+            debFile?.let { file ->
                 artifact(file) {
                     extension = "deb"
                     classifier = "linux"
                 }
             }
 
-            buildDir.walkTopDown().find { it.extension == "msi" }?.let { file ->
+            val msiFile = rootDir.walkTopDown().find { it.extension == "msi" }
+            msiFile?.let { file ->
                 artifact(file) {
                     extension = "msi"
                     classifier = "windows"
