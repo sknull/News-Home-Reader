@@ -1,5 +1,6 @@
 import de.visualdigits.translation.util.TranslationUtil
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.compose.desktop.application.tasks.AbstractJPackageTask
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -438,25 +439,45 @@ publishing {
             artifactId = "news-home-reader"
             version = project.version.toString()
 
-            val apkFileProvider = layout.buildDirectory.file("outputs/apk/debug/NewsHomeReader-debug.apk")
-            artifact(apkFileProvider) {
+            // 1. Android APK (Immer über den Provider, um auf assembleDebug zu warten)
+            artifact(layout.buildDirectory.file("outputs/apk/debug/NewsHomeReader-debug.apk")) {
                 extension = "apk"
                 classifier = "android"
                 builtBy(tasks.matching { it.name == "assembleDebug" })
             }
 
+            // 2. Desktop ZIP (Über Provider)
             val zipTask = tasks.named<Zip>("zip")
             artifact(zipTask.flatMap { it.archiveFile }) {
                 extension = "zip"
                 classifier = "desktop"
-                builtBy(zipTask)
             }
 
+            // 3. PDF (Über Provider)
             val pdfTask = tasks.named<org.asciidoctor.gradle.jvm.pdf.AsciidoctorPdfTask>("asciidoctorPdf")
-            artifact(pdfTask.map { File(it.outputDir, "README.pdf") }) {
+            artifact(pdfTask.map { it.outputDir.resolve("README.pdf") }) {
                 extension = "pdf"
                 classifier = "docs"
-                builtBy(pdfTask)
+            }
+
+            // 4. DEB - Wir suchen die Datei im bekannten Pfad
+            artifact(project.provider {
+                layout.buildDirectory.dir("compose/binaries/main/deb").get().asFile
+                    .walk().find { it.extension == "deb" }
+            }) {
+                extension = "deb"
+                classifier = "linux"
+                builtBy(tasks.matching { it.name == "packageReleaseDeb" })
+            }
+
+            // 5. MSI - Wir suchen die Datei im bekannten Pfad
+            artifact(project.provider {
+                layout.buildDirectory.dir("compose/binaries/main/msi").get().asFile
+                    .walk().find { it.extension == "msi" }
+            }) {
+                extension = "msi"
+                classifier = "windows"
+                builtBy(tasks.matching { it.name == "packageReleaseMsi" })
             }
         }
     }

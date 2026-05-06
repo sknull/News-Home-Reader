@@ -69,7 +69,7 @@ jobs:
           chmod +x gradlew
           if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
             # Linux baut alles UND publiziert nach GitHub Packages
-            ./gradlew packageReleaseDeb assembleDebug asciidoctorPdf publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache
+            ./gradlew zip packageReleaseDeb assembleDebug asciidoctorPdf publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache
           else
             # Windows baut NUR die MSI
             ./gradlew packageReleaseMsi --no-configuration-cache
@@ -82,6 +82,7 @@ jobs:
           path: |
             News-Home-Reader/composeApp/build/compose/binaries/main/deb/*.deb
             News-Home-Reader/composeApp/build/compose/binaries/main/msi/*.msi
+            News-Home-Reader/composeApp/build/distributions/*.zip
             News-Home-Reader/composeApp/build/outputs/apk/debug/*.apk
             News-Home-Reader/composeApp/build/asciidoc/*.pdf
           if-no-files-found: warn
