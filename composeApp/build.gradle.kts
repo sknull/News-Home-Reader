@@ -505,3 +505,18 @@ publishing {
         }
     }
 }
+
+tasks.withType<PublishToMavenRepository> {
+    // Android
+    dependsOn(tasks.matching { it.name == "assembleDebug" })
+    // Desktop ZIP
+    dependsOn(tasks.named("zip"))
+    // PDF
+    dependsOn(tasks.named("asciidoctorPdf"))
+
+    // Native Installer (nur wenn sie auf dem OS existieren)
+    dependsOn(tasks.matching { it.name == "packageDeb" })
+    dependsOn(tasks.matching { it.name == "packageMsi" })
+    dependsOn(tasks.matching { it.name == "packageReleaseDeb" })
+    dependsOn(tasks.matching { it.name == "packageReleaseMsi" })
+}

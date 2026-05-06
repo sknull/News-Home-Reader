@@ -80,7 +80,7 @@ jobs:
             # Wir rufen jetzt explizit den DEB-Task auf
             xvfb-run ./gradlew packageDeb assembleDebug publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache
           else
-            ./gradlew packageMsi publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache --no-daemon
+            ./gradlew packageReleaseMsi publishBinaryReleasePublicationToGitHubPackagesRepository -x test -x jvmTest --no-configuration-cache --no-daemon
           fi
 
       - name: Debug Path
