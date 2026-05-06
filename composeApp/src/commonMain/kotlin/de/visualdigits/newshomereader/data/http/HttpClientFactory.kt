@@ -73,10 +73,10 @@ object HttpClientFactory {
                 requestTimeoutMillis = 20_000L
             }
             install(Logging) {
-                level = LogLevel.HEADERS
+                level = LogLevel.NONE
                 logger = object : Logger {
                     override fun log(message: String) {
-                        log.i(message)
+                        log.d(message)
                     }
                 }
             }
