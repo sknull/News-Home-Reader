@@ -75,12 +75,13 @@ jobs:
           GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2g -XX:MaxMetaspaceSize=512m"
         shell: bash
         run: |
-          chmod +x gradlew
           if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
-            # ALLES in einem xvfb-Aufruf zusammenfassen
-            xvfb-run ./gradlew packageReleaseDeb assembleDebug asciidoctorPdf publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache --info
+            sudo apt-get update && sudo apt-get install -y fakeroot dpkg xvfb
+            chmod +x gradlew
+            # Wir rufen jetzt explizit den DEB-Task auf
+            xvfb-run ./gradlew packageDeb assembleDebug publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache
           else
-            ./gradlew packageReleaseMsi publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache --no-daemon
+            ./gradlew packageMsi publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache --no-daemon
           fi
 
       - name: Debug Path
