@@ -16,10 +16,8 @@ import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_arrow_back_24px
 import de.visualdigits.compose.resources.icon_chat_24px
-import de.visualdigits.compose.resources.icon_link_24px
 import de.visualdigits.compose.resources.tooltip_back
 import de.visualdigits.compose.resources.tooltip_open_chat
-import de.visualdigits.compose.resources.tooltip_open_link
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
@@ -53,17 +51,6 @@ fun NewsArticleMenuBar(
             toolTip = stringResource(Res.string.tooltip_back),
         ) {
             onAction(NewsHomeReaderAction.OnNewsItemBackClicked())
-        }
-
-        IndicatorButton(
-            modifier = Modifier,
-            width = 50.dp,
-            height = 50.dp,
-            leadingIcon = painterResource(Res.drawable.icon_link_24px),
-            leadingIconTint = MaterialTheme.colorScheme.onSurface,
-            toolTip = stringResource(Res.string.tooltip_open_link),
-        ) {
-            uriHandler.openUri(newsItem.link)
         }
 
         newsArticle.discussionUrl?.also { link ->

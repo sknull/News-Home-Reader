@@ -111,7 +111,8 @@
   <string name="tooltip_mark_read_older_1">Marks all items as read which are older than one day</string>
   <string name="tooltip_mark_read_older_2">Marks all items as read which are older than two days</string>
   <string name="tooltip_open_chat">Open chat page in external browser</string>
-  <string name="tooltip_open_link">Open article page in external browser</string>
+  <string name="tooltip_open_link_article">Open article page in external browser</string>
+  <string name="tooltip_open_link_feed">Open feed page in external browser</string>
   <string name="tooltip_refresh_interval">Interval to refresh all feeds</string>
   <string name="tooltip_refresh_newsfeed">Refresh News Feed</string>
   <string name="tooltip_refresh_wifi_only">Refresh feeds only when a free of charge connection is available.</string>

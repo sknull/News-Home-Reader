@@ -1,6 +1,10 @@
 package de.visualdigits.newshomereader.presentation.page.newsfeeditems.article
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,11 +22,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -104,38 +113,59 @@ fun NewsArticleCard(
                         ) {
                             val feedName = newsItem.newsFeed?.feedName
                             state.lookupNewsFeedMap[feedName?.trim()?.lowercase()]?.url?.let { url ->
-                                Box(
+                                NewsItemImage(
                                     modifier = Modifier
                                         .width(24.dp)
-                                        .height(24.dp)
-                                ) {
-                                    NewsItemImage(
-                                        modifier = Modifier,
-                                        url = url.getFaviconUrl(48),
-                                        width = 24.dp,
-                                        height = 24.dp,
-                                        contentDescription = feedName ?: "",
-                                        maxImageSize = maxImageSize,
-                                        showLoadingIcon = false
-                                    )
-                                }
+                                        .height(24.dp),
+                                    url = url.getFaviconUrl(48),
+                                    width = 24.dp,
+                                    height = 24.dp,
+                                    contentDescription = feedName ?: "",
+                                    maxImageSize = maxImageSize,
+                                    showLoadingIcon = false
+                                )
                             }
 
                             newsItem.newsFeed?.feedName?.let { fn ->
+                                val interactionSource = remember { MutableInteractionSource() }
+                                val isHovered by interactionSource.collectIsHoveredAsState()
                                 Text(
-                                    modifier = Modifier,
+                                    modifier = Modifier
+                                        .pointerHoverIcon(PointerIcon.Hand)
+                                        .hoverable(interactionSource)
+                                        .clickable {
+                                            uriHandler.openUri(newsItem.newsFeed.link)
+                                        },
                                     text = fn,
-                                    style = if (maxWidth > 600.dp) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleSmall
+                                    color = if (isHovered) MaterialTheme.colorScheme.onSurface else displayTheme.textColor,
+                                    style = (if (maxWidth > 600.dp) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleSmall).copy(
+                                        textDecoration = if (isHovered) TextDecoration.Underline else TextDecoration.None
+                                    )
                                 )
                             }
                         }
                     }),
                     Pair("title", @Composable {
-                        Text(
-                            modifier = Modifier,
-                            text = newsItem.title,
-                            style = if (maxWidth > 600.dp) MaterialTheme.typography.headlineLarge else MaterialTheme.typography.headlineMedium
-                        )
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            val interactionSource = remember { MutableInteractionSource() }
+                            val isHovered by interactionSource.collectIsHoveredAsState()
+                            Text(
+                                modifier = Modifier
+                                    .pointerHoverIcon(PointerIcon.Hand)
+                                    .hoverable(interactionSource)
+                                    .clickable {
+                                        uriHandler.openUri(newsItem.link)
+                                    },
+                                text = newsItem.title,
+                                color = if (isHovered) MaterialTheme.colorScheme.onSurface else displayTheme.textColor,
+                                style = (if (maxWidth > 600.dp) MaterialTheme.typography.headlineLarge else MaterialTheme.typography.headlineMedium).copy(
+                                    textDecoration = if (isHovered) TextDecoration.Underline else TextDecoration.None
+                                )
+                            )
+                        }
                     }),
                     Pair("updated", @Composable {
                         Text(

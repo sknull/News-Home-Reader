@@ -20,9 +20,8 @@ image:https://shields.io[Desktop]
 endif::[]
 
 == Downloads
-- *Android:* `news-home-reader-android-debug.apk`
-- *Desktop:* `news-home-reader-desktop.zip`
-- *Docs:* `news-home-reader-docs.pdf`
+
+image:https://shields.io[link="https://github.com"]
 
 == About
 
