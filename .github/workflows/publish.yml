@@ -124,4 +124,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           GITHUB_ACTOR: sknull
-        run: ./gradlew publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache
+        run: |
+          chmod +x gradlew
+          ./gradlew publishBinaryReleasePublicationToGitHubPackagesRepository --no-configuration-cache
