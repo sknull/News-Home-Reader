@@ -466,8 +466,7 @@ publishing {
 
             val debProvider = project.provider {
                 layout.buildDirectory.asFile.get()
-                    .walk()
-                    .filter { it.parentFile.name == "deb" }
+                    .walkTopDown()
                     .find { it.extension == "deb" }
             }
             if (System.getProperty("os.name").contains("Linux", ignoreCase = true)) {
@@ -480,8 +479,7 @@ publishing {
 
             val msiProvider = project.provider {
                 layout.buildDirectory.asFile.get()
-                    .walk()
-                    .filter { it.parentFile.name == "msi" }
+                    .walkTopDown()
                     .find { it.extension == "msi" }
             }
             if (System.getProperty("os.name").contains("Windows", ignoreCase = true)) {
