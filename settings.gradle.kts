@@ -24,16 +24,16 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url = uri("https://maven.pkg.github.com/sknull/essence")
-            credentials {
-                username = "sknull"
-                password = githubToken
-            }
-            content {
-                includeGroup("de.visualdigits")
-            }
-        }
+//        maven {
+//            url = uri("https://maven.pkg.github.com/sknull/essence")
+//            credentials {
+//                username = "sknull"
+//                password = githubToken
+//            }
+//            content {
+//                includeGroup("de.visualdigits")
+//            }
+//        }
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven("https://maven.pkg.jetbrains.space")
         maven("https://central.sonatype.com/repository/maven-snapshots/")
@@ -46,9 +46,17 @@ plugins {
 }
 
 include(":composeApp")
+
 includeBuild("../Stephans-KMP-Components") {
     dependencySubstitution {
         substitute(module("de.visualdigits.kmp:stephans-kmp-components"))
+            .using(project(":library"))
+    }
+}
+
+includeBuild("../essence") {
+    dependencySubstitution {
+        substitute(module("de.visualdigits:essence"))
             .using(project(":library"))
     }
 }

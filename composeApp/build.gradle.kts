@@ -147,9 +147,7 @@ kotlin {
 
             implementation(libs.kermit)
 
-            implementation("de.visualdigits:essence:${libs.versions.version.essence.get()}") {
-                exclude(group = "com.fleeksoft.ksoup", module = "ksoup-jvm")
-            }
+            implementation(libs.essence)
             implementation(libs.ksoup.core)
 
             implementation(libs.html.converter)

@@ -13,7 +13,6 @@ on:
 
 jobs:
   build:
-    # macOS ist für KMP am stabilsten (auch wenn du noch kein iOS hast)
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
@@ -24,11 +23,18 @@ jobs:
         with:
           path: News-Home-Reader
 
-      - name: Checkout Library
+      - name: Checkout Stephans-KMP-Components
         uses: actions/checkout@v4
         with:
           repository: sknull/Stephans-KMP-Components
           path: Stephans-KMP-Components
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+      - name: Checkout essence
+        uses: actions/checkout@v4
+        with:
+          repository: sknull/essence
+          path: essence
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       - name: Set up JDK 21
