@@ -17,6 +17,8 @@ interface FeedRepository {
         file: File
     ): NewsFeed?
 
+    suspend fun getAllFeedItems(): Result<List<NewsItem>, DataError.Remote>
+
     suspend fun getFeedItemsByNewsFeedName(
         feedName: String
     ): Result<List<NewsItem>, DataError.Remote>

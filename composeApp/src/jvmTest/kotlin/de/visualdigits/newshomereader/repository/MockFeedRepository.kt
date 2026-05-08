@@ -34,6 +34,10 @@ class MockFeedRepository(
         return readFromBytes(feedName, file.readBytes())
     }
 
+    override suspend fun getAllFeedItems(): Result<List<NewsItem>, DataError.Remote> {
+        return Result.Success(listOf())
+    }
+
     override suspend fun getFeedItemsByNewsFeedName(feedName: String): Result<List<NewsItem>, DataError.Remote> {
         return Result.Success(listOf())
     }

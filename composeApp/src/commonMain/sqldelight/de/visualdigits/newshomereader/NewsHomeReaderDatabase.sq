@@ -116,7 +116,9 @@ SET title = :title,
     keywords = :keywords
 WHERE feedName = :feedName;
 
-
+deleteNewsFeedByFeedName:
+DELETE FROM NewsFeedEntity
+WHERE identifier == :identifier;
 
 --
 -- NEWS ITEM
@@ -202,6 +204,10 @@ WHERE feedName == :feedName AND identifier == :identifier;
 getReadNewsItems:
 SELECT * FROM NewsItemEntity
 WHERE isRead = 1;
+
+deleteNewsItemsByFeedName:
+DELETE FROM NewsItemEntity
+WHERE feedName == :feedName;
 
 cleanupOldReadNewsItems:
 DELETE FROM NewsItemEntity

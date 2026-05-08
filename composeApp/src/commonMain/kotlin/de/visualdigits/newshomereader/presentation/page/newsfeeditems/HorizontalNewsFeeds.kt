@@ -23,14 +23,20 @@ import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
 import de.visualdigits.common.presentation.components.StudioClock
 import de.visualdigits.common.presentation.components.button.IndicatorButton
+import de.visualdigits.common.presentation.components.container.FlexibleSearchBar
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.digital_dream_skew_fat
 import de.visualdigits.compose.resources.icon_add_notes_24px
+import de.visualdigits.compose.resources.icon_close_24px
+import de.visualdigits.compose.resources.icon_delete_24px
+import de.visualdigits.compose.resources.icon_search_24px
+import de.visualdigits.compose.resources.title_search
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
@@ -53,8 +59,10 @@ fun HorizontalNewsFeeds(
     scrollPosition: MutableMap<String, Pair<Int, Int?>>,
     displayTheme: DisplayThemeEnum,
     connectivityManager: ConnectivityManager,
+    screenWidth: Dp,
     maxWidth: Dp,
-    rowData: List<Pair<String, List<NewsItem>>>,
+    rowData: List<List<NewsItem>>,
+    rowDataFiltered: List<NewsItem>,
     maxImageSize: Int?,
     settings: Settings?,
     uriHandler: UriHandler,
@@ -149,6 +157,18 @@ fun HorizontalNewsFeeds(
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
         ) {
+            NewsItemSearchBar(
+                state,
+                screenWidth,
+                onAction,
+                scrollPosition,
+                onCommonAction,
+                rowDataFiltered,
+                maxImageSize,
+                settings,
+                uriHandler
+            )
+
             NewsListMenuBar(
                 connectivityManager = connectivityManager,
                 state = state,
@@ -168,7 +188,7 @@ fun HorizontalNewsFeeds(
                 scrollPosition = scrollPosition,
                 onCommonAction = onCommonAction
             ) {
-                rowData.map { (_, rowItems) ->
+                rowData.map { rowItems ->
                     Pair(rowItems.joinToString("_") { item -> item.id.toString() }, @Composable {
                         Row(
                             modifier = Modifier.fillMaxWidth(),

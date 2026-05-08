@@ -62,6 +62,19 @@ class DefaultFeedRepository(
 
     private val log = Logger.withTag("DefaultFeedRepository")
 
+    override suspend fun getAllFeedItems(): Result<List<NewsItem>, DataError.Remote> = withContext(Dispatchers.IO) {
+        try {
+            val data = dao.getAllNewsItems()
+                .executeAsList()
+                .map { ni ->
+                    ni.toNewsItem()
+                }
+            Result.Success(data)
+        } catch (e: Exception) {
+            Result.Error(DataError.Remote.SERIALIZATION, e)
+        }
+    }
+
     override suspend fun getFeedItemsByNewsFeedName(feedName: String): Result<List<NewsItem>, DataError.Remote> = withContext(Dispatchers.IO) {
         try {
             val data = dao.getAllNewsItemsByFeedName(feedName.trim().lowercase())
@@ -388,10 +401,7 @@ class DefaultFeedRepository(
                                 item
                             }
                         } catch (e: Exception) {
-                            log.e(
-                                "Could not fetch article for newsItem [${newsItem.id}] ${newsItem.newsFeed?.feedName}/${newsItem.identifier}",
-                                e
-                            )
+                            log.e("Could not fetch article for newsItem [${newsItem.id}] ${newsItem.newsFeed?.feedName}/${newsItem.identifier}",e)
                             newsItem
                         }
                     }

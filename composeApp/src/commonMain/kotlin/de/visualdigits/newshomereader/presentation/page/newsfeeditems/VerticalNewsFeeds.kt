@@ -18,9 +18,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
+import de.visualdigits.common.presentation.components.container.FlexibleSearchBar
 import de.visualdigits.common.presentation.model.CommonAction
+import de.visualdigits.compose.resources.Res
+import de.visualdigits.compose.resources.icon_close_24px
+import de.visualdigits.compose.resources.icon_delete_24px
+import de.visualdigits.compose.resources.icon_search_24px
+import de.visualdigits.compose.resources.title_search
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
@@ -29,6 +36,7 @@ import de.visualdigits.newshomereader.presentation.page.navigation.NewsFeedGroup
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.NewsItemCard
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
+import org.jetbrains.compose.resources.painterResource
 
 /**
  * Renders the news item card for a given newsfeed
@@ -39,8 +47,10 @@ fun VerticalNewsFeeds(
     scrollPosition: MutableMap<String, Pair<Int, Int?>>,
     state: NewsHomeReaderState,
     connectivityManager: ConnectivityManager,
+    screenWidth: Dp,
     maxWidth: Dp,
-    rowData: List<Pair<String, List<NewsItem>>>,
+    rowData: List<List<NewsItem>>,
+    rowDataFiltered: List<NewsItem>,
     maxImageSize: Int?,
     settings: Settings?,
     uriHandler: UriHandler,
@@ -93,6 +103,19 @@ fun VerticalNewsFeeds(
         } else {
             listOf()
         } + listOf(
+            Pair("newslist_searchbar", @Composable {
+                NewsItemSearchBar(
+                    state,
+                    screenWidth,
+                    onAction,
+                    scrollPosition,
+                    onCommonAction,
+                    rowDataFiltered,
+                    maxImageSize,
+                    settings,
+                    uriHandler
+                )
+            }),
             Pair("newslist_menubar", @Composable {
                 NewsListMenuBar(
                     connectivityManager = connectivityManager,
@@ -101,18 +124,18 @@ fun VerticalNewsFeeds(
                     onAction = onAction
                 )
             })
-        ) + rowData.map { (_, rowItems) ->
+        ) + rowData.map { rowItems ->
             Pair(rowItems.joinToString("_") { item -> item.id.toString() }, @Composable {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                 ) {
-                    rowItems.forEach { item ->
+                    rowItems.forEach { newsItem ->
                         NewsItemCard(
                             modifier = Modifier.weight(1f),
                             state = state,
                             maxImageSize = maxImageSize,
-                            newsItem = item,
+                            newsItem = newsItem,
                             settings = settings,
                             uriHandler = uriHandler,
                             onAction = onAction
@@ -126,4 +149,5 @@ fun VerticalNewsFeeds(
         }
     }
 }
+
 

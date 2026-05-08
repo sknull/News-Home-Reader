@@ -31,6 +31,11 @@ data class NewsHomeReaderState(
     val visibleNewsItems: List<NewsItem> = listOf(),
     val allowClearVisibleNewsItems: Boolean = false,
 
+    val allNewsItems: List<NewsItem> = listOf(),
+    val filteredNewsItems: List<NewsItem> = listOf(),
+    val newsItemSearchText: String = "",
+    val isNewsItemSearchActive: Boolean = false,
+
     val currentNewsItem: NewsItem? = null,
     val currentNewsArticle: FullArticle? = null,
 
@@ -49,8 +54,7 @@ data class NewsHomeReaderState(
     val newsFeedCatalog: NewsFeedCatalog? = null,
     val isViewingCatalog: Boolean = false,
 
-    val searchText: String = "",
-    val isSearchActive: Boolean = false,
+    val catalogSearchText: String = "",
     val filteredCatalog: NewsFeedCatalog? = null,
 
     val isLoading: Boolean = false,

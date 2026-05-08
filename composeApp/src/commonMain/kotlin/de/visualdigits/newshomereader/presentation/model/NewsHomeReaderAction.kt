@@ -210,6 +210,16 @@ sealed interface NewsHomeReaderAction {
     @Immutable
     class OnNewsItemBackClicked : NewsHomeReaderAction
 
+    @Immutable
+    data class OnNewsItemSearchExpandStateChanged(
+        val expanded: Boolean
+    ): NewsHomeReaderAction
+
+    @Immutable
+    data class OnNewsItemSearchTextChanged(
+        val text: String
+    ): NewsHomeReaderAction
+
 
     //
     // Catalog
@@ -220,7 +230,7 @@ sealed interface NewsHomeReaderAction {
     ): NewsHomeReaderAction
 
     @Immutable
-    data class OnSearchTextChanged(
+    data class OnCatalogSearchTextChanged(
         val text: String
     ): NewsHomeReaderAction
 

@@ -55,6 +55,7 @@ import java.time.format.DateTimeFormatter
 fun NewsItemCard(
     modifier: Modifier = Modifier,
     state: NewsHomeReaderState,
+    simple: Boolean = false,
     maxImageSize: Int?,
     newsItem: NewsItem,
     settings: Settings?,
@@ -63,7 +64,7 @@ fun NewsItemCard(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val displayTheme = settings?.get<DisplayThemeEnum>(SK.displayTheme) ?: DisplayThemeEnum.LIGHT
-    val feedName = newsItem.newsFeed?.feedName
+    val feedName = newsItem.newsFeed?.feedName?:newsItem.feedName
 
     Box(
         modifier = modifier
@@ -97,16 +98,18 @@ fun NewsItemCard(
                 }
         ) {
             // teaser image
-            var image = newsItem.image
-            if (image.isEmpty()) {
-                image = newsItem.newsArticle?.articleImage?:""
-            }
-            if (image.isNotEmpty()) {
-                Image(
-                    url = image,
-                    contentDescription = newsItem.imageCaption,
-                    maxImageSize = maxImageSize
-                )
+            if (!simple) {
+                var image = newsItem.image
+                if (image.isEmpty()) {
+                    image = newsItem.newsArticle?.articleImage?:""
+                }
+                if (image.isNotEmpty()) {
+                    Image(
+                        url = image,
+                        contentDescription = newsItem.imageCaption,
+                        maxImageSize = maxImageSize
+                    )
+                }
             }
 
             // inner column to provide padding for all text content
@@ -121,7 +124,7 @@ fun NewsItemCard(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                 ) {
-                    if (state.currentNewsFeedGroup != null) {
+                    if (state.currentNewsFeedGroup != null || simple) {
                         state.lookupNewsFeedMap[feedName?.trim()?.lowercase()]?.url?.let { url ->
                             Box(
                                 modifier = Modifier
@@ -147,31 +150,33 @@ fun NewsItemCard(
                     )
 
                     // indicators
-                    if (newsItem.newsArticle?.videoItems?.isNotEmpty() == true) {
-                        Icon(
-                            modifier = Modifier.size(18.dp),
-                            painter = painterResource(Res.drawable.icon_videocam_24px),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
+                    if (!simple) {
+                        if (newsItem.newsArticle?.videoItems?.isNotEmpty() == true) {
+                            Icon(
+                                modifier = Modifier.size(18.dp),
+                                painter = painterResource(Res.drawable.icon_videocam_24px),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
 
-                    if (newsItem.newsArticle?.audioItems?.isNotEmpty() == true) {
-                        Icon(
-                            modifier = Modifier.size(18.dp),
-                            painter = painterResource(Res.drawable.icon_volume_up_24px),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
+                        if (newsItem.newsArticle?.audioItems?.isNotEmpty() == true) {
+                            Icon(
+                                modifier = Modifier.size(18.dp),
+                                painter = painterResource(Res.drawable.icon_volume_up_24px),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
 
-                    if (newsItem.newsArticle?.isFree == false) {
-                        Icon(
-                            modifier = Modifier.size(18.dp),
-                            painter = painterResource(Res.drawable.icon_paid_24px),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface
-                        )
+                        if (newsItem.newsArticle?.isFree == false) {
+                            Icon(
+                                modifier = Modifier.size(18.dp),
+                                painter = painterResource(Res.drawable.icon_paid_24px),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
                     }
                 }
 

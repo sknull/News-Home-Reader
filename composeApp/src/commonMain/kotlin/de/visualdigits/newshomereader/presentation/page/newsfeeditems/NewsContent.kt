@@ -21,6 +21,7 @@ import de.visualdigits.newshomereader.presentation.style.gap
 fun NewsContent(
     state: NewsHomeReaderState,
     viewModel: NewsHomeReaderViewModel,
+    screenWidth: Dp,
     mw: Dp,
     maxImageSize: Int,
     uriHandler: UriHandler,
@@ -53,6 +54,7 @@ fun NewsContent(
                 state = state,
                 scrollPosition = viewModel.scrollPosition,
                 displayTheme = displayTheme,
+                screenWidth = screenWidth,
                 maxWidth = mw,
                 maxImageSize = maxImageSize,
                 settings = state.settings,

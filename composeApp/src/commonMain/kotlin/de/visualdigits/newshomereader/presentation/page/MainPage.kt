@@ -145,6 +145,7 @@ fun MainPage(
                         NewsContent(
                             state = state,
                             viewModel = viewModel,
+                            screenWidth = screenWidth,
                             mw = screenWidth,
                             maxImageSize = maxImageSize,
                             uriHandler = uriHandler,

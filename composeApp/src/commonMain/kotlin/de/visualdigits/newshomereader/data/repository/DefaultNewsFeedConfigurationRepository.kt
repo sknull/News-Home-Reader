@@ -75,7 +75,18 @@ class DefaultNewsFeedConfigurationRepository(
 
     override suspend fun deleteNewsFeedGroup(newsFeedGroup: NewsFeedGroup): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         try {
-            dao.deleteNewsFeedGroupEntity(newsFeedGroup.id)
+            dao.transaction {
+                log.i("Deleting newsFeedGroup: ${newsFeedGroup.name}")
+                dao.deleteNewsFeedGroupEntity(newsFeedGroup.id)
+                dao.deleteNewsFeedByFeedName(newsFeedGroup.name)
+                dao.deleteNewsItemsByFeedName(newsFeedGroup.name.trim().lowercase())
+                newsFeedGroup.subGroups.forEach { subGroup ->
+                    dao.deleteNewsFeedGroupEntity(subGroup.id)
+                    log.i("Deleting newsFeedGroup: ${subGroup.name}")
+                    dao.deleteNewsFeedByFeedName(subGroup.name)
+                    dao.deleteNewsItemsByFeedName(subGroup.name.trim().lowercase())
+                }
+            }
             Result.Success(dao.getAllNewsFeedGroups())
         } catch (e: Exception) {
             log.e("Error while deleting group", e)
@@ -85,11 +96,18 @@ class DefaultNewsFeedConfigurationRepository(
 
     override suspend fun deleteNewsFeedItem(newsFeedItem: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         try {
+            log.i("Deleting newsFeedItem: ${newsFeedItem.name}")
             val newsFeedGroupEntity = getNewsFeedGroupEntity(newsFeedItem)
             if (newsFeedGroupEntity != null) {
                 val newsFeeds = newsFeedGroupEntity.newsFeeds.toMutableList()
                 newsFeeds.removeIf { nf -> nf.name == newsFeedItem.name }
-                dao.upsertNewsFeedGroup(newsFeedGroupEntity.copy(newsFeeds = newsFeeds))
+                dao.transaction {
+                    dao.upsertNewsFeedGroup(newsFeedGroupEntity.copy(newsFeeds = newsFeeds))
+                    newsFeedItem.name?.also { name ->
+                        log.i("Deleting news items for newsfeed: ${newsFeedItem.name}")
+                        dao.deleteNewsItemsByFeedName(name.trim().lowercase())
+                    }
+                }
             }
             Result.Success(dao.getAllNewsFeedGroups())
         } catch (e: Exception) {

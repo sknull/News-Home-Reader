@@ -485,6 +485,19 @@ class NewsHomeReaderViewModel(
                 }
             }
 
+            is NewsHomeReaderAction.OnNewsItemSearchExpandStateChanged -> {
+                loadAllNewsItems(action.expanded)
+            }
+
+            is NewsHomeReaderAction.OnNewsItemSearchTextChanged -> {
+                _state.update {
+                    it.copy(
+                        newsItemSearchText = action.text
+                    )
+                }
+                filterNewsItems(action.text)
+            }
+
             //
             //
             //
@@ -545,10 +558,10 @@ class NewsHomeReaderViewModel(
                 }
             }
 
-            is NewsHomeReaderAction.OnSearchTextChanged -> {
+            is NewsHomeReaderAction.OnCatalogSearchTextChanged -> {
                 _state.update {
                     it.copy(
-                        searchText = action.text
+                        catalogSearchText = action.text
                     )
                 }
                 filterCatalog(action.text)
@@ -1283,6 +1296,51 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
             }
     }
 
+
+    private fun loadAllNewsItems(expanded: Boolean) = viewModelScope.launch {
+        _state.update {
+            it.copy(
+                isLoading = true,
+            )
+        }
+        if (expanded) {
+            feedRepository.getAllFeedItems()
+                .onSuccess { newsItems ->
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            isNewsItemSearchActive = true,
+                            allNewsItems = newsItems,
+                            currentProgress = 0.0f,
+                            progressStage = ProgressStage.NONE,
+                        )
+                    }
+                }
+                .onError { remote, throwable ->
+                    log.e("Could not load all news items", throwable)
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            isNewsItemSearchActive = false,
+                            allNewsItems = listOf(),
+                            currentProgress = 0.0f,
+                            progressStage = ProgressStage.NONE,
+                        )
+                    }
+                }
+        } else {
+            _state.update {
+                it.copy(
+                    isLoading = false,
+                    isNewsItemSearchActive = false,
+                    allNewsItems = listOf(),
+                    currentProgress = 0.0f,
+                    progressStage = ProgressStage.NONE,
+                )
+            }
+        }
+    }
+
     private fun loadData() = viewModelScope.launch {
         _state.update {
             it.copy(
@@ -1562,6 +1620,28 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
         )
         _state.update {
             it.copy(filteredCatalog = filtered)
+        }
+    }
+
+    private fun filterNewsItems(query: String) {
+        val originalNewsItems = state.value.allNewsItems
+        if (query.isBlank()) {
+            _state.update { it.copy(filteredNewsItems = originalNewsItems) }
+            return
+        }
+
+        val filtered = originalNewsItems.mapNotNull { newsItem ->
+            if (newsItem.title.contains(query, ignoreCase = true)
+                || newsItem.summary.contains(query, ignoreCase = true)
+                || newsItem.newsArticle?.html?.contains(query, ignoreCase = true) == true
+            ) {
+                newsItem
+            } else {
+                null
+            }
+        }
+        _state.update {
+            it.copy(filteredNewsItems = filtered)
         }
     }
 
