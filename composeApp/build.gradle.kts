@@ -1,6 +1,5 @@
 import de.visualdigits.translation.util.TranslationUtil
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.compose.desktop.application.tasks.AbstractJPackageTask
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -16,8 +15,14 @@ plugins {
     `maven-publish`
 }
 
-version = "1.0.0-SNAPSHOT"
-val numericVersion = version.toString().split("-").first() // for desktop packaging
+val version = "1.0.0-SNAPSHOT"
+
+val buildNumber = System.getenv("GITHUB_RUN_NUMBER") ?: "9999"
+val installerVersion = if (buildNumber == "9999") {
+    version
+} else {
+    "$version.$buildNumber"
+}
 
 buildscript {
     dependencies {
@@ -79,7 +84,7 @@ data class AppVersion(
 
 val generateVersionClass = tasks.register<GenerateVersionTask>("generateVersionClass") {
     notCompatibleWithConfigurationCache("No caching supported.")
-    appVersion.set(project.version.toString())
+    appVersion.set(installerVersion)
     outputDirectory.set(layout.buildDirectory.dir("generated/version"))
 }
 
@@ -157,7 +162,6 @@ kotlin {
             implementation(libs.sqldelight.coroutines)
             implementation(libs.sqlite.bundled)
 
-            implementation(libs.compose.colorpicker)
             implementation(libs.stephans.kmp.components)
         }
 
@@ -375,7 +379,7 @@ compose.desktop {
 
         nativeDistributions {
             packageName = "de.visualdigits.newshomereader"
-            packageVersion = numericVersion
+            packageVersion = "1.0.$buildNumber"
             includeAllModules = false
             modules(
                 "java.instrument",

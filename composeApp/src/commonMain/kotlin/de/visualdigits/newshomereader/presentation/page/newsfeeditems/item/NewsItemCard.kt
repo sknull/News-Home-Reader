@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.em
 import be.digitalia.compose.htmlconverter.HtmlStyle
 import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
 import de.visualdigits.compose.resources.Res
+import de.visualdigits.compose.resources.icon_paid_24px
 import de.visualdigits.compose.resources.icon_videocam_24px
 import de.visualdigits.compose.resources.icon_volume_up_24px
 import de.visualdigits.newshomereader.domain.model.settings.SK
@@ -101,7 +102,7 @@ fun NewsItemCard(
                 image = newsItem.newsArticle?.articleImage?:""
             }
             if (image.isNotEmpty()) {
-                NewsItemImage(
+                Image(
                     url = image,
                     contentDescription = newsItem.imageCaption,
                     maxImageSize = maxImageSize
@@ -127,7 +128,7 @@ fun NewsItemCard(
                                     .width(30.dp)
                                     .height(30.dp)
                             ) {
-                                NewsItemImage(
+                                Image(
                                     modifier = Modifier,
                                     url = url.getFaviconUrl(48),
                                     width = 30.dp,
@@ -145,6 +146,7 @@ fun NewsItemCard(
                         style = MaterialTheme.typography.bodySmall
                     )
 
+                    // indicators
                     if (newsItem.newsArticle?.videoItems?.isNotEmpty() == true) {
                         Icon(
                             modifier = Modifier.size(18.dp),
@@ -158,6 +160,15 @@ fun NewsItemCard(
                         Icon(
                             modifier = Modifier.size(18.dp),
                             painter = painterResource(Res.drawable.icon_volume_up_24px),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+
+                    if (newsItem.newsArticle?.isFree == false) {
+                        Icon(
+                            modifier = Modifier.size(18.dp),
+                            painter = painterResource(Res.drawable.icon_paid_24px),
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onSurface
                         )

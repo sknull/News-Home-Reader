@@ -29,7 +29,7 @@ import de.visualdigits.compose.resources.icon_volume_up_24px
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem
 import de.visualdigits.newshomereader.domain.model.unified.MediaType
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
-import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.NewsItemImage
+import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.Image
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
 import org.jetbrains.compose.resources.painterResource
@@ -85,7 +85,7 @@ fun MediaItemButtons(
 
                                         val url = thumbnail.url.firstOrNull()
                                         if (url != null) {
-                                            NewsItemImage(
+                                            Image(
                                                 url = url,
                                                 height = 90.dp,
                                                 contentDescription = thumbnail.description ?: "",

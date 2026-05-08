@@ -55,7 +55,7 @@ class DefaultWebDavSyncService(
                         setBody(newState)
                         contentType(ContentType.Application.Json)
                     }
-                    log.i("Sync erfolgreich: ${mergedIds.size} IDs auf NAS.")
+                    log.i("Synced read item: ${mergedIds.size}")
                 }
 
                 Result.Success(mergedIds)
@@ -65,7 +65,7 @@ class DefaultWebDavSyncService(
                 Result.Error(DataError.Remote.UNKNOWN)
             }
         } catch (e: Exception) {
-            log.e("Sync fehlgeschlagen", e)
+            log.e("Something went wrong while syncing read items", e)
             Result.Error(DataError.Remote.SERIALIZATION, e)
         }
     }

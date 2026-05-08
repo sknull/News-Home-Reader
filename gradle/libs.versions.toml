@@ -10,7 +10,6 @@ version-androidx-activityCompose = "1.13.0"
 version-androidx-lifecycle = "2.10.0"
 version-androidx-work = "2.11.2"
 version-coil3 = "3.4.0"
-version-colorpicker = "1.1.3"
 version-charlex-pdf = "1.0.0-rc01"
 version-essence = "1.2.0-SNAPSHOT"
 version-flatlaf = "3.7.1"
@@ -107,7 +106,6 @@ sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", 
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "version-sqlite" }
 
 stephans-kmp-components = { module = "de.visualdigits.kmp:stephans-kmp-components", version.ref = "version-stephans-kmp-components" }
-compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "version-colorpicker" }
 
 essence = { module = "de.visualdigits:essence", version.ref = "version-essence" }
 

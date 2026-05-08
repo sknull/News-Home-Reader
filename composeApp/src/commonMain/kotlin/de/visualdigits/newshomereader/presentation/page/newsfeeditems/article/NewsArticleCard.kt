@@ -42,6 +42,7 @@ import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.compose.resources.Res
+import de.visualdigits.compose.resources.icon_paid_24px
 import de.visualdigits.compose.resources.icon_timelapse_24px
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.settings.Settings
@@ -50,7 +51,7 @@ import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.util.getFaviconUrl
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
-import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.NewsItemImage
+import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.Image
 import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
@@ -113,7 +114,7 @@ fun NewsArticleCard(
                         ) {
                             val feedName = newsItem.newsFeed?.feedName
                             state.lookupNewsFeedMap[feedName?.trim()?.lowercase()]?.url?.let { url ->
-                                NewsItemImage(
+                                Image(
                                     modifier = Modifier
                                         .width(24.dp)
                                         .height(24.dp),
@@ -142,18 +143,30 @@ fun NewsArticleCard(
                                         textDecoration = if (isHovered) TextDecoration.Underline else TextDecoration.None
                                     )
                                 )
+
+                                if (newsItem.newsArticle?.isFree == false) {
+                                    Icon(
+                                        modifier = Modifier.size(24.dp)
+                                            .width(24.dp)
+                                            .height(24.dp),
+                                        painter = painterResource(Res.drawable.icon_paid_24px),
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
                             }
                         }
                     }),
                     Pair("title", @Composable {
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.Top
                         ) {
                             val interactionSource = remember { MutableInteractionSource() }
                             val isHovered by interactionSource.collectIsHoveredAsState()
                             Text(
                                 modifier = Modifier
+                                    .weight(1f)
                                     .pointerHoverIcon(PointerIcon.Hand)
                                     .hoverable(interactionSource)
                                     .clickable {

@@ -32,7 +32,7 @@ import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.util.getFaviconUrl
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
-import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.NewsItemImage
+import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.Image
 import de.visualdigits.newshomereader.presentation.style.gap
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -123,7 +123,7 @@ fun NewsListMenuBar(
                             .width(30.dp)
                             .height(30.dp)
                     ) {
-                        NewsItemImage(
+                        Image(
                             modifier = Modifier,
                             url = url.getFaviconUrl(48),
                             width = 30.dp,

@@ -152,40 +152,6 @@ class Settings(
                 valid = { value -> value != null }
             ),
 
-            /** Hidden field for maxImageSize. */
-            Field(
-                descriptor = EnumFieldDescriptor(
-                    fieldClass = Int::class,
-                    visible = false,
-                    key = SK.maxImageSize,
-                    label =  UiText.StringResourceId(Res.string.ok),
-                    keyFactory = IntKeyFactory
-                ),
-                valid = { value -> value != null }
-            ),
-
-            /** Hidden field for maxImageSize. */
-            Field(
-                descriptor = IntFieldDescriptor(
-                    visible = false,
-                    key = SK.maxImageSize,
-                    label =  UiText.StringResourceId(Res.string.ok),
-                ),
-                valid = { value -> value != null }
-            ),
-
-            /** Hidden field for feeds changed (dirty flag). */
-            Field(
-                descriptor = EnumFieldDescriptor(
-                    visible = false,
-                    fieldClass = BooleanEnum::class,
-                    key = SK.feedsChanged,
-                    label =  UiText.StringResourceId(Res.string.ok),
-                    keyFactory = BooleanEnum
-                ),
-                valid = { value -> value != null }
-            ),
-
             /** The webDav host URL. */
             Field(
                 descriptor = StringFieldDescriptor(
@@ -233,11 +199,45 @@ class Settings(
                     (value as? String)?.isNotBlank() == true
                 }
             ),
+
+
+            /** Hidden field for maxImageSize. */
+            Field(
+                descriptor = EnumFieldDescriptor(
+                    fieldClass = Int::class,
+                    visible = false,
+                    key = SK.maxImageSize,
+                    label =  UiText.StringResourceId(Res.string.ok),
+                    keyFactory = IntKeyFactory
+                ),
+                valid = { value -> value != null }
+            ),
+
+            /** Hidden field for maxImageSize. */
+            Field(
+                descriptor = IntFieldDescriptor(
+                    visible = false,
+                    key = SK.maxImageSize,
+                    label =  UiText.StringResourceId(Res.string.ok),
+                ),
+                valid = { value -> value != null }
+            ),
+
+            /** Hidden field for feeds changed (dirty flag). */
+            Field(
+                descriptor = EnumFieldDescriptor(
+                    visible = false,
+                    fieldClass = BooleanEnum::class,
+                    key = SK.feedsChanged,
+                    label =  UiText.StringResourceId(Res.string.ok),
+                    keyFactory = BooleanEnum
+                ),
+                valid = { value -> value != null }
+            ),
         )
     }
 
     override fun createInstance(newFields: LinkedHashMap<SK, Field<*,*,SK>>): Settings {
         return Settings(newFields)
     }
-
 }

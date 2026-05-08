@@ -55,6 +55,7 @@ class NewsFeedConfiguration(
                     (value as? String)?.isNotBlank() == true
                 }
             ),
+
             Field(
                 descriptor = ReferenceListFieldDescriptor(
                     fieldClass = String::class,
@@ -71,6 +72,7 @@ class NewsFeedConfiguration(
                     (value as? String)?.isNotBlank() == true
                 }
             ),
+
             Field(
                 descriptor = ReferenceListFieldDescriptor(
                     fieldClass = String::class,
@@ -90,6 +92,7 @@ class NewsFeedConfiguration(
                     (value as? String)?.isNotBlank() == true
                 }
             ),
+
             Field(
                 descriptor = StringFieldDescriptor(
                     key = NC.url,
@@ -100,6 +103,7 @@ class NewsFeedConfiguration(
                     (value as? String)?.isNotBlank() == true
                 }
             ),
+
             Field(
                 descriptor = StringFieldDescriptor(
                     key = NC.imageUrl,
@@ -110,6 +114,7 @@ class NewsFeedConfiguration(
                     (value as? String)?.isNotBlank() == true
                 }
             ),
+
             Field(
                 descriptor = ListFieldDescriptor(
                     fieldClass = String::class,

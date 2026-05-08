@@ -357,7 +357,7 @@ class DefaultFeedRepository(
 
     private suspend fun loadArticles(
         loadArticles: Boolean,
-        persistedItems: List<NewsItem>,
+        newsItems: List<NewsItem>,
         totalSteps: Int,
         progress: (Float, ProgressStage) -> Unit
     ): Pair<List<NewsItem>, Boolean> {
@@ -366,7 +366,7 @@ class DefaultFeedRepository(
         val newsItemsWithArticles =  if (loadArticles) {
             coroutineScope {
                 val semaphore = Semaphore(5)
-                persistedItems.map { newsItem ->
+                newsItems.map { newsItem ->
                     async {
                         try {
                             semaphore.withPermit {
@@ -398,7 +398,7 @@ class DefaultFeedRepository(
                 }.awaitAll()
             }
         } else {
-            persistedItems
+            newsItems
         }
 
         return Pair(newsItemsWithArticles, changed)

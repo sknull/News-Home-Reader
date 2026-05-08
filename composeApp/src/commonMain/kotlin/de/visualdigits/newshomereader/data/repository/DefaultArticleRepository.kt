@@ -9,7 +9,7 @@ import de.visualdigits.newshomereader.data.database.mapper.toFullArticle
 import de.visualdigits.newshomereader.data.database.mapper.toFullArticleEntity
 import de.visualdigits.newshomereader.data.database.upsertFullArticle
 import de.visualdigits.newshomereader.data.mapper.toAppJson
-import de.visualdigits.newshomereader.data.model.applicationjson.AppJsonDto
+import de.visualdigits.newshomereader.data.model.applicationjson.AppJsonWrapper
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
@@ -52,7 +52,7 @@ class DefaultArticleRepository(
             val changedArticle = if (fullArticle == null || newsItem.isChanged) {
                 val response = httpClient.get(urlString = newsItem.link)
                 val rawHtml = response.bodyAsText()
-                fullArticle = readFromString(newsItem, rawHtml)
+                fullArticle = readFromString(newsItem, rawHtml, newsItem.link)
                 dao.upsertFullArticle(fullArticle.toFullArticleEntity())
             } else {
                 false
@@ -65,7 +65,8 @@ class DefaultArticleRepository(
 
     override suspend fun readFromString(
         newsItem: NewsItem,
-        rawHtml: String?
+        rawHtml: String?,
+        url: String?
     ): FullArticle = withContext(Dispatchers.IO) {
         // extract main text from raw html using essence's heuristics
         val htmlElement = rawHtml?.let { rh -> Essence.extract(rh).html }
@@ -77,23 +78,24 @@ class DefaultArticleRepository(
         val applicationJson = try {
             rawHtml?.let { rh -> Ksoup.parse(rh) }
                 ?.select("script[type=application/ld+json]")
-                ?.map { script ->
+                ?.flatMap { script ->
                     val json = script.data()
-                    val appJsonDto = AppJsonDto.decodeFromString(json)
-                    appJsonDto.clazz = script.attr("class")
-                    appJsonDto
-                }
+                    AppJsonWrapper.decodeFromString(json).appJsons.map { appJsonDto ->
+                        appJsonDto.clazz = script.attr("class")
+                        appJsonDto
+                    }
+                }?:listOf()
         } catch (e: Exception) {
-            log.e("Could not read article", e)
-            null
+            log.e("Could not parse app json for article url: $url", e)
+            listOf()
         }
 
         val newsArticle = applicationJson
-            ?.find { script -> script.type?.lowercase() == "newsarticle" }
+            .find { script -> script.type?.lowercase()?.contains("newsarticle") == true }
             ?:applicationJson
-                ?.filter { script -> script.graphs.isNotEmpty() }
-                ?.map { script -> script.graphs.find { g -> g.type?.lowercase() == "newsarticle" } }
-                ?.firstOrNull()
+                .filter { script -> script.graphs.isNotEmpty() }
+                .map { script -> script.graphs.find { g -> g.type?.lowercase()?.contains("newsarticle") == true } }
+                .firstOrNull()
 
         val isFree = newsArticle?.isAccessibleForFree?:true
 
@@ -101,17 +103,14 @@ class DefaultArticleRepository(
         val commentCount = newsArticle?.commentCount?.toLong()?:0L
 
         val imageItems = applicationJson
-            ?.filter { script -> script.type?.lowercase() == "imageobject" }
-            ?.map { ao -> ao.toMediaItem() }
-            ?:listOf()
+            .filter { script -> script.type?.lowercase() == "imageobject" }
+            .map { ao -> ao.toMediaItem() }
         val audioItems = applicationJson
-            ?.filter { script -> script.type?.lowercase() == "audioobject" }
-            ?.map { ao -> ao.toMediaItem() }
-            ?:listOf()
+            .filter { script -> script.type?.lowercase() == "audioobject" }
+            .map { ao -> ao.toMediaItem() }
         val videoItems = applicationJson
-            ?.filter { script -> script.type?.lowercase() == "videoobject" }
-            ?.map { vo -> vo.toMediaItem() }
-            ?:listOf()
+            .filter { script -> script.type?.lowercase() == "videoobject" }
+            .map { vo -> vo.toMediaItem() }
 
         val imageDto = newsArticle
             ?.image
@@ -130,7 +129,7 @@ class DefaultArticleRepository(
         FullArticle(
             id = 0L,
             itemId = newsItem.id,
-            applicationJson = applicationJson?.map { a -> a.toAppJson() }?:listOf(),
+            applicationJson = applicationJson.map { a -> a.toAppJson() }?:listOf(),
             html = html,
             imageItems = imageItems,
             videoItems = videoItems,

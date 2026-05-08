@@ -23,6 +23,7 @@ interface ArticleRepository {
 
     suspend fun readFromString(
         newsItem: NewsItem,
-        rawHtml: String?
+        rawHtml: String?,
+        url: String? = null
     ): FullArticle
 }

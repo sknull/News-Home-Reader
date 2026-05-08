@@ -27,7 +27,7 @@ import de.visualdigits.compose.resources.icon_hourglass_top_24px
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun NewsItemImage(
+fun Image(
     modifier: Modifier = Modifier,
     url: String,
     width: Dp? = null,

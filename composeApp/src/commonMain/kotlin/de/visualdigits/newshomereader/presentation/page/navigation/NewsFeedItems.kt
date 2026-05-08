@@ -20,7 +20,7 @@ import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.util.getFaviconUrl
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
-import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.NewsItemImage
+import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.Image
 import de.visualdigits.newshomereader.presentation.style.gap
 import org.jetbrains.compose.resources.painterResource
 
@@ -57,7 +57,7 @@ fun NewsFeedItems(
                     selected = state.currentNewsFeedName == newsFeedItem.name,
                     leadingImage = {
                         newsFeedItem.url?.getFaviconUrl(48)?.let { url ->
-                            NewsItemImage(
+                            Image(
                                 modifier = Modifier
                                     .width(24.dp)
                                     .height(24.dp),

@@ -19,7 +19,7 @@ import org.koin.test.junit5.KoinTestExtension
 import java.io.File
 import java.time.OffsetDateTime
 
-@Disabled("Only for local testing")
+//@Disabled("Only for local testing")
 class RssTest : KoinTest {
 
     private val feedService: FeedRepository by inject()
@@ -86,7 +86,7 @@ class RssTest : KoinTest {
         runBlocking {
             val article = fullArticleService.readFromFile(
                 newsItem,
-                File(ClassLoader.getSystemResource("rdf/heise-story-2.html").toURI())
+                File(ClassLoader.getSystemResource("rdf/heise-story-3.html").toURI())
             )
             println(article)
         }
