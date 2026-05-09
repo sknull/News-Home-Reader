@@ -22,7 +22,9 @@ endif::[]
 == About
 
 News Home Reader is a simple yet powerful newsreader which supports feeds of type
-atom, rdf and rss.
+atom, rdf and rss and runs on android and desktop (currently windows and linux).
+
+For those interested: This is implemented using the latest Kotlin Multiplatform framework.
 
 It can cache full articles along with their images while you are at home for offline use
 while you are not at home.
