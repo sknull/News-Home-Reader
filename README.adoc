@@ -55,6 +55,17 @@ News Home Reader is a privacy first newsreader which means that new items and ar
 
 == Installation
 
+=== Downloads
+
+image:https://shields.io[link="https://github.com"]
+image:https://shields.io[link="https://github.com"]
+image:https://shields.io[link="https://github.com"]
+
+[TIP]
+====
+On the package page just click on the latest version to download the desired files.
+====
+
 === Build Yourself
 
 To compile the executable on your local machine just check out the project somewhere, cd to the root directory and issue:
