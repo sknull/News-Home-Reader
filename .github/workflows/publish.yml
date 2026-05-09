@@ -86,7 +86,9 @@ jobs:
         env:
           ENCODED_STRING: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
         run: |
-          echo $ENCODED_STRING | base64 -d > News-Home-Reader/composeApp/release.keystore
+          if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
+            echo $ENCODED_STRING | base64 -d > News-Home-Reader/composeApp/release.keystore
+          fi
 
       - name: Build Release APK
         working-directory: News-Home-Reader
@@ -95,7 +97,10 @@ jobs:
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
           RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
           RELEASE_KEYSTORE_PATH: release.keystore
-        run: ./gradlew assembleRelease
+        run: |
+          if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
+            ./gradlew assembleRelease
+          fi
 
       - name: Upload Intermediates
         uses: actions/upload-artifact@v4
