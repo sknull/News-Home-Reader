@@ -508,7 +508,7 @@ class NewsHomeReaderViewModel(
             is NewsHomeReaderAction.OnNewsItemSearchExpandStateChanged -> {
                 _state.update {
                     it.copy(
-                        isNewsItemSearchActive = true,
+                        isNewsItemSearchActive = action.expanded,
                     )
                 }
             }

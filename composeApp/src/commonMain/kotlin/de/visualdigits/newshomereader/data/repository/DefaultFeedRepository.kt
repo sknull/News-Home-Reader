@@ -62,10 +62,11 @@ class DefaultFeedRepository(
     private val log = Logger.withTag("DefaultFeedRepository")
 
     override fun observeNewsFeedItemSearchItems(query: String): Flow<List<NewsItem>> {
-        return dao.searchNewsItems(query)
+        val map = dao.searchNewsItems(query)
             .asFlow()
             .mapToList(Dispatchers.IO)
             .map { list -> list.map { composit -> composit.toNewsItem() } }
+        return map
     }
 
     override suspend fun getAllFeedItems(): Result<List<NewsItem>, DataError.Remote> = withContext(Dispatchers.IO) {
@@ -395,7 +396,7 @@ class DefaultFeedRepository(
                                     }
 
                                     is Result.Error -> {
-                                        log.e("Could not read article: ${newsItem.link}", articleResult.throwable)
+                                        log.e("Could not read article [${newsItem.id}]: ${newsItem.link}", articleResult.throwable)
                                         newsItem
                                     }
                                 }

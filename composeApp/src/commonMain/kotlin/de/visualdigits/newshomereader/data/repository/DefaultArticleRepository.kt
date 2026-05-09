@@ -64,7 +64,7 @@ open class DefaultArticleRepository(
     }
 
     override suspend fun readFromString(
-        newsItem: NewsItem,
+        newsItem: NewsItem?,
         rawHtml: String?,
         url: String?
     ): FullArticle = withContext(Dispatchers.IO) {
@@ -125,13 +125,15 @@ open class DefaultArticleRepository(
             ?: ""
 
         // cleanup if possible
-        if (html.contains(newsItem.summary)) {
-            html = html.replace(newsItem.summary, "")
+        newsItem?.summary?.also { s ->
+            if (html.contains(s)) {
+                html = html.replace(s, "")
+            }
         }
 
         FullArticle(
             id = 0L,
-            itemId = newsItem.id,
+            itemId = newsItem?.id?:0L,
             applicationJson = applicationJson.map { a -> a.toAppJson() }?:listOf(),
             html = html,
             imageItems = imageItems,

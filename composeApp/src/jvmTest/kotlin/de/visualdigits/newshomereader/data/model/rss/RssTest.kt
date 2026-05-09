@@ -55,7 +55,7 @@ class RssTest : KoinTest {
     }
 
     @Test
-//    @Disabled("Only for local testing")
+    @Disabled("Only for local testing")
     fun testReadFromUrl() {
         runBlocking {
             val response = httpClient.get(urlString = "https://www.focus.de/rss")
@@ -103,6 +103,19 @@ class RssTest : KoinTest {
             val article = fullArticleService.readFromFile(
                 newsItem,
                 File(ClassLoader.getSystemResource("rdf/focus-story.html").toURI())
+            )
+            println(article)
+        }
+    }
+
+    @Test
+    @Disabled("Only for local testing")
+    fun testReadArticleUrl() {
+        runBlocking {
+            val response = httpClient.get(urlString = "https://www.focus.de/panorama/welt/schadet-nicht-privat-vorzusorgen-mathematiker-investiert-monatlich-1500-euro-in-etfs_daf719c6-c9c1-4aaf-8cbf-670075509e12.html")
+            val htmlRaw = response.bodyAsText()
+            val article = fullArticleService.readFromString(
+                rawHtml = htmlRaw
             )
             println(article)
         }

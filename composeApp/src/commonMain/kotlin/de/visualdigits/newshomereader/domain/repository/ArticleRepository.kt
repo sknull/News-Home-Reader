@@ -22,7 +22,7 @@ interface ArticleRepository {
     ): Result<Pair<FullArticle, Boolean>, DataError.Remote>
 
     suspend fun readFromString(
-        newsItem: NewsItem,
+        newsItem: NewsItem? = null,
         rawHtml: String?,
         url: String? = null
     ): FullArticle

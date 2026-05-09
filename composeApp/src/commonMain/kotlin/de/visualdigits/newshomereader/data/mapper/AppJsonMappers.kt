@@ -102,7 +102,7 @@ fun VideoDto.toVideo(): Video {
         thumbnailUrl = thumbnailUrl,
         contentUrl = contentUrl,
         uploadDate = uploadDate,
-        publisher = publisher
+        publisher = publisher?.toPublisher()
     )
 }
 
