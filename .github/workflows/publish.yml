@@ -85,6 +85,7 @@ jobs:
       - name: Decode Keystore
         env:
           ENCODED_STRING: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+        shell: bash
         run: |
           if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
             echo $ENCODED_STRING | base64 -d > News-Home-Reader/composeApp/release.keystore
@@ -97,6 +98,7 @@ jobs:
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
           RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
           RELEASE_KEYSTORE_PATH: release.keystore
+        shell: bash
         run: |
           if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
             ./gradlew assembleRelease
