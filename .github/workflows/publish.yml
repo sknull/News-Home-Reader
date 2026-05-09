@@ -147,7 +147,6 @@ jobs:
           cache-encryption-key: ${{ secrets.Gradle_Encryption_Key }}
 
       - name: Decode Keystore
-        if: matrix.os == 'ubuntu-latest'
         env:
           ENCODED_STRING: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
         run: |

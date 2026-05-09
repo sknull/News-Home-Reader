@@ -31,10 +31,16 @@ News can be updated in intervals of 15, 30, 45 and 60 minutes.
 There is also an offline catalog on board which was produced from https://www.rss-verzeichnis.de
 which you can use to find some interesting newsfeeds in German.
 
-Currently the app is not published on any appstore so if you wish to put it on your device or
-use it on your windows desktop.
-Sorry I have no apple devices so I cannot test this nor support this platform.
+Currently, the app is not published on any appstore so if you wish to put it on your device or
+use it on your Windows desktop.
+Sorry I have no Apple devices, so I cannot test this nor support this platform.
 Please have a look into the installation section below how to build the app yourself.
+
+[TIP]
+====
+The project is currently in early beta. So there might be still bugs and flaws...
+====
+
 
 == Features
 
@@ -84,7 +90,7 @@ When the build finished successfully you find the final directory in directories
 ----
 
 Copy the whole directory somewhere. The exe file is just a wrapper to a java main.
-Of course you can rename the folder to whatever you like.
+Of course, you can rename the folder to whatever you like.
 You may then just double-click on the exe file, and you are good to go.
 Besides the exe you find this readme as a pdf file.
 
@@ -103,7 +109,7 @@ This contains the above directory as a zipped file.
 ----
 
 This is an unsigned apk file which you can install on android devices.
-You have to allow installation from unknown locations. Also you have to let
+You have to allow installation from unknown locations. Also, you have to let
 scan the apk file on every install or update.
 
 ==== Preliminaries for building on your machine
