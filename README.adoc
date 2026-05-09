@@ -19,10 +19,6 @@ image:https://shields.io[Android]
 image:https://shields.io[Desktop]
 endif::[]
 
-== Downloads
-
-image:https://shields.io[link="https://github.com"]
-
 == About
 
 News Home Reader is a simple yet powerful newsreader which supports feeds of type
@@ -40,7 +36,7 @@ use it on your windows desktop.
 Sorry I have no apple devices so I cannot test this nor support this platform.
 Please have a look into the installation section below how to build the app yourself.
 
-=== Features
+== Features
 
 News Home Reader is a privacy first newsreader which means that new items and articles are stored only on your device. Synchronization of read news items is only performed within your Wi-Fi zone at home. For now only WebDAV is supported to store the synchronization file, which is just a simple JSON file.
 
