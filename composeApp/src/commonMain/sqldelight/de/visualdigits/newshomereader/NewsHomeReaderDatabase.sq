@@ -217,7 +217,6 @@ cleanupOldUnreadNewsItems:
 DELETE FROM NewsItemEntity
 WHERE lastSeenMillis < :timeStamp AND isRead = 0;
 
-
 --
 -- FULL ARTICLE
 --
@@ -267,7 +266,19 @@ SET id = :id,
     readingTime = :readingTime
 WHERE itemId = :itemId;
 
+getAllNewsItemsWithArticles:
+SELECT NewsItemEntity.*, FullArticleEntity.*
+FROM NewsItemEntity
+LEFT JOIN FullArticleEntity ON NewsItemEntity.id = FullArticleEntity.itemId;
 
+searchNewsItems:
+SELECT NewsItemEntity.*, FullArticleEntity.*
+FROM NewsItemEntity
+LEFT JOIN FullArticleEntity ON NewsItemEntity.id = FullArticleEntity.itemId
+WHERE LOWER(NewsItemEntity.title) LIKE LOWER('%' || :query || '%')
+   OR LOWER(NewsItemEntity.summary) LIKE LOWER('%' || :query || '%')
+   OR LOWER(FullArticleEntity.html) LIKE LOWER('%' || :query || '%')
+ORDER BY NewsItemEntity.publishedMillis DESC;
 
 --
 -- NEWS FEED CONFIGURATION

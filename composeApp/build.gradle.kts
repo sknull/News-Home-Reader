@@ -368,11 +368,20 @@ android {
         create("release") {
             val keystoreName = System.getenv("RELEASE_KEYSTORE_PATH") ?: "release.keystore"
             val keystoreFile = File(projectDir, keystoreName)
-            storeFile = keystoreFile
+            if (keystoreFile.exists()) {
+                storeFile = keystoreFile
+                storePassword = System.getenv("RELEASE_KEYSTORE_PASSWORD") ?: project.findProperty("RELEASE_STORE_PASSWORD").toString()
+                keyAlias = System.getenv("RELEASE_KEY_ALIAS") ?: project.findProperty("RELEASE_KEY_ALIAS").toString()
+                keyPassword = System.getenv("RELEASE_KEY_PASSWORD") ?: project.findProperty("RELEASE_KEY_PASSWORD").toString()
+            } else {
+                val debugConfig = getByName("debug")
+                storeFile = debugConfig.storeFile
+                storePassword = debugConfig.storePassword
+                keyAlias = debugConfig.keyAlias
+                keyPassword = debugConfig.keyPassword
 
-            storePassword = System.getenv("RELEASE_KEYSTORE_PASSWORD") ?: project.findProperty("RELEASE_STORE_PASSWORD").toString()
-            keyAlias = System.getenv("RELEASE_KEY_ALIAS") ?: project.findProperty("RELEASE_KEY_ALIAS").toString()
-            keyPassword = System.getenv("RELEASE_KEY_PASSWORD") ?: project.findProperty("RELEASE_KEY_PASSWORD").toString()
+                println("No release.keystore - falling back to debug signature")
+            }
         }
     }
 

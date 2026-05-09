@@ -122,5 +122,5 @@
   <string name="true">True</string>
   <string name="warning_delete">Möchtest Du diesen Eintrag wirklich löschen?</string>
   <string name="warning_migration">Deine Konfiguration wurde auf die neueste Version migriert.\nEine Rückkehr zu einer älteren Version ist mit der neuen Konfiguration nicht möglich.\nVon der alten Konfiguration wurde ein Backup angelegt.</string>
-  <string name="warning_no_results">Keine Projekte.</string>
+  <string name="warning_no_results">Keine Ergebnisse.</string>
 </resources>

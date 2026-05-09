@@ -46,6 +46,7 @@ data class AppJsonDto @OptIn(ExperimentalSerializationApi::class, ExperimentalSe
     val headline: String? = null,
     val identifier: Long? = null,
     val image: ImageWrapper? = null,
+    val video: VideoWrapper? = null,
     val inLanguage: String? = null,
     val isAccessibleForFree: Boolean? = null,
     val isFamilyFriendly: Boolean? = null,

@@ -1,7 +1,6 @@
 package de.visualdigits.newshomereader.presentation.page
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
@@ -28,10 +28,10 @@ import de.visualdigits.newshomereader.presentation.page.newsfeedconfiguration.Co
 import de.visualdigits.newshomereader.presentation.page.newsfeedconfiguration.NewsFeedConfigurationGroupDialog
 import de.visualdigits.newshomereader.presentation.page.newsfeedconfiguration.NewsFeedConfigurationPage
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.NewsContent
+import de.visualdigits.newshomereader.presentation.page.newsfeeditems.NewsItemSearchBar
 import de.visualdigits.newshomereader.presentation.page.settings.SettingsPage
 import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.presentation.style.MyShapes
-import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.typography
 import kotlin.math.max
 
@@ -46,6 +46,7 @@ fun MainPage(
     val maxImageSize = state.settings?.get<Int>(SK.maxImageSize) ?: 1200
 
     val uriHandler = LocalUriHandler.current
+
 
     val onCommonAction: (CommonAction) -> Unit = { action ->
         viewModel.onCommonAction(action)
@@ -73,6 +74,19 @@ fun MainPage(
             else -> 1.0f
         }
 
+        val chunks = when {
+            maxWidth > 1500.dp -> 4
+            maxWidth > 1000.dp -> 3
+            maxWidth > 500.dp -> 2
+            else -> 1
+        }
+
+        val rowDataFiltered = remember(state.filteredNewsItems) {
+            state.filteredNewsItems
+                .sortedByDescending { newsItem -> newsItem.updated }
+                .chunked(chunks)
+        }
+
         MaterialTheme(
             colorScheme = displayTheme.colorScheme,
             typography = typography(
@@ -93,12 +107,23 @@ fun MainPage(
                     .fillMaxSize()
                     .background(displayTheme.colorScheme.background)
                     .safeDrawingPadding(),
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
             ) {
                 ErrorCard(
                     errorMessage = state.uiMessage,
                     severity = state.uiMessageSeverity,
                     shapeContainer = MaterialTheme.shapes.small
+                )
+
+                NewsItemSearchBar(
+                    state,
+                    screenWidth,
+                    onAction,
+                    viewModel.scrollPosition,
+                    onCommonAction,
+                    rowDataFiltered,
+                    maxImageSize,
+                    state.settings,
+                    uriHandler
                 )
 
                 MainMenuBar(
@@ -144,9 +169,9 @@ fun MainPage(
                     else -> {
                         NewsContent(
                             state = state,
+                            chunks = chunks,
                             viewModel = viewModel,
-                            screenWidth = screenWidth,
-                            mw = screenWidth,
+                            maxWidth = screenWidth,
                             maxImageSize = maxImageSize,
                             uriHandler = uriHandler,
                             connectivityManager = connectivityManager,

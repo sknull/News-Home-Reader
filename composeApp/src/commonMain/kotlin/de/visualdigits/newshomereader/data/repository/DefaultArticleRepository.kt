@@ -22,9 +22,9 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import kotlin.math.roundToLong
 
-class DefaultArticleRepository(
+open class DefaultArticleRepository(
     private val httpClient: HttpClient,
-    private val dao: NewsHomeReaderDatabaseQueries
+    private val dao: NewsHomeReaderDatabaseQueries? = null
 ) : ArticleRepository {
 
     val log = Logger.withTag("DefaultArticleRepository")
@@ -38,7 +38,7 @@ class DefaultArticleRepository(
 
     override suspend fun getFullArticle(itemId: Long): Result<FullArticle?, DataError.Local> {
         return try {
-            Result.Success(dao.getFullArticleByItemId(itemId).executeAsOneOrNull()?.toFullArticle())
+            Result.Success(dao!!.getFullArticleByItemId(itemId).executeAsOneOrNull()?.toFullArticle())
         } catch (e: Exception) {
             Result.Error(DataError.Local.SERIALIZATION, throwable = e)
         }
@@ -48,7 +48,7 @@ class DefaultArticleRepository(
         newsItem: NewsItem
     ): Result<Pair<FullArticle, Boolean>, DataError.Remote> = withContext(Dispatchers.IO) {
         try {
-            var fullArticle = dao.getFullArticleByItemId(newsItem.id).executeAsOneOrNull()?.toFullArticle()
+            var fullArticle = dao!!.getFullArticleByItemId(newsItem.id).executeAsOneOrNull()?.toFullArticle()
             val changedArticle = if (fullArticle == null || newsItem.isChanged) {
                 val response = httpClient.get(urlString = newsItem.link)
                 val rawHtml = response.bodyAsText()
@@ -110,7 +110,10 @@ class DefaultArticleRepository(
             .map { ao -> ao.toMediaItem() }
         val videoItems = applicationJson
             .filter { script -> script.type?.lowercase() == "videoobject" }
-            .map { vo -> vo.toMediaItem() }
+            .map { vo -> vo.toMediaItem() } +
+                applicationJson.flatMap { aj ->
+                    aj.video?.videos?.map { video -> video.toMediaItem() }?:listOf()
+                }
 
         val imageDto = newsArticle
             ?.image

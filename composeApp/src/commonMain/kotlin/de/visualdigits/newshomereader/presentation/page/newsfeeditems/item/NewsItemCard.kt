@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.unit.DpOffset
@@ -34,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import be.digitalia.compose.htmlconverter.HtmlStyle
 import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
+import de.visualdigits.common.presentation.components.util.conditional
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_paid_24px
 import de.visualdigits.compose.resources.icon_videocam_24px
@@ -46,6 +49,7 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.presentation.style.gap
+import de.visualdigits.newshomereader.presentation.util.highlightQuery
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
 import org.jetbrains.compose.resources.painterResource
 import java.time.format.DateTimeFormatter
@@ -68,7 +72,8 @@ fun NewsItemCard(
 
     Box(
         modifier = modifier
-            .dropShadow(
+            .conditional(simple) { height(100.dp) }
+            .conditional(!simple) { dropShadow(
                 shape = RoundedCornerShape(20.dp),
                 shadow = Shadow(
                     radius = 6.dp,
@@ -76,7 +81,7 @@ fun NewsItemCard(
                     color = Color.Black.copy(alpha = 0.2f),
                     offset = DpOffset(2.dp, 2.dp)
                 )
-            )
+            )}
     ) {
         Column(
             modifier = modifier
@@ -97,7 +102,7 @@ fun NewsItemCard(
                     }
                 }
         ) {
-            // teaser image
+            // teaser image (for non simple layout)
             if (!simple) {
                 var image = newsItem.image
                 if (image.isEmpty()) {
@@ -112,45 +117,65 @@ fun NewsItemCard(
                 }
             }
 
-            // inner column to provide padding for all text content
-            Column(
+            Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(MaterialTheme.shapes.gap),
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
             ) {
-                Row(
+                // teaser image (for simple layout)
+                if (simple) {
+                    var image = newsItem.image
+                    if (image.isEmpty()) {
+                        image = newsItem.newsArticle?.articleImage ?: ""
+                    }
+                    if (image.isNotEmpty()) {
+                        Image(
+                            modifier = Modifier
+                                .weight(0.5f)
+                                .fillMaxHeight(),
+                            url = image,
+                            contentScale = ContentScale.FillHeight,
+                            contentDescription = newsItem.imageCaption,
+                            maxImageSize = 640
+                        )
+                    }
+                }
+
+                // inner column to provide padding for all text content
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                        .weight(1f)
+                        .padding(MaterialTheme.shapes.gap),
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                 ) {
-                    if (state.currentNewsFeedGroup != null || simple) {
-                        state.lookupNewsFeedMap[feedName?.trim()?.lowercase()]?.url?.let { url ->
-                            Box(
-                                modifier = Modifier
-                                    .width(30.dp)
-                                    .height(30.dp)
-                            ) {
+                    // favicon and date
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                    ) {
+                        if (state.currentNewsFeedGroup != null || simple) {
+                            state.lookupNewsFeedMap[feedName.trim().lowercase()]?.url?.let { url ->
+                                // favicon
                                 Image(
-                                    modifier = Modifier,
+                                    modifier = Modifier
+                                        .width(30.dp),
                                     url = url.getFaviconUrl(48),
                                     width = 30.dp,
-                                    height = 30.dp,
-                                    contentDescription = feedName ?: "",
+                                    contentDescription = feedName,
                                     maxImageSize = 48,
                                     showLoadingIcon = false
                                 )
                             }
                         }
-                    }
 
-                    Text(
-                        text = "${newsItem.updated.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}",
-                        style = MaterialTheme.typography.bodySmall
-                    )
+                        // updated date
+                        Text(
+                            text = "${newsItem.updated.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}",
+                            style = MaterialTheme.typography.bodySmall
+                        )
 
-                    // indicators
-                    if (!simple) {
+                        // indicators
                         if (newsItem.newsArticle?.videoItems?.isNotEmpty() == true) {
                             Icon(
                                 modifier = Modifier.size(18.dp),
@@ -178,29 +203,47 @@ fun NewsItemCard(
                             )
                         }
                     }
-                }
 
-                Text(
-                    text = newsItem.title,
-                    style = MaterialTheme.typography.titleSmall
-                )
-
-                Text(
-                    modifier = Modifier,
-                    text = htmlToAnnotatedString(
-                        html = newsItem.summary,
-                        style = HtmlStyle(
-                            textLinkStyles = displayTheme.textLinkStyles
-                        ),
-                        linkInteractionListener = { linkAnnotation ->
-                            makeUrlAbsolute(
-                                newsItem.link,
-                                (linkAnnotation as LinkAnnotation.Url).url
-                            ).let { uriHandler.openUri(it) }
+                    val annotatedTitle = htmlToAnnotatedString(newsItem.title)
+                    val highlightedTitle = remember(annotatedTitle, state.newsItemSearchText) {
+                        if (!state.newsItemSearchText.isNullOrBlank()) {
+                            annotatedTitle.highlightQuery(state.newsItemSearchText)
+                        } else {
+                            annotatedTitle
                         }
-                    ),
-                    style = MaterialTheme.typography.bodySmall.copy(lineHeight = 1.2.em)
-                )
+                    }
+                    Text(
+                        text = highlightedTitle,
+                        style = MaterialTheme.typography.titleSmall
+                    )
+
+                    if (!simple) {
+                        val annotatedSummary = htmlToAnnotatedString(
+                            html = newsItem.summary,
+                            style = HtmlStyle(
+                                textLinkStyles = displayTheme.textLinkStyles
+                            ),
+                            linkInteractionListener = { linkAnnotation ->
+                                makeUrlAbsolute(
+                                    newsItem.link,
+                                    (linkAnnotation as LinkAnnotation.Url).url
+                                ).let { uriHandler.openUri(it) }
+                            }
+                        )
+                        val highlightedSummary = remember(annotatedSummary, state.newsItemSearchText) {
+                            if (!state.newsItemSearchText.isNullOrBlank()) {
+                                annotatedSummary.highlightQuery(state.newsItemSearchText)
+                            } else {
+                                annotatedSummary
+                            }
+                        }
+                        Text(
+                            modifier = Modifier,
+                            text = highlightedSummary,
+                            style = MaterialTheme.typography.bodySmall.copy(lineHeight = 1.2.em)
+                        )
+                    }
+                }
             }
         }
     }

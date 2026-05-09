@@ -1,9 +1,9 @@
 package de.visualdigits.newshomereader.domain.repository
 
-import de.visualdigits.newshomereader.di.sharedModule
-import de.visualdigits.newshomereader.di.testModule
 import de.visualdigits.common.domain.model.errorhandling.onError
 import de.visualdigits.common.domain.model.errorhandling.onSuccess
+import de.visualdigits.newshomereader.di.sharedModule
+import de.visualdigits.newshomereader.di.testModule
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Disabled

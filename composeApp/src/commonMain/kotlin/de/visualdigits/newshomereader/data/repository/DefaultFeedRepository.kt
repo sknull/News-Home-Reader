@@ -49,7 +49,6 @@ import java.time.Duration
 import java.time.OffsetDateTime
 import java.time.temporal.ChronoUnit
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.collections.map
 
 class DefaultFeedRepository(
     private val httpClient: HttpClient,
@@ -62,13 +61,18 @@ class DefaultFeedRepository(
 
     private val log = Logger.withTag("DefaultFeedRepository")
 
+    override fun observeNewsFeedItemSearchItems(query: String): Flow<List<NewsItem>> {
+        return dao.searchNewsItems(query)
+            .asFlow()
+            .mapToList(Dispatchers.IO)
+            .map { list -> list.map { composit -> composit.toNewsItem() } }
+    }
+
     override suspend fun getAllFeedItems(): Result<List<NewsItem>, DataError.Remote> = withContext(Dispatchers.IO) {
         try {
-            val data = dao.getAllNewsItems()
+            val data = dao.getAllNewsItemsWithArticles()
                 .executeAsList()
-                .map { ni ->
-                    ni.toNewsItem()
-                }
+                .map { composit -> composit.toNewsItem() }
             Result.Success(data)
         } catch (e: Exception) {
             Result.Error(DataError.Remote.SERIALIZATION, e)

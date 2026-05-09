@@ -25,6 +25,8 @@ interface FeedRepository {
 
     fun observeFeedItems(newsFeedGroup: NewsFeedGroup?, newsFeedName: String?): Flow<List<NewsItem>>
 
+    fun observeNewsFeedItemSearchItems(query: String): Flow<List<NewsItem>>
+
     suspend fun upsertNewsFeed(
         newsFeed: NewsFeed
     ): Result<Unit, DataError.Local>

@@ -46,6 +46,10 @@ class MockFeedRepository(
         return emptyFlow()
     }
 
+    override fun observeNewsFeedItemSearchItems(query: String): Flow<List<NewsItem>> {
+        return emptyFlow()
+    }
+
     override suspend fun upsertNewsFeed(newsFeed: NewsFeed): Result<Unit, DataError.Local> {
         return Result.Success(Unit)
     }

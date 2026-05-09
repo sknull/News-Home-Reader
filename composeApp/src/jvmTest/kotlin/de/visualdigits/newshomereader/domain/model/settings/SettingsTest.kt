@@ -1,22 +1,22 @@
 package de.visualdigits.newshomereader.domain.model.settings
 
+import de.visualdigits.common.domain.model.errorhandling.Result
+import de.visualdigits.newshomereader.data.database.mapper.toSettings
+import de.visualdigits.newshomereader.data.database.mapper.toSettingsEntity
 import de.visualdigits.newshomereader.di.platformModule
 import de.visualdigits.newshomereader.di.sharedModule
+import de.visualdigits.newshomereader.di.testHomeDirectory
 import de.visualdigits.newshomereader.di.testModule
 import de.visualdigits.newshomereader.domain.repository.SettingsRepository
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertNotNull
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.koin.test.KoinTest
 import org.koin.test.inject
 import org.koin.test.junit5.KoinTestExtension
-import de.visualdigits.common.domain.model.errorhandling.Result
-import de.visualdigits.newshomereader.data.database.mapper.toSettings
-import de.visualdigits.newshomereader.data.database.mapper.toSettingsEntity
-import de.visualdigits.newshomereader.di.testHomeDirectory
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Disabled
-import org.junit.jupiter.api.assertNotNull
 import java.io.File
 
 @Disabled("Only for local testing")

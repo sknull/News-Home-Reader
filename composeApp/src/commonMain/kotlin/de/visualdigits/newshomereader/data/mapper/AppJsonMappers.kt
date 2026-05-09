@@ -17,6 +17,7 @@ import de.visualdigits.newshomereader.data.model.applicationjson.PublisherDto
 import de.visualdigits.newshomereader.data.model.applicationjson.QueryInputDto
 import de.visualdigits.newshomereader.data.model.applicationjson.SourceOrganizationDto
 import de.visualdigits.newshomereader.data.model.applicationjson.TargetDto
+import de.visualdigits.newshomereader.data.model.applicationjson.VideoDto
 import de.visualdigits.newshomereader.domain.model.applicationjson.About
 import de.visualdigits.newshomereader.domain.model.applicationjson.AppJson
 import de.visualdigits.newshomereader.domain.model.applicationjson.Author
@@ -34,6 +35,7 @@ import de.visualdigits.newshomereader.domain.model.applicationjson.Publisher
 import de.visualdigits.newshomereader.domain.model.applicationjson.QueryInput
 import de.visualdigits.newshomereader.domain.model.applicationjson.SourceOrganization
 import de.visualdigits.newshomereader.domain.model.applicationjson.Target
+import de.visualdigits.newshomereader.domain.model.applicationjson.Video
 
 
 fun AboutDto.toAbout(): About {
@@ -87,6 +89,20 @@ fun ImageDto.toImage(): Image {
         datePublished = datePublished,
         description = description,
         inLanguage = inLanguage
+    )
+}
+
+fun VideoDto.toVideo(): Video {
+    return Video(
+        context = context,
+        type = type,
+        name = name,
+        description = description,
+        duration = duration,
+        thumbnailUrl = thumbnailUrl,
+        contentUrl = contentUrl,
+        uploadDate = uploadDate,
+        publisher = publisher
     )
 }
 
@@ -229,6 +245,7 @@ fun AppJsonDto.toAppJson(): AppJson {
         headline = headline,
         identifier = identifier,
         image = image?.images?.map { i -> i.toImage() }?:listOf(),
+        video = video?.videos?.map { i -> i.toVideo() }?:listOf(),
         inLanguage = inLanguage,
         isAccessibleForFree = isAccessibleForFree,
         isFamilyFriendly = isFamilyFriendly,

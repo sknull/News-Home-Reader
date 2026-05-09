@@ -55,6 +55,7 @@ import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.Image
 import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
+import de.visualdigits.newshomereader.presentation.util.highlightQuery
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
 import org.jetbrains.compose.resources.painterResource
 import java.time.format.DateTimeFormatter
@@ -164,6 +165,14 @@ fun NewsArticleCard(
                         ) {
                             val interactionSource = remember { MutableInteractionSource() }
                             val isHovered by interactionSource.collectIsHoveredAsState()
+                            val annotatedTile = htmlToAnnotatedString(newsItem.title)
+                            val highlightedTitle = remember(annotatedTile, state.newsItemSearchText) {
+                                if (!state.newsItemSearchText.isNullOrBlank()) {
+                                    annotatedTile.highlightQuery(state.newsItemSearchText)
+                                } else {
+                                    annotatedTile
+                                }
+                            }
                             Text(
                                 modifier = Modifier
                                     .weight(1f)
@@ -172,7 +181,7 @@ fun NewsArticleCard(
                                     .clickable {
                                         uriHandler.openUri(newsItem.link)
                                     },
-                                text = newsItem.title,
+                                text = highlightedTitle,
                                 color = if (isHovered) MaterialTheme.colorScheme.onSurface else displayTheme.textColor,
                                 style = (if (maxWidth > 600.dp) MaterialTheme.typography.headlineLarge else MaterialTheme.typography.headlineMedium).copy(
                                     textDecoration = if (isHovered) TextDecoration.Underline else TextDecoration.None
@@ -226,33 +235,8 @@ fun NewsArticleCard(
                     }),
                     Pair("summary", @Composable {
                         if (newsItem.summary.isNotEmpty()) {
-                            Text(
-                                modifier = Modifier,
-                                text = htmlToAnnotatedString(
-                                    html = newsItem.summary,
-                                    style = HtmlStyle(
-                                        textLinkStyles = displayTheme.textLinkStyles
-                                    ),
-                                    linkInteractionListener = { linkAnnotation ->
-                                        makeUrlAbsolute(
-                                            newsItem.link,
-                                            (linkAnnotation as LinkAnnotation.Url).url
-                                        ).let { uriHandler.openUri(it) }
-                                    }
-                                ),
-                                style = MaterialTheme.typography.titleMedium.copy(
-//                                fontSize = MaterialTheme.typography.titleMedium.fontSize * 1.5f,
-                                    lineHeight = 1.4.em
-                                )
-                            )
-                            Spacer(Modifier.height(16.dp))
-                        }
-                    }),
-                    Pair("text", @Composable {
-                        Text(
-                            modifier = Modifier,
-                            text = htmlToAnnotatedString(
-                                html = newsArticle.html,
+                            val annotatedSummary = htmlToAnnotatedString(
+                                html = newsItem.summary,
                                 style = HtmlStyle(
                                     textLinkStyles = displayTheme.textLinkStyles
                                 ),
@@ -262,7 +246,48 @@ fun NewsArticleCard(
                                         (linkAnnotation as LinkAnnotation.Url).url
                                     ).let { uriHandler.openUri(it) }
                                 }
+                            )
+                            val highlightedSummary = remember(annotatedSummary, state.newsItemSearchText) {
+                                if (!state.newsItemSearchText.isNullOrBlank()) {
+                                    annotatedSummary.highlightQuery(state.newsItemSearchText)
+                                } else {
+                                    annotatedSummary
+                                }
+                            }
+                            Text(
+                                modifier = Modifier,
+                                text = highlightedSummary,
+                                style = MaterialTheme.typography.titleMedium.copy(
+//                                fontSize = MaterialTheme.typography.titleMedium.fontSize * 1.5f,
+                                    lineHeight = 1.4.em
+                                )
+                            )
+                            Spacer(Modifier.height(16.dp))
+                        }
+                    }),
+                    Pair("text", @Composable {
+                        val annotatedText = htmlToAnnotatedString(
+                            html = newsArticle.html,
+                            style = HtmlStyle(
+                                textLinkStyles = displayTheme.textLinkStyles
                             ),
+                            linkInteractionListener = { linkAnnotation ->
+                                makeUrlAbsolute(
+                                    newsItem.link,
+                                    (linkAnnotation as LinkAnnotation.Url).url
+                                ).let { uriHandler.openUri(it) }
+                            }
+                        )
+                        val highlightedText = remember(annotatedText, state.newsItemSearchText) {
+                            if (!state.newsItemSearchText.isNullOrBlank()) {
+                                annotatedText.highlightQuery(state.newsItemSearchText)
+                            } else {
+                                annotatedText
+                            }
+                        }
+                        Text(
+                            modifier = Modifier,
+                            text = highlightedText,
                             style = MaterialTheme.typography.bodyMedium.copy(lineHeight = 1.5.em)
                         )
                     }),

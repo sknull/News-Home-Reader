@@ -39,6 +39,7 @@ data class AppJson(
     val headline: String? = null,
     val identifier: Long? = null,
     val image: List<Image> = listOf(),
+    val video: List<Video> = listOf(),
     val inLanguage: String? = null,
     val isAccessibleForFree: Boolean? = null,
     val isFamilyFriendly: Boolean? = null,

@@ -20,9 +20,9 @@ import de.visualdigits.newshomereader.presentation.style.gap
 @Composable
 fun NewsContent(
     state: NewsHomeReaderState,
+    chunks: Int,
     viewModel: NewsHomeReaderViewModel,
-    screenWidth: Dp,
-    mw: Dp,
+    maxWidth: Dp,
     maxImageSize: Int,
     uriHandler: UriHandler,
     connectivityManager: ConnectivityManager,
@@ -38,7 +38,7 @@ fun NewsContent(
         if (state.currentNewsArticle != null && state.currentNewsItem != null) {
             NewsArticleCard(
                 scrollPosition = viewModel.scrollPosition,
-                maxWidth = mw,
+                maxWidth = maxWidth,
                 maxImageSize = maxImageSize,
                 newsItem = state.currentNewsItem,
                 newsArticle = state.currentNewsArticle,
@@ -53,9 +53,9 @@ fun NewsContent(
             NewsFeeds(
                 state = state,
                 scrollPosition = viewModel.scrollPosition,
+                chunks = chunks,
                 displayTheme = displayTheme,
-                screenWidth = screenWidth,
-                maxWidth = mw,
+                maxWidth = maxWidth,
                 maxImageSize = maxImageSize,
                 settings = state.settings,
                 uriHandler = uriHandler,

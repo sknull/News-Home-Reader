@@ -55,12 +55,6 @@ jobs:
           mkdir -p "${{ github.workspace }}/News-Home-Reader/composeApp"
           echo "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | tr -d '\n ' | base64 -d > "${{ github.workspace }}/News-Home-Reader/composeApp/release.keystore"
 
-      - name: Verify Keystore Location
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          echo "Suche Keystore Datei:"
-          find ${{ github.workspace }} -name "release.keystore"
-
       - name: Install Linux Build Tools
         if: matrix.os == 'ubuntu-latest'
         run: |
@@ -158,14 +152,6 @@ jobs:
         with:
           path: News-Home-Reader
           merge-multiple: true
-
-      - name: Verify Files
-        working-directory: News-Home-Reader
-        run: |
-          echo "Prüfe Ordnerstruktur:"
-          ls -R compose/binaries || echo "Nicht gefunden!"
-          echo "Suche MSI:"
-          find . -name "*.msi"
 
       - name: Final Publish to GitHub Packages
         working-directory: News-Home-Reader

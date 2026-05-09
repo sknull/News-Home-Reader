@@ -53,6 +53,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.InputStream
@@ -60,7 +61,6 @@ import java.io.OutputStream
 import java.time.OffsetDateTime
 import java.time.temporal.ChronoUnit
 import java.util.Locale
-import kotlin.collections.map
 import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
@@ -86,47 +86,67 @@ class NewsHomeReaderViewModel(
         log.i("Application started")
 
         _state
-            .map { it.currentNewsFeedGroup to it.currentNewsFeedName }
+            .map { Triple(it.currentNewsFeedGroup, it.currentNewsFeedName, it.newsItemSearchText) }
             .distinctUntilChanged()
-            .flatMapLatest { (newsFeedGroup, newsFeedName) ->
-                if (newsFeedGroup != null || !newsFeedName.isNullOrBlank()) {
-                    feedRepository.observeFeedItems(newsFeedGroup, newsFeedName)
-                        .debounce(150.milliseconds)
-                        .flowOn(Dispatchers.IO)
-                        .map { items ->
-                            coroutineScope {
-                                // do thhe heavy lifting in the default thread
-                                val enriched = items.map { newsItem ->
-                                    async {
-                                        val articleResult = articleRepository.getFullArticle(newsItem.id)
-                                        if (articleResult is Result.Success) {
-                                            newsItem.copy(newsArticle = articleResult.data)
-                                        } else {
-                                            newsItem
-                                        }
-                                    }
-                                }.awaitAll()
+            .flatMapLatest { (group, name, searchText) ->
+                val isSearching = !searchText.isNullOrBlank()
 
-                                // fetch current settings
+                val sourceFlow = when {
+                    isSearching -> feedRepository.observeNewsFeedItemSearchItems(searchText)
+                    group != null || !name.isNullOrBlank() -> feedRepository.observeFeedItems(group, name)
+                    else -> flowOf(emptyList())
+                }
+
+                sourceFlow
+                    .debounce(150.milliseconds)
+                    .flowOn(Dispatchers.IO)
+                    .transform { items ->
+                        coroutineScope {
+                            val enriched = items.map { newsItem ->
+                                async {
+                                    if (newsItem.newsArticle != null) return@async newsItem
+                                    val articleResult = articleRepository.getFullArticle(newsItem.id)
+                                    if (articleResult is Result.Success) newsItem.copy(
+                                        newsArticle = articleResult.data
+                                    ) else {
+                                        newsItem
+                                    }
+                                }
+                            }.awaitAll()
+
+                            if (isSearching) {
+                                // Im Suchmodus: Nur die gefilterte Liste füllen, visible bleibt wie es ist
+                                emit(SearchResult(
+                                    enriched = enriched,
+                                    isSearch = true
+                                ))
+                            } else {
+                                // Im Feed-Modus: Normale Filter-Logik anwenden
                                 val currentState = _state.value
                                 val hideRead = currentState.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
-                                val newsFeedItem = currentState.currentNewsFeedItem
-
-                                val visible = calculateVisibleNewsItems(enriched, hideRead, newsFeedItem)
-                                enriched to visible
+                                val visible = calculateVisibleNewsItems(enriched, hideRead, currentState.currentNewsFeedItem)
+                                emit(SearchResult(
+                                    enriched = enriched,
+                                    visible = visible,
+                                    isSearch = false
+                                ))
                             }
                         }
-                        .flowOn(Dispatchers.Default) // do calulations on default thread
-                } else {
-                    flowOf(emptyList<NewsItem>() to emptyList())
-                }
+                    }
             }
-            .onEach { (enriched, visible) ->
+            .flowOn(Dispatchers.Default)
+            .onEach { result ->
                 _state.update {
-                    it.copy(
-                        currentNewsItems = enriched,
-                        visibleNewsItems = visible
-                    )
+                    if (result.isSearch) {
+                        it.copy(
+                            filteredNewsItems = result.enriched
+                        )
+                    } else {
+                        it.copy(
+                            currentNewsItems = result.enriched,
+                            visibleNewsItems = result.visible
+                        )
+                    }
                 }
             }
             .launchIn(viewModelScope)
@@ -486,7 +506,11 @@ class NewsHomeReaderViewModel(
             }
 
             is NewsHomeReaderAction.OnNewsItemSearchExpandStateChanged -> {
-                loadAllNewsItems(action.expanded)
+                _state.update {
+                    it.copy(
+                        isNewsItemSearchActive = true,
+                    )
+                }
             }
 
             is NewsHomeReaderAction.OnNewsItemSearchTextChanged -> {
@@ -495,7 +519,6 @@ class NewsHomeReaderViewModel(
                         newsItemSearchText = action.text
                     )
                 }
-                filterNewsItems(action.text)
             }
 
             //
@@ -1082,7 +1105,9 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                 } else {
                     state.value.newsFeedGroups
                 }
-                val newsFeedConfigurations = newsFeedGroups.flatMap { nfg -> nfg.newsFeeds }
+                val newsFeedConfigurations = newsFeedGroups.flatMap { nfg ->
+                    nfg.newsFeeds + nfg.subGroups.flatMap { sg -> sg.newsFeeds }
+                }
                 val newsFeedResult = refreshNewsFeeds(newsFeedConfigurations)
                 if (newsFeedResult is Result.Success) {
                     val (newsFeeds, changed) = newsFeedResult.data
@@ -1296,51 +1321,6 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
             }
     }
 
-
-    private fun loadAllNewsItems(expanded: Boolean) = viewModelScope.launch {
-        _state.update {
-            it.copy(
-                isLoading = true,
-            )
-        }
-        if (expanded) {
-            feedRepository.getAllFeedItems()
-                .onSuccess { newsItems ->
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            isNewsItemSearchActive = true,
-                            allNewsItems = newsItems,
-                            currentProgress = 0.0f,
-                            progressStage = ProgressStage.NONE,
-                        )
-                    }
-                }
-                .onError { remote, throwable ->
-                    log.e("Could not load all news items", throwable)
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            isNewsItemSearchActive = false,
-                            allNewsItems = listOf(),
-                            currentProgress = 0.0f,
-                            progressStage = ProgressStage.NONE,
-                        )
-                    }
-                }
-        } else {
-            _state.update {
-                it.copy(
-                    isLoading = false,
-                    isNewsItemSearchActive = false,
-                    allNewsItems = listOf(),
-                    currentProgress = 0.0f,
-                    progressStage = ProgressStage.NONE,
-                )
-            }
-        }
-    }
-
     private fun loadData() = viewModelScope.launch {
         _state.update {
             it.copy(
@@ -1517,6 +1497,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                     currentNewsItem = copy,
                     currentNewsArticle = articleResult.data.first,
                     currentNewsItems = currentNewsItems,
+                    isNewsItemSearchActive = false,
                     visibleNewsItems = calculateVisibleNewsItems(
                         newsItems = currentNewsItems,
                         hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false,
@@ -1534,6 +1515,8 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
             _state.update {
                 it.copy(
                     isLoading = false,
+                    isNewsItemSearchActive = false,
+                    newsItemSearchText = null,
                     currentProgress = 0.0f,
                     progressStage = ProgressStage.NONE,
                     uiMessage = articleResult.error.toUiText(),
@@ -1623,28 +1606,6 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
         }
     }
 
-    private fun filterNewsItems(query: String) {
-        val originalNewsItems = state.value.allNewsItems
-        if (query.isBlank()) {
-            _state.update { it.copy(filteredNewsItems = originalNewsItems) }
-            return
-        }
-
-        val filtered = originalNewsItems.mapNotNull { newsItem ->
-            if (newsItem.title.contains(query, ignoreCase = true)
-                || newsItem.summary.contains(query, ignoreCase = true)
-                || newsItem.newsArticle?.html?.contains(query, ignoreCase = true) == true
-            ) {
-                newsItem
-            } else {
-                null
-            }
-        }
-        _state.update {
-            it.copy(filteredNewsItems = filtered)
-        }
-    }
-
     private fun calculateVisibleNewsItems(newsItems: List<NewsItem>, hideRead: Boolean, newsFeedItem: NewsFeedItem?): List<NewsItem> {
         val stopWords = newsFeedItem?.stopWords?:listOf()
         val sortedByDescending = newsItems
@@ -1658,3 +1619,9 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
 }
 
 private fun String.nostop(stopWords: List<String>): Boolean = stopWords.none { w -> this.contains(w, ignoreCase = true) }
+
+private data class SearchResult(
+    val enriched: List<NewsItem>,
+    val visible: List<NewsItem> = emptyList(),
+    val isSearch: Boolean
+)

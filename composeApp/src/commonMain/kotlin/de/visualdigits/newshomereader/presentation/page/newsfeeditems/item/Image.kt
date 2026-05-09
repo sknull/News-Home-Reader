@@ -32,6 +32,7 @@ fun Image(
     url: String,
     width: Dp? = null,
     height: Dp? = null,
+    contentScale: ContentScale = ContentScale.FillWidth,
     contentDescription: String,
     maxImageSize: Int?,
     showLoadingIcon: Boolean = true
@@ -79,7 +80,7 @@ fun Image(
                 .conditional(width != null) { width(width!!) }
                 .conditional(height != null) { height(height!!) }
                 .conditional(width == null && height == null) { fillMaxWidth() },
-            contentScale = ContentScale.FillWidth,
+            contentScale = contentScale,
             model = request,
             contentDescription = contentDescription
         )

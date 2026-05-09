@@ -122,5 +122,5 @@
   <string name="true">True</string>
   <string name="warning_delete">Do you really want to delete this entry?</string>
   <string name="warning_migration">Your configuration has been migrated to the latest version.\nIt is not possible to revert to an older version with the new configuration.\nA backup of the old configuration has been created.</string>
-  <string name="warning_no_results">No projects.</string>
+  <string name="warning_no_results">No results.</string>
 </resources>

@@ -6,7 +6,6 @@ import de.visualdigits.newshomereader.NewsFeedEntity
 import de.visualdigits.newshomereader.NewsFeedGroupEntity
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.SettingsDatabase
-import de.visualdigits.newshomereader.SettingsDatabase.Companion.invoke
 import de.visualdigits.newshomereader.SettingsEntity
 import de.visualdigits.newshomereader.data.database.DriverFactory
 import de.visualdigits.newshomereader.data.database.mapper.applicationJsonAdapter

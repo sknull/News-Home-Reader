@@ -1,0 +1,27 @@
+<?xml version='1.1' encoding='UTF-8' ?>
+<opml xmlns:feeder="https://nononsenseapps.com/feeder" xmlns:nhr="https://github.com/sknull" version="1.1">
+    <head>
+        <title>NewsHomeReader</title>
+    </head>
+    <body>
+        <outline title="IT" text="IT">
+            <outline title="heise online News" text="heise online News" type="rss" xmlUrl="https://www.heise.de/rss/heise-atom.xml" feeder:imageUrl="https://www.heise.de/icons/ho/touch-icons/apple-touch-icon-180x180.png" />
+            <outline title="t3n.de - News" text="t3n.de - News" type="rss" xmlUrl="https://t3n.de/rss.xml" feeder:imageUrl="https://cdn.t3n.de/global/images/icons/t3n-rss-feed-600x600.png?class=default" />
+        </outline>
+        <outline title="Lokales" text="Lokales">
+            <outline title="Nachrichten aus Hamburg" text="Nachrichten aus Hamburg" type="rss" xmlUrl="https://www.ndr.de/nachrichten/hamburg/index~rdf.xml" feeder:imageUrl="https://www.ndr.de/apple-touch-icon-57x57.png" />
+            <outline title="Ruhrgebiet - WDR.de" text="Ruhrgebiet - WDR.de" type="rss" xmlUrl="https://www1.wdr.de/nachrichten/ruhrgebiet/uebersicht-ruhrgebiet-100.feed" feeder:imageUrl="https://www1.wdr.de/resources-v5.163.2/img/favicon/apple-touch-icon.png" />
+        </outline>
+        <outline title="News" text="News">
+            <outline title="n-tv.de - Startseite" text="n-tv.de - Startseite" type="rss" xmlUrl="https://www.n-tv.de/rss" feeder:imageUrl="https://www.n-tv.de/stat/rss/head_logo.png" />
+            <outline title="tagesschau.de - Die Nachrichten der ARD" text="tagesschau.de - Die Nachrichten der ARD" type="rss" xmlUrl="https://www.tagesschau.de/infoservices/alle-meldungen-100~rss2.xml" feeder:imageUrl="https://www.tagesschau.de/resources/assets/image/favicon/apple-icon-57x57.png" />
+        </outline>
+        <outline title="Nachrichten" text="Nachrichten">
+            <outline title="Aktuelles" text="Aktuelles">
+                <outline title="heute-Nachrichten" text="heute-Nachrichten" type="rss" xmlUrl="https://www.zdf.de/rss/zdf/nachrichten" />
+                <outline title="SPIEGEL RSS Feed - TOP Nachrichten von heute" text="SPIEGEL RSS Feed - TOP Nachrichten von heute" type="rss" xmlUrl="https://www.spiegel.de/index.rss" />
+                <outline title="FOCUS Online - News" text="FOCUS Online - News" type="rss" xmlUrl="https://www.focus.de/rss" />
+            </outline>
+        </outline>
+    </body>
+</opml>

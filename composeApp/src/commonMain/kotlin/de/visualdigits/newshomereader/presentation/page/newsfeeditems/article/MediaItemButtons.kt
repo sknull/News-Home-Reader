@@ -100,7 +100,7 @@ fun MediaItemButtons(
                                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                                     ) {
                                         Text(
-                                            text = "${mediaItem.uploadDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}",
+                                            text = "${mediaItem.uploadDate?.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}",
                                             style = MaterialTheme.typography.bodySmall
                                         )
 

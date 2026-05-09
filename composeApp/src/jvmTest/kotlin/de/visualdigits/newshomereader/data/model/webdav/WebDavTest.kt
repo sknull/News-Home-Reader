@@ -1,9 +1,7 @@
 package de.visualdigits.newshomereader.data.model.webdav
 
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
-import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.di.platformModule
-import de.visualdigits.newshomereader.di.sharedModule
 import de.visualdigits.newshomereader.di.testModule
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum
@@ -13,7 +11,6 @@ import de.visualdigits.newshomereader.domain.model.type.Language
 import de.visualdigits.newshomereader.domain.repository.SettingsRepository
 import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import io.ktor.client.HttpClient
-import io.ktor.client.request.get
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
@@ -29,7 +26,6 @@ import org.koin.test.KoinTest
 import org.koin.test.inject
 import org.koin.test.junit5.KoinTestExtension
 import java.io.File
-import kotlin.getValue
 import kotlin.time.Clock
 
 @Disabled("Only for local testing")

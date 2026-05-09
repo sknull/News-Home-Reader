@@ -1,14 +1,17 @@
 package de.visualdigits.newshomereader.data.model.rss
 
+import de.visualdigits.common.domain.model.errorhandling.onError
+import de.visualdigits.common.domain.model.errorhandling.onSuccess
 import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedEntity
 import de.visualdigits.newshomereader.data.model.applicationjson.AppJsonDto
 import de.visualdigits.newshomereader.di.platformModule
 import de.visualdigits.newshomereader.di.sharedModule
-import de.visualdigits.common.domain.model.errorhandling.onError
-import de.visualdigits.common.domain.model.errorhandling.onSuccess
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -19,11 +22,11 @@ import org.koin.test.junit5.KoinTestExtension
 import java.io.File
 import java.time.OffsetDateTime
 
-@Disabled("Only for local testing")
 class RssTest : KoinTest {
 
     private val feedService: FeedRepository by inject()
     private val fullArticleService: ArticleRepository by inject()
+    private val httpClient: HttpClient by inject()
 
     private val newsItem = NewsItem(
         id = 4711,
@@ -52,6 +55,17 @@ class RssTest : KoinTest {
     }
 
     @Test
+//    @Disabled("Only for local testing")
+    fun testReadFromUrl() {
+        runBlocking {
+            val response = httpClient.get(urlString = "https://www.focus.de/rss")
+            val xml = response.bodyAsText()
+            println(xml)
+        }
+    }
+
+    @Test
+    @Disabled("Only for local testing")
     fun testReadScript() {
         val json = File(ClassLoader.getSystemResource("rdf/script.json").toURI()).readText()
         val appJsonDto = AppJsonDto.decodeFromString(json)
@@ -59,6 +73,7 @@ class RssTest : KoinTest {
     }
 
     @Test
+    @Disabled("Only for local testing")
     fun testReadFeed() {
         runBlocking {
             feedService.refreshNewsFeed(
@@ -82,17 +97,19 @@ class RssTest : KoinTest {
     }
 
     @Test
+    @Disabled("Only for local testing")
     fun testReadArticleFile() {
         runBlocking {
             val article = fullArticleService.readFromFile(
                 newsItem,
-                File(ClassLoader.getSystemResource("rdf/heise-story-3.html").toURI())
+                File(ClassLoader.getSystemResource("rdf/focus-story.html").toURI())
             )
             println(article)
         }
     }
 
     @Test
+    @Disabled("Only for local testing")
     fun testReadModel() {
         runBlocking {
             feedService.readFromFile("heise", File(ClassLoader.getSystemResource("rdf/heise.xml").toURI()))

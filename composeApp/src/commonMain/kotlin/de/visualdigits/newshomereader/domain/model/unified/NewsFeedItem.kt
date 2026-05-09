@@ -31,7 +31,7 @@ data class NewsFeedItem(
     }
 
     val rootLine: String
-        get() = "${mainGroupName?.let{"${it}_"}}${subGroupName?.let{"${it}_"}}$name"
+        get() = "${mainGroupName.let{"${it}_"}}${subGroupName?.let{"${it}_"}}$name"
 
     override fun toString(): String {
         return "$name: $url"

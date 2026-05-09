@@ -16,7 +16,7 @@ class OpmlTest {
 //        val opml1 = decodeValue<Opml>(File(ClassLoader.getSystemResource("opml/feeder-export-2025-11-26-65586.opml").toURI()))
 //        val opml3 = decodeValue<Opml>(File(ClassLoader.getSystemResource("opml/feedflow-export_24-5-2025_samsung-sm-t720.opml").toURI()))
 //        val opml = decodeValue<Opml>(File(ClassLoader.getSystemResource("opml/feeder-export-2025-11-28-42199.opml").toURI()), false)
-        val opml = decodeValue<Opml>(File(ClassLoader.getSystemResource("opml/newshomereader-export_2026-04-22_12-15-31.opml").toURI()), false)
+        val opml = decodeValue<Opml>(File(ClassLoader.getSystemResource("opml/newshomereader-export_2026-05-09_17-46-33.opml").toURI()), false)
         val newsFeeds = opml.toNewsFeedConfiguration()
         val opml2 = newsFeeds.toOpml()
 

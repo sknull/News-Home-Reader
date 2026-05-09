@@ -3,9 +3,11 @@ package de.visualdigits.newshomereader.data.database.mapper
 import app.cash.sqldelight.ColumnAdapter
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.newshomereader.FullArticleEntity
+import de.visualdigits.newshomereader.GetAllNewsItemsWithArticles
 import de.visualdigits.newshomereader.NewsFeedEntity
 import de.visualdigits.newshomereader.NewsFeedGroupEntity
 import de.visualdigits.newshomereader.NewsItemEntity
+import de.visualdigits.newshomereader.SearchNewsItems
 import de.visualdigits.newshomereader.SettingsEntity
 import de.visualdigits.newshomereader.domain.model.applicationjson.AppJson
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogCategory
@@ -222,6 +224,78 @@ fun NewsItemEntity.toNewsItem(): NewsItem {
         imageCaption = imageCaption,
         isRead = isRead
     )
+}
+
+fun GetAllNewsItemsWithArticles.toNewsItem(): NewsItem {
+    return NewsItemEntity(
+        id = id,
+        feedName = feedName,
+        identifier = identifier,
+        publishedMillis = publishedMillis,
+        publishedZone = publishedZone,
+        updatedMillis = updatedMillis,
+        updatedZone = updatedZone,
+        lastSeenMillis = lastSeenMillis,
+        link = link,
+        title = title,
+        summary = summary,
+        content = content,
+        keywords = keywords,
+        image = image,
+        imageTitle = imageTitle,
+        imageCaption = imageCaption,
+        isRead = isRead
+    ).toNewsItem().copy(newsArticle = FullArticleEntity(
+        id = id_?:0L,
+        itemId = itemId?:0L,
+        applicationJson = applicationJson?:listOf(),
+        html = html?:"",
+        imageItems = imageItems?:listOf(),
+        videoItems = videoItems?:listOf(),
+        audioItems = audioItems?:listOf(),
+        articleImage = articleImage,
+        discussionUrl = discussionUrl,
+        commentCount = commentCount?:0L,
+        isFree = isFree?:false,
+        wordCount = wordCount?:0L,
+        readingTime = readingTime?:0
+    ).toFullArticle())
+}
+
+fun SearchNewsItems.toNewsItem(): NewsItem {
+    return NewsItemEntity(
+        id = id,
+        feedName = feedName,
+        identifier = identifier,
+        publishedMillis = publishedMillis,
+        publishedZone = publishedZone,
+        updatedMillis = updatedMillis,
+        updatedZone = updatedZone,
+        lastSeenMillis = lastSeenMillis,
+        link = link,
+        title = title,
+        summary = summary,
+        content = content,
+        keywords = keywords,
+        image = image,
+        imageTitle = imageTitle,
+        imageCaption = imageCaption,
+        isRead = isRead
+    ).toNewsItem().copy(newsArticle = FullArticleEntity(
+        id = id_?:0L,
+        itemId = itemId?:0L,
+        applicationJson = applicationJson?:listOf(),
+        html = html?:"",
+        imageItems = imageItems?:listOf(),
+        videoItems = videoItems?:listOf(),
+        audioItems = audioItems?:listOf(),
+        articleImage = articleImage,
+        discussionUrl = discussionUrl,
+        commentCount = commentCount?:0L,
+        isFree = isFree?:false,
+        wordCount = wordCount?:0L,
+        readingTime = readingTime?:0
+    ).toFullArticle())
 }
 
 val stringListAdapter = object : ColumnAdapter<List<String>, String> {
