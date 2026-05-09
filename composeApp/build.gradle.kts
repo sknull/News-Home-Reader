@@ -367,7 +367,13 @@ android {
     signingConfigs {
         create("release") {
             val keystoreName = System.getenv("RELEASE_KEYSTORE_PATH") ?: "release.keystore"
-            storeFile = rootProject.file("composeApp/$keystoreName")
+            val keystoreFile = File(projectDir, keystoreName)
+            storeFile = keystoreFile
+
+            if (System.getenv("GITHUB_ACTIONS") == "true") {
+                println("SIGNING DEBUG: Looking for keystore at: ${keystoreFile.absolutePath}")
+            }
+
             storePassword = System.getenv("RELEASE_KEYSTORE_PASSWORD") ?: project.findProperty("RELEASE_STORE_PASSWORD").toString()
             keyAlias = System.getenv("RELEASE_KEY_ALIAS") ?: project.findProperty("RELEASE_KEY_ALIAS").toString()
             keyPassword = System.getenv("RELEASE_KEY_PASSWORD") ?: project.findProperty("RELEASE_KEY_PASSWORD").toString()
@@ -428,7 +434,6 @@ compose.desktop {
             buildTypes {
                 release {
                     proguard {
-//                        configurationFiles.from(project.file("proguard-rules.pro"))
                         isEnabled.set(false)
                         optimize.set(false)
                     }
@@ -449,15 +454,6 @@ configurations.all {
 
         val versionOkHttp = libs.versions.version.okhttp
         val versionOkio = libs.versions.version.okio
-
-//        dependencySubstitution {
-//            substitute(module("com.squareup.okhttp3:okhttp"))
-//                .using(module("com.squareup.okhttp3:okhttp-jvm:$versionOkHttp"))
-//            substitute(module("com.squareup.okio:okio"))
-//                .using(module("com.squareup.okio:okio-jvm:$versionOkio"))
-//        }
-//        force("com.squareup.okhttp3:okhttp-jvm:$versionOkHttp")
-//        force("com.squareup.okio:okio-jvm:$versionOkio")
 
         val versionIo = libs.versions.version.kotlinx.io.core.get()
         force("org.jetbrains.kotlinx:kotlinx-io-core:$versionIo")
