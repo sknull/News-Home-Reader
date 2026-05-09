@@ -375,17 +375,20 @@ android {
 
     buildTypes {
         getByName("release") {
-//            isMinifyEnabled = true
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             signingConfig = signingConfigs.getByName("release")
-//            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
+        isCoreLibraryDesugaringEnabled = true
     }
+}
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }
 
 compose.desktop {
@@ -466,38 +469,50 @@ publishing {
         create<MavenPublication>("binaryRelease") {
             groupId = "de.visualdigits.kmp"
             artifactId = "news-home-reader"
-            version = project.version.toString()
+            version = installerVersion
 
-            // 1. Android, ZIP, PDF (bleiben wie gehabt)
-            artifact(layout.buildDirectory.file("outputs/apk/debug/NewsHomeReader-debug.apk")) {
-                extension = "apk"
-                classifier = "android"
-                builtBy(tasks.matching { it.name == "assembleDebug" })
-            }
-            artifact(tasks.named<Zip>("zip").flatMap { it.archiveFile }) {
-                extension = "zip"
-                classifier = "desktop"
-            }
+            val rootDir = project.rootDir
+
+            // pdf docs
             artifact(tasks.named<org.asciidoctor.gradle.jvm.pdf.AsciidoctorPdfTask>("asciidoctorPdf").map { it.outputDir.resolve("README.pdf") }) {
                 extension = "pdf"
                 classifier = "docs"
             }
 
-            val rootDir = project.rootDir
+            // android debug apk
+            artifact(layout.buildDirectory.file("outputs/apk/debug/NewsHomeReader-debug.apk")) {
+                extension = "apk"
+                classifier = "android-debug"
+                builtBy(tasks.matching { it.name == "assembleDebug" })
+            }
+
+            // android release apk
+            artifact(layout.buildDirectory.file("outputs/apk/release/NewsHomeReader-release.apk")) {
+                extension = "apk"
+                classifier = "android"
+                builtBy(tasks.matching { it.name == "assembleRelease" })
+            }
+
+            // windows zip file
+            artifact(tasks.named<Zip>("zip").flatMap { it.archiveFile }) {
+                extension = "zip"
+                classifier = "desktop"
+            }
+
+            // windows msi installer
+            val msiFile = rootDir.walkTopDown().find { it.extension == "msi" }
+            msiFile?.let { file ->
+                artifact(file) {
+                    extension = "msi"
+                    classifier = "windows"
+                }
+            }
 
             val debFile = rootDir.walkTopDown().find { it.extension == "deb" }
             debFile?.let { file ->
                 artifact(file) {
                     extension = "deb"
                     classifier = "linux"
-                }
-            }
-
-            val msiFile = rootDir.walkTopDown().find { it.extension == "msi" }
-            msiFile?.let { file ->
-                artifact(file) {
-                    extension = "msi"
-                    classifier = "windows"
                 }
             }
         }
