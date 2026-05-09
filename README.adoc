@@ -15,8 +15,9 @@ Version 0.0.1-SNAPSHOT
 
 ifndef::backend-pdf[]
 image:https://github.com/sknull/News-Home-Reader/actions/workflows/publish.yml/badge.svg[News Home Reader CI,link=https://github.com/sknull/News-Home-Reader/actions/workflows/publish.yml]
-image:https://shields.io[Android]
-image:https://shields.io[Desktop]
+image:http://img.shields.io/badge/platform-android-3DDC84.svg?style=flat[badge-android]
+image:http://img.shields.io/badge/platform-windows-0078D7.svg?style=flat[badge-windows]
+image:http://img.shields.io/badge/platform-linux-654FF0.svg?style=flat[badge-linux]
 endif::[]
 
 == About
@@ -43,7 +44,6 @@ Please have a look into the installation section below how to build the app your
 The project is currently in early beta. So there might be still bugs and flaws...
 ====
 
-
 == Features
 
 News Home Reader is a privacy first newsreader which means that new items and articles are stored only on your device. Synchronization of read news items is only performed within your Wi-Fi zone at home. For now only WebDAV is supported to store the synchronization file, which is just a simple JSON file.
@@ -62,9 +62,7 @@ News Home Reader is a privacy first newsreader which means that new items and ar
 === Downloads
 
 ifndef::backend-pdf[]
-image:https://shields.io[link="https://github.com"]
-image:https://shields.io[link="https://github.com"]
-image:https://shields.io[link="https://github.com"]
+image:http://img.shields.io/badge/download-latest release-3d48e2.svg?style=flat[Download Link,link=https://github.com/sknull/News-Home-Reader/releases/latest]
 endif::[]
 
 [TIP]
