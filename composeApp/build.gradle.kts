@@ -366,7 +366,8 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file(System.getenv("RELEASE_KEYSTORE_PATH") ?: "release.keystore")
+            val keystoreName = System.getenv("RELEASE_KEYSTORE_PATH") ?: "release.keystore"
+            storeFile = rootProject.file("composeApp/$keystoreName")
             storePassword = System.getenv("RELEASE_KEYSTORE_PASSWORD") ?: project.findProperty("RELEASE_STORE_PASSWORD").toString()
             keyAlias = System.getenv("RELEASE_KEY_ALIAS") ?: project.findProperty("RELEASE_KEY_ALIAS").toString()
             keyPassword = System.getenv("RELEASE_KEY_PASSWORD") ?: project.findProperty("RELEASE_KEY_PASSWORD").toString()
@@ -543,4 +544,8 @@ tasks.withType<PublishToMavenRepository> {
     dependsOn(tasks.matching { it.name == "packageMsi" })
     dependsOn(tasks.matching { it.name == "packageReleaseDeb" })
     dependsOn(tasks.matching { it.name == "packageReleaseMsi" })
+}
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor(0, "seconds")
 }
