@@ -54,9 +54,6 @@ jobs:
         run: |
           mkdir -p "${{ github.workspace }}/News-Home-Reader/composeApp"
           echo "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | tr -d '\n ' | base64 -d > "${{ github.workspace }}/News-Home-Reader/composeApp/release.keystore"
-          
-          echo "Erfolg! Datei liegt hier:"
-          readlink -f "${{ github.workspace }}/News-Home-Reader/composeApp/release.keystore"
 
       - name: Verify Keystore Location
         if: matrix.os == 'ubuntu-latest'

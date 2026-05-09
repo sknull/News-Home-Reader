@@ -370,10 +370,6 @@ android {
             val keystoreFile = File(projectDir, keystoreName)
             storeFile = keystoreFile
 
-            if (System.getenv("GITHUB_ACTIONS") == "true") {
-                println("SIGNING DEBUG: Looking for keystore at: ${keystoreFile.absolutePath}")
-            }
-
             storePassword = System.getenv("RELEASE_KEYSTORE_PASSWORD") ?: project.findProperty("RELEASE_STORE_PASSWORD").toString()
             keyAlias = System.getenv("RELEASE_KEY_ALIAS") ?: project.findProperty("RELEASE_KEY_ALIAS").toString()
             keyPassword = System.getenv("RELEASE_KEY_PASSWORD") ?: project.findProperty("RELEASE_KEY_PASSWORD").toString()
