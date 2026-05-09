@@ -52,8 +52,8 @@ jobs:
         env:
           ENCODED_STRING: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
         run: |
-          echo "$ENCODED_STRING" | base64 -d > News-Home-Reader/composeApp/release.keystore
-          ls -l News-Home-Reader/composeApp/release.keystore
+          echo "$ENCODED_STRING" | tr -d '\n ' | base64 -d > release.keystore
+          ls -l release.keystore
 
       - name: Verify Keystore Location
         if: matrix.os == 'ubuntu-latest'
@@ -83,6 +83,10 @@ jobs:
       - name: Build Binaries Only
         working-directory: News-Home-Reader
         env:
+          RELEASE_KEYSTORE_PASSWORD: '${{ secrets.RELEASE_KEYSTORE_PASSWORD }}'
+          RELEASE_KEY_ALIAS: '${{ secrets.RELEASE_KEY_ALIAS }}'
+          RELEASE_KEY_PASSWORD: '${{ secrets.RELEASE_KEY_PASSWORD }}'
+          RELEASE_KEYSTORE_PATH: release.keystore
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           GITHUB_ACTOR: sknull
