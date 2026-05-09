@@ -57,9 +57,11 @@ News Home Reader is a privacy first newsreader which means that new items and ar
 
 === Downloads
 
+ifndef::backend-pdf[]
 image:https://shields.io[link="https://github.com"]
 image:https://shields.io[link="https://github.com"]
 image:https://shields.io[link="https://github.com"]
+endif::[]
 
 [TIP]
 ====
