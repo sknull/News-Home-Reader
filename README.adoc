@@ -129,3 +129,18 @@ To install scoop on your machine just open a PowerShell and issue:
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
 ----
+
+== License
+
+link:LICENSE[GNU GENERAL PUBLIC LICENSE v3 (2007)]
+
+This project is licensed under GPLv3. If you use this code in your app, your entire app must also be open-sourced under GPLv3.
+
+=== What this means for you
+
+You are free to use, modify, and distribute this software.Copyleft: If you use this code in your own project or app, your entire project must also be licensed under GPLv3 and its source code must be made public.This effectively prevents using this code in "closed-source" commercial apps. If you intend to sell an app based on this code without releasing your source code, you are in violation of this license.
+
+[TIP]
+====
+This project contains a Kotlin Multiplatform port of Essence, which remains under the Apache 2.0 license (see link:LICENSE-ESSENCE[Original Project License]).
+====
