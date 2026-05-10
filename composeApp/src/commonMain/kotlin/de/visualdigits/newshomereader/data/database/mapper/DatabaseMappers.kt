@@ -1,7 +1,10 @@
 package de.visualdigits.newshomereader.data.database.mapper
 
+import androidx.compose.ui.graphics.Color
 import app.cash.sqldelight.ColumnAdapter
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
+import de.visualdigits.common.domain.util.toComposeColor
+import de.visualdigits.common.domain.util.toWebColor
 import de.visualdigits.newshomereader.FullArticleEntity
 import de.visualdigits.newshomereader.GetAllNewsItemsWithArticles
 import de.visualdigits.newshomereader.NewsFeedEntity
@@ -10,12 +13,8 @@ import de.visualdigits.newshomereader.NewsItemEntity
 import de.visualdigits.newshomereader.SearchNewsItems
 import de.visualdigits.newshomereader.SettingsEntity
 import de.visualdigits.newshomereader.domain.model.applicationjson.AppJson
-import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogCategory
-import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum
-import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NC
-import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
@@ -36,6 +35,7 @@ fun Settings.toSettingsEntity(): SettingsEntity {
     val settingsEntity = SettingsEntity(
         id = 0,
         displayTheme = get<DisplayThemeEnum>(SK.displayTheme)?.name ?: "LIGHT",
+        spotColor = get<Color>(SK.spotColor)?.toWebColor() ?: "",
         language = get<Language>(SK.language)?.name ?: "EN",
         hideRead = get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
         loadArticles = get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false,
@@ -56,6 +56,7 @@ fun SettingsEntity.toSettings(): Settings {
     val settings = Settings()
 
     settings.set(SK.displayTheme, displayTheme)
+    settings.set(SK.spotColor, spotColor.toComposeColor())
     settings.set(SK.language, language)
     settings.set(SK.hideRead, hideRead)
     settings.set(SK.loadArticles, loadArticles)
@@ -93,59 +94,6 @@ fun NewsFeedGroupEntity.toNewsFeedGroup(): NewsFeedGroup {
         newsFeeds = newsFeeds,
         subGroups = subGroups
     )
-}
-
-fun NewsFeedCatalogItem.toNewsFeedItem(): NewsFeedItem {
-    return if (parentCategory?.parentCategory != null) {
-        NewsFeedItem(
-            name = name,
-            mainGroupName = parentCategory?.parentCategory?.name?:error("No root category given"),
-            subGroupName = parentCategory?.name,
-            url = url
-        )
-    } else {
-        NewsFeedItem(
-            name = name,
-            mainGroupName = parentCategory?.name?:error("No parent category given"),
-            subGroupName = null,
-            url = url
-        )
-    }
-}
-
-fun NewsFeedCatalogCategory.toNewsFeedGroup(): NewsFeedGroup {
-    return NewsFeedGroup(
-        id = 0L,
-        parentId = 0L,
-        parentGroupName = parentCategory?.name,
-        name = name,
-        newsFeeds = feeds.map { f -> f.toNewsFeedItem() },
-        subGroups = subCategories.map { sc -> sc.toNewsFeedGroup() }
-    )
-}
-
-fun NewsFeedConfiguration.toNewsFeedItem(): NewsFeedItem {
-    val newsFeedItem = NewsFeedItem(
-        name = get<String>(NC.feedName),
-        mainGroupName = get<String>(NC.mainGroupName) ?: error("No main group given"),
-        subGroupName = get<String>(NC.subGroupName),
-        imageUrl = get<String>(NC.imageUrl),
-        url = get<String>(NC.url),
-        stopWords = get<List<String>>(NC.stopWords)
-    )
-    return newsFeedItem
-}
-
-fun NewsFeedItem.toNewsFeedConfiguration(newsFeedGroups: List<NewsFeedGroup>): NewsFeedConfiguration {
-    val newsFeedConfiguration = NewsFeedConfiguration(newsFeedGroups = newsFeedGroups)
-    newsFeedConfiguration.set(NC.feedName, name)
-    newsFeedConfiguration.set(NC.mainGroupName, mainGroupName)
-    newsFeedConfiguration.set(NC.subGroupName, subGroupName)
-    newsFeedConfiguration.set(NC.imageUrl, imageUrl)
-    newsFeedConfiguration.set(NC.url, url)
-    newsFeedConfiguration.set(NC.stopWords, stopWords)
-
-    return newsFeedConfiguration
 }
 
 fun NewsFeed.toNewsFeedEntity(): NewsFeedEntity {

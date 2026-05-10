@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
@@ -31,7 +33,11 @@ import de.visualdigits.newshomereader.presentation.page.newsfeeditems.NewsConten
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.NewsItemSearchBar
 import de.visualdigits.newshomereader.presentation.page.settings.SettingsPage
 import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
+import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum.ANTHRACITE
+import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum.LIGHT
 import de.visualdigits.newshomereader.presentation.style.MyShapes
+import de.visualdigits.newshomereader.presentation.style.anthraciteTheme
+import de.visualdigits.newshomereader.presentation.style.lightTheme
 import de.visualdigits.newshomereader.presentation.style.typography
 import kotlin.math.max
 
@@ -42,7 +48,8 @@ fun MainPage(
     connectivityManager: ConnectivityManager
 ) {
     val state by viewModel.state.collectAsState()
-    val displayTheme = state.settings?.get<DisplayThemeEnum>(SK.displayTheme) ?: DisplayThemeEnum.LIGHT
+    val displayTheme = state.settings?.get<DisplayThemeEnum>(SK.displayTheme) ?: LIGHT
+    val spotColor = state.settings?.get<Color>(SK.spotColor)?: DisplayThemeEnum.SPOT_COLOR_DEFAULT
     val maxImageSize = state.settings?.get<Int>(SK.maxImageSize) ?: 1200
 
     val uriHandler = LocalUriHandler.current
@@ -57,6 +64,11 @@ fun MainPage(
 
     BindBackHandler(isEnabled = state.currentNewsArticle != null) {
         viewModel.onAction(NewsHomeReaderAction.OnNewsItemClosed())
+    }
+
+    val colorScheme = when (displayTheme) {
+        LIGHT -> lightTheme(spotColor)
+        ANTHRACITE -> anthraciteTheme(spotColor)
     }
 
     BoxWithConstraints(
@@ -88,7 +100,7 @@ fun MainPage(
         }
 
         MaterialTheme(
-            colorScheme = displayTheme.colorScheme,
+            colorScheme = colorScheme,
             typography = typography(
                 textColor = displayTheme.textColor,
                 sizeFactor = sizeFactor
@@ -105,7 +117,7 @@ fun MainPage(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(displayTheme.colorScheme.background)
+                    .background(colorScheme.background)
                     .safeDrawingPadding(),
             ) {
                 ErrorCard(

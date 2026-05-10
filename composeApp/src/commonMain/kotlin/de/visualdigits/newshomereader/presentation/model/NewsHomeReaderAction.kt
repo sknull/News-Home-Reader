@@ -26,7 +26,6 @@ sealed interface NewsHomeReaderAction {
 
     @Immutable
     data class OnSettingsValueChanged(
-        val settings: Settings?,
         val keyValue: KeyValue,
     ): NewsHomeReaderAction
 

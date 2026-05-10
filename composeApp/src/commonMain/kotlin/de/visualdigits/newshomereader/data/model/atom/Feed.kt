@@ -1,7 +1,7 @@
 package de.visualdigits.newshomereader.data.model.atom
 
 import androidx.compose.runtime.Immutable
-import de.visualdigits.newshomereader.data.serializer.OffsetDateTimeHeuristicDeserializer
+import de.visualdigits.newshomereader.domain.serializer.OffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName

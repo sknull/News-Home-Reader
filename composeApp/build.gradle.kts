@@ -244,7 +244,7 @@ tasks.asciidoctorPdf {
                 "imagesdir" to rootDir.absolutePath,
                 "source-highlighter" to "rouge",
                 "icons" to "font",
-//                "allow-uri-read" to true
+                "allow-uri-read" to true
             )
         )
     }

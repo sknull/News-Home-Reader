@@ -13,6 +13,7 @@ import de.visualdigits.newshomereader.domain.model.settings.EncryptedString;
 CREATE TABLE SettingsEntity (
     id INTEGER NOT NULL DEFAULT 0,
     displayTheme TEXT NOT NULL,
+    spotColor TEXT NOT NULL,
     language TEXT NOT NULL,
     refreshInterval TEXT NOT NULL,
     refreshWifiOnly INTEGER AS Boolean NOT NULL DEFAULT 0,
@@ -29,10 +30,10 @@ CREATE TABLE SettingsEntity (
 
 insertSettings:
 INSERT OR REPLACE INTO SettingsEntity (
-    displayTheme, language, refreshInterval, refreshWifiOnly, lastMaxImageSize, keepReadArticles,
+    displayTheme, spotColor, language, refreshInterval, refreshWifiOnly, lastMaxImageSize, keepReadArticles,
     keepUnreadArticles, loadArticles, hideRead, webDavUrl, webDavDirectory, webDavUser, webDavPassword
 )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 getSettingsById:
 SELECT * FROM SettingsEntity WHERE id = :id;
@@ -43,6 +44,7 @@ SELECT * FROM SettingsEntity;
 updateSettingsEntity:
 UPDATE SettingsEntity
 SET displayTheme = :displayTheme,
+    spotColor = :spotColor,
     language = :language,
     refreshInterval = :refreshInterval,
     refreshWifiOnly = :refreshWifiOnly,

@@ -3,7 +3,7 @@ package de.visualdigits.newshomereader.data.model.applicationjson
 
 import androidx.compose.runtime.Immutable
 import de.visualdigits.newshomereader.data.serializer.ListSerializer
-import de.visualdigits.newshomereader.data.serializer.OffsetDateTimeHeuristicDeserializer
+import de.visualdigits.newshomereader.domain.serializer.OffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlSerialName

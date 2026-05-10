@@ -46,6 +46,7 @@ class WebDavTest : KoinTest {
         val webDavCredentials = Json.decodeFromString<WebDavCredentials>(File("E:\\temp\\.newshomereader\\webDav_credentials.json").readText())
         val newSettings = Settings()
         newSettings.set(SK.displayTheme, DisplayThemeEnum.LIGHT)
+        newSettings.set(SK.spotColor, DisplayThemeEnum.SPOT_COLOR_DEFAULT)
         newSettings.set(SK.language, Language.EN)
         newSettings.set(SK.refreshInterval, RefreshIntervalEnum.MINUTES_60)
         newSettings.set(SK.refreshWifiOnly, BooleanEnum.TRUE)

@@ -49,7 +49,6 @@
   <string name="label_60_days">60 Tage</string>
   <string name="label_60_minutes">60 Minuten</string>
   <string name="label_7_days">7 Tage</string>
-  <string name="label_add_scene">New Szene</string>
   <string name="label_configuration">Konfiguration</string>
   <string name="label_delete_scene">Szene löschen</string>
   <string name="label_displayTheme">Oberflächen Thema</string>
@@ -69,6 +68,8 @@
   <string name="label_settings">Einstellungen</string>
   <string name="label_stopWords">Stop Words</string>
   <string name="label_subgroupName">Untergruppen Name</string>
+  <string name="label_spotColor">Spot Farbe</string>
+  <string name="tooltip_spotColor">Die Akzentfarbe für das Basisthema</string>
   <string name="label_url">Feed URL</string>
   <string name="language_de">Deutsch</string>
   <string name="language_en">Englisch</string>

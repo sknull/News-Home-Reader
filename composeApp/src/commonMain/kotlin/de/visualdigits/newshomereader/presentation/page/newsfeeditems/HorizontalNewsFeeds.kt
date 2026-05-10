@@ -19,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
@@ -31,6 +32,7 @@ import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.digital_dream_skew_fat
 import de.visualdigits.compose.resources.icon_add_notes_24px
+import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
@@ -40,6 +42,7 @@ import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.NewsI
 import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
+import de.visualdigits.newshomereader.presentation.style.studioClockColors
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 
@@ -139,7 +142,9 @@ fun HorizontalNewsFeeds(
                     fontFamily = FontFamily(Font(Res.font.digital_dream_skew_fat)),
                     showSeconds = false,
                     showDate = true,
-                    colors = displayTheme.studioClockColors
+                    colors = state.settings?.get<Color>(SK.spotColor)
+                        ?.let { sc -> studioClockColors(sc) }
+                        ?: studioClockColors(DisplayThemeEnum.SPOT_COLOR_DEFAULT)
                 )
             }
         }

@@ -1,8 +1,10 @@
 package de.visualdigits.newshomereader.data.repository
 
+import androidx.compose.ui.graphics.Color
 import co.touchlab.kermit.Logger
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.errorhandling.Result
+import de.visualdigits.common.domain.util.toWebColor
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.data.database.mapper.toSettings
 import de.visualdigits.newshomereader.data.database.mapper.toSettingsEntity
@@ -104,6 +106,7 @@ private fun Settings.toSettingsRepositoryEntity(cryptoBox: CryptoBox): SettingsR
     val settingsEntity = SettingsRepositoryEntity(
         id = 0,
         displayTheme = get<DisplayThemeEnum>(SK.displayTheme)?.name ?: "LIGHT",
+        spotColor = get<Color>(SK.spotColor)?.toWebColor() ?: DisplayThemeEnum.SPOT_COLOR_DEFAULT.toWebColor(),
         language = get<Language>(SK.language)?.name ?: "EN",
         hideRead = get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
         loadArticles = get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false,
@@ -124,6 +127,7 @@ private fun Settings.toSettingsRepositoryEntity(cryptoBox: CryptoBox): SettingsR
 private data class SettingsRepositoryEntity(
     val id: Long,
     val displayTheme: String,
+    val spotColor: String,
     val language: String,
     val refreshInterval: String,
     val refreshWifiOnly: Boolean,
@@ -141,6 +145,7 @@ private data class SettingsRepositoryEntity(
         val settings = Settings()
 
         settings.set(SK.displayTheme, displayTheme)
+        settings.set(SK.spotColor, spotColor)
         settings.set(SK.language, language)
         settings.set(SK.hideRead, hideRead)
         settings.set(SK.loadArticles, loadArticles)

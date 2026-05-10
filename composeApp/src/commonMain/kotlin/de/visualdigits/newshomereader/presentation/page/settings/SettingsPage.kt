@@ -105,7 +105,6 @@ fun SettingsPage(
             onValueChange = { keyValue ->
                 onAction(
                     NewsHomeReaderAction.OnSettingsValueChanged(
-                        settings = state.settings,
                         keyValue = keyValue
                     )
                 )

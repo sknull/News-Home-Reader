@@ -1,4 +1,4 @@
-package de.visualdigits.newshomereader.data.serializer
+package de.visualdigits.newshomereader.domain.serializer
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.SerialDescriptor

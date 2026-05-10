@@ -9,15 +9,28 @@
 
 image::art/NewsHomeReader_Banner.jpg[]
 
+ifndef::backend-pdf[]
 == Status
 
-Version 0.0.1-SNAPSHOT
-
-ifndef::backend-pdf[]
 image:https://github.com/sknull/News-Home-Reader/actions/workflows/publish.yml/badge.svg[News Home Reader CI,link=https://github.com/sknull/News-Home-Reader/actions/workflows/publish.yml]
+image:http://img.shields.io/badge/version-1.0.0 SNAPSHOT-ffaa00.svg?style=flat[badge-version]
+
+== Supported Platforms
+
 image:http://img.shields.io/badge/platform-android-3DDC84.svg?style=flat[badge-android]
 image:http://img.shields.io/badge/platform-windows-0078D7.svg?style=flat[badge-windows]
 image:http://img.shields.io/badge/platform-linux-654FF0.svg?style=flat[badge-linux]
+endif::[]
+ifdef::backend-pdf[]
+== Status
+
+Version 1.0.0-SNAPSHOT
+
+== Supported Platforms
+
+- Android
+- Windows
+- Linux
 endif::[]
 
 == About

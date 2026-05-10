@@ -1,6 +1,6 @@
 package de.visualdigits.newshomereader.domain.model.catalog
 
-import de.visualdigits.newshomereader.data.serializer.OffsetDateTimeHeuristicDeserializer
+import de.visualdigits.newshomereader.domain.serializer.OffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.Serializable
 import java.time.OffsetDateTime
 

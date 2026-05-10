@@ -14,8 +14,8 @@ import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.error_local_wrong_filetype
 import de.visualdigits.generated.AppVersion
-import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedConfiguration
-import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedItem
+import de.visualdigits.newshomereader.domain.mapper.toNewsFeedConfiguration
+import de.visualdigits.newshomereader.domain.mapper.toNewsFeedItem
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum
@@ -187,7 +187,7 @@ class NewsHomeReaderViewModel(
                     }
                 }
                 _state.update {
-                    val settings = action.settings?.copy(
+                    val settings = it.settings?.copy(
                         key = action.keyValue.descriptor.key as SK,
                         value = action.keyValue.value
                     )
@@ -1337,6 +1337,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
             } else {
                 val newSettings = Settings()
                 newSettings.set(SK.displayTheme, DisplayThemeEnum.LIGHT)
+                newSettings.set(SK.spotColor, DisplayThemeEnum.SPOT_COLOR_DEFAULT)
                 newSettings.set(SK.language, Language.EN)
                 newSettings.set(SK.refreshInterval, RefreshIntervalEnum.MINUTES_60)
                 newSettings.set(SK.refreshWifiOnly, BooleanEnum.TRUE)
