@@ -2,9 +2,9 @@ package de.visualdigits.newshomereader.data.model.applicationjson
 
 
 import de.visualdigits.newshomereader.data.serializer.ListSerializer
-import de.visualdigits.newshomereader.domain.serializer.OffsetDateTimeHeuristicDeserializer
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem
 import de.visualdigits.newshomereader.domain.model.unified.ThumbnailItem
+import de.visualdigits.newshomereader.domain.serializer.OffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.OffsetDateTime

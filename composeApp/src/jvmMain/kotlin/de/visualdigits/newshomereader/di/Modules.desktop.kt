@@ -7,14 +7,8 @@ import de.visualdigits.newshomereader.data.model.CryptoBox
 import de.visualdigits.newshomereader.data.model.JvmCryptoBox
 import de.visualdigits.newshomereader.data.repository.FeedScheduler
 import de.visualdigits.newshomereader.data.repository.ImageCache
-import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.okhttp.OkHttp
-import io.ktor.client.plugins.HttpRedirect
-import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.request.header
-import io.ktor.http.HttpHeaders
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
