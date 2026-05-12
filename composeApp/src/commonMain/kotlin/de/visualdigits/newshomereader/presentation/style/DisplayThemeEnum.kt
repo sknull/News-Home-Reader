@@ -61,11 +61,13 @@ enum class DisplayThemeEnum(
     )
     ;
 
-    override fun toString(): String = name.lowercase()
+    override fun toString(): String = name
 
     companion object : KeyFactory<DisplayThemeEnum> {
 
         val SPOT_COLOR_DEFAULT: Color = Color(0xFF439DDE)
+
+        override val options: List<Triple<DisplayThemeEnum, UiText?, DrawableResource?>> = entries.map { e -> Triple(e, e.uiText, e.drawableResourceId) }
 
         override fun fromString(value: String?): DisplayThemeEnum? {
             return entries.find { e -> e.name == value }

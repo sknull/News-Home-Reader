@@ -57,9 +57,7 @@ sealed interface NewsHomeReaderAction {
     ): NewsHomeReaderAction
 
     @Immutable
-    data class OnSaveSettingsClick(
-        val settings: Settings,
-    ) : NewsHomeReaderAction
+    class OnSaveSettingsClick : NewsHomeReaderAction
 
     @Immutable
     data class OnShowInfosClick(
@@ -111,7 +109,6 @@ sealed interface NewsHomeReaderAction {
 
     @Immutable
     data class OnNewsFeedConfigurationValueChanged(
-        val newsFeedConfiguration: NewsFeedConfiguration?,
         val keyValue: KeyValue,
     ): NewsHomeReaderAction
 

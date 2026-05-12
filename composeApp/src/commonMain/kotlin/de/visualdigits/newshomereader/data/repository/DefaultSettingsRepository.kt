@@ -2,6 +2,9 @@ package de.visualdigits.newshomereader.data.repository
 
 import androidx.compose.ui.graphics.Color
 import co.touchlab.kermit.Logger
+import de.visualdigits.common.domain.model.CryptoBox
+import de.visualdigits.common.domain.model.EncryptedString
+import de.visualdigits.common.domain.model.configuration.AbstractConfiguration.Companion.valueMap
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.common.domain.util.toWebColor
@@ -9,11 +12,9 @@ import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.data.database.mapper.toSettings
 import de.visualdigits.newshomereader.data.database.mapper.toSettingsEntity
 import de.visualdigits.newshomereader.data.database.upsertSettings
-import de.visualdigits.newshomereader.data.model.CryptoBox
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
-import de.visualdigits.newshomereader.domain.model.settings.EncryptedString
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
@@ -24,6 +25,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.jsonPrimitive
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -42,11 +45,11 @@ class DefaultSettingsRepository(
         try {
             dao.getSettingsById(0)
                 .executeAsOneOrNull()
-                ?.let { settingsEntites ->
-                    settingsEntites
+                ?.let { settingsEntity ->
+                    settingsEntity
                         .toSettings()
                         .let { s ->
-                            webDavUrl = s.get<String>(SK.webDavUrl)
+                            webDavUrl = s.get<String>(SK.webDavUrl) // remember url for update worker
                             Result.Success(s)
                         }
                 } ?: Result.Success(null)
@@ -71,13 +74,34 @@ class DefaultSettingsRepository(
     override suspend fun importSettings(ins: InputStream): Result<Settings, DataError.Local> = withContext(dispatcher) {
         try {
             val jsonMapper = Json {
-                prettyPrint = true
+                ignoreUnknownKeys = true
+                explicitNulls = false
             }
             val json = ins.use { ins ->
                 String(ins.readBytes())
             }
-            val settingsEntity = jsonMapper.decodeFromString(SettingsRepositoryEntity.serializer(), json)
-            val settings = settingsEntity.toSettings(cryptoBox)
+
+            val settings = Settings(
+                valueMap(
+                    fieldDescriptors = Settings.DESCRIPTORS,
+                    values = jsonMapper
+                        .decodeFromString<Map<String, JsonElement>>(json)
+                        .mapNotNull { (key, value) ->
+                            val sk = SK.fromString(key)
+                            if (sk != null) {
+                                val rawValue = value.jsonPrimitive.content
+                                val finalValue = if (sk == SK.webDavPassword) {
+                                    cryptoBox.decrypt(rawValue)
+                                } else {
+                                    rawValue
+                                }
+                                Pair(sk, finalValue)
+                            } else {
+                                null
+                            }
+                        }
+                        .toMap()
+                ))
             setSettings(settings)
             Result.Success(settings)
         } catch (e: Exception) {
@@ -140,25 +164,4 @@ private data class SettingsRepositoryEntity(
     val webDavDirectory: String,
     val webDavUser: String,
     val webDavPassword: EncryptedString,
-) {
-    fun toSettings(cryptoBox: CryptoBox): Settings {
-        val settings = Settings()
-
-        settings.set(SK.displayTheme, displayTheme)
-        settings.set(SK.spotColor, spotColor)
-        settings.set(SK.language, language)
-        settings.set(SK.hideRead, hideRead)
-        settings.set(SK.loadArticles, loadArticles)
-        settings.set(SK.refreshInterval, refreshInterval)
-        settings.set(SK.refreshWifiOnly, refreshWifiOnly)
-        settings.set(SK.maxImageSize, lastMaxImageSize)
-        settings.set(SK.keepReadArticles, keepReadArticles)
-        settings.set(SK.keepUnreadArticles, keepUnreadArticles)
-        settings.set(SK.webDavUrl, webDavUrl)
-        settings.set(SK.webDavDirectory, webDavDirectory)
-        settings.set(SK.webDavUser, webDavUser)
-        settings.set(SK.webDavPassword, cryptoBox.decrypt(webDavPassword))
-
-        return settings
-    }
-}
+)

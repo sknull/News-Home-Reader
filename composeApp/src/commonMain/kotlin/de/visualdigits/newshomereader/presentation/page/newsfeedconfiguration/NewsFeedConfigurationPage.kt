@@ -96,12 +96,11 @@ fun NewsFeedConfigurationPage(
             onValueChange = { keyValue ->
                 onAction(
                     NewsHomeReaderAction.OnNewsFeedConfigurationValueChanged(
-                        newsFeedConfiguration = state.editedNewsFeedConfiguration,
                         keyValue = keyValue
                     )
                 )
             },
-            configuration = { state.editedNewsFeedConfiguration!! },
+            configuration = state.editedNewsFeedConfiguration!!,
             onCancelClick = {
                 onAction(
                     if (state.isAddingNewsFeedConfiguration) {

@@ -44,20 +44,21 @@ class WebDavTest : KoinTest {
     @Test
     fun testWebDavClient() = runTest {
         val webDavCredentials = Json.decodeFromString<WebDavCredentials>(File("E:\\temp\\.newshomereader\\webDav_credentials.json").readText())
-        val newSettings = Settings()
-        newSettings.set(SK.displayTheme, DisplayThemeEnum.LIGHT)
-        newSettings.set(SK.spotColor, DisplayThemeEnum.SPOT_COLOR_DEFAULT)
-        newSettings.set(SK.language, Language.EN)
-        newSettings.set(SK.refreshInterval, RefreshIntervalEnum.MINUTES_60)
-        newSettings.set(SK.refreshWifiOnly, BooleanEnum.TRUE)
-        newSettings.set(SK.maxImageSize, 1200)
-        newSettings.set(SK.loadArticles, BooleanEnum.FALSE)
-        newSettings.set(SK.hideRead, BooleanEnum.TRUE)
-        newSettings.set(SK.keepReadArticles, KeepArticlesEnum.DAYS_3)
-        newSettings.set(SK.keepUnreadArticles, KeepArticlesEnum.DAYS_7)
-        newSettings.set(SK.webDavUrl, webDavCredentials.webDavUrl)
-        newSettings.set(SK.webDavUser, webDavCredentials.webDavUser)
-        newSettings.set(SK.webDavPassword, webDavCredentials.webDavPassword)
+        val newSettings = Settings(mapOf(
+            SK.displayTheme to DisplayThemeEnum.LIGHT,
+            SK.spotColor to DisplayThemeEnum.SPOT_COLOR_DEFAULT,
+            SK.language to Language.EN,
+            SK.refreshInterval to RefreshIntervalEnum.MINUTES_60,
+            SK.refreshWifiOnly to BooleanEnum.TRUE,
+            SK.maxImageSize to 1200,
+            SK.loadArticles to BooleanEnum.FALSE,
+            SK.hideRead to BooleanEnum.TRUE,
+            SK.keepReadArticles to KeepArticlesEnum.DAYS_3,
+            SK.keepUnreadArticles to KeepArticlesEnum.DAYS_7,
+            SK.webDavUrl to webDavCredentials.webDavUrl,
+            SK.webDavUser to webDavCredentials.webDavUser,
+            SK.webDavPassword to webDavCredentials.webDavPassword
+        ))
         settingsRepository.setSettings(newSettings)
 
 //        val response = httpClient.get("${webDavCredentials.webDavUrl}/files/hello.txt")

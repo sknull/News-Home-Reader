@@ -26,9 +26,11 @@ enum class KeepArticlesEnum(
    DAYS_60(UiText.StringResourceId(Res.string.label_60_days),  null, 60),
     ;
 
-    override fun toString(): String = name.lowercase()
+    override fun toString(): String = name
 
     companion object : KeyFactory<KeepArticlesEnum> {
+
+        override val options: List<Triple<KeepArticlesEnum, UiText?, DrawableResource?>> = entries.map { e -> Triple(e, e.uiText, e.drawableResourceId) }
 
         override fun fromString(value: String?): KeepArticlesEnum? {
             return entries.find { e -> e.name == value }

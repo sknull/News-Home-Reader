@@ -39,7 +39,6 @@ data class NewsHomeReaderState(
     val currentNewsArticle: FullArticle? = null,
 
     val settings: Settings? = null,
-    val originalSettings: Settings? = null,
 
     val selectedTabIndex: Int = 0,
     val selectedTabLabel: StringResource? = null,

@@ -80,6 +80,9 @@ class NewsHomeReaderViewModel(
     private val _state = MutableStateFlow(NewsHomeReaderState())
     val state = _state.asStateFlow()
 
+    val _editedSettings = MutableStateFlow<Settings?>(null)
+    val editedSettings = _editedSettings.asStateFlow()
+
     init {
         log.i("Application version ${AppVersion().version} initializing...")
         loadData()
@@ -169,9 +172,9 @@ class NewsHomeReaderViewModel(
             // Settings
             //
             is NewsHomeReaderAction.OnEditSettingsClick -> {
+                _editedSettings.value = state.value.settings
                 _state.update {
                     it.copy(
-                        originalSettings = it.settings,
                         isEditingSettings = action.isEditingSettings,
                         isShowInfos = false,
                         uiMessage = null,
@@ -183,25 +186,21 @@ class NewsHomeReaderViewModel(
             is NewsHomeReaderAction.OnSettingsValueChanged -> {
                 if (action.keyValue.descriptor.key == SK.language) {
                     action.keyValue.value?.also { l ->
-                        Locale.setDefault(Language.valueOf(l).locale)
+                        Locale.setDefault((l as Language).locale)
                     }
                 }
-                _state.update {
-                    val settings = it.settings?.copy(
+                _editedSettings.update { current ->
+                    current?.copy(
                         key = action.keyValue.descriptor.key as SK,
                         value = action.keyValue.value
-                    )
-                    it.copy(
-                        settings = settings,
                     )
                 }
             }
 
             is NewsHomeReaderAction.OnEditSettingsCancelClick -> {
                 _state.update { state ->
-                    state.originalSettings?.get<Language>(SK.language)?.also { l -> Locale.setDefault(l.locale) }
+                    state.settings?.get<Language>(SK.language)?.also { l -> Locale.setDefault(l.locale) }
                     state.copy(
-                        settings = state.originalSettings?.copy(),
                         isEditingSettings = false,
                         uiMessage = null,
                         uiMessageSeverity = null
@@ -210,7 +209,7 @@ class NewsHomeReaderViewModel(
             }
 
             is NewsHomeReaderAction.OnSaveSettingsClick -> {
-                saveSettings(action.settings)
+                saveSettings(_editedSettings.value)
             }
 
             is NewsHomeReaderAction.OnOpmlImport -> {
@@ -231,8 +230,7 @@ class NewsHomeReaderViewModel(
 
             is NewsHomeReaderAction.UpdateMaxImageSize -> {
                 action.settings?.also { settings ->
-                    settings.set(SK.maxImageSize, action.maxImageSize)
-                    saveSettings(settings)
+                    saveSettings(settings.copy(SK.maxImageSize, action.maxImageSize))
                 }
                 _state.update {
                     it.copy(
@@ -280,12 +278,16 @@ class NewsHomeReaderViewModel(
                 }
             }
             is NewsHomeReaderAction.OnAddNewsFeedConfigurationClick -> {
-                val newsFeedConfiguration = NewsFeedConfiguration(newsFeedGroups = state.value.newsFeedGroups)
-                newsFeedConfiguration.set(NC.feedName, "")
-                newsFeedConfiguration.set(NC.mainGroupName, action.newsFeedGroupName)
-                newsFeedConfiguration.set(NC.imageUrl, "")
-                newsFeedConfiguration.set(NC.url, "")
-                newsFeedConfiguration.set(NC.stopWords, "")
+                val newsFeedConfiguration = NewsFeedConfiguration(
+                    newsFeedGroups = state.value.newsFeedGroups, 
+                    values = mapOf(
+                        NC.feedName to "",
+                        NC.mainGroupName to action.newsFeedGroupName,
+                        NC.imageUrl to "",
+                        NC.url to "",
+                        NC.stopWords to ""
+                    )
+                )
 
                 _state.update {
                     it.copy(
@@ -375,7 +377,7 @@ class NewsHomeReaderViewModel(
             is NewsHomeReaderAction.OnNewsFeedConfigurationValueChanged -> {
                 _state.update { state ->
                     val key = action.keyValue.descriptor.key as NC
-                    var newsFeedConfiguration = action.newsFeedConfiguration?.copy(
+                    var newsFeedConfiguration = state.editedNewsFeedConfiguration?.copy(
                         key = key,
                         value = action.keyValue.value
                     )
@@ -1335,17 +1337,18 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
             val finalSettings = if (settings != null) {
                 settings
             } else {
-                val newSettings = Settings()
-                newSettings.set(SK.displayTheme, DisplayThemeEnum.LIGHT)
-                newSettings.set(SK.spotColor, DisplayThemeEnum.SPOT_COLOR_DEFAULT)
-                newSettings.set(SK.language, Language.EN)
-                newSettings.set(SK.refreshInterval, RefreshIntervalEnum.MINUTES_60)
-                newSettings.set(SK.refreshWifiOnly, BooleanEnum.TRUE)
-                newSettings.set(SK.maxImageSize, 1200)
-                newSettings.set(SK.loadArticles, BooleanEnum.FALSE)
-                newSettings.set(SK.hideRead, BooleanEnum.TRUE)
-                newSettings.set(SK.keepReadArticles, KeepArticlesEnum.DAYS_3)
-                newSettings.set(SK.keepUnreadArticles, KeepArticlesEnum.DAYS_7)
+                val newSettings = Settings(mapOf(
+                    SK.displayTheme to DisplayThemeEnum.LIGHT,
+                    SK.spotColor to DisplayThemeEnum.SPOT_COLOR_DEFAULT,
+                    SK.language to Language.EN,
+                    SK.refreshInterval to RefreshIntervalEnum.MINUTES_60,
+                    SK.refreshWifiOnly to BooleanEnum.TRUE,
+                    SK.maxImageSize to 1200,
+                    SK.loadArticles to BooleanEnum.FALSE,
+                    SK.hideRead to BooleanEnum.TRUE,
+                    SK.keepReadArticles to KeepArticlesEnum.DAYS_3,
+                    SK.keepUnreadArticles to KeepArticlesEnum.DAYS_7
+                ))
                 settingsRepository.setSettings(newSettings)
                     .onError { _, throwable ->
                         log.e("Could not safe initial settings", throwable)
@@ -1537,23 +1540,25 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
     }
 
     private fun saveSettings(
-        settings: Settings,
+        editedSettings: Settings?,
     ) = viewModelScope.launch {
+        checkNotNull(editedSettings) { "No settings to save" }
         _state.update {
             it.copy(
                 isLoading = true,
             )
         }
 
-        settingsRepository.setSettings(settings)
+        settingsRepository.setSettings(editedSettings)
             .onSuccess {
+                _editedSettings.value = null
                 _state.update {
                     it.copy(
-                        settings = settings.copy(),
+                        settings = editedSettings,
                         visibleNewsItems = calculateVisibleNewsItems(
                             newsItems = it.currentNewsItems,
                             hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false,
-                            newsFeedItem =it.currentNewsFeedItem
+                            newsFeedItem = it.currentNewsFeedItem
                         ),
                         isLoading = false,
                         currentProgress = 0.0f,

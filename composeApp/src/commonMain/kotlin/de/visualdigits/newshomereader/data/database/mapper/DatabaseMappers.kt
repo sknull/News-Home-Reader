@@ -2,8 +2,8 @@ package de.visualdigits.newshomereader.data.database.mapper
 
 import androidx.compose.ui.graphics.Color
 import app.cash.sqldelight.ColumnAdapter
+import de.visualdigits.common.domain.model.configuration.AbstractConfiguration.Companion.valueMap
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
-import de.visualdigits.common.domain.util.toComposeColor
 import de.visualdigits.common.domain.util.toWebColor
 import de.visualdigits.newshomereader.FullArticleEntity
 import de.visualdigits.newshomereader.GetAllNewsItemsWithArticles
@@ -53,22 +53,28 @@ fun Settings.toSettingsEntity(): SettingsEntity {
 }
 
 fun SettingsEntity.toSettings(): Settings {
-    val settings = Settings()
-
-    settings.set(SK.displayTheme, displayTheme)
-    settings.set(SK.spotColor, spotColor.toComposeColor())
-    settings.set(SK.language, language)
-    settings.set(SK.hideRead, hideRead)
-    settings.set(SK.loadArticles, loadArticles)
-    settings.set(SK.refreshInterval, refreshInterval)
-    settings.set(SK.refreshWifiOnly, refreshWifiOnly)
-    settings.set(SK.maxImageSize, lastMaxImageSize)
-    settings.set(SK.keepReadArticles, keepReadArticles)
-    settings.set(SK.keepUnreadArticles, keepUnreadArticles)
-    settings.set(SK.webDavUrl, webDavUrl)
-    settings.set(SK.webDavDirectory, webDavDirectory)
-    settings.set(SK.webDavUser, webDavUser)
-    settings.set(SK.webDavPassword, webDavPassword)
+    val values = valueMap(
+        fieldDescriptors = Settings.DESCRIPTORS,
+        values = mapOf(
+            SK.displayTheme to displayTheme,
+            SK.spotColor to spotColor,
+            SK.language to language,
+            SK.hideRead to hideRead,
+            SK.loadArticles to loadArticles,
+            SK.refreshInterval to refreshInterval,
+            SK.refreshWifiOnly to refreshWifiOnly,
+            SK.maxImageSize to lastMaxImageSize,
+            SK.keepReadArticles to keepReadArticles,
+            SK.keepUnreadArticles to keepUnreadArticles,
+            SK.webDavUrl to webDavUrl,
+            SK.webDavDirectory to webDavDirectory,
+            SK.webDavUser to webDavUser,
+            SK.webDavPassword to webDavPassword
+        )
+    )
+    val settings = Settings(
+        values
+    )
 
     return settings
 }

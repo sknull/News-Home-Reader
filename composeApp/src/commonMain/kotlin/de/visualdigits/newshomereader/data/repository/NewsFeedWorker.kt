@@ -53,9 +53,9 @@ class NewsFeedWorker(
                                 newsFeeds = newsFeeds
                             ) { _, _ -> }
                             settings?.also { s ->
-                                s.set(SK.feedsChanged, BooleanEnum.TRUE)
+                                val sc = s.copy(SK.feedsChanged, BooleanEnum.TRUE)
                                 CoroutineScope(Dispatchers.Default).launch {
-                                    settingsRepository.setSettings(s)
+                                    settingsRepository.setSettings(sc)
                                 }
                             }
                         }

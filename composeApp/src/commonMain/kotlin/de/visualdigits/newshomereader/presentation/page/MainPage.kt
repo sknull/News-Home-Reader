@@ -152,6 +152,7 @@ fun MainPage(
                     }
                     state.isEditingSettings -> {
                         SettingsPage(
+                            viewModel = viewModel,
                             state = state,
                             scrollPosition = viewModel.scrollPosition,
                             onCommonAction = onCommonAction,

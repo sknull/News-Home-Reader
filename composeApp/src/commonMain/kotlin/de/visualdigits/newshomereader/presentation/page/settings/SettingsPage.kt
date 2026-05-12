@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
@@ -34,10 +36,12 @@ import de.visualdigits.compose.resources.icon_delete_24px
 import de.visualdigits.compose.resources.icon_edit_24px
 import de.visualdigits.compose.resources.icon_file_save_24px
 import de.visualdigits.compose.resources.icon_folder_open_24px
+import de.visualdigits.compose.resources.icon_visibility_24px
 import de.visualdigits.compose.resources.ok
 import de.visualdigits.compose.resources.title_settings
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -45,11 +49,14 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SettingsPage(
+    viewModel: NewsHomeReaderViewModel,
     state: NewsHomeReaderState,
     scrollPosition: MutableMap<String, Pair<Int, Int?>>,
     onCommonAction: (CommonAction) -> Unit,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
+
+    val editedSettings by viewModel.editedSettings.collectAsState()
 
     Column(
         modifier = Modifier
@@ -91,6 +98,7 @@ fun SettingsPage(
                 iconSaveFile = painterResource(Res.drawable.icon_file_save_24px)
             ),
             tooltipOk = UiText.StringResourceId(Res.string.ok),
+            visibilityIcon = painterResource(Res.drawable.icon_visibility_24px),
             iconOk = painterResource(Res.drawable.icon_check_small_24px),
             tooltipCancel = UiText.StringResourceId(Res.string.cancel),
             iconCancel = painterResource(Res.drawable.icon_cancel_24px),
@@ -109,7 +117,7 @@ fun SettingsPage(
                     )
                 )
             },
-            configuration = { state.settings!! },
+            configuration = editedSettings!!,
             onCancelClick = {
                 onAction(
                     NewsHomeReaderAction.OnEditSettingsCancelClick()
@@ -117,9 +125,7 @@ fun SettingsPage(
             },
             onOkClick = {
                 onAction(
-                    NewsHomeReaderAction.OnSaveSettingsClick(
-                        settings = state.settings ?: error("No Settings")
-                    )
+                    NewsHomeReaderAction.OnSaveSettingsClick()
                 )
             },
             onCommonAction = onCommonAction

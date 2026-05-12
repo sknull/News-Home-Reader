@@ -1,10 +1,10 @@
 package de.visualdigits.newshomereader.di
 
+import de.visualdigits.common.domain.model.CryptoBox
+import de.visualdigits.common.domain.model.JvmCryptoBox
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.newshomereader.data.database.DriverFactory
 import de.visualdigits.newshomereader.data.http.HttpClientFactory
-import de.visualdigits.newshomereader.data.model.CryptoBox
-import de.visualdigits.newshomereader.data.model.JvmCryptoBox
 import de.visualdigits.newshomereader.data.repository.FeedScheduler
 import de.visualdigits.newshomereader.data.repository.ImageCache
 import io.ktor.client.engine.HttpClientEngine

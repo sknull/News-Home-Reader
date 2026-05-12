@@ -21,13 +21,14 @@ fun NewsFeedConfiguration.toNewsFeedItem(): NewsFeedItem {
 }
 
 fun NewsFeedItem.toNewsFeedConfiguration(newsFeedGroups: List<NewsFeedGroup>): NewsFeedConfiguration {
-    val newsFeedConfiguration = NewsFeedConfiguration(newsFeedGroups = newsFeedGroups)
-    newsFeedConfiguration.set(NC.feedName, name)
-    newsFeedConfiguration.set(NC.mainGroupName, mainGroupName)
-    newsFeedConfiguration.set(NC.subGroupName, subGroupName)
-    newsFeedConfiguration.set(NC.imageUrl, imageUrl)
-    newsFeedConfiguration.set(NC.url, url)
-    newsFeedConfiguration.set(NC.stopWords, stopWords)
+    val newsFeedConfiguration = NewsFeedConfiguration(newsFeedGroups = newsFeedGroups, values = mapOf(
+        NC.feedName to name,
+        NC.mainGroupName to mainGroupName,
+        NC.subGroupName to subGroupName,
+        NC.imageUrl to imageUrl,
+        NC.url to url,
+        NC.stopWords to stopWords
+    ))
 
     return newsFeedConfiguration
 }

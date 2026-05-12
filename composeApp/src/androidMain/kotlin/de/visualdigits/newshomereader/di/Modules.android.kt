@@ -1,22 +1,16 @@
 package de.visualdigits.newshomereader.di
 
+import de.visualdigits.common.domain.model.AndroidCryptoBox
+import de.visualdigits.common.domain.model.CryptoBox
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.newshomereader.data.database.DriverFactory
 import de.visualdigits.newshomereader.data.http.HttpClientFactory
-import de.visualdigits.newshomereader.data.model.AndroidCryptoBox
-import de.visualdigits.newshomereader.data.model.CryptoBox
 import de.visualdigits.newshomereader.data.repository.FeedScheduler
 import de.visualdigits.newshomereader.data.repository.FeedUpdateWorker
 import de.visualdigits.newshomereader.data.repository.ImageCache
 import de.visualdigits.newshomereader.data.repository.NewsFeedWorker
-import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.okhttp.OkHttp
-import io.ktor.client.plugins.HttpRedirect
-import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.request.header
-import io.ktor.http.HttpHeaders
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.workmanager.dsl.worker
 import org.koin.core.module.Module

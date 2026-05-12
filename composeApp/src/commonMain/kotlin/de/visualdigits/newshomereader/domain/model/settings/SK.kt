@@ -21,4 +21,10 @@ enum class SK : FieldKey<SK> {
     maxImageSize,
     feedsChanged
     ;
+
+    companion object {
+        fun fromString(value: String): SK? {
+            return entries.find { entry -> entry.name == value }
+        }
+    }
 }

@@ -1,6 +1,8 @@
 package de.visualdigits.newshomereader.di
 
 import app.cash.sqldelight.ColumnAdapter
+import de.visualdigits.common.domain.model.CryptoBox
+import de.visualdigits.common.domain.model.EncryptedString
 import de.visualdigits.newshomereader.FullArticleEntity
 import de.visualdigits.newshomereader.NewsFeedEntity
 import de.visualdigits.newshomereader.NewsFeedGroupEntity
@@ -14,7 +16,6 @@ import de.visualdigits.newshomereader.data.database.mapper.newsFeedsAdapter
 import de.visualdigits.newshomereader.data.database.mapper.stringListAdapter
 import de.visualdigits.newshomereader.data.database.mapper.subGroupsAdapter
 import de.visualdigits.newshomereader.data.http.HttpClientFactory
-import de.visualdigits.newshomereader.data.model.CryptoBox
 import de.visualdigits.newshomereader.data.repository.DefaultArticleRepository
 import de.visualdigits.newshomereader.data.repository.DefaultCatalogRepository
 import de.visualdigits.newshomereader.data.repository.DefaultFeedRepository
@@ -22,7 +23,6 @@ import de.visualdigits.newshomereader.data.repository.DefaultNewsFeedConfigurati
 import de.visualdigits.newshomereader.data.repository.DefaultSettingsRepository
 import de.visualdigits.newshomereader.data.repository.NewsFeedWorker
 import de.visualdigits.newshomereader.data.webdav.DefaultWebDavSyncService
-import de.visualdigits.newshomereader.domain.model.settings.EncryptedString
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
 import de.visualdigits.newshomereader.domain.repository.CatalogRepository
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
@@ -75,6 +75,7 @@ val sharedModule = module {
             )
         )
     }
+
     single<NewsHomeReaderDatabaseQueries> {
         get<SettingsDatabase>().newsHomeReaderDatabaseQueries
     }

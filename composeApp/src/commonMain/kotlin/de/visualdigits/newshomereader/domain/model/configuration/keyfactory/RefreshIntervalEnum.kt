@@ -22,9 +22,11 @@ enum class RefreshIntervalEnum(
     MINUTES_60(UiText.StringResourceId(Res.string.label_60_minutes),  null, 60),
     ;
 
-    override fun toString(): String = name.lowercase()
+    override fun toString(): String = name
 
     companion object : KeyFactory<RefreshIntervalEnum> {
+
+        override val options: List<Triple<RefreshIntervalEnum, UiText?, DrawableResource?>> = entries.map { e -> Triple(e, e.uiText, e.drawableResourceId) }
 
         override fun fromString(value: String?): RefreshIntervalEnum? {
             return entries.find { e -> e.name == value }

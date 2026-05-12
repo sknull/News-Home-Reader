@@ -5,7 +5,7 @@ import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem;
 import kotlin.Boolean;
 import kotlin.String;
 import kotlin.collections.List;
-import de.visualdigits.newshomereader.domain.model.settings.EncryptedString;
+import de.visualdigits.common.domain.model.EncryptedString;
 
 --
 -- SETTINGS
@@ -13,7 +13,7 @@ import de.visualdigits.newshomereader.domain.model.settings.EncryptedString;
 CREATE TABLE SettingsEntity (
     id INTEGER NOT NULL DEFAULT 0,
     displayTheme TEXT NOT NULL,
-    spotColor TEXT NOT NULL,
+    spotColor TEXT NOT NULL DEFAULT "0xffffffff",
     language TEXT NOT NULL,
     refreshInterval TEXT NOT NULL,
     refreshWifiOnly INTEGER AS Boolean NOT NULL DEFAULT 0,
