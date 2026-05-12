@@ -103,10 +103,10 @@ class DefaultFeedRepository(
                             .flatMap { subGroupEntity ->
                                 subGroupEntity.newsFeeds.map { nf -> nf.name }
                             } + newsFeedGroupEntity.newsFeeds.map { it.name }
-                        addAll(names.map { observeNesFeedItems(it) })
+                        addAll(names.map { observeNewsItems(it) })
                     }
             }
-            newsFeedName?.let { add(observeNesFeedItems(it)) }
+            newsFeedName?.let { add(observeNewsItems(it)) }
         }
 
         return when {
@@ -115,7 +115,7 @@ class DefaultFeedRepository(
         }
     }
 
-    private fun observeNesFeedItems(newsFeedName: String?): Flow<List<NewsItem>> {
+    private fun observeNewsItems(newsFeedName: String?): Flow<List<NewsItem>> {
         val newsItems = if (newsFeedName != null) {
             val newsFeed = dao.getNewsFeedByFeedName(newsFeedName).executeAsOneOrNull()?.toNewsFeed()
             dao.getAllNewsItemsByFeedName(newsFeedName.trim().lowercase())

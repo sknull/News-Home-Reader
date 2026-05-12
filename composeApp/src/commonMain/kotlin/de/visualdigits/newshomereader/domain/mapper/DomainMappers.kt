@@ -15,7 +15,7 @@ fun NewsFeedConfiguration.toNewsFeedItem(): NewsFeedItem {
         subGroupName = get<String>(NC.subGroupName),
         imageUrl = get<String>(NC.imageUrl),
         url = get<String>(NC.url),
-        stopWords = get<List<String>>(NC.stopWords)
+        stopWords = get<List<String>>(NC.stopWords) ?: listOf()
     )
     return newsFeedItem
 }

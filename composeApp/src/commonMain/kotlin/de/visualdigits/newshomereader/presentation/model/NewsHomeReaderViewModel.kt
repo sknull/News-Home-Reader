@@ -118,16 +118,15 @@ class NewsHomeReaderViewModel(
                             }.awaitAll()
 
                             if (isSearching) {
-                                // Im Suchmodus: Nur die gefilterte Liste füllen, visible bleibt wie es ist
                                 emit(SearchResult(
                                     enriched = enriched,
                                     isSearch = true
                                 ))
                             } else {
-                                // Im Feed-Modus: Normale Filter-Logik anwenden
                                 val currentState = _state.value
                                 val hideRead = currentState.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
-                                val visible = calculateVisibleNewsItems(enriched, hideRead, currentState.currentNewsFeedItem)
+                                val stopWords = group?.let { g -> determineStopWords(g) } ?: currentState.currentNewsFeedItem?.stopWords?.toSet() ?: setOf()
+                                val visible = calculateVisibleNewsItems(enriched, hideRead, stopWords)
                                 emit(SearchResult(
                                     enriched = enriched,
                                     visible = visible,
@@ -814,6 +813,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
     private fun editNewsFeedConfiguration(oldNewsFeedConfiguration: NewsFeedConfiguration?, newNewsFeedConfiguration: NewsFeedConfiguration?) = viewModelScope.launch {
         val oldEntity = oldNewsFeedConfiguration?.toNewsFeedItem()
         val newEntity = newNewsFeedConfiguration?.toNewsFeedItem()
+
         if (oldEntity != null && newEntity != null) {
             newsFeedConfigurationRepository.editNewsFeedItem(
                 oldNewsFeedItem = oldEntity,
@@ -829,7 +829,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                             visibleNewsItems = calculateVisibleNewsItems(
                                 newsItems = it.currentNewsItems,
                                 hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-                                newsFeedItem = newEntity
+                                stopWords = newNewsFeedConfiguration?.get<List<String>>(NC.stopWords)?.toSet()?:setOf()
                             )
                         )
                     }
@@ -918,7 +918,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                             visibleNewsItems = calculateVisibleNewsItems(
                                 newsItems = newsFeed?.items ?: listOf(),
                                 hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-                                newsFeedItem = it.currentNewsFeedItem
+                                stopWords = it.currentNewsFeedGroup?.let { g -> determineStopWords(g) } ?: it.currentNewsFeedItem?.stopWords?.toSet() ?: setOf()
                             ),
                             isLoading = false,
                             uiMessage = null,
@@ -966,6 +966,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                 val (newsFeeds, changed) = newsFeedResult.data
                 _state.update {
                     val currentNewsItems = newsFeeds.find { nf -> nf.feedName == it.currentNewsFeedName }?.items ?: listOf()
+                    it.currentNewsFeedGroup
                     it.copy(
                         isLoading = false,
                         currentProgress = 0.0f,
@@ -975,7 +976,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                         visibleNewsItems = calculateVisibleNewsItems(
                             newsItems = currentNewsItems,
                             hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-                            newsFeedItem = it.currentNewsFeedItem
+                            stopWords = it.currentNewsFeedGroup?.let { g -> determineStopWords(g) } ?: it.currentNewsFeedItem?.stopWords?.toSet() ?: setOf()
                         ),
                         newsFeedGroups = newsFeedGroups
                     )
@@ -1124,7 +1125,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                             visibleNewsItems = calculateVisibleNewsItems(
                                 newsItems = currentNewsItems,
                                 hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-                                newsFeedItem = it.currentNewsFeedItem
+                                stopWords = it.currentNewsFeedGroup?.let { g -> determineStopWords(g) } ?: it.currentNewsFeedItem?.stopWords?.toSet() ?: setOf()
                             ),
                             newsFeedGroups = newsFeedGroups
                         )
@@ -1461,7 +1462,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                     visibleNewsItems = calculateVisibleNewsItems(
                         newsItems = newsItems,
                         hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-                        newsFeedItem = it.currentNewsFeedItem
+                        stopWords = it.currentNewsFeedGroup?.let { g -> determineStopWords(g) } ?: it.currentNewsFeedItem?.stopWords?.toSet() ?: setOf()
                     ),
                 )
             }
@@ -1505,7 +1506,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                     visibleNewsItems = calculateVisibleNewsItems(
                         newsItems = currentNewsItems,
                         hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false,
-                        newsFeedItem = it.currentNewsFeedItem
+                        stopWords = it.currentNewsFeedGroup?.let { g -> determineStopWords(g) } ?: it.currentNewsFeedItem?.stopWords?.toSet() ?: setOf()
                     ),
                     isLoading = false,
                     currentProgress = 0.0f,
@@ -1558,7 +1559,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                         visibleNewsItems = calculateVisibleNewsItems(
                             newsItems = it.currentNewsItems,
                             hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false,
-                            newsFeedItem = it.currentNewsFeedItem
+                            stopWords = it.currentNewsFeedGroup?.let { g -> determineStopWords(g) } ?: it.currentNewsFeedItem?.stopWords?.toSet() ?: setOf()
                         ),
                         isLoading = false,
                         currentProgress = 0.0f,
@@ -1612,8 +1613,12 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
         }
     }
 
-    private fun calculateVisibleNewsItems(newsItems: List<NewsItem>, hideRead: Boolean, newsFeedItem: NewsFeedItem?): List<NewsItem> {
-        val stopWords = newsFeedItem?.stopWords?:listOf()
+    private fun determineStopWords(group: NewsFeedGroup?): Set<String> =
+        ((group?.newsFeeds?.flatMap { nf -> nf.stopWords } ?: listOf()) +
+                (group?.subGroups?.flatMap { sg -> sg.newsFeeds.flatMap { nf -> nf.stopWords } } ?: listOf()))
+            .toSet()
+
+    private fun calculateVisibleNewsItems(newsItems: List<NewsItem>, hideRead: Boolean, stopWords: Set<String>): List<NewsItem> {
         val sortedByDescending = newsItems
             .filter { item -> (!hideRead || !item.isRead)
                     && item.title.nostop(stopWords)
@@ -1624,7 +1629,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
     }
 }
 
-private fun String.nostop(stopWords: List<String>): Boolean = stopWords.none { w -> this.contains(w, ignoreCase = true) }
+private fun String.nostop(stopWords: Set<String>): Boolean = stopWords.none { w -> this.contains(w, ignoreCase = true) }
 
 private data class SearchResult(
     val enriched: List<NewsItem>,

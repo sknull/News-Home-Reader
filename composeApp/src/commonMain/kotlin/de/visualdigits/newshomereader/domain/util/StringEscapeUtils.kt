@@ -10,7 +10,9 @@ object StringEscapeUtils {
         escapeMode(Entities.EscapeMode.xhtml) // xhtml entspricht der XML-Logik
     }
 
-    fun escapeXml(xml: String): String = Entities.escape(xml, xmlSettings)
+     fun escapeXml(xml: String): String = Entities.escape(xml, xmlSettings)
 
     fun unescapeXml(xml: String): String = Entities.unescape(xml)
+
+    fun normalizeXml(xml: String): String = xml.replace("&amp;", "&").replace("&", "&amp;")
 }

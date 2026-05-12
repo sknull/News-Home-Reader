@@ -93,6 +93,7 @@ fun SettingsPage(
                 iconDelete = painterResource(Res.drawable.icon_delete_24px),
                 toolTipEdit = UiText.StringResourceId(Res.string.edit),
                 labelOk = UiText.StringResourceId(Res.string.ok),
+                iconOk = painterResource(Res.drawable.icon_check_small_24px),
                 labelCancel = UiText.StringResourceId(Res.string.cancel),
                 iconCancel = painterResource(Res.drawable.icon_cancel_24px),
                 iconSaveFile = painterResource(Res.drawable.icon_file_save_24px)

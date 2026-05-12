@@ -11,7 +11,7 @@ data class NewsFeedItem(
     val name: String? = null,
     val imageUrl: String? = null,
     val url: String? = null,
-    val stopWords: List<String>? = listOf()
+    val stopWords: List<String> = listOf()
 ) {
     companion object {
 

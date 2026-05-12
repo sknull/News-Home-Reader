@@ -22,6 +22,7 @@ fun typography(
     val fontFamilyRegular = FontFamily(Font(Res.font.Roboto_Regular))
     val fontFamilyBold = FontFamily(Font(Res.font.Roboto_Bold))
     val fontFamilyBlack = FontFamily(Font(Res.font.Roboto_Black))
+
     return Typography(
         headlineSmall = TextStyle(
             fontFamily = fontFamilyBlack,
@@ -147,6 +148,5 @@ fun typography(
             letterSpacing = 0.2.sp,
             color = textColor
         )
-
     )
 }

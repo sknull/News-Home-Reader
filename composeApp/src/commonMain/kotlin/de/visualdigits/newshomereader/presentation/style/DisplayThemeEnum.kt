@@ -23,7 +23,6 @@ import org.jetbrains.compose.resources.DrawableResource
 enum class DisplayThemeEnum(
     override val uiText: UiText,
     override val drawableResourceId: DrawableResource?,
-    val textLinkStyles: TextLinkStyles,
     val textColor: Color,
     val backgroundImage: Painter? = null,
     val isDark: Boolean // consider as dark theme for android
@@ -38,12 +37,6 @@ enum class DisplayThemeEnum(
         isDark = true,
         uiText = UiText.DynamicString("Anthracite"),
         drawableResourceId = null,
-        textLinkStyles = TextLinkStyles(
-            style = SpanStyle(
-                color = Color(0xFF868686),
-                textDecoration = TextDecoration.Underline
-            )
-        ),
         textColor = Color(0xFFFFFFFF),
     ),
 
@@ -51,12 +44,6 @@ enum class DisplayThemeEnum(
         isDark = false,
         uiText = UiText.DynamicString("Light"),
         drawableResourceId = null,
-        textLinkStyles = TextLinkStyles(
-            style = SpanStyle(
-                color = Color(0xFF439DDE),
-                textDecoration = TextDecoration.Underline
-            )
-        ),
         textColor = Color(0xFF000000),
     )
     ;
@@ -86,6 +73,13 @@ enum class DisplayThemeEnum(
         }
     }
 }
+
+fun textLinkStyles(spotColor: Color): TextLinkStyles = TextLinkStyles(
+    style = SpanStyle(
+        color = spotColor,
+        textDecoration = TextDecoration.Underline
+    )
+)
 
 fun lightTheme(spotColor: Color): ColorScheme = lightColorScheme(
     primary = Color(0xFFFFFFFF),

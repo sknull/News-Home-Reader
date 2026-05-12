@@ -44,11 +44,13 @@ import de.visualdigits.compose.resources.icon_volume_up_24px
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
+import de.visualdigits.newshomereader.domain.util.StringEscapeUtils.normalizeXml
 import de.visualdigits.newshomereader.domain.util.getFaviconUrl
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.presentation.style.gap
+import de.visualdigits.newshomereader.presentation.style.textLinkStyles
 import de.visualdigits.newshomereader.presentation.util.highlightQuery
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
 import org.jetbrains.compose.resources.painterResource
@@ -69,6 +71,8 @@ fun NewsItemCard(
     val interactionSource = remember { MutableInteractionSource() }
     val displayTheme = settings?.get<DisplayThemeEnum>(SK.displayTheme) ?: DisplayThemeEnum.LIGHT
     val feedName = newsItem.newsFeed?.feedName?:newsItem.feedName
+    val spotColor = state.settings?.get<Color>(SK.spotColor)?: DisplayThemeEnum.SPOT_COLOR_DEFAULT
+
 
     Box(
         modifier = modifier
@@ -204,7 +208,18 @@ fun NewsItemCard(
                         }
                     }
 
-                    val annotatedTitle = htmlToAnnotatedString(newsItem.title)
+                    val annotatedTitle = htmlToAnnotatedString(
+                        html = normalizeXml(newsItem.title),
+                        style = HtmlStyle(
+                            textLinkStyles = textLinkStyles(spotColor)
+                        ),
+                        linkInteractionListener = { linkAnnotation ->
+                            makeUrlAbsolute(
+                                newsItem.link,
+                                (linkAnnotation as LinkAnnotation.Url).url
+                            ).let { uriHandler.openUri(it) }
+                        }
+                    )
                     val highlightedTitle = remember(annotatedTitle, state.newsItemSearchText) {
                         if (!state.newsItemSearchText.isNullOrBlank()) {
                             annotatedTitle.highlightQuery(state.newsItemSearchText)
@@ -219,9 +234,9 @@ fun NewsItemCard(
 
                     if (!simple) {
                         val annotatedSummary = htmlToAnnotatedString(
-                            html = newsItem.summary,
+                            html = normalizeXml(newsItem.summary),
                             style = HtmlStyle(
-                                textLinkStyles = displayTheme.textLinkStyles
+                                textLinkStyles = textLinkStyles(spotColor)
                             ),
                             linkInteractionListener = { linkAnnotation ->
                                 makeUrlAbsolute(
