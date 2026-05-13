@@ -57,7 +57,7 @@ class Settings(
                 key = SK.language,
                 label = UiText.StringResourceId(Res.string.label_language),
                 toolTip =  UiText.StringResourceId(Res.string.tooltip_language),
-                options = { Language.options },
+                options = { _, _ -> Language.options },
                 keyFactory = Language,
                 default = Language.EN
             ),
@@ -68,7 +68,7 @@ class Settings(
                 key = SK.displayTheme,
                 label =  UiText.StringResourceId(Res.string.label_displayTheme),
                 toolTip =  UiText.StringResourceId(Res.string.tooltip_displayTheme),
-                options = { DisplayThemeEnum.options },
+                options = { _, _ -> DisplayThemeEnum.options },
                 keyFactory = DisplayThemeEnum,
                 default = DisplayThemeEnum.LIGHT
             ),
@@ -87,7 +87,7 @@ class Settings(
                 key = SK.refreshInterval,
                 label =  UiText.StringResourceId(Res.string.label_refresh_interval),
                 toolTip =  UiText.StringResourceId(Res.string.tooltip_refresh_interval),
-                options = { RefreshIntervalEnum.options },
+                options = { _, _ -> RefreshIntervalEnum.options },
                 keyFactory = RefreshIntervalEnum,
                 default = RefreshIntervalEnum.MINUTES_60
             ),
@@ -98,7 +98,7 @@ class Settings(
                 key = SK.refreshWifiOnly,
                 label =  UiText.StringResourceId(Res.string.label_refresh_wifi_only),
                 toolTip =  UiText.StringResourceId(Res.string.tooltip_refresh_wifi_only),
-                options = { BooleanEnum.options },
+                options = { _, _ -> BooleanEnum.options },
                 keyFactory = BooleanEnum,
                 default = BooleanEnum.TRUE
             ),
@@ -109,7 +109,7 @@ class Settings(
                 key = SK.keepReadArticles,
                 label =  UiText.StringResourceId(Res.string.label_keep_read_articles),
                 toolTip =  UiText.StringResourceId(Res.string.tooltip_keep_read_articles),
-                options = { KeepArticlesEnum.options },
+                options = { _, _ -> KeepArticlesEnum.options },
                 keyFactory = KeepArticlesEnum,
                 default = KeepArticlesEnum.DAYS_3
             ),
@@ -120,7 +120,7 @@ class Settings(
                 key = SK.keepUnreadArticles,
                 label =  UiText.StringResourceId(Res.string.label_keep_unread_articles),
                 toolTip =  UiText.StringResourceId(Res.string.tooltip_keep_unread_articles),
-                options = { KeepArticlesEnum.options },
+                options = { _, _ -> KeepArticlesEnum.options },
                 keyFactory = KeepArticlesEnum,
                 default = KeepArticlesEnum.DAYS_3
             ),
@@ -131,7 +131,7 @@ class Settings(
                 key = SK.loadArticles,
                 label =  UiText.StringResourceId(Res.string.label_load_articles),
                 toolTip =  UiText.StringResourceId(Res.string.tooltip_load_articles),
-                options = { BooleanEnum.options },
+                options = { _, _ -> BooleanEnum.options },
                 keyFactory = BooleanEnum,
                 default = BooleanEnum.TRUE
             ),
@@ -142,7 +142,7 @@ class Settings(
                 key = SK.hideRead,
                 label =  UiText.StringResourceId(Res.string.label_hide_read),
                 toolTip =  UiText.StringResourceId(Res.string.tooltip_hide_read),
-                options = { BooleanEnum.options },
+                options = { _, _ -> BooleanEnum.options },
                 keyFactory = BooleanEnum,
                 default = BooleanEnum.TRUE
             ),

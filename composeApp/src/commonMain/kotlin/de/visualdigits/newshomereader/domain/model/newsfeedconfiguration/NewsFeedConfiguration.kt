@@ -54,7 +54,7 @@ class NewsFeedConfiguration(
                 key = NC.mainGroupName,
                 label =  UiText.StringResourceId(Res.string.label_maingroupName),
                 keyFactory = StringKeyFactory,
-                options = { configuration ->
+                options = { configuration, _ ->
                     (configuration as? NewsFeedConfiguration)?.newsFeedGroups
                         ?.map { nfg -> Triple<String, UiText?, DrawableResource?>(nfg.name, null, null) }
                         ?.sortedBy { t -> t.first }
@@ -70,7 +70,7 @@ class NewsFeedConfiguration(
                 key = NC.subGroupName,
                 label =  UiText.StringResourceId(Res.string.label_subgroupName),
                 keyFactory = StringKeyFactory,
-                options = { configuration ->
+                options = { configuration, _ ->
                     (configuration as? NewsFeedConfiguration)?.newsFeedItemsMap[configuration.values[NC.mainGroupName]]
                         ?.keys
                         ?.map { nfg -> Triple<String, UiText?, DrawableResource?>(nfg, null, null) }
