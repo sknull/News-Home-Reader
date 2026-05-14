@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.presentation.components.button.IndicatorButton
@@ -44,7 +45,6 @@ fun NewsFeedItems(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IndicatorButton(
-                    modifier = Modifier,
                     width = 200.dp - MaterialTheme.shapes.gap * 2,
                     height = 50.dp,
                     indicatorPosition = Alignment.CenterStart,
@@ -52,7 +52,7 @@ fun NewsFeedItems(
                     text = newsFeedItem.name,
                     textStyle = MaterialTheme.typography.bodySmall,
                     textAlign = TextAlign.Start,
-                    buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    buttonColor = Color.Transparent,
                     shape = MaterialTheme.shapes.extraSmall,
                     selected = state.currentNewsFeedName == newsFeedItem.name,
                     leadingImage = {

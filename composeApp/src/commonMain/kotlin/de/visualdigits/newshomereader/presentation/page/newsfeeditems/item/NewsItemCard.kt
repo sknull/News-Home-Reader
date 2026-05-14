@@ -42,7 +42,6 @@ import de.visualdigits.compose.resources.icon_paid_24px
 import de.visualdigits.compose.resources.icon_videocam_24px
 import de.visualdigits.compose.resources.icon_volume_up_24px
 import de.visualdigits.newshomereader.domain.model.settings.SK
-import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.util.StringEscapeUtils.normalizeXml
 import de.visualdigits.newshomereader.domain.util.getFaviconUrl
@@ -64,12 +63,11 @@ fun NewsItemCard(
     simple: Boolean = false,
     maxImageSize: Int?,
     newsItem: NewsItem,
-    settings: Settings?,
+    displayTheme: DisplayThemeEnum?,
     uriHandler: UriHandler,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val displayTheme = settings?.get<DisplayThemeEnum>(SK.displayTheme) ?: DisplayThemeEnum.LIGHT
     val feedName = newsItem.newsFeed?.feedName?:newsItem.feedName
     val spotColor = state.settings?.get<Color>(SK.spotColor)?: DisplayThemeEnum.SPOT_COLOR_DEFAULT
 
@@ -83,7 +81,7 @@ fun NewsItemCard(
                     radius = 6.dp,
                     spread = 2.dp,
                     color = Color.Black.copy(alpha = 0.2f),
-                    offset = DpOffset(2.dp, 2.dp)
+                    offset = DpOffset((-5).dp, 5.dp)
                 )
             )}
     ) {

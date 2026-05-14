@@ -1,9 +1,10 @@
-package de.visualdigits.newshomereader.data.database.mapper
+package de.visualdigits.newshomereader.data.database
 
 import androidx.compose.ui.graphics.Color
 import app.cash.sqldelight.ColumnAdapter
 import de.visualdigits.common.domain.model.configuration.AbstractConfiguration.Companion.valueMap
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
+import de.visualdigits.common.domain.util.toComposeColor
 import de.visualdigits.common.domain.util.toWebColor
 import de.visualdigits.newshomereader.FullArticleEntity
 import de.visualdigits.newshomereader.GetAllNewsItemsWithArticles
@@ -53,30 +54,27 @@ fun Settings.toSettingsEntity(): SettingsEntity {
 }
 
 fun SettingsEntity.toSettings(): Settings {
-    val values = valueMap(
-        fieldDescriptors = Settings.DESCRIPTORS,
-        values = mapOf(
-            SK.displayTheme to displayTheme,
-            SK.spotColor to spotColor,
-            SK.language to language,
-            SK.hideRead to hideRead,
-            SK.loadArticles to loadArticles,
-            SK.refreshInterval to refreshInterval,
-            SK.refreshWifiOnly to refreshWifiOnly,
-            SK.maxImageSize to lastMaxImageSize,
-            SK.keepReadArticles to keepReadArticles,
-            SK.keepUnreadArticles to keepUnreadArticles,
-            SK.webDavUrl to webDavUrl,
-            SK.webDavDirectory to webDavDirectory,
-            SK.webDavUser to webDavUser,
-            SK.webDavPassword to webDavPassword
+    return Settings(
+        valueMap(
+            fieldDescriptors = Settings.DESCRIPTORS,
+            values = mapOf(
+                SK.displayTheme to DisplayThemeEnum.fromValue(displayTheme),
+                SK.spotColor to spotColor.toComposeColor(),
+                SK.language to Language.fromValue(language),
+                SK.hideRead to BooleanEnum.fromValue(hideRead),
+                SK.loadArticles to BooleanEnum.fromValue(loadArticles),
+                SK.refreshInterval to RefreshIntervalEnum.fromValue(refreshInterval),
+                SK.refreshWifiOnly to BooleanEnum.fromValue(refreshWifiOnly),
+                SK.maxImageSize to lastMaxImageSize,
+                SK.keepReadArticles to KeepArticlesEnum.fromValue(keepReadArticles),
+                SK.keepUnreadArticles to KeepArticlesEnum.fromValue(keepUnreadArticles),
+                SK.webDavUrl to webDavUrl,
+                SK.webDavDirectory to webDavDirectory,
+                SK.webDavUser to webDavUser,
+                SK.webDavPassword to webDavPassword
+            )
         )
     )
-    val settings = Settings(
-        values
-    )
-
-    return settings
 }
 
 

@@ -38,9 +38,6 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 getSettingsById:
 SELECT * FROM SettingsEntity WHERE id = :id;
 
-getAllSettings:
-SELECT * FROM SettingsEntity;
-
 updateSettingsEntity:
 UPDATE SettingsEntity
 SET displayTheme = :displayTheme,

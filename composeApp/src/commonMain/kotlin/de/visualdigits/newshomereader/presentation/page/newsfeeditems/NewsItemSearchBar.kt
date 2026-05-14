@@ -23,11 +23,11 @@ import de.visualdigits.compose.resources.icon_delete_24px
 import de.visualdigits.compose.resources.icon_search_24px
 import de.visualdigits.compose.resources.title_search
 import de.visualdigits.compose.resources.warning_no_results
-import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.NewsItemCard
+import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import org.jetbrains.compose.resources.painterResource
@@ -42,7 +42,7 @@ fun NewsItemSearchBar(
     onCommonAction: (CommonAction) -> Unit,
     rowDataFiltered: List<List<NewsItem>>,
     maxImageSize: Int?,
-    settings: Settings?,
+    displayTheme: DisplayThemeEnum?,
     uriHandler: UriHandler
 ) {
     FlexibleSearchBar(
@@ -89,7 +89,7 @@ fun NewsItemSearchBar(
                                     state = state,
                                     maxImageSize = maxImageSize,
                                     newsItem = newsItem,
-                                    settings = settings,
+                                    displayTheme = displayTheme,
                                     uriHandler = uriHandler,
                                     onAction = onAction
                                 )

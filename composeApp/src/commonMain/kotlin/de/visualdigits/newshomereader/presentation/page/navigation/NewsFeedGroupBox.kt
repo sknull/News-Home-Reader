@@ -3,11 +3,16 @@ package de.visualdigits.newshomereader.presentation.page.navigation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.common.presentation.components.container.VerticalCollapsibleBox
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_arrow_drop_down_24px
@@ -28,11 +33,33 @@ fun NewsFeedGroupBox(
     state: NewsHomeReaderState,
     maxImageSize: Int?
 ) {
+    val edgeColor = MaterialTheme.colorScheme.onSurface
     VerticalCollapsibleBox(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = MaterialTheme.shapes.gap * 2),
-        title = newsFeedGroup.name,
+            .drawBehind() {
+                val strokeWidth = 1.dp.toPx()
+                drawLine(
+                    color = edgeColor,
+                    start = Offset(0f, size.height - strokeWidth / 2),
+                    end = Offset(size.width, size.height - strokeWidth / 2),
+                    strokeWidth = strokeWidth
+                )
+            },
+        titleContent = {
+            IndicatorButton(
+                width = 180.dp - MaterialTheme.shapes.gap * 2,
+                height = 50.dp,
+                indicatorPosition = Alignment.CenterStart,
+                indicatorColor = MaterialTheme.colorScheme.onSurface,
+                text = newsFeedGroup.name,
+                textStyle = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Start,
+                buttonColor = Color.Transparent,
+                shape = MaterialTheme.shapes.extraSmall,
+                selected = state.currentNewsFeedGroup?.name == newsFeedGroup.name
+            )
+        },
         focusedBorderColor = Color.Transparent,
         unfocusedBorderColor = Color.Transparent,
         backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,

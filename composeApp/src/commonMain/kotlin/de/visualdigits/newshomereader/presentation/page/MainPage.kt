@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -73,7 +74,7 @@ fun MainPage(
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .safeDrawingPadding()
     ) {
         val density = LocalDensity.current
         val screenWidth = maxWidth
@@ -116,8 +117,8 @@ fun MainPage(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(colorScheme.background)
-                    .safeDrawingPadding(),
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(end = 4.dp, bottom = 4.dp),
             ) {
                 ErrorCard(
                     errorMessage = state.uiMessage,
@@ -126,15 +127,15 @@ fun MainPage(
                 )
 
                 NewsItemSearchBar(
-                    state,
-                    screenWidth,
-                    onAction,
-                    viewModel.scrollPosition,
-                    onCommonAction,
-                    rowDataFiltered,
-                    maxImageSize,
-                    state.settings,
-                    uriHandler
+                    state = state,
+                    screenWidth = screenWidth,
+                    onAction = onAction,
+                    scrollPosition = viewModel.scrollPosition,
+                    onCommonAction = onCommonAction,
+                    rowDataFiltered = rowDataFiltered,
+                    maxImageSize = maxImageSize,
+                    displayTheme = displayTheme,
+                    uriHandler = uriHandler
                 )
 
                 MainMenuBar(
@@ -184,6 +185,7 @@ fun MainPage(
                             chunks = chunks,
                             viewModel = viewModel,
                             maxWidth = screenWidth,
+                            maxHeight = screenHeight,
                             maxImageSize = maxImageSize,
                             uriHandler = uriHandler,
                             connectivityManager = connectivityManager,

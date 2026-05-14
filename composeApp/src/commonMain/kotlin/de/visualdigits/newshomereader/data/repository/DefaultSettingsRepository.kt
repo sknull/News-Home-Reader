@@ -9,8 +9,8 @@ import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.common.domain.util.toWebColor
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
-import de.visualdigits.newshomereader.data.database.mapper.toSettings
-import de.visualdigits.newshomereader.data.database.mapper.toSettingsEntity
+import de.visualdigits.newshomereader.data.database.toSettings
+import de.visualdigits.newshomereader.data.database.toSettingsEntity
 import de.visualdigits.newshomereader.data.database.upsertSettings
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum

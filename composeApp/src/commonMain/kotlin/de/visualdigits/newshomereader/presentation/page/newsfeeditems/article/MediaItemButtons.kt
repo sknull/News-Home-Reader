@@ -60,7 +60,7 @@ fun MediaItemButtons(
                                     radius = 6.dp,
                                     spread = 2.dp,
                                     color = Color.Black.copy(alpha = 0.2f),
-                                    offset = DpOffset(2.dp, 2.dp)
+                                    offset = DpOffset((-5).dp, 5.dp)
                                 )
                             )
                     ) {

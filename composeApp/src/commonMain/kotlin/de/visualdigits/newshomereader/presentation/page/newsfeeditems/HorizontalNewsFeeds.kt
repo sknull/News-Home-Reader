@@ -19,10 +19,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.innerShadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
@@ -33,7 +39,6 @@ import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.digital_dream_skew_fat
 import de.visualdigits.compose.resources.icon_add_notes_24px
 import de.visualdigits.newshomereader.domain.model.settings.SK
-import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
@@ -59,7 +64,6 @@ fun HorizontalNewsFeeds(
     maxWidth: Dp,
     rowData: List<List<NewsItem>>,
     maxImageSize: Int?,
-    settings: Settings?,
     uriHandler: UriHandler,
     chunks: Int,
     onCommonAction: (CommonAction) -> Unit,
@@ -67,8 +71,7 @@ fun HorizontalNewsFeeds(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(MaterialTheme.shapes.gap),
+            .fillMaxSize(),
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
     ) {
         if (state.collapsibleState["group_newsfeeds_navigation"] == true) {
@@ -77,11 +80,12 @@ fun HorizontalNewsFeeds(
                     .fillMaxHeight(),
                 contentAlignment = Alignment.BottomCenter
             ) {
+                val edgeColor = MaterialTheme.colorScheme.primaryFixedDim
                 Box(
                     modifier = Modifier
                         .fillMaxHeight()
                         .width(if (state.isEditMode) 400.dp else 250.dp)
-                        .padding(bottom = 200.dp)
+                        .padding(bottom = 220.dp)
                 ) {
                     Column(
                         modifier = Modifier
@@ -102,7 +106,33 @@ fun HorizontalNewsFeeds(
 
                         PlatformVerticalScrollbarBox(
                             modifier = Modifier
-                                .width(500.dp),
+                                .fillMaxWidth()
+                                .padding(end = 10.dp) // let shadow start before scrollbar
+                                .innerShadow(
+                                    shape = RectangleShape,
+                                    shadow = Shadow(
+                                        radius = 6.dp,
+                                        spread = 2.dp,
+                                        color = Color.Black.copy(alpha = 0.2f),
+                                        offset = DpOffset(x = (-10).dp, y = 5.dp)
+                                    )
+                                )
+                                .drawBehind() {
+                                    val strokeWidth = 1.dp.toPx()
+                                    drawLine(
+                                        color = edgeColor,
+                                        start = Offset(size.width, 0f),
+                                        end = Offset(size.width, size.height),
+                                        strokeWidth = strokeWidth
+                                    )
+                                    drawLine(
+                                        color = edgeColor,
+                                        start = Offset(0f, 0f),
+                                        end = Offset(size.width, 0f),
+                                        strokeWidth = strokeWidth
+                                    )
+                                }
+                                .padding(top = 8.dp), // push content a bit down
                             scrollbarModifier = Modifier
                                 .clip(MaterialTheme.shapes.small)
                                 .width(10.dp)
@@ -135,17 +165,43 @@ fun HorizontalNewsFeeds(
                     }
                 }
 
-                StudioClock(
+                Box(
                     modifier = Modifier
-                        .width(200.dp)
-                        .height(200.dp),
-                    fontFamily = FontFamily(Font(Res.font.digital_dream_skew_fat)),
-                    showSeconds = false,
-                    showDate = true,
-                    colors = state.settings?.get<Color>(SK.spotColor)
-                        ?.let { sc -> studioClockColors(sc) }
-                        ?: studioClockColors(DisplayThemeEnum.SPOT_COLOR_DEFAULT)
-                )
+                        .width(if (state.isEditMode) 400.dp else 250.dp)
+                        .height(220.dp)
+                        .innerShadow(
+                            shape = RectangleShape,
+                            shadow = Shadow(
+                                radius = 6.dp,
+                                spread = 2.dp,
+                                color = Color.Black.copy(alpha = 0.2f),
+                                offset = DpOffset(x = (-10).dp, y = 5.dp)
+                            )
+                        )
+                        .drawBehind() {
+                            val strokeWidth = 1.dp.toPx()
+                            drawLine(
+                                color = edgeColor,
+                                start = Offset(0f, 0f),
+                                end = Offset(size.width, 0f),
+                                strokeWidth = strokeWidth
+                            )
+                        }
+                        .padding(top = 8.dp, start = 8.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    StudioClock(
+                        modifier = Modifier
+                            .width(200.dp)
+                            .height(200.dp),
+                        fontFamily = FontFamily(Font(Res.font.digital_dream_skew_fat)),
+                        showSeconds = false,
+                        showDate = true,
+                        colors = state.settings?.get<Color>(SK.spotColor)
+                            ?.let { sc -> studioClockColors(sc) }
+                            ?: studioClockColors(DisplayThemeEnum.SPOT_COLOR_DEFAULT)
+                    )
+                }
             }
         }
 
@@ -163,7 +219,8 @@ fun HorizontalNewsFeeds(
 
             PlatformVerticalScrollbarBox(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .padding(end = 8.dp),
                 scrollbarModifier = Modifier
                     .clip(MaterialTheme.shapes.small)
                     .width(10.dp)
@@ -185,7 +242,7 @@ fun HorizontalNewsFeeds(
                                     state = state,
                                     maxImageSize = maxImageSize,
                                     newsItem = newsItem,
-                                    settings = settings,
+                                    displayTheme = displayTheme,
                                     uriHandler = uriHandler,
                                     onAction = onAction
                                 )

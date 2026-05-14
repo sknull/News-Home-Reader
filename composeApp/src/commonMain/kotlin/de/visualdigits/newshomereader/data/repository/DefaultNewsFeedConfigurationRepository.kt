@@ -5,8 +5,8 @@ import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.NewsFeedGroupEntity
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.data.database.getAllNewsFeedGroups
-import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedGroup
-import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedGroupEntity
+import de.visualdigits.newshomereader.data.database.toNewsFeedGroup
+import de.visualdigits.newshomereader.data.database.toNewsFeedGroupEntity
 import de.visualdigits.newshomereader.data.database.upsertNewsFeedGroup
 import de.visualdigits.newshomereader.data.mapper.toNewsFeedConfiguration
 import de.visualdigits.newshomereader.data.mapper.toOpml

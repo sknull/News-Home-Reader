@@ -2,7 +2,7 @@ package de.visualdigits.newshomereader.data.model.rss
 
 import de.visualdigits.common.domain.model.errorhandling.onError
 import de.visualdigits.common.domain.model.errorhandling.onSuccess
-import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedEntity
+import de.visualdigits.newshomereader.data.database.toNewsFeedEntity
 import de.visualdigits.newshomereader.data.model.applicationjson.AppJsonDto
 import de.visualdigits.newshomereader.di.platformModule
 import de.visualdigits.newshomereader.di.sharedModule

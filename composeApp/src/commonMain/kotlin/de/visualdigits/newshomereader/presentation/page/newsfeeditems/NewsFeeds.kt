@@ -5,10 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.model.CommonAction
-import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
@@ -24,8 +22,8 @@ fun NewsFeeds(
     chunks: Int,
     displayTheme: DisplayThemeEnum,
     maxWidth: Dp,
+    maxHeight: Dp,
     maxImageSize: Int?,
-    settings: Settings?,
     uriHandler: UriHandler,
     connectivityManager: ConnectivityManager,
     onCommonAction: (CommonAction) -> Unit,
@@ -43,7 +41,7 @@ fun NewsFeeds(
         }
     }
 
-    if (maxWidth > 600.dp) {
+    if (maxWidth > maxHeight) {
         HorizontalNewsFeeds(
             state = state,
             scrollPosition = scrollPosition,
@@ -52,7 +50,6 @@ fun NewsFeeds(
             maxWidth = maxWidth,
             rowData = rowData,
             maxImageSize = maxImageSize,
-            settings = settings,
             uriHandler = uriHandler,
             chunks = chunks,
             onCommonAction = onCommonAction,
@@ -66,7 +63,7 @@ fun NewsFeeds(
             maxWidth = maxWidth,
             rowData = rowData,
             maxImageSize = maxImageSize,
-            settings = settings,
+            displayTheme = displayTheme,
             uriHandler = uriHandler,
             chunks = chunks,
             onCommonAction = onCommonAction,

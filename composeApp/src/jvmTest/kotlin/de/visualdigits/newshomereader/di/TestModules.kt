@@ -10,11 +10,11 @@ import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.SettingsDatabase
 import de.visualdigits.newshomereader.SettingsEntity
 import de.visualdigits.newshomereader.data.database.DriverFactory
-import de.visualdigits.newshomereader.data.database.mapper.applicationJsonAdapter
-import de.visualdigits.newshomereader.data.database.mapper.mediaItemAdapter
-import de.visualdigits.newshomereader.data.database.mapper.newsFeedsAdapter
-import de.visualdigits.newshomereader.data.database.mapper.stringListAdapter
-import de.visualdigits.newshomereader.data.database.mapper.subGroupsAdapter
+import de.visualdigits.newshomereader.data.database.applicationJsonAdapter
+import de.visualdigits.newshomereader.data.database.mediaItemAdapter
+import de.visualdigits.newshomereader.data.database.newsFeedsAdapter
+import de.visualdigits.newshomereader.data.database.stringListAdapter
+import de.visualdigits.newshomereader.data.database.subGroupsAdapter
 import de.visualdigits.newshomereader.data.http.HttpClientFactory
 import de.visualdigits.newshomereader.data.repository.DefaultSettingsRepository
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository

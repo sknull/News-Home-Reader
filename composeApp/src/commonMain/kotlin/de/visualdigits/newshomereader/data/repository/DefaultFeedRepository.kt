@@ -8,10 +8,10 @@ import com.fleeksoft.ksoup.parser.Parser
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
-import de.visualdigits.newshomereader.data.database.mapper.toNewsFeed
-import de.visualdigits.newshomereader.data.database.mapper.toNewsFeedEntity
-import de.visualdigits.newshomereader.data.database.mapper.toNewsItem
-import de.visualdigits.newshomereader.data.database.mapper.toNewsItemEntity
+import de.visualdigits.newshomereader.data.database.toNewsFeed
+import de.visualdigits.newshomereader.data.database.toNewsFeedEntity
+import de.visualdigits.newshomereader.data.database.toNewsItem
+import de.visualdigits.newshomereader.data.database.toNewsItemEntity
 import de.visualdigits.newshomereader.data.database.upsertNewsFeed
 import de.visualdigits.newshomereader.data.database.upsertNewsItem
 import de.visualdigits.newshomereader.data.mapper.toNewsFeed

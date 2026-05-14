@@ -30,7 +30,6 @@ import de.visualdigits.compose.resources.icon_cancel_24px
 import de.visualdigits.compose.resources.icon_check_small_24px
 import de.visualdigits.compose.resources.icon_delete_24px
 import de.visualdigits.compose.resources.icon_edit_24px
-import de.visualdigits.compose.resources.icon_file_save_24px
 import de.visualdigits.compose.resources.icon_folder_open_24px
 import de.visualdigits.compose.resources.ok
 import de.visualdigits.compose.resources.title_add_newsfeedconfiguration
@@ -68,19 +67,18 @@ fun NewsFeedConfigurationPage(
             titleChooseFile = UiText.StringResourceId(Res.string.choose_file),
             iconFolder = painterResource(Res.drawable.icon_folder_open_24px),
             editableListResources = EditableListResources(
-                hintAdd = UiText.StringResourceId(Res.string.add_hint),
                 titleAdd = UiText.StringResourceId(Res.string.add),
-                iconAdd = painterResource(Res.drawable.icon_add_24px),
                 titleEdit = UiText.StringResourceId(Res.string.edit),
-                iconEdit = painterResource(Res.drawable.icon_edit_24px),
-                toolTipDelete = UiText.StringResourceId(Res.string.delete),
-                iconDelete = painterResource(Res.drawable.icon_delete_24px),
+                tooltipAdd = UiText.StringResourceId(Res.string.add_hint),
+                iconAdd = Res.drawable.icon_add_24px,
                 toolTipEdit = UiText.StringResourceId(Res.string.edit),
+                iconEdit = Res.drawable.icon_edit_24px,
+                toolTipDelete = UiText.StringResourceId(Res.string.delete),
+                iconDelete = Res.drawable.icon_delete_24px,
                 labelOk = UiText.StringResourceId(Res.string.ok),
-                iconOk = painterResource(Res.drawable.icon_check_small_24px),
+                iconOk = Res.drawable.icon_check_small_24px,
                 labelCancel = UiText.StringResourceId(Res.string.cancel),
-                iconCancel = painterResource(Res.drawable.icon_cancel_24px),
-                iconSaveFile = painterResource(Res.drawable.icon_file_save_24px)
+                iconCancel = Res.drawable.icon_cancel_24px,
             ),
             tooltipOk = UiText.StringResourceId(Res.string.ok),
             iconOk = painterResource(Res.drawable.icon_check_small_24px),

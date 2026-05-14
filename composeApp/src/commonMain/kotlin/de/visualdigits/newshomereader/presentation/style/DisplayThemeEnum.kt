@@ -97,6 +97,7 @@ fun lightTheme(spotColor: Color): ColorScheme = lightColorScheme(
 
     surface = Color.Transparent,
     onSurface = spotColor, // deco color
+    primaryFixedDim = Color(0xFFBCBCBC),
 
     inverseSurface = Color(0xFF000000),
     surfaceContainer = Color(0xFF000000),
@@ -131,6 +132,7 @@ fun anthraciteTheme(spotColor: Color): ColorScheme = darkColorScheme(
 
     surface = Color.Transparent,
     onSurface = spotColor, // spot color
+    primaryFixedDim = Color(0x77000000),
 
     inverseSurface = Color(0xFFFFFFFF),
     surfaceContainer = Color(0xFFFFFFFF),

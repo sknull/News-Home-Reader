@@ -24,7 +24,6 @@ import de.visualdigits.compose.resources.label_webDavDirectory
 import de.visualdigits.compose.resources.label_webDavPassword
 import de.visualdigits.compose.resources.label_webDavUrl
 import de.visualdigits.compose.resources.label_webDavUser
-import de.visualdigits.compose.resources.ok
 import de.visualdigits.compose.resources.tooltip_displayTheme
 import de.visualdigits.compose.resources.tooltip_hide_read
 import de.visualdigits.compose.resources.tooltip_keep_read_articles
@@ -181,7 +180,7 @@ class Settings(
                 fieldClass = Int::class,
                 visible = false,
                 key = SK.maxImageSize,
-                label =  UiText.StringResourceId(Res.string.ok),
+                label =  UiText.DynamicString(""),
                 keyFactory = IntKeyFactory
             ),
 
@@ -189,7 +188,7 @@ class Settings(
             IntFieldDescriptor(
                 visible = false,
                 key = SK.maxImageSize,
-                label =  UiText.StringResourceId(Res.string.ok),
+                label =  UiText.DynamicString(""),
             ),
 
             /** Hidden field for feeds changed (dirty flag). */
@@ -197,7 +196,7 @@ class Settings(
                 visible = false,
                 fieldClass = BooleanEnum::class,
                 key = SK.feedsChanged,
-                label =  UiText.StringResourceId(Res.string.ok),
+                label =  UiText.DynamicString(""),
                 keyFactory = BooleanEnum
             ),
         )
