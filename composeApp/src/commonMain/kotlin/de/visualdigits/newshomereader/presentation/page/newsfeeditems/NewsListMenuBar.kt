@@ -39,13 +39,14 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun NewsListMenuBar(
+    modifier: Modifier = Modifier,
     connectivityManager: ConnectivityManager,
     state: NewsHomeReaderState,
     maxWidth: Dp,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(50.dp)
             .background(MaterialTheme.colorScheme.surfaceContainerHigh)

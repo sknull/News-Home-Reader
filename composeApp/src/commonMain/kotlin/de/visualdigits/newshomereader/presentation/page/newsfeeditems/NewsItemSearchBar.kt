@@ -70,7 +70,7 @@ fun NewsItemSearchBar(
                 .width(10.dp)
                 .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
             scrollbarStyle = scrollbarStyle(),
-            space = MaterialTheme.shapes.gap,
+            padding = MaterialTheme.shapes.gap,
             scrollbarId = "newsfeed_${state.currentNewsFeedName}",
             scrollPosition = scrollPosition,
             onCommonAction = onCommonAction

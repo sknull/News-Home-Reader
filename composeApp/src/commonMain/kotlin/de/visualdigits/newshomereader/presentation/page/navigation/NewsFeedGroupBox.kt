@@ -3,6 +3,7 @@ package de.visualdigits.newshomereader.presentation.page.navigation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -56,7 +57,7 @@ fun NewsFeedGroupBox(
                 textStyle = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Start,
                 buttonColor = Color.Transparent,
-                shape = MaterialTheme.shapes.extraSmall,
+                shape = RoundedCornerShape(topStart = 4.dp, bottomStart = 4.dp),
                 selected = state.currentNewsFeedGroup?.name == newsFeedGroup.name
             )
         },

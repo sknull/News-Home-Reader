@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -25,17 +26,24 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.shadow.Shadow
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import de.visualdigits.common.domain.util.copy
+import de.visualdigits.common.domain.util.copyFactor
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
 import de.visualdigits.common.presentation.components.StudioClock
 import de.visualdigits.common.presentation.components.button.IndicatorButton
+import de.visualdigits.common.presentation.components.modifier.angledInnerShadow
+import de.visualdigits.common.presentation.components.modifier.tintedBackgroundImage
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.compose.resources.Res
+import de.visualdigits.compose.resources.circuit_board_squared
+import de.visualdigits.compose.resources.circuit_board_with_circle
 import de.visualdigits.compose.resources.digital_dream_skew_fat
 import de.visualdigits.compose.resources.icon_add_notes_24px
 import de.visualdigits.newshomereader.domain.model.settings.SK
@@ -49,6 +57,7 @@ import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import de.visualdigits.newshomereader.presentation.style.studioClockColors
 import org.jetbrains.compose.resources.Font
+import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.painterResource
 
 /**
@@ -69,18 +78,20 @@ fun HorizontalNewsFeeds(
     onCommonAction: (CommonAction) -> Unit,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
+    val dimFactor = if (displayTheme == DisplayThemeEnum.ANTHRACITE) 1.5f else 1.25f
     Row(
         modifier = Modifier
-            .fillMaxSize(),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
+            .fillMaxSize()
     ) {
+        //
+        // navigation
+        //
         if (state.collapsibleState["group_newsfeeds_navigation"] == true) {
             Box(
                 modifier = Modifier
                     .fillMaxHeight(),
                 contentAlignment = Alignment.BottomCenter
             ) {
-                val edgeColor = MaterialTheme.colorScheme.primaryFixedDim
                 Box(
                     modifier = Modifier
                         .fillMaxHeight()
@@ -108,30 +119,14 @@ fun HorizontalNewsFeeds(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(end = 10.dp) // let shadow start before scrollbar
-                                .innerShadow(
-                                    shape = RectangleShape,
-                                    shadow = Shadow(
-                                        radius = 6.dp,
-                                        spread = 2.dp,
-                                        color = Color.Black.copy(alpha = 0.2f),
-                                        offset = DpOffset(x = (-10).dp, y = 5.dp)
-                                    )
+                                .angledInnerShadow(
+                                    angle = 45f,
+                                    distance = 10.dp,
+                                    alpha = 0.2f,
+                                    insetSize = 2.dp,
+                                    insetColorLight = MaterialTheme.colorScheme.background.copyFactor(valueFactor = dimFactor),
+                                    insetColorShadow = MaterialTheme.colorScheme.background.copyFactor(valueFactor = 1f / dimFactor)
                                 )
-                                .drawBehind() {
-                                    val strokeWidth = 1.dp.toPx()
-                                    drawLine(
-                                        color = edgeColor,
-                                        start = Offset(size.width, 0f),
-                                        end = Offset(size.width, size.height),
-                                        strokeWidth = strokeWidth
-                                    )
-                                    drawLine(
-                                        color = edgeColor,
-                                        start = Offset(0f, 0f),
-                                        end = Offset(size.width, 0f),
-                                        strokeWidth = strokeWidth
-                                    )
-                                }
                                 .padding(top = 8.dp), // push content a bit down
                             scrollbarModifier = Modifier
                                 .clip(MaterialTheme.shapes.small)
@@ -169,31 +164,30 @@ fun HorizontalNewsFeeds(
                     modifier = Modifier
                         .width(if (state.isEditMode) 400.dp else 250.dp)
                         .height(220.dp)
-                        .innerShadow(
-                            shape = RectangleShape,
-                            shadow = Shadow(
-                                radius = 6.dp,
-                                spread = 2.dp,
-                                color = Color.Black.copy(alpha = 0.2f),
-                                offset = DpOffset(x = (-10).dp, y = 5.dp)
-                            )
+                        .tintedBackgroundImage(
+                            image = imageResource(Res.drawable.circuit_board_with_circle),
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            contentScale = ContentScale.Fit,
+                            finalZoomFactor = 2.0f,
+                            finalOffsetX = 4.dp,
+                            finalOffsetY = 6.dp,
+                            finalAlpha = 0.6f
                         )
-                        .drawBehind() {
-                            val strokeWidth = 1.dp.toPx()
-                            drawLine(
-                                color = edgeColor,
-                                start = Offset(0f, 0f),
-                                end = Offset(size.width, 0f),
-                                strokeWidth = strokeWidth
-                            )
-                        }
+                        .angledInnerShadow(
+                            angle = 45f,
+                            distance = 10.dp,
+                            alpha = 0.5f,
+                            insetSize = 2.dp,
+                            insetColorLight = MaterialTheme.colorScheme.background.copyFactor(valueFactor = dimFactor),
+                            insetColorShadow = MaterialTheme.colorScheme.background.copyFactor(valueFactor = 1f / dimFactor)
+                        )
                         .padding(top = 8.dp, start = 8.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     StudioClock(
                         modifier = Modifier
-                            .width(200.dp)
-                            .height(200.dp),
+                            .width(180.dp)
+                            .height(180.dp),
                         fontFamily = FontFamily(Font(Res.font.digital_dream_skew_fat)),
                         showSeconds = false,
                         showDate = true,
@@ -205,25 +199,45 @@ fun HorizontalNewsFeeds(
             }
         }
 
+        //
+        // Main area
+        //
         Column(
             modifier = Modifier
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                .fillMaxWidth()
+                .tintedBackgroundImage(
+                    image = imageResource(Res.drawable.circuit_board_squared),
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    finalAlpha = 0.2f
+                )
+                .angledInnerShadow(
+                    angle = 45f,
+                    distance = 10.dp,
+                    alpha = 0.5f,
+                    insetSize = 2.dp,
+                    insetColorLight = MaterialTheme.colorScheme.background.copyFactor(valueFactor = dimFactor),
+                    insetColorShadow = MaterialTheme.colorScheme.background.copyFactor(valueFactor = 1f / dimFactor)
+                )
         ) {
-            NewsListMenuBar(
-                connectivityManager = connectivityManager,
-                state = state,
-                maxWidth = maxWidth,
-                onAction = onAction
-            )
+            if (state.currentNewsFeedGroup != null || state.currentNewsFeedName != null) {
+                NewsListMenuBar(
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.background),
+                    connectivityManager = connectivityManager,
+                    state = state,
+                    maxWidth = maxWidth,
+                    onAction = onAction
+                )
+                Spacer(Modifier.size(MaterialTheme.shapes.gap))
+            }
 
             PlatformVerticalScrollbarBox(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 8.dp),
+                    .fillMaxWidth(),
                 scrollbarModifier = Modifier
                     .clip(MaterialTheme.shapes.small)
                     .width(10.dp)
+                    .background(MaterialTheme.colorScheme.background)
                     .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
                 scrollbarStyle = scrollbarStyle(),
                 scrollbarId = "newsfeed_${state.currentNewsFeedName}",

@@ -6,10 +6,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 val MyShapes = Shapes(
-    extraSmall = RoundedCornerShape(6.dp),
-    small = RoundedCornerShape(10.dp),
+    extraSmall = RoundedCornerShape(4.dp),
+    small = RoundedCornerShape(8.dp),
 )
 
-val Shapes.gap: Dp get() = 5.dp
+val Shapes.gap: Dp get() = 8.dp
 
 val Shapes.buttonsFlat: Boolean get() = true

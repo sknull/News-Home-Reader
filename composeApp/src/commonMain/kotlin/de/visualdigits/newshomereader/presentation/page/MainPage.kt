@@ -1,6 +1,7 @@
 package de.visualdigits.newshomereader.presentation.page
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -74,7 +75,6 @@ fun MainPage(
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .safeDrawingPadding()
     ) {
         val density = LocalDensity.current
         val screenWidth = maxWidth
@@ -114,98 +114,104 @@ fun MainPage(
                 onAction(NewsHomeReaderAction.UpdateMaxImageSize(state.settings, max(wPx, hPx)))
             }
 
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background)
-                    .padding(end = 4.dp, bottom = 4.dp),
+                    .safeDrawingPadding()
             ) {
-                ErrorCard(
-                    errorMessage = state.uiMessage,
-                    severity = state.uiMessageSeverity,
-                    shapeContainer = MaterialTheme.shapes.small
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(end = 4.dp, bottom = 4.dp),
+                ) {
+                    ErrorCard(
+                        errorMessage = state.uiMessage,
+                        severity = state.uiMessageSeverity,
+                        shapeContainer = MaterialTheme.shapes.small
+                    )
 
-                NewsItemSearchBar(
-                    state = state,
-                    screenWidth = screenWidth,
-                    onAction = onAction,
-                    scrollPosition = viewModel.scrollPosition,
-                    onCommonAction = onCommonAction,
-                    rowDataFiltered = rowDataFiltered,
-                    maxImageSize = maxImageSize,
-                    displayTheme = displayTheme,
-                    uriHandler = uriHandler
-                )
+                    NewsItemSearchBar(
+                        state = state,
+                        screenWidth = screenWidth,
+                        onAction = onAction,
+                        scrollPosition = viewModel.scrollPosition,
+                        onCommonAction = onCommonAction,
+                        rowDataFiltered = rowDataFiltered,
+                        maxImageSize = maxImageSize,
+                        displayTheme = displayTheme,
+                        uriHandler = uriHandler
+                    )
 
-                MainMenuBar(
-                    state = state,
-                    onAction = onAction,
-                    connectivityManager = connectivityManager
-                )
+                    MainMenuBar(
+                        state = state,
+                        onAction = onAction,
+                        connectivityManager = connectivityManager
+                    )
 
-                when {
-                    state.isShowInfos -> {
-                        InfoPage(
-                            uriHandler = uriHandler,
-                            onAction = onAction
-                        )
-                    }
-                    state.isEditingSettings -> {
-                        SettingsPage(
-                            viewModel = viewModel,
-                            state = state,
-                            scrollPosition = viewModel.scrollPosition,
-                            onCommonAction = onCommonAction,
-                            onAction = onAction
-                        )
-                    }
-                    state.isAddingNewsFeedConfiguration || state.isEditingNewsFeedConfiguration -> {
-                        NewsFeedConfigurationPage(
-                            state = state,
-                            viewModel = viewModel,
-                            onCommonAction = onCommonAction,
-                            onAction = onAction
-                        )
-                    }
-                    state.isViewingCatalog -> {
-                        CatalogPage(
-                            state = state,
-                            screenWidth = screenWidth,
-                            onAction = onAction,
-                            viewModel = viewModel,
-                            uriHandler = uriHandler,
-                            displayTheme = displayTheme,
-                            onCommonAction = onCommonAction
-                        )
-                    }
-                    else -> {
-                        NewsContent(
-                            state = state,
-                            chunks = chunks,
-                            viewModel = viewModel,
-                            maxWidth = screenWidth,
-                            maxHeight = screenHeight,
-                            maxImageSize = maxImageSize,
-                            uriHandler = uriHandler,
-                            connectivityManager = connectivityManager,
-                            displayTheme = displayTheme,
-                            onCommonAction = onCommonAction,
-                            onAction = onAction
-                        )
+                    when {
+                        state.isShowInfos -> {
+                            InfoPage(
+                                uriHandler = uriHandler,
+                                onAction = onAction
+                            )
+                        }
+                        state.isEditingSettings -> {
+                            SettingsPage(
+                                viewModel = viewModel,
+                                state = state,
+                                scrollPosition = viewModel.scrollPosition,
+                                onCommonAction = onCommonAction,
+                                onAction = onAction
+                            )
+                        }
+                        state.isAddingNewsFeedConfiguration || state.isEditingNewsFeedConfiguration -> {
+                            NewsFeedConfigurationPage(
+                                state = state,
+                                viewModel = viewModel,
+                                onCommonAction = onCommonAction,
+                                onAction = onAction
+                            )
+                        }
+                        state.isViewingCatalog -> {
+                            CatalogPage(
+                                state = state,
+                                screenWidth = screenWidth,
+                                onAction = onAction,
+                                viewModel = viewModel,
+                                uriHandler = uriHandler,
+                                displayTheme = displayTheme,
+                                onCommonAction = onCommonAction
+                            )
+                        }
+                        else -> {
+                            NewsContent(
+                                state = state,
+                                chunks = chunks,
+                                viewModel = viewModel,
+                                maxWidth = screenWidth,
+                                maxHeight = screenHeight,
+                                maxImageSize = maxImageSize,
+                                uriHandler = uriHandler,
+                                connectivityManager = connectivityManager,
+                                displayTheme = displayTheme,
+                                onCommonAction = onCommonAction,
+                                onAction = onAction
+                            )
+                        }
                     }
                 }
+
+                NewsFeedConfigurationGroupDialog(
+                    state = state,
+                    onAction = onAction
+                )
+
+                ConfirmDeleteNewsFeedGroupDialog(
+                    state = state,
+                    onAction = onAction
+                )
             }
-
-            NewsFeedConfigurationGroupDialog(
-                state = state,
-                onAction = onAction
-            )
-
-            ConfirmDeleteNewsFeedGroupDialog(
-                state = state,
-                onAction = onAction
-            )
         }
     }
 }
