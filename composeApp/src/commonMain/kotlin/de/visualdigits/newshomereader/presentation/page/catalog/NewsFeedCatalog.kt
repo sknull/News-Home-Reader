@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
 import de.visualdigits.common.presentation.components.container.VerticalCollapsibleBox
 import de.visualdigits.common.presentation.model.CommonAction
+import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_arrow_drop_down_24px
 import de.visualdigits.compose.resources.icon_arrow_right_24px
@@ -49,7 +50,7 @@ import org.jetbrains.compose.resources.painterResource
 fun NewsFeedCatalog(
     modifier: Modifier = Modifier,
     catalog: NewsFeedCatalog?,
-    scrollPosition: MutableMap<String, Pair<Int, Int?>>,
+    scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     state: NewsHomeReaderState,
     uriHandler: UriHandler,
     displayTheme: DisplayThemeEnum,

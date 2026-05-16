@@ -42,6 +42,7 @@ import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
 import de.visualdigits.common.presentation.model.CommonAction
+import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_paid_24px
 import de.visualdigits.compose.resources.icon_timelapse_24px
@@ -67,7 +68,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun NewsArticleCard(
     modifier: Modifier = Modifier,
-    scrollPosition: MutableMap<String, Pair<Int, Int?>>,
+    scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     maxWidth: Dp,
     maxImageSize: Int?,
     newsItem: NewsItem,

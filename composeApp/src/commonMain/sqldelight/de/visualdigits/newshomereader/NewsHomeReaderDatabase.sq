@@ -30,10 +30,10 @@ CREATE TABLE SettingsEntity (
 
 insertSettings:
 INSERT OR REPLACE INTO SettingsEntity (
-    displayTheme, spotColor, language, refreshInterval, refreshWifiOnly, lastMaxImageSize, keepReadArticles,
+    id, displayTheme, spotColor, language, refreshInterval, refreshWifiOnly, lastMaxImageSize, keepReadArticles,
     keepUnreadArticles, loadArticles, hideRead, webDavUrl, webDavDirectory, webDavUser, webDavPassword
 )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 getSettingsById:
 SELECT * FROM SettingsEntity WHERE id = :id;
@@ -148,14 +148,14 @@ CREATE INDEX IF NOT EXISTS index_news_item_updated ON NewsItemEntity(updatedMill
 
 insertNewsItem:
 INSERT OR REPLACE INTO NewsItemEntity (
-    feedName, identifier, publishedMillis, publishedZone,
+    id, feedName, identifier, publishedMillis, publishedZone,
     updatedMillis, lastSeenMillis, updatedZone, link, title, summary,
     content, keywords, image, imageTitle, imageCaption, isRead
 )
 VALUES (
-    :feedName, :identifier, :publishedMillis, :publishedZone,
-    :updatedMillis, :lastSeenMillis, :updatedZone, :link, :title, :summary,
-    :content, :keywords, :image, :imageTitle, :imageCaption, :isRead
+    ?, ?, ?, ?, ?,
+    ?, ?, ?, ?, ?, ?,
+    ?, ?, ?, ?, ?, ?
 );
 
 getAllNewsItems:
@@ -238,10 +238,10 @@ CREATE TABLE FullArticleEntity (
 
 insertFullArticle:
 INSERT OR REPLACE INTO FullArticleEntity (
-    itemId, applicationJson, html, imageItems, videoItems,
+    id, itemId, applicationJson, html, imageItems, videoItems,
     audioItems, articleImage, discussionUrl, commentCount, isFree, wordCount, readingTime
 )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 getFullArticleById:
 SELECT * FROM FullArticleEntity WHERE id = :id;
@@ -295,9 +295,9 @@ CREATE TABLE NewsFeedGroupEntity (
 
 insertNewsFeedGroupEntity:
 INSERT OR REPLACE INTO NewsFeedGroupEntity (
-    parentId, parentGroupName, name, newsFeeds, subGroups
+    id, parentId, parentGroupName, name, newsFeeds, subGroups
 )
-VALUES (?, ?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?, ?);
 
 getAllNewsFeedGroupEntities:
 SELECT * FROM NewsFeedGroupEntity;

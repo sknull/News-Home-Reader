@@ -91,15 +91,6 @@ class NewsFeedConfiguration(
                 }
             ),
 
-            StringFieldDescriptor(
-                key = NC.imageUrl,
-                label =  UiText.StringResourceId(Res.string.label_imageUrl),
-                toolTip =  UiText.StringResourceId(Res.string.tooltip_imageUrl),
-                valid = { _, value ->
-                    (value as? String)?.isNotBlank() == true
-                }
-            ),
-
             ListFieldDescriptor(
                 fieldClass = String::class,
                 key = NC.stopWords,

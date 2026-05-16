@@ -21,6 +21,7 @@ import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.form.EditableListResources
 import de.visualdigits.common.presentation.components.form.ConfigurationEditForm
 import de.visualdigits.common.presentation.model.CommonAction
+import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.add
 import de.visualdigits.compose.resources.add_hint
@@ -50,7 +51,7 @@ import org.jetbrains.compose.resources.stringResource
 fun SettingsPage(
     viewModel: NewsHomeReaderViewModel,
     state: NewsHomeReaderState,
-    scrollPosition: MutableMap<String, Pair<Int, Int?>>,
+    scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     onCommonAction: (CommonAction) -> Unit,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {

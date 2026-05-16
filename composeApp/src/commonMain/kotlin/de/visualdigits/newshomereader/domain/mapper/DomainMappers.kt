@@ -13,7 +13,6 @@ fun NewsFeedConfiguration.toNewsFeedItem(): NewsFeedItem {
         name = get<String>(NC.feedName),
         mainGroupName = get<String>(NC.mainGroupName) ?: error("No main group given"),
         subGroupName = get<String>(NC.subGroupName),
-        imageUrl = get<String>(NC.imageUrl),
         url = get<String>(NC.url),
         stopWords = get<List<String>>(NC.stopWords) ?: listOf()
     )
@@ -25,7 +24,6 @@ fun NewsFeedItem.toNewsFeedConfiguration(newsFeedGroups: List<NewsFeedGroup>): N
         NC.feedName to name,
         NC.mainGroupName to mainGroupName,
         NC.subGroupName to subGroupName,
-        NC.imageUrl to imageUrl,
         NC.url to url,
         NC.stopWords to stopWords
     ))

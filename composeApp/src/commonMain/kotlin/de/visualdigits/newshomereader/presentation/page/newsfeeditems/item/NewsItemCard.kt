@@ -80,7 +80,7 @@ fun NewsItemCard(
                 shadow = Shadow(
                     radius = 6.dp,
                     spread = 2.dp,
-                    color = Color.Black.copy(alpha = 0.2f),
+                    color = Color.Black.copy(alpha = 0.5f),
                     offset = DpOffset((-5).dp, 5.dp)
                 )
             )}

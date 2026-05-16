@@ -11,6 +11,7 @@ import de.visualdigits.common.domain.model.errorhandling.onError
 import de.visualdigits.common.domain.model.errorhandling.onSuccess
 import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.presentation.model.CommonAction
+import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.error_local_wrong_filetype
 import de.visualdigits.generated.AppVersion
@@ -74,7 +75,7 @@ class NewsHomeReaderViewModel(
 
     private val log = Logger.withTag("NewsHomeReaderViewModel")
 
-    val scrollPosition: MutableMap<String, Pair<Int, Int?>> = mutableMapOf()
+    val scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>> = mutableMapOf()
     var platformType: PlatformType = PlatformType.unknown
 
     private val _state = MutableStateFlow(NewsHomeReaderState())
@@ -158,7 +159,7 @@ class NewsHomeReaderViewModel(
     fun onCommonAction(action: CommonAction) {
         when (action) {
             is CommonAction.OnScrollPositionChange -> {
-                scrollPosition[action.id] = Pair(action.position, action.offset)
+                scrollPosition[action.id] = Triple(action.position, action.offset, action.scrollIntent)
             }
         }
     }
@@ -278,11 +279,11 @@ class NewsHomeReaderViewModel(
             }
             is NewsHomeReaderAction.OnAddNewsFeedConfigurationClick -> {
                 val newsFeedConfiguration = NewsFeedConfiguration(
-                    newsFeedGroups = state.value.newsFeedGroups, 
+                    newsFeedGroups = state.value.newsFeedGroups,
                     values = mapOf(
                         NC.feedName to "",
-                        NC.mainGroupName to action.newsFeedGroupName,
-                        NC.imageUrl to "",
+                        NC.mainGroupName to (action.newsFeedGroup.parentGroupName?:action.newsFeedGroup.name),
+                        NC.subGroupName to if (action.newsFeedGroup.parentGroupName != null) action.newsFeedGroup.name else null,
                         NC.url to "",
                         NC.stopWords to ""
                     )
@@ -299,21 +300,30 @@ class NewsHomeReaderViewModel(
             is NewsHomeReaderAction.OnAddNewsFeedConfigurationOkClick -> {
                 viewModelScope.launch {
                     val newsFeedItem = action.newsFeedConfiguration?.toNewsFeedItem()
-                    upsertNewsFeedItem(newsFeedItem)
-                        .onSuccess { newsFeedGroups ->
-                            _state.update {
-                                it.copy(
-                                    isAddingNewsFeedConfiguration = false,
-                                    isEditingNewsFeedConfiguration = false,
-                                    newsFeedGroups = newsFeedGroups?:listOf()
-                                )
-                            }
+                    val upsertResult = upsertNewsFeedItem(newsFeedItem)
+                    if (upsertResult is Result.Success) {
+                        refreshNewsFeeds()
+                        _state.update {
+                            it.copy(
+                                isAddingNewsFeedConfiguration = false,
+                                isEditingNewsFeedConfiguration = false,
+                                newsFeedGroups = upsertResult.data?:listOf()
+                            )
                         }
-                        .onError { _, throwable ->
-                            log.e("Could not add newsfeed item '${newsFeedItem?.name}'", throwable)
+                    } else if (upsertResult is Result.Error) {
+                        log.e("Could not add newsfeed item '${newsFeedItem?.name}'", upsertResult.throwable)
+                        _state.update {
+                            it.copy(
+                                isAddingNewsFeedConfiguration = false,
+                                isEditingNewsFeedConfiguration = false,
+                                uiMessage = upsertResult.error.toUiText(),
+                                uiMessageSeverity = Severity.Error
+                            )
                         }
+                    }
                 }
             }
+
             is NewsHomeReaderAction.OnAddNewsFeedConfigurationCancelClick -> {
                 _state.update {
                     it.copy(
@@ -422,7 +432,7 @@ class NewsHomeReaderViewModel(
             is NewsHomeReaderAction.OnAddNewsfeedGroupGroupClick -> {
                 _state.update {
                     it.copy(
-                        parentNewsFeedGroupName = action.newsFeedGroupName,
+                        parentNewsFeedGroup = action.newsFeedGroup,
                         originalNewsFeedGroup = null,
                         currentNewsFeedGroupToDelete = null,
                         isAddingNewsFeedGroup = true
@@ -431,7 +441,7 @@ class NewsHomeReaderViewModel(
             }
             is NewsHomeReaderAction.OnAddNewsFeedGroupOkClick -> {
                 addNewsFeedGroup(
-                    parentGroupName = state.value.parentNewsFeedGroupName,
+                    parentGroup = state.value.parentNewsFeedGroup,
                     newsFeedGroupName = action.newsFeedGroupName
                 )
             }
@@ -636,27 +646,6 @@ class NewsHomeReaderViewModel(
         }
     }
 
-    private fun addNewsFeedGroup(
-        parentGroupName: String?,
-        newsFeedGroupName: String
-    ) = viewModelScope.launch {
-        val addResult = newsFeedConfigurationRepository.upsertNewsFeedGroupSingle(
-            NewsFeedGroup(
-                parentGroupName = parentGroupName,
-                name = newsFeedGroupName
-            )
-        )
-        when (addResult) {
-            is Result.Success -> {
-                addResult.data
-            }
-
-            is Result.Error -> {
-                log.e("Could not add newsfeed group '$newsFeedGroupName'", addResult.throwable)
-            }
-        }
-    }
-
     private fun maintainSubscription(newsFeedCatalogItem: NewsFeedCatalogItem, subscribe: Boolean) = viewModelScope.launch {
         if (subscribe) {
             val mainCategory = newsFeedCatalogItem.parentCategory?.parentCategory
@@ -764,6 +753,34 @@ class NewsHomeReaderViewModel(
         }
     }
 
+    private fun addNewsFeedGroup(
+        parentGroup: NewsFeedGroup?,
+        newsFeedGroupName: String
+    ) = viewModelScope.launch {
+        val addResult = newsFeedConfigurationRepository.upsertNewsFeedGroup(
+            NewsFeedGroup(
+                parentId = parentGroup?.id,
+                parentGroupName = parentGroup?.name,
+                name = newsFeedGroupName
+            )
+        )
+        when (addResult) {
+            is Result.Success -> {
+                _state.update {
+                    it.copy(
+                        isAddingNewsFeedGroup = false,
+                        isEditingNewsFeedGroup = false,
+                        newsFeedGroups = addResult.data
+                    )
+                }
+            }
+
+            is Result.Error -> {
+                log.e("Could not add newsfeed group '$newsFeedGroupName'", addResult.throwable)
+            }
+        }
+    }
+
     private suspend fun addGroup(
         newsFeedGroup: NewsFeedGroup
     ): Result<NewsFeedGroup?, DataError.Local> {
@@ -788,6 +805,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
         if (editResult is Result.Success) {
             _state.update {
                 it.copy(
+                    isAddingNewsFeedGroup = false,
                     isEditingNewsFeedGroup = false,
                     newsFeedGroups = editResult.data
                 )
@@ -796,6 +814,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
             log.e("Could not get old newsfeed group '${newsFeedGroup?.name}'", editResult.throwable)
             _state.update {
                 it.copy(
+                    isAddingNewsFeedGroup = false,
                     isEditingNewsFeedGroup = false,
                     uiMessage = editResult.error.toUiText(),
                     uiMessageSeverity = Severity.Error
@@ -806,7 +825,9 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
 
     private suspend fun upsertNewsFeedItem(newsFeedItem: NewsFeedItem?): Result<List<NewsFeedGroup>?, DataError.Local> {
         return newsFeedItem
-            ?.let { nfc -> newsFeedConfigurationRepository.upsertNewsFeedItem(nfc) }
+            ?.let { nfc ->
+                newsFeedConfigurationRepository.upsertNewsFeedItem(nfc)
+            }
             ?: Result.Success(null)
     }
 
@@ -881,7 +902,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
                 isLoading = true,
             )
         }
-        scrollPosition["newsfeed_$feedName"] = Pair(0, 0)
+        scrollPosition["newsfeed_$feedName"] = Triple(0, 0, ScrollIntent.scrollToStart)
         val wifiOnly = state.value.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
         val loadArticles = state.value.settings?.get<BooleanEnum>(SK.loadArticles)?.booleanValue?:false
         val keepReadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue?:30
@@ -1236,7 +1257,7 @@ log.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
         scrollPosition
             .keys
             .filter { k -> k.startsWith("newsfeed_") }
-            .forEach { k -> scrollPosition[k] = Pair(0, 0)}
+            .forEach { k -> scrollPosition[k] = Triple(0, 0, ScrollIntent.scrollToStart)}
 
         return feedRepository.refreshNewsFeeds(
             newsFeedItems = newsFeedItems,

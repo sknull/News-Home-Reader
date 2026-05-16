@@ -17,6 +17,7 @@ import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
 import de.visualdigits.common.presentation.components.container.FlexibleSearchBar
 import de.visualdigits.common.presentation.model.CommonAction
+import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_close_24px
 import de.visualdigits.compose.resources.icon_delete_24px
@@ -38,7 +39,7 @@ fun NewsItemSearchBar(
     state: NewsHomeReaderState,
     screenWidth: Dp,
     onAction: (NewsHomeReaderAction) -> Unit,
-    scrollPosition: MutableMap<String, Pair<Int, Int?>>,
+    scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     onCommonAction: (CommonAction) -> Unit,
     rowDataFiltered: List<List<NewsItem>>,
     maxImageSize: Int?,
@@ -71,7 +72,7 @@ fun NewsItemSearchBar(
                 .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
             scrollbarStyle = scrollbarStyle(),
             padding = MaterialTheme.shapes.gap,
-            scrollbarId = "newsfeed_${state.currentNewsFeedName}",
+            scrollbarId = "newsfeed_searchbar",
             scrollPosition = scrollPosition,
             onCommonAction = onCommonAction
         ) {

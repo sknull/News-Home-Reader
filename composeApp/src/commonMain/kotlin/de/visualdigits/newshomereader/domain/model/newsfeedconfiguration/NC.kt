@@ -7,7 +7,6 @@ enum class NC : FieldKey<NC> {
     feedName,
     mainGroupName,
     subGroupName,
-    imageUrl,
     url,
     stopWords,
     ;

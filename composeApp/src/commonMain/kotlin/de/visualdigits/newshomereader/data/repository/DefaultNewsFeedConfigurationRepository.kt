@@ -127,8 +127,7 @@ class DefaultNewsFeedConfigurationRepository(
 
     override suspend fun upsertNewsFeedItem(newsFeedItem: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         try {
-            checkNotNull(newsFeedItem.subGroupName) { "Newsfeeditem with name '${newsFeedItem.name}' has no group name" }
-            val newsFeedGroupEntity = dao.getNewsFeedGroupEntityByName(newsFeedItem.subGroupName!!, newsFeedItem.mainGroupName).executeAsOneOrNull()
+            val newsFeedGroupEntity = dao.getNewsFeedGroupEntityByName(newsFeedItem.subGroupName ?: newsFeedItem.mainGroupName, if (newsFeedItem.subGroupName != null) newsFeedItem.mainGroupName else null).executeAsOneOrNull()
             if (newsFeedGroupEntity != null) {
                 val newsFeeds = newsFeedGroupEntity.newsFeeds.toMutableList()
                 newsFeeds.removeIf { nf -> nf.name == newsFeedItem.name }

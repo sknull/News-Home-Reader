@@ -153,10 +153,10 @@ fun anthraciteTheme(spotColor: Color): ColorScheme = darkColorScheme(
 
 fun studioClockColors(spotColor: Color): StudioClockColors = StudioClockColors(
     colorHours = spotColor,
-    colorMinutes = spotColor.copy(saturation = 0.3f, value = 0.8f),
+    colorMinutes = spotColor,
     colorSeconds = spotColor,
     colorTime = spotColor,
-    colorDate = spotColor.copy(saturation = 0.3f, value = 0.8f),
+    colorDate = spotColor.copy(saturation = 0.25f, value = 0.75f),
     colorBackground = Color(0xdd000000),
 )
 

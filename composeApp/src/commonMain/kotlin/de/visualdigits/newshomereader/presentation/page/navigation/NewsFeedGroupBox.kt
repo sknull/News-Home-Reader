@@ -1,8 +1,11 @@
 package de.visualdigits.newshomereader.presentation.page.navigation
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -15,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.common.presentation.components.container.VerticalCollapsibleBox
+import de.visualdigits.common.presentation.components.util.conditional
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_arrow_drop_down_24px
 import de.visualdigits.compose.resources.icon_arrow_right_24px
@@ -29,24 +33,31 @@ import org.jetbrains.compose.resources.painterResource
  */
 @Composable
 fun NewsFeedGroupBox(
+    modifier: Modifier = Modifier,
     newsFeedGroup: NewsFeedGroup,
     onAction: (NewsHomeReaderAction) -> Unit,
     state: NewsHomeReaderState,
     maxImageSize: Int?
 ) {
     val edgeColor = MaterialTheme.colorScheme.onSurface
+    val collapsibleState = state.collapsibleState["group_${newsFeedGroup.name}"]
     VerticalCollapsibleBox(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .drawBehind() {
-                val strokeWidth = 1.dp.toPx()
-                drawLine(
-                    color = edgeColor,
-                    start = Offset(0f, size.height - strokeWidth / 2),
-                    end = Offset(size.width, size.height - strokeWidth / 2),
-                    strokeWidth = strokeWidth
-                )
-            },
+            .conditional(
+                newsFeedGroup.parentGroupName == null
+            ) {
+                drawBehind() {
+                    val strokeWidth = 1.dp.toPx()
+                    drawLine(
+                        color = edgeColor,
+                        start = Offset(0f, size.height - strokeWidth / 2),
+                        end = Offset(size.width, size.height - strokeWidth / 2),
+                        strokeWidth = strokeWidth
+                    )
+                }
+            }
+            .padding(start = if (newsFeedGroup.parentGroupName != null) 20.dp else 0.dp),
         titleContent = {
             IndicatorButton(
                 width = 180.dp - MaterialTheme.shapes.gap * 2,
@@ -68,7 +79,7 @@ fun NewsFeedGroupBox(
         onStateChange = { state ->
             onAction(NewsHomeReaderAction.OnNewsFeedGroupCollapsibleStateChange(newsFeedGroup, state))
         },
-        isExpanded = state.collapsibleState["group_${newsFeedGroup.name}"] == true,
+        isExpanded = collapsibleState == true,
         iconArrowRight = painterResource(Res.drawable.icon_arrow_right_24px),
         iconArrowDown = painterResource(Res.drawable.icon_arrow_drop_down_24px),
         trailingIcon = {
@@ -82,7 +93,6 @@ fun NewsFeedGroupBox(
         Column(
             modifier = Modifier
                 .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
         ) {
             newsFeedGroup.subGroups
                 .sortedBy { sg -> sg.name }
@@ -96,6 +106,8 @@ fun NewsFeedGroupBox(
             }
 
             NewsFeedItems(
+                modifier = Modifier
+                    .padding(start = if (newsFeedGroup.parentGroupName != null) 20.dp else 0.dp),
                 newsFeedGroup = newsFeedGroup,
                 state = state,
                 onAction = onAction

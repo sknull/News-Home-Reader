@@ -41,16 +41,6 @@ fun EditButtonsTop(
             ) {
                 onAction(NewsHomeReaderAction.OnDeleteNewsfeedGroupClick(newsFeedGroup))
             }
-
-            IndicatorButton(
-                modifier = Modifier,
-                width = 30.dp,
-                height = 30.dp,
-                padding = 2.dp,
-                leadingIcon = painterResource(Res.drawable.icon_add_notes_24px)
-            ) {
-                onAction(NewsHomeReaderAction.OnAddNewsfeedGroupGroupClick(newsFeedGroupName = newsFeedGroup.name))
-            }
         }
     }
 }

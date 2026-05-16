@@ -20,19 +20,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.draw.innerShadow
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import de.visualdigits.common.domain.util.copy
 import de.visualdigits.common.domain.util.copyFactor
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
@@ -41,6 +34,7 @@ import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.common.presentation.components.modifier.angledInnerShadow
 import de.visualdigits.common.presentation.components.modifier.tintedBackgroundImage
 import de.visualdigits.common.presentation.model.CommonAction
+import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.circuit_board_squared
 import de.visualdigits.compose.resources.circuit_board_with_circle
@@ -67,7 +61,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun HorizontalNewsFeeds(
     state: NewsHomeReaderState,
-    scrollPosition: MutableMap<String, Pair<Int, Int?>>,
+    scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     displayTheme: DisplayThemeEnum,
     connectivityManager: ConnectivityManager,
     maxWidth: Dp,
@@ -95,13 +89,12 @@ fun HorizontalNewsFeeds(
                 Box(
                     modifier = Modifier
                         .fillMaxHeight()
-                        .width(if (state.isEditMode) 400.dp else 250.dp)
+                        .width(if (state.isEditMode) 320.dp else 250.dp)
                         .padding(bottom = 220.dp)
                 ) {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.surfaceContainerLow)
                     ) {
                         if (state.isEditMode) {
                             IndicatorButton(
@@ -118,27 +111,40 @@ fun HorizontalNewsFeeds(
                         PlatformVerticalScrollbarBox(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(end = 10.dp) // let shadow start before scrollbar
+                                .tintedBackgroundImage(
+                                    image = imageResource(Res.drawable.circuit_board_squared),
+                                    tint = MaterialTheme.colorScheme.onSurface,
+                                    finalAlpha = 0.2f
+                                )
                                 .angledInnerShadow(
                                     angle = 45f,
-                                    distance = 10.dp,
-                                    alpha = 0.2f,
+                                    distance = 20.dp,
+                                    spread = 10.dp,
+                                    alpha = 0.5f,
                                     insetSize = 2.dp,
                                     insetColorLight = MaterialTheme.colorScheme.background.copyFactor(valueFactor = dimFactor),
                                     insetColorShadow = MaterialTheme.colorScheme.background.copyFactor(valueFactor = 1f / dimFactor)
-                                )
-                                .padding(top = 8.dp), // push content a bit down
+                                ),
                             scrollbarModifier = Modifier
                                 .clip(MaterialTheme.shapes.small)
                                 .width(10.dp)
+                                .background(MaterialTheme.colorScheme.background)
                                 .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                            verticalArrangementGap = 0.dp,
                             scrollbarStyle = scrollbarStyle(),
                             scrollbarId = "newsfeed_navigation",
                             scrollPosition = scrollPosition,
                             onCommonAction = onCommonAction,
-                            scrollToTop = { lazyListState ->
-                                LaunchedEffect(state.collapsibleState["group_newsfeeds_navigation"]) {
-                                    if (state.collapsibleState["group_newsfeeds_navigation"] == true) {
+                            scrollToTop = { scrollState, scrollIntent ->
+                                LaunchedEffect(state.collapsibleState["group_newsfeeds_navigation"], scrollIntent) {
+                                    if (state.collapsibleState["group_newsfeeds_navigation"] == true || scrollIntent != ScrollIntent.standard) {
+                                        scrollState.animateScrollTo(0)
+                                    }
+                                }
+                            },
+                            scrollToTopLazy = { lazyListState, scrollIntent ->
+                                LaunchedEffect(state.collapsibleState["group_newsfeeds_navigation"], scrollIntent) {
+                                    if (state.collapsibleState["group_newsfeeds_navigation"] == true || scrollIntent != ScrollIntent.standard) {
                                         lazyListState.animateScrollToItem(0)
                                     }
                                 }
@@ -149,6 +155,8 @@ fun HorizontalNewsFeeds(
                                 .map { newsFeedGroup ->
                                     Pair("newsfeed_navigation_${newsFeedGroup.name}", @Composable {
                                         NewsFeedGroupBox(
+                                            modifier = Modifier
+                                                .background(MaterialTheme.colorScheme.background.copy(alpha = 0.8f)),
                                             newsFeedGroup = newsFeedGroup,
                                             onAction = onAction,
                                             state = state,
@@ -162,7 +170,7 @@ fun HorizontalNewsFeeds(
 
                 Box(
                     modifier = Modifier
-                        .width(if (state.isEditMode) 400.dp else 250.dp)
+                        .width(if (state.isEditMode) 320.dp else 250.dp)
                         .height(220.dp)
                         .tintedBackgroundImage(
                             image = imageResource(Res.drawable.circuit_board_with_circle),
@@ -191,6 +199,7 @@ fun HorizontalNewsFeeds(
                         fontFamily = FontFamily(Font(Res.font.digital_dream_skew_fat)),
                         showSeconds = false,
                         showDate = true,
+                        showYear = true,
                         colors = state.settings?.get<Color>(SK.spotColor)
                             ?.let { sc -> studioClockColors(sc) }
                             ?: studioClockColors(DisplayThemeEnum.SPOT_COLOR_DEFAULT)
@@ -212,7 +221,8 @@ fun HorizontalNewsFeeds(
                 )
                 .angledInnerShadow(
                     angle = 45f,
-                    distance = 10.dp,
+                    distance = 20.dp,
+                    spread = 10.dp,
                     alpha = 0.5f,
                     insetSize = 2.dp,
                     insetColorLight = MaterialTheme.colorScheme.background.copyFactor(valueFactor = dimFactor),
@@ -240,14 +250,16 @@ fun HorizontalNewsFeeds(
                     .background(MaterialTheme.colorScheme.background)
                     .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
                 scrollbarStyle = scrollbarStyle(),
-                scrollbarId = "newsfeed_${state.currentNewsFeedName}",
+                scrollbarId = "newsfeed_items",
                 scrollPosition = scrollPosition,
                 onCommonAction = onCommonAction
             ) {
                 rowData.map { rowItems ->
                     Pair(rowItems.joinToString("_") { item -> item.id.toString() }, @Composable {
                         Row(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = MaterialTheme.shapes.gap),
                             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                         ) {
                             rowItems.forEach { newsItem ->

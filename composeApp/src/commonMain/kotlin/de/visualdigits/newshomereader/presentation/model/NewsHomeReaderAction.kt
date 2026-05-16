@@ -96,7 +96,7 @@ sealed interface NewsHomeReaderAction {
 
     @Immutable
     class OnAddNewsFeedConfigurationClick(
-        val newsFeedGroupName: String
+        val newsFeedGroup: NewsFeedGroup
     ) : NewsHomeReaderAction
 
     @Immutable
@@ -150,7 +150,7 @@ sealed interface NewsHomeReaderAction {
 
     @Immutable
     data class OnAddNewsfeedGroupGroupClick(
-        val newsFeedGroupName: String? = null,
+        val newsFeedGroup: NewsFeedGroup? = null
     ) : NewsHomeReaderAction
 
     @Immutable

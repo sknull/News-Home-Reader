@@ -146,6 +146,7 @@ fun MainPage(
                     MainMenuBar(
                         state = state,
                         onAction = onAction,
+                        onCommonAction = onCommonAction,
                         connectivityManager = connectivityManager
                     )
 

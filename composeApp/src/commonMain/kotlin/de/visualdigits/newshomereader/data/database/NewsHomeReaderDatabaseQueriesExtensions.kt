@@ -11,16 +11,17 @@ import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 
 fun NewsHomeReaderDatabaseQueries.getAllNewsFeedGroups(): List<NewsFeedGroup> {
-    val childrenByParent = getAllNewsFeedGroupEntities()
+    val executeAsList = getAllNewsFeedGroupEntities()
         .executeAsList()
+    val childrenByParent = executeAsList
         .groupBy { it.parentId }
     return try {
-        childrenByParent[null]
+        val groups = childrenByParent[null]
             ?.map { rootEntity ->
                 buildNodeRecursive(rootEntity, childrenByParent)
             } ?: emptyList()
+        groups
     } catch (e: Exception) {
-        Result.Error(DataError.Local.UNKNOWN, e)
         listOf()
     }
 }
@@ -45,6 +46,7 @@ private fun buildNodeRecursive(
 
 fun NewsHomeReaderDatabaseQueries.upsertNewsFeedGroup(newsFeedGroupEntity: NewsFeedGroupEntity): NewsFeedGroupEntity {
     insertNewsFeedGroupEntity(
+        id = newsFeedGroupEntity.id,
         parentId = newsFeedGroupEntity.parentId,
         parentGroupName = newsFeedGroupEntity.parentGroupName,
         name = newsFeedGroupEntity.name,
@@ -66,6 +68,7 @@ fun NewsHomeReaderDatabaseQueries.upsertSettings(settingsEntity: SettingsEntity)
 
 fun NewsHomeReaderDatabaseQueries.insertSettings(settingsEntity: SettingsEntity) {
     insertSettings(
+        id = settingsEntity.id,
         displayTheme = settingsEntity.displayTheme,
         spotColor = settingsEntity.spotColor,
         language = settingsEntity.language,
@@ -177,6 +180,7 @@ fun NewsHomeReaderDatabaseQueries.upsertNewsItem(newsItemEntity: NewsItemEntity,
 
 fun NewsHomeReaderDatabaseQueries.insertNewsItem(newsItemEntity: NewsItemEntity) {
     insertNewsItem(
+        id = newsItemEntity.id,
         identifier = newsItemEntity.identifier,
         feedName = newsItemEntity.feedName,
         publishedMillis = newsItemEntity.publishedMillis,
@@ -231,6 +235,7 @@ fun NewsHomeReaderDatabaseQueries.upsertFullArticle(fullArticleEntity: FullArtic
 
 fun NewsHomeReaderDatabaseQueries.insertFullArticle(fullArticleEntity: FullArticleEntity) {
     insertFullArticle(
+        id = fullArticleEntity.id,
         itemId = fullArticleEntity.itemId,
         applicationJson = fullArticleEntity.applicationJson,
         html = fullArticleEntity.html,

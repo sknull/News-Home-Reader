@@ -26,6 +26,7 @@ import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarB
 import de.visualdigits.common.presentation.components.modifier.angledInnerShadow
 import de.visualdigits.common.presentation.components.modifier.tintedBackgroundImage
 import de.visualdigits.common.presentation.model.CommonAction
+import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.circuit_board_squared
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
@@ -44,7 +45,7 @@ import org.jetbrains.compose.resources.imageResource
  */
 @Composable
 fun VerticalNewsFeeds(
-    scrollPosition: MutableMap<String, Pair<Int, Int?>>,
+    scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     state: NewsHomeReaderState,
     connectivityManager: ConnectivityManager,
     maxWidth: Dp,
@@ -64,7 +65,6 @@ fun VerticalNewsFeeds(
         PlatformVerticalScrollbarBox(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(end = 10.dp) // let shadow start before scrollbar
                 .tintedBackgroundImage(
                     image = imageResource(Res.drawable.circuit_board_squared),
                     tint = MaterialTheme.colorScheme.onSurface,
@@ -72,44 +72,53 @@ fun VerticalNewsFeeds(
                 )
                 .angledInnerShadow(
                     angle = 45f,
-                    distance = 10.dp,
-                    alpha = 0.2f,
+                    distance = 20.dp,
+                    spread = 10.dp,
+                    alpha = 0.5f,
                     insetSize = 2.dp,
                     insetColorLight = MaterialTheme.colorScheme.background.copyFactor(valueFactor = dimFactor),
                     insetColorShadow = MaterialTheme.colorScheme.background.copyFactor(valueFactor = 1f / dimFactor)
-                )
-, // push content a bit down
-            padding = 0.dp,
-            verticalArrangementGap = 0.dp,
-            backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                ),
             scrollbarModifier = Modifier
                 .clip(MaterialTheme.shapes.small)
                 .width(10.dp)
+                .background(MaterialTheme.colorScheme.background)
                 .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+            padding = 0.dp,
+            verticalArrangementGap = 0.dp,
+            backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
             scrollbarStyle = scrollbarStyle(),
-            scrollbarId = "newsfeed_navigation",
+            scrollbarId = "newsfeed_items",
             scrollPosition = scrollPosition,
             onCommonAction = onCommonAction,
-            scrollToTop = { lazyListState ->
-                LaunchedEffect(state.collapsibleState["group_newsfeeds_navigation"]) {
-                    if (state.collapsibleState["group_newsfeeds_navigation"] == true) {
+            scrollToTop = { scrollState, scrollIntent ->
+                LaunchedEffect(state.collapsibleState["group_newsfeeds_navigation"], scrollIntent) {
+                    if (state.collapsibleState["group_newsfeeds_navigation"] == true || scrollIntent != ScrollIntent.standard) {
+                        scrollState.animateScrollTo(0)
+                    }
+                }
+            },
+            scrollToTopLazy = { lazyListState, scrollIntent ->
+                LaunchedEffect(state.collapsibleState["group_newsfeeds_navigation"], scrollIntent) {
+                    if (state.collapsibleState["group_newsfeeds_navigation"] == true || scrollIntent != ScrollIntent.standard) {
                         lazyListState.animateScrollToItem(0)
                     }
                 }
             }
         ) {
+            val lastRow = rowData.size - 1
             if (state.collapsibleState["group_newsfeeds_navigation"] == true) {
                 listOf(Pair("newsfeed_navigation", @Composable {
                     Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.background),
-                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                            .fillMaxWidth(),
                     ) {
                         state.newsFeedGroups
                             .sortedBy { nfg -> nfg.name }
                             .forEach { newsFeedGroup ->
                                 NewsFeedGroupBox(
+                                    modifier = Modifier
+                                        .background(MaterialTheme.colorScheme.background.copy(alpha = 0.8f)),
                                     newsFeedGroup = newsFeedGroup,
                                     onAction = onAction,
                                     state = state,
@@ -134,39 +143,38 @@ fun VerticalNewsFeeds(
                         Spacer(Modifier.size(MaterialTheme.shapes.gap))
                     }
                 })
-            ) + listOf(
-                Pair("newslist_items", @Composable {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(MaterialTheme.shapes.gap),
-                    ) {
-                        rowData.map { rowItems ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
-                            ) {
-                                rowItems.forEach { newsItem ->
-                                    NewsItemCard(
-                                        modifier = Modifier
-                                            .weight(1f),
-                                        state = state,
-                                        maxImageSize = maxImageSize,
-                                        newsItem = newsItem,
-                                        displayTheme = displayTheme,
-                                        uriHandler = uriHandler,
-                                        onAction = onAction
-                                    )
-                                }
-                                (0 until chunks - rowItems.size).forEach {
-                                    Spacer(Modifier.weight(1f))
-                                }
+            ) + rowData.flatMapIndexed{ index, rowItems ->
+                listOf(
+                    Pair("row_" + rowItems.joinToString("_") { item -> item.id.toString() }, @Composable {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = MaterialTheme.shapes.gap),
+                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                        ) {
+                            rowItems.forEach{ newsItem ->
+                                NewsItemCard(
+                                    modifier = Modifier
+                                        .weight(1f),
+                                    state = state,
+                                    maxImageSize = maxImageSize,
+                                    newsItem = newsItem,
+                                    displayTheme = displayTheme,
+                                    uriHandler = uriHandler,
+                                    onAction = onAction
+                                )
+                            }
+                            (0 until chunks - rowItems.size).forEach {
+                                Spacer(Modifier.weight(1f))
                             }
                         }
-                    }
-                })
-            )
+                    })
+                ) + if (index < lastRow) {
+                    listOf(Pair("spacer_" + rowItems.joinToString("_") { item -> item.id.toString() }, @Composable { Spacer(Modifier.size(MaterialTheme.shapes.gap)) }))
+                } else {
+                    listOf()
+                }
+            }
         }
     }
 }

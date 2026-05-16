@@ -30,12 +30,13 @@ import org.jetbrains.compose.resources.painterResource
  */
 @Composable
 fun NewsFeedItems(
+    modifier: Modifier = Modifier,
     newsFeedGroup: NewsFeedGroup,
     state: NewsHomeReaderState,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
     FlowRow(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(),
     ) {
         newsFeedGroup.newsFeeds.forEach { newsFeedItem ->

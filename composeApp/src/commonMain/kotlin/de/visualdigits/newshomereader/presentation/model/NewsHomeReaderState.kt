@@ -30,6 +30,7 @@ data class NewsHomeReaderState(
     val currentNewsItems: List<NewsItem> = listOf(),
     val visibleNewsItems: List<NewsItem> = listOf(),
     val allowClearVisibleNewsItems: Boolean = false,
+    val scrollToTop: Boolean = false,
 
     val filteredNewsItems: List<NewsItem> = listOf(),
     val newsItemSearchText: String? = null,
@@ -70,7 +71,7 @@ data class NewsHomeReaderState(
     val isEditMode: Boolean = false,
     val onlySubscribedFeeds: Boolean = false,
 
-    val parentNewsFeedGroupName: String? = null,
+    val parentNewsFeedGroup: NewsFeedGroup? = null,
     val originalNewsFeedConfiguration: NewsFeedConfiguration? = null,
     val editedNewsFeedConfiguration: NewsFeedConfiguration? = null,
     val isEditingNewsFeedGroup: Boolean = false,
