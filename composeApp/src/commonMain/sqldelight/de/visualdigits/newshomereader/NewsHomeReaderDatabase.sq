@@ -29,11 +29,11 @@ CREATE TABLE SettingsEntity (
 );
 
 insertSettings:
-INSERT OR REPLACE INTO SettingsEntity (
-    id, displayTheme, spotColor, language, refreshInterval, refreshWifiOnly, lastMaxImageSize, keepReadArticles,
+INSERT INTO SettingsEntity (
+    displayTheme, spotColor, language, refreshInterval, refreshWifiOnly, lastMaxImageSize, keepReadArticles,
     keepUnreadArticles, loadArticles, hideRead, webDavUrl, webDavDirectory, webDavUser, webDavPassword
 )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 getSettingsById:
 SELECT * FROM SettingsEntity WHERE id = :id;
@@ -147,16 +147,36 @@ CREATE INDEX IF NOT EXISTS index_news_item_feedname ON NewsItemEntity(feedName);
 CREATE INDEX IF NOT EXISTS index_news_item_updated ON NewsItemEntity(updatedMillis);
 
 insertNewsItem:
-INSERT OR REPLACE INTO NewsItemEntity (
-    id, feedName, identifier, publishedMillis, publishedZone,
+INSERT INTO NewsItemEntity (
+    feedName, identifier, publishedMillis, publishedZone,
     updatedMillis, lastSeenMillis, updatedZone, link, title, summary,
     content, keywords, image, imageTitle, imageCaption, isRead
 )
 VALUES (
-    ?, ?, ?, ?, ?,
+    ?, ?, ?, ?,
     ?, ?, ?, ?, ?, ?,
     ?, ?, ?, ?, ?, ?
 );
+
+updateNewsItem:
+UPDATE NewsItemEntity
+SET feedName = :feedName,
+    identifier = :identifier,
+    publishedMillis = :publishedMillis,
+    publishedZone = :publishedZone,
+    updatedMillis = :updatedMillis,
+    lastSeenMillis = :lastSeenMillis,
+    updatedZone = :updatedZone,
+    link = :link,
+    title = :title,
+    summary = :summary,
+    content = :content,
+    keywords = :keywords,
+    image = :image,
+    imageTitle = :imageTitle,
+    imageCaption = :imageCaption,
+    isRead = :isRead
+WHERE id = :id;
 
 getAllNewsItems:
 SELECT * FROM NewsItemEntity;
@@ -170,25 +190,6 @@ SELECT * FROM NewsItemEntity WHERE feedName = :feedName AND identifier = :identi
 getAllNewsItemsByFeedName:
 SELECT * FROM NewsItemEntity WHERE feedName = :feedName
 ORDER BY updatedMillis DESC;
-
-updateNewsItem:
-UPDATE NewsItemEntity
-SET feedName = :feedName,
-    identifier = :identifier,
-    publishedMillis = :publishedMillis,
-    publishedZone = :publishedZone,
-    updatedMillis = :updatedMillis,
-    updatedZone = :updatedZone,
-    link = :link,
-    title = :title,
-    summary = :summary,
-    content = :content,
-    keywords = :keywords,
-    image = :image,
-    imageTitle = :imageTitle,
-    imageCaption = :imageCaption,
-    isRead = :isRead
-WHERE id = :id;
 
 markNewsItemsAsReadById:
 UPDATE NewsItemEntity
@@ -237,17 +238,11 @@ CREATE TABLE FullArticleEntity (
 );
 
 insertFullArticle:
-INSERT OR REPLACE INTO FullArticleEntity (
-    id, itemId, applicationJson, html, imageItems, videoItems,
+INSERT INTO FullArticleEntity (
+    itemId, applicationJson, html, imageItems, videoItems,
     audioItems, articleImage, discussionUrl, commentCount, isFree, wordCount, readingTime
 )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-
-getFullArticleById:
-SELECT * FROM FullArticleEntity WHERE id = :id;
-
-getFullArticleByItemId:
-SELECT * FROM FullArticleEntity WHERE itemId = :itemId;
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 updateFullArticle:
 UPDATE FullArticleEntity
@@ -264,6 +259,12 @@ SET id = :id,
     wordCount = :wordCount,
     readingTime = :readingTime
 WHERE itemId = :itemId;
+
+getFullArticleById:
+SELECT * FROM FullArticleEntity WHERE id = :id;
+
+getFullArticleByItemId:
+SELECT * FROM FullArticleEntity WHERE itemId = :itemId;
 
 getAllNewsItemsWithArticles:
 SELECT NewsItemEntity.*, FullArticleEntity.*
@@ -294,10 +295,19 @@ CREATE TABLE NewsFeedGroupEntity (
 );
 
 insertNewsFeedGroupEntity:
-INSERT OR REPLACE INTO NewsFeedGroupEntity (
-    id, parentId, parentGroupName, name, newsFeeds, subGroups
+INSERT INTO NewsFeedGroupEntity (
+    parentId, parentGroupName, name, newsFeeds, subGroups
 )
-VALUES (?, ?, ?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?);
+
+updateNewsFeedGroupEntity:
+UPDATE NewsFeedGroupEntity
+SET parentId = :parentId,
+        parentGroupName = :parentGroupName,
+        name = :name,
+        newsFeeds = :newsFeeds,
+        subGroups = :subGroups
+WHERE id = :id;
 
 getAllNewsFeedGroupEntities:
 SELECT * FROM NewsFeedGroupEntity;

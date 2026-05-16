@@ -1,13 +1,11 @@
 package de.visualdigits.newshomereader.data.database
 
-import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.FullArticleEntity
 import de.visualdigits.newshomereader.NewsFeedEntity
 import de.visualdigits.newshomereader.NewsFeedGroupEntity
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.NewsItemEntity
 import de.visualdigits.newshomereader.SettingsEntity
-import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 
 fun NewsHomeReaderDatabaseQueries.getAllNewsFeedGroups(): List<NewsFeedGroup> {
@@ -45,13 +43,34 @@ private fun buildNodeRecursive(
 }
 
 fun NewsHomeReaderDatabaseQueries.upsertNewsFeedGroup(newsFeedGroupEntity: NewsFeedGroupEntity): NewsFeedGroupEntity {
+    val existingNewsFeedEntity = getNewsFeedGroupEntityById(newsFeedGroupEntity.id).executeAsOneOrNull()
+    return if (existingNewsFeedEntity != null) {
+        updateNewsFeedGroup(newsFeedGroupEntity)
+    } else {
+        insertNewsFeedGroup(newsFeedGroupEntity)
+    }
+}
+
+fun NewsHomeReaderDatabaseQueries.insertNewsFeedGroup(newsFeedGroupEntity: NewsFeedGroupEntity): NewsFeedGroupEntity {
     insertNewsFeedGroupEntity(
-        id = newsFeedGroupEntity.id,
         parentId = newsFeedGroupEntity.parentId,
         parentGroupName = newsFeedGroupEntity.parentGroupName,
         name = newsFeedGroupEntity.name,
         newsFeeds = newsFeedGroupEntity.newsFeeds,
         subGroups = newsFeedGroupEntity.subGroups
+    )
+
+    return getNewsFeedGroupEntityByName(name = newsFeedGroupEntity.name, parentGroupName = newsFeedGroupEntity.parentGroupName).executeAsOne()
+}
+
+fun NewsHomeReaderDatabaseQueries.updateNewsFeedGroup(newsFeedGroupEntity: NewsFeedGroupEntity): NewsFeedGroupEntity {
+    updateNewsFeedGroupEntity(
+        parentId = newsFeedGroupEntity.parentId,
+        parentGroupName = newsFeedGroupEntity.parentGroupName,
+        name = newsFeedGroupEntity.name,
+        newsFeeds = newsFeedGroupEntity.newsFeeds,
+        subGroups = newsFeedGroupEntity.subGroups,
+        id = newsFeedGroupEntity.id
     )
 
     return getNewsFeedGroupEntityByName(name = newsFeedGroupEntity.name, parentGroupName = newsFeedGroupEntity.parentGroupName).executeAsOne()
@@ -68,7 +87,6 @@ fun NewsHomeReaderDatabaseQueries.upsertSettings(settingsEntity: SettingsEntity)
 
 fun NewsHomeReaderDatabaseQueries.insertSettings(settingsEntity: SettingsEntity) {
     insertSettings(
-        id = settingsEntity.id,
         displayTheme = settingsEntity.displayTheme,
         spotColor = settingsEntity.spotColor,
         language = settingsEntity.language,
@@ -180,7 +198,6 @@ fun NewsHomeReaderDatabaseQueries.upsertNewsItem(newsItemEntity: NewsItemEntity,
 
 fun NewsHomeReaderDatabaseQueries.insertNewsItem(newsItemEntity: NewsItemEntity) {
     insertNewsItem(
-        id = newsItemEntity.id,
         identifier = newsItemEntity.identifier,
         feedName = newsItemEntity.feedName,
         publishedMillis = newsItemEntity.publishedMillis,
@@ -208,6 +225,7 @@ fun NewsHomeReaderDatabaseQueries.updateNewsItem(newsItemEntity: NewsItemEntity)
         publishedZone = newsItemEntity.publishedZone,
         updatedMillis = newsItemEntity.updatedMillis,
         updatedZone = newsItemEntity.updatedZone,
+        lastSeenMillis = newsItemEntity.lastSeenMillis,
         link = newsItemEntity.link,
         title = newsItemEntity.title,
         summary = newsItemEntity.summary,
@@ -225,7 +243,7 @@ fun NewsHomeReaderDatabaseQueries.updateNewsItem(newsItemEntity: NewsItemEntity)
 fun NewsHomeReaderDatabaseQueries.upsertFullArticle(fullArticleEntity: FullArticleEntity): Boolean {
     val existingFullArticleEntity = getFullArticleByItemId(fullArticleEntity.itemId).executeAsOneOrNull()
     return if (existingFullArticleEntity != null) {
-        insertFullArticle(fullArticleEntity)
+        updateFullArticle(fullArticleEntity)
         !existingFullArticleEntity.isEqualto(fullArticleEntity)
     } else {
         insertFullArticle(fullArticleEntity)
@@ -235,7 +253,6 @@ fun NewsHomeReaderDatabaseQueries.upsertFullArticle(fullArticleEntity: FullArtic
 
 fun NewsHomeReaderDatabaseQueries.insertFullArticle(fullArticleEntity: FullArticleEntity) {
     insertFullArticle(
-        id = fullArticleEntity.id,
         itemId = fullArticleEntity.itemId,
         applicationJson = fullArticleEntity.applicationJson,
         html = fullArticleEntity.html,
@@ -249,6 +266,33 @@ fun NewsHomeReaderDatabaseQueries.insertFullArticle(fullArticleEntity: FullArtic
         wordCount = fullArticleEntity.wordCount,
         readingTime = fullArticleEntity.readingTime,
     )
+}
+
+fun NewsHomeReaderDatabaseQueries.updateFullArticle(fullArticleEntity: FullArticleEntity) {
+    updateFullArticle(
+        itemId = fullArticleEntity.itemId,
+        applicationJson = fullArticleEntity.applicationJson,
+        html = fullArticleEntity.html,
+        imageItems = fullArticleEntity.imageItems,
+        videoItems = fullArticleEntity.videoItems,
+        audioItems = fullArticleEntity.audioItems,
+        articleImage = fullArticleEntity.articleImage,
+        discussionUrl = fullArticleEntity.discussionUrl,
+        commentCount = fullArticleEntity.commentCount,
+        isFree = fullArticleEntity.isFree,
+        wordCount = fullArticleEntity.wordCount,
+        readingTime = fullArticleEntity.readingTime,
+        id = fullArticleEntity.id
+    )
+}
+
+fun NewsFeedGroupEntity.isEqualTo(other: NewsFeedGroupEntity): Boolean {
+    return   id == other.id &&
+    parentId == other.parentId &&
+    parentGroupName == other.parentGroupName &&
+    name == other.name &&
+    newsFeeds == other.newsFeeds &&
+    subGroups == other.subGroups
 }
 
 fun NewsFeedEntity.isEqualTo(other: NewsFeedEntity): Boolean {

@@ -21,18 +21,6 @@ fun EditButtonsBottom(
 ) {
     if (state.isEditMode) {
         Row() {
-            IndicatorButton(
-                modifier = Modifier,
-                width = 30.dp,
-                height = 30.dp,
-                padding = 2.dp,
-                leadingIcon = painterResource(Res.drawable.icon_add_notes_24px)
-            ) {
-                onAction(NewsHomeReaderAction.OnAddNewsfeedGroupGroupClick(
-                    newsFeedGroup = newsFeedGroup
-                ))
-            }
-
             // only allow one sub group level
             if (newsFeedGroup.parentGroupName == null) {
                 IndicatorButton(
@@ -40,10 +28,22 @@ fun EditButtonsBottom(
                     width = 30.dp,
                     height = 30.dp,
                     padding = 2.dp,
-                    leadingIcon = painterResource(Res.drawable.icon_docs_add_on_24px)
+                    leadingIcon = painterResource(Res.drawable.icon_add_notes_24px)
                 ) {
-                    onAction(NewsHomeReaderAction.OnAddNewsFeedConfigurationClick(newsFeedGroup = newsFeedGroup))
+                    onAction(NewsHomeReaderAction.OnAddNewsfeedGroupGroupClick(
+                        newsFeedGroup = newsFeedGroup
+                    ))
                 }
+            }
+
+            IndicatorButton(
+                modifier = Modifier,
+                width = 30.dp,
+                height = 30.dp,
+                padding = 2.dp,
+                leadingIcon = painterResource(Res.drawable.icon_docs_add_on_24px)
+            ) {
+                onAction(NewsHomeReaderAction.OnAddNewsFeedConfigurationClick(newsFeedGroup = newsFeedGroup))
             }
         }
     }
