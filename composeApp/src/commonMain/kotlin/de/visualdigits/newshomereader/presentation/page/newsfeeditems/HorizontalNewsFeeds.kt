@@ -130,11 +130,11 @@ fun HorizontalNewsFeeds(
                                 .width(10.dp)
                                 .background(MaterialTheme.colorScheme.background)
                                 .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
-                            verticalArrangementGap = 0.dp,
                             scrollbarStyle = scrollbarStyle(),
                             scrollbarId = "newsfeed_navigation",
                             scrollPosition = scrollPosition,
                             onCommonAction = onCommonAction,
+                            verticalArrangementGap = 0.dp,
                             scrollToTop = { scrollState, scrollIntent ->
                                 LaunchedEffect(state.collapsibleState["group_newsfeeds_navigation"], scrollIntent) {
                                     if (state.collapsibleState["group_newsfeeds_navigation"] == true || scrollIntent != ScrollIntent.standard) {

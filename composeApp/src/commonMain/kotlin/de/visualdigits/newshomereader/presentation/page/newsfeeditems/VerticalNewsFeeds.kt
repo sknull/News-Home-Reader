@@ -79,18 +79,17 @@ fun VerticalNewsFeeds(
                     insetColorLight = MaterialTheme.colorScheme.background.copyFactor(valueFactor = dimFactor),
                     insetColorShadow = MaterialTheme.colorScheme.background.copyFactor(valueFactor = 1f / dimFactor)
                 ),
+            backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
             scrollbarModifier = Modifier
                 .clip(MaterialTheme.shapes.small)
                 .width(10.dp)
                 .background(MaterialTheme.colorScheme.background)
                 .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
-            padding = 0.dp,
-            verticalArrangementGap = 0.dp,
-            backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
             scrollbarStyle = scrollbarStyle(),
             scrollbarId = "newsfeed_items",
             scrollPosition = scrollPosition,
             onCommonAction = onCommonAction,
+            verticalArrangementGap = 0.dp,
             scrollToTop = { scrollState, scrollIntent ->
                 LaunchedEffect(state.collapsibleState["group_newsfeeds_navigation"], scrollIntent) {
                     if (state.collapsibleState["group_newsfeeds_navigation"] == true || scrollIntent != ScrollIntent.standard) {
@@ -143,7 +142,7 @@ fun VerticalNewsFeeds(
                         Spacer(Modifier.size(MaterialTheme.shapes.gap))
                     }
                 })
-            ) + rowData.flatMapIndexed{ index, rowItems ->
+            ) + rowData.flatMapIndexed { index, rowItems ->
                 listOf(
                     Pair("row_" + rowItems.joinToString("_") { item -> item.id.toString() }, @Composable {
                         Row(
@@ -152,7 +151,7 @@ fun VerticalNewsFeeds(
                                 .padding(horizontal = MaterialTheme.shapes.gap),
                             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                         ) {
-                            rowItems.forEach{ newsItem ->
+                            rowItems.forEach { newsItem ->
                                 NewsItemCard(
                                     modifier = Modifier
                                         .weight(1f),
@@ -170,7 +169,11 @@ fun VerticalNewsFeeds(
                         }
                     })
                 ) + if (index < lastRow) {
-                    listOf(Pair("spacer_" + rowItems.joinToString("_") { item -> item.id.toString() }, @Composable { Spacer(Modifier.size(MaterialTheme.shapes.gap)) }))
+                    listOf(
+                        Pair(
+                            "spacer_" + rowItems.joinToString("_") { item -> item.id.toString() },
+                            @Composable { Spacer(Modifier.size(MaterialTheme.shapes.gap)) })
+                    )
                 } else {
                     listOf()
                 }
