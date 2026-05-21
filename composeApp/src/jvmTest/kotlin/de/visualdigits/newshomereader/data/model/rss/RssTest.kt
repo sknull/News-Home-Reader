@@ -109,10 +109,10 @@ class RssTest : KoinTest {
     }
 
     @Test
-    @Disabled("Only for local testing")
+//    @Disabled("Only for local testing")
     fun testReadArticleUrl() {
         runBlocking {
-            val response = httpClient.get(urlString = "https://www.focus.de/panorama/welt/schadet-nicht-privat-vorzusorgen-mathematiker-investiert-monatlich-1500-euro-in-etfs_daf719c6-c9c1-4aaf-8cbf-670075509e12.html")
+            val response = httpClient.get(urlString = "https://www.spiegel.de/ausland/iran-krieg-us-senat-stimmt-dafuer-befugnisse-von-donald-trump-einzuschraenken-mit-republikaner-stimmen-a-12f9e1fa-16cf-4426-8b6c-39d72e5adcb6#ref=rss")
             val htmlRaw = response.bodyAsText()
             val article = fullArticleService.readFromString(
                 rawHtml = htmlRaw

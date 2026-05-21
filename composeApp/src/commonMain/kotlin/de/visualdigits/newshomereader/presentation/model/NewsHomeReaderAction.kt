@@ -11,7 +11,6 @@ import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import nl.adaptivity.xmlutil.core.impl.multiplatform.InputStream
 import nl.adaptivity.xmlutil.core.impl.multiplatform.OutputStream
-import org.jetbrains.compose.resources.StringResource
 
 sealed interface NewsHomeReaderAction {
 
@@ -244,13 +243,6 @@ sealed interface NewsHomeReaderAction {
     //
     //
     @Immutable
-    data class OnTabSelected(
-        val index: Int? = null,
-        val selectedLabel: StringResource? = null,
-        val loadData: Boolean = true
-    ): NewsHomeReaderAction
-
-    @Immutable
     data class OnCollapsibleStateChange(
         val id: String,
         val isExpanded: Boolean
@@ -260,11 +252,6 @@ sealed interface NewsHomeReaderAction {
     data class OnNewsFeedGroupCollapsibleStateChange(
         val group: NewsFeedGroup,
         val isExpanded: Boolean
-    ): NewsHomeReaderAction
-
-    @Immutable
-    data class OnInitializeTabs(
-        val tabLabels: List<StringResource>
     ): NewsHomeReaderAction
 
     @Immutable

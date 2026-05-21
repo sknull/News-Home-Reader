@@ -89,21 +89,7 @@ fun VerticalNewsFeeds(
             scrollbarId = "newsfeed_items",
             scrollPosition = scrollPosition,
             onCommonAction = onCommonAction,
-            verticalArrangementGap = 0.dp,
-            scrollToTop = { scrollState, scrollIntent ->
-                LaunchedEffect(state.collapsibleState["group_newsfeeds_navigation"], scrollIntent) {
-                    if (state.collapsibleState["group_newsfeeds_navigation"] == true || scrollIntent != ScrollIntent.standard) {
-                        scrollState.animateScrollTo(0)
-                    }
-                }
-            },
-            scrollToTopLazy = { lazyListState, scrollIntent ->
-                LaunchedEffect(state.collapsibleState["group_newsfeeds_navigation"], scrollIntent) {
-                    if (state.collapsibleState["group_newsfeeds_navigation"] == true || scrollIntent != ScrollIntent.standard) {
-                        lazyListState.animateScrollToItem(0)
-                    }
-                }
-            }
+            verticalArrangementGap = 0.dp
         ) {
             val lastRow = rowData.size - 1
             if (state.collapsibleState["group_newsfeeds_navigation"] == true) {

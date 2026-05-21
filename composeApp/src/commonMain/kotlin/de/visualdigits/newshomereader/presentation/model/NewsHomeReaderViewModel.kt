@@ -535,21 +535,6 @@ class NewsHomeReaderViewModel(
             //
             //
             //
-            is NewsHomeReaderAction.OnTabSelected -> {
-                if (action.loadData) {
-                    loadData()
-                }
-                _state.update { state ->
-                    state.copy(
-                        selectedTabIndex = action.selectedLabel?.let { sl -> state.tabLabels.indexOf(sl) } ?: action.index ?: 0,
-                        selectedTabLabel = action.selectedLabel?:action.index?.let { i -> state.tabLabels[i] },
-                        isShowInfos = false,
-                        uiMessage = null,
-                        uiMessageSeverity = null
-                    )
-                }
-            }
-
             is NewsHomeReaderAction.OnCollapsibleStateChange -> {
                 _state.update {
                     it.copy(
@@ -560,6 +545,7 @@ class NewsHomeReaderViewModel(
 
             is NewsHomeReaderAction.OnNewsFeedGroupCollapsibleStateChange -> {
                 // keep collapsible box open when user switches from single feed to group
+                scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.scrollToStart)
                 _state.update {
                     val stayInGroup = !action.isExpanded && it.currentNewsFeedName != null && it.previousNewsFeedGroup == it.currentNewsFeedGroup
                     it.copy(
@@ -615,19 +601,6 @@ class NewsHomeReaderViewModel(
                     it.copy(
                         isShowInfos = action.isShowInfos,
                         isEditingSettings = false,
-                        uiMessage = null,
-                        uiMessageSeverity = null
-                    )
-                }
-            }
-
-            is NewsHomeReaderAction.OnInitializeTabs -> {
-                _state.update {
-                    it.copy(
-                        tabLabels = action.tabLabels,
-                        selectedTabIndex = 0,
-                        selectedTabLabel = action.tabLabels.firstOrNull(),
-                        isShowInfos = false,
                         uiMessage = null,
                         uiMessageSeverity = null
                     )

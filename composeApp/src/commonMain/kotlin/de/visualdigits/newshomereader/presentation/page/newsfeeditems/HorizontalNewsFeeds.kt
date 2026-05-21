@@ -134,21 +134,7 @@ fun HorizontalNewsFeeds(
                             scrollbarId = "newsfeed_navigation",
                             scrollPosition = scrollPosition,
                             onCommonAction = onCommonAction,
-                            verticalArrangementGap = 0.dp,
-                            scrollToTop = { scrollState, scrollIntent ->
-                                LaunchedEffect(state.collapsibleState["group_newsfeeds_navigation"], scrollIntent) {
-                                    if (state.collapsibleState["group_newsfeeds_navigation"] == true || scrollIntent != ScrollIntent.standard) {
-                                        scrollState.animateScrollTo(0)
-                                    }
-                                }
-                            },
-                            scrollToTopLazy = { lazyListState, scrollIntent ->
-                                LaunchedEffect(state.collapsibleState["group_newsfeeds_navigation"], scrollIntent) {
-                                    if (state.collapsibleState["group_newsfeeds_navigation"] == true || scrollIntent != ScrollIntent.standard) {
-                                        lazyListState.animateScrollToItem(0)
-                                    }
-                                }
-                            }
+                            verticalArrangementGap = 0.dp
                         ) {
                             state.newsFeedGroups
                                 .sortedBy { nfg -> nfg.name }

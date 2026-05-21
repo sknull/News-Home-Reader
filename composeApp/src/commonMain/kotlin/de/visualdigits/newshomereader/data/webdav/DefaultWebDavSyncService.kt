@@ -29,36 +29,41 @@ class DefaultWebDavSyncService(
             if (settingsResult is Result.Success) {
                 val settings = settingsResult.data?:error("No settings provided")
                 val webDavUrl = settings.get<String>(SK.webDavUrl)
-                val directory = settings.get<String>(SK.webDavDirectory)?.removePrefix("/")?.removeSuffix("/")
-                val url = "$webDavUrl/$directory/newsHomeReader_syncfile.json"
-                val remoteState = try {
-                    val response = httpClient.get(url)
-                    if (response.status.isSuccess()) {
-                        response.body<SyncState>()
-                    } else {
+                if (webDavUrl?.isNotEmpty() == true) {
+                    val directory = settings.get<String>(SK.webDavDirectory)?.removePrefix("/")?.removeSuffix("/")
+                    val url = "$webDavUrl/$directory/newsHomeReader_syncfile.json"
+                    val remoteState = try {
+                        val response = httpClient.get(url)
+                        if (response.status.isSuccess()) {
+                            response.body<SyncState>()
+                        } else {
+                            SyncState(OffsetDateTime.now().toInstant().toEpochMilli(), emptySet())
+                        }
+                    } catch (_: Exception) {
+                        log.w("Something went wrong while fetching sync file - falling back to empty sync file")
                         SyncState(OffsetDateTime.now().toInstant().toEpochMilli(), emptySet())
                     }
-                } catch (e: Exception) {
-                    log.w("Something went wrong while fetching sync file - falling back to empty sync file")
-                    SyncState(OffsetDateTime.now().toInstant().toEpochMilli(), emptySet())
-                }
 
-                val mergedIds = remoteState.readNewsItemIds + localReadIds
+                    val mergedIds = remoteState.readNewsItemIds + localReadIds
 
-                if (mergedIds.size > remoteState.readNewsItemIds.size || mergedIds.size > localReadIds.size) {
-                    val newState = SyncState(
-                        lastUpdated = OffsetDateTime.now().toInstant().toEpochMilli(),
-                        readNewsItemIds = mergedIds
-                    )
+                    if (mergedIds.size > remoteState.readNewsItemIds.size || mergedIds.size > localReadIds.size) {
+                        val newState = SyncState(
+                            lastUpdated = OffsetDateTime.now().toInstant().toEpochMilli(),
+                            readNewsItemIds = mergedIds
+                        )
 
-                    httpClient.put(url) {
-                        setBody(newState)
-                        contentType(ContentType.Application.Json)
+                        httpClient.put(url) {
+                            setBody(newState)
+                            contentType(ContentType.Application.Json)
+                        }
+                        log.i("Synced read item: ${mergedIds.size}")
                     }
-                    log.i("Synced read item: ${mergedIds.size}")
+                    Result.Success(mergedIds)
+                } else {
+                    log.w("webDAV URL unset - not syncing remotely")
+                    Result.Success(localReadIds)
                 }
 
-                Result.Success(mergedIds)
             } else if (settingsResult is Result.Error) {
                 Result.Error(DataError.Remote.UNKNOWN)
             } else {

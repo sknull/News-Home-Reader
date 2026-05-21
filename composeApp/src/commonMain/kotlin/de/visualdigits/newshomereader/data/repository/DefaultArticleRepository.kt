@@ -18,16 +18,21 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.roundToLong
 
 open class DefaultArticleRepository(
     private val httpClient: HttpClient,
-    private val dao: NewsHomeReaderDatabaseQueries? = null
+    private val dao: NewsHomeReaderDatabaseQueries
 ) : ArticleRepository {
 
     val log = Logger.withTag("DefaultArticleRepository")
+
+    private val articleLocks = ConcurrentHashMap<Long, Mutex>()
 
     override suspend fun readFromFile(
         newsItem: NewsItem,
@@ -38,7 +43,7 @@ open class DefaultArticleRepository(
 
     override suspend fun getFullArticle(itemId: Long): Result<FullArticle?, DataError.Local> {
         return try {
-            Result.Success(dao!!.getFullArticleByItemId(itemId).executeAsOneOrNull()?.toFullArticle())
+            Result.Success(dao.getFullArticleByItemId(itemId).executeAsOneOrNull()?.toFullArticle())
         } catch (e: Exception) {
             Result.Error(DataError.Local.SERIALIZATION, throwable = e)
         }
@@ -47,19 +52,26 @@ open class DefaultArticleRepository(
     override suspend fun readFullArticle(
         newsItem: NewsItem
     ): Result<Pair<FullArticle, Boolean>, DataError.Remote> = withContext(Dispatchers.IO) {
-        try {
-            var fullArticle = dao!!.getFullArticleByItemId(newsItem.id).executeAsOneOrNull()?.toFullArticle()
-            val changedArticle = if (fullArticle == null || newsItem.isChanged) {
-                val response = httpClient.get(urlString = newsItem.link)
-                val rawHtml = response.bodyAsText()
-                fullArticle = readFromString(newsItem, rawHtml, newsItem.link)
-                dao.upsertFullArticle(fullArticle.toFullArticleEntity())
-            } else {
-                false
+        val lock = articleLocks.computeIfAbsent(newsItem.id) { Mutex() }
+        lock.withLock {
+            try {
+                var fullArticle = dao.getFullArticleByItemId(newsItem.id).executeAsOneOrNull()?.toFullArticle()
+                val changedArticle = if (fullArticle == null || newsItem.isChanged) {
+                    val response = httpClient.get(urlString = newsItem.link)
+                    val rawHtml = response.bodyAsText()
+                    fullArticle = readFromString(newsItem, rawHtml, newsItem.link)
+                    dao.upsertFullArticle(fullArticle.toFullArticleEntity())
+                } else {
+                    false
+                }
+                Result.Success(Pair(fullArticle, changedArticle))
+            } catch (e: Exception) {
+                Result.Error(DataError.Remote.SERIALIZATION, throwable = e)
+            } finally {
+                if (!lock.isLocked) {
+                    articleLocks.remove(newsItem.id)
+                }
             }
-            Result.Success(Pair(fullArticle, changedArticle))
-        } catch (e: Exception) {
-            Result.Error(DataError.Remote.SERIALIZATION, throwable = e)
         }
     }
 
