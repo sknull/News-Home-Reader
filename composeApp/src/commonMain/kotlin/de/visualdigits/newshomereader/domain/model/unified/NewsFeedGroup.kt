@@ -1,5 +1,7 @@
 package de.visualdigits.newshomereader.domain.model.unified
 
+import de.visualdigits.newshomereader.data.mapper.mergeNewsFeedGroups
+import de.visualdigits.newshomereader.data.mapper.mergeNewsFeedItems
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -25,6 +27,17 @@ data class NewsFeedGroup(
 
     override fun toString(): String {
         return "NewsFeedGroup(id=$id, name='$name', newsFeeds=$newsFeeds, subGroups=$subGroups)"
+    }
+
+    fun merge(other: NewsFeedGroup): NewsFeedGroup {
+        return if (other.name == name && other.parentGroupName == parentGroupName) {
+            copy(
+                newsFeeds = newsFeeds.mergeNewsFeedItems(other.newsFeeds),
+                subGroups = subGroups.mergeNewsFeedGroups(other.subGroups)
+            )
+        } else {
+            copy()
+        }
     }
 
     override fun equals(other: Any?): Boolean {

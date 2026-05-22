@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -134,7 +135,21 @@ fun HorizontalNewsFeeds(
                             scrollbarId = "newsfeed_navigation",
                             scrollPosition = scrollPosition,
                             onCommonAction = onCommonAction,
-                            verticalArrangementGap = 0.dp
+                            verticalArrangementGap = 0.dp,
+                            scrollToTop = { scrollState, scrollIntent ->
+                                LaunchedEffect(state.collapsibleState["group_newsfeeds_navigation"], scrollIntent) {
+                                    if (state.collapsibleState["group_newsfeeds_navigation"] == true || scrollIntent != ScrollIntent.standard) {
+                                        scrollState.animateScrollTo(0)
+                                    }
+                                }
+                            },
+                            scrollToTopLazy = { lazyListState, scrollIntent ->
+                                LaunchedEffect(state.collapsibleState["group_newsfeeds_navigation"], scrollIntent) {
+                                    if (state.collapsibleState["group_newsfeeds_navigation"] == true || scrollIntent != ScrollIntent.standard) {
+                                        lazyListState.animateScrollToItem(0)
+                                    }
+                                }
+                            }
                         ) {
                             state.newsFeedGroups
                                 .sortedBy { nfg -> nfg.name }
@@ -238,7 +253,21 @@ fun HorizontalNewsFeeds(
                 scrollbarStyle = scrollbarStyle(),
                 scrollbarId = "newsfeed_items",
                 scrollPosition = scrollPosition,
-                onCommonAction = onCommonAction
+                onCommonAction = onCommonAction,
+                scrollToTop = { scrollState, scrollIntent ->
+                    LaunchedEffect(scrollIntent) {
+                        if (scrollIntent != ScrollIntent.standard) {
+                            scrollState.animateScrollTo(0)
+                        }
+                    }
+                },
+                scrollToTopLazy = { lazyListState, scrollIntent ->
+                    LaunchedEffect(scrollIntent) {
+                        if (scrollIntent != ScrollIntent.standard) {
+                            lazyListState.animateScrollToItem(0)
+                        }
+                    }
+                }
             ) {
                 rowData.map { rowItems ->
                     Pair(rowItems.joinToString("_") { item -> item.id.toString() }, @Composable {

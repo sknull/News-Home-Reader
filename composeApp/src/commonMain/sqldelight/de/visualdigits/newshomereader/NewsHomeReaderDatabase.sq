@@ -329,6 +329,9 @@ deleteNewsFeedGroupEntity:
 DELETE FROM NewsFeedGroupEntity
 WHERE id = :id;
 
+deleteAllNewsFeedGroupEntities:
+DELETE FROM NewsFeedGroupEntity;
+
 deleteNewsFeedGroupEntityByName:
 DELETE FROM NewsFeedGroupEntity
 WHERE name = :name;

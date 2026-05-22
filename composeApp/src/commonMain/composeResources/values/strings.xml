@@ -27,6 +27,10 @@
   <string name="error_unknown_field">Field unknown in configuration.</string>
   <string name="false">False</string>
 
+  <string name="group_display_theme">Display Theme</string>
+  <string name="group_feed_seetings">Feed Settings</string>
+  <string name="group_webdav">WebDAV</string>
+
   <string name="label_clockColor">Clock Color</string>
   <string name="tooltip_clockColor">Basecolor of the studio clock.</string>
   <string name="label_webDavUrl">WebDAV Url</string>

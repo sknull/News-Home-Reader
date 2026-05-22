@@ -7,10 +7,12 @@ import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.NewsFeedGroupEntity
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.data.database.getAllNewsFeedGroups
+import de.visualdigits.newshomereader.data.database.insertNewsFeedGroup
 import de.visualdigits.newshomereader.data.database.isEqualTo
 import de.visualdigits.newshomereader.data.database.toNewsFeedGroup
 import de.visualdigits.newshomereader.data.database.toNewsFeedGroupEntity
 import de.visualdigits.newshomereader.data.database.upsertNewsFeedGroup
+import de.visualdigits.newshomereader.data.mapper.mergeNewsFeedGroups
 import de.visualdigits.newshomereader.data.mapper.toNewsFeedConfiguration
 import de.visualdigits.newshomereader.data.mapper.toOpml
 import de.visualdigits.newshomereader.data.model.opml.Opml
@@ -182,44 +184,15 @@ class DefaultNewsFeedConfigurationRepository(
             ).executeAsOneOrNull()
         }
 
-    override suspend fun setNewsFeedGroups(newsFeedGroups: List<NewsFeedGroup>): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
-        try {
-            newsFeedGroups.forEach { newsFeedGroup ->
-                var groupEntity = dao.getNewsFeedGroupEntityByName(
-                    name = newsFeedGroup.name,
-                    parentGroupName = newsFeedGroup.parentGroupName
-                ).executeAsOneOrNull()
-                if (groupEntity == null) {
-                    groupEntity = dao.upsertNewsFeedGroup(newsFeedGroup.toNewsFeedGroupEntity())
-                }
-                val existingSubGroups = dao.getNewsFeedGroupEntitiesByParentName(newsFeedGroup.name)
-                    .executeAsList()
-                    .map { sg -> sg.name }
-                newsFeedGroup.subGroups
-                    .filter { nfg -> !existingSubGroups.contains(nfg.name) }
-                    .forEach { sg ->
-                        val existingSubGroup = dao.getNewsFeedGroupEntityByName(sg.name, sg.parentGroupName).executeAsOneOrNull()
-                        val subGroup = if (existingSubGroup != null) {
-                            val existingFeedNames = existingSubGroup.newsFeeds.map { f -> f.name }
-                            existingSubGroup.copy(newsFeeds = sg.newsFeeds.filter { nf -> !existingFeedNames.contains(nf.name) })
-                        } else {
-                            sg.toNewsFeedGroupEntity().copy(parentId = groupEntity.id)
-                        }
-                        dao.upsertNewsFeedGroup(subGroup)
-                    }
-            }
-            Result.Success(dao.getAllNewsFeedGroups())
-        } catch (e: Exception) {
-            log(Severity.Error, "Error while deleting groups", e, withTag = "NHM")
-            Result.Error(DataError.Local.SERIALIZATION, e)
-        }
-    }
-
     override suspend fun setNewsFeedGroups(ins: InputStream): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         try {
             val newsFeedGroups = decodeFromString<Opml>(String(ins.readBytes()), false)
                 .toNewsFeedConfiguration()
-            setNewsFeedGroups(newsFeedGroups)
+            dao.transaction {
+                val existingNewsFeedGroups = dao.getAllNewsFeedGroups()
+                val mergedNewsFeedGroups = existingNewsFeedGroups.mergeNewsFeedGroups(newsFeedGroups)
+                mergedNewsFeedGroups.forEach { mfg -> dao.upsertNewsFeedGroup(mfg.toNewsFeedGroupEntity()) }
+            }
             Result.Success(dao.getAllNewsFeedGroups())
         } catch (e: Exception) {
             log(Severity.Error, "Error while deleting groups", e, withTag = "NHM")

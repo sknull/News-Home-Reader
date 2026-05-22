@@ -37,6 +37,18 @@ data class NewsFeedItem(
         return "$name: $url"
     }
 
+    fun merge(other: NewsFeedItem): NewsFeedItem {
+        return if (other.name == name && other.mainGroupName == mainGroupName && other.subGroupName == subGroupName) {
+            copy(
+                imageUrl = imageUrl?:other.imageUrl,
+                url = url?:other.url,
+                stopWords = (stopWords.toSet() + other.stopWords).toList()
+            )
+        } else {
+            copy()
+        }
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is NewsFeedItem) return false

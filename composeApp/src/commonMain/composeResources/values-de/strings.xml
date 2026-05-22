@@ -9,6 +9,10 @@
   <string name="close">Schließen</string>
   <string name="delete">Löschen</string>
 
+  <string name="group_display_theme">Display Thema</string>
+  <string name="group_feed_seetings">Feed Einstellungen</string>
+  <string name="group_webdav">WebDAV</string>
+
   <string name="label_clockColor">Uhr Farbe</string>
   <string name="tooltip_clockColor">Basisfarbe der Studio Uhr.</string>
   <string name="label_webDavUrl">WebDAV Url</string>

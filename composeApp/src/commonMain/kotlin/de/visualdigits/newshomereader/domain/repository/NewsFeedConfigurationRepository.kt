@@ -13,8 +13,6 @@ interface NewsFeedConfigurationRepository {
 
     suspend fun getNewsFeedGroupByName(parentGroupName: String?, name: String): Result<NewsFeedGroup?, DataError.Local>
 
-    suspend fun setNewsFeedGroups(newsFeedGroups: List<NewsFeedGroup>): Result<List<NewsFeedGroup>, DataError.Local>
-
     /**
      * [ins] must represent a stream of OPML.
      */

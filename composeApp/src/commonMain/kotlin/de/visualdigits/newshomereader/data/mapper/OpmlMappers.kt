@@ -79,6 +79,23 @@ fun List<NewsFeedGroup>.toOpml(): Opml {
     )
 }
 
+fun List<NewsFeedGroup>.mergeNewsFeedGroups(other: List<NewsFeedGroup>): List<NewsFeedGroup> {
+    val lookupOther = other.associateBy { sg -> Pair(sg.name, sg.parentGroupName) }
+    val lookup = associateBy { sg -> Pair(sg.name, sg.parentGroupName) }
+    return mapNotNull { nfg -> lookupOther[Pair(nfg.name, nfg.parentGroupName)]?.let { onfg -> nfg.merge(onfg) } } +
+            lookup.filter { (k, v) -> !lookupOther.contains(k) }.values +
+            lookupOther.filter { (k, v) -> !lookup.contains(k) }.values
+
+}
+
+fun List<NewsFeedItem>.mergeNewsFeedItems(other: List<NewsFeedItem>): List<NewsFeedItem> {
+    val lookupOther = other.associateBy { nfi -> Triple(nfi.name, nfi.mainGroupName, nfi.subGroupName) }
+    val lookup = associateBy { nfi -> Triple(nfi.name, nfi.mainGroupName, nfi.subGroupName) }
+    return mapNotNull { nfi -> lookupOther[Triple(nfi.name, nfi.mainGroupName, nfi.subGroupName)]?.let { onfi -> nfi.merge(onfi) } } +
+            lookup.filter { (k, v) -> !lookupOther.contains(k) }.values +
+            lookupOther.filter { (k, v) -> !lookup.contains(k) }.values
+}
+
 private fun createNewsFeedOutline(newsFeed: NewsFeedItem): Outline = Outline(
     title = newsFeed.name,
     text = newsFeed.name,

@@ -65,7 +65,10 @@ inline fun <reified T : Any> decodeFromString(xml: String, removeNamespaces: Boo
 @OptIn(ExperimentalXmlUtilApi::class)
 fun <T> encodeToString(serializer: SerializationStrategy<T>, value: T): String  {
     return try {
-        xmlMapper.encodeToString(serializer, value)
+        xmlMapper
+            .encodeToString(serializer, value)
+            .replace("\r\n", "\n")
+            .replace("\r", "\n")
     } catch (e: Exception) {
         throw IllegalStateException("Could not parse string", e)
     }
