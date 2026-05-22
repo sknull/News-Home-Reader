@@ -6,6 +6,7 @@ enum class SK : FieldKey<SK> {
 
     displayTheme,
     spotColor,
+    clockColor,
     language,
     refreshInterval,
     refreshWifiOnly,

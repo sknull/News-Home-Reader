@@ -1,6 +1,7 @@
 package de.visualdigits.newshomereader.data.model.webdav
 
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
+import de.visualdigits.common.presentation.components.StudioClockColors
 import de.visualdigits.newshomereader.di.platformModule
 import de.visualdigits.newshomereader.di.testModule
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
@@ -46,6 +47,7 @@ class WebDavTest : KoinTest {
         val webDavCredentials = Json.decodeFromString<WebDavCredentials>(File("E:\\temp\\.newshomereader\\webDav_credentials.json").readText())
         val newSettings = Settings(mapOf(
             SK.displayTheme to DisplayThemeEnum.LIGHT,
+            SK.clockColor to StudioClockColors.STUDIO_CLOCK_COLOR_DEFAULT,
             SK.spotColor to DisplayThemeEnum.SPOT_COLOR_DEFAULT,
             SK.language to Language.EN,
             SK.refreshInterval to RefreshIntervalEnum.MINUTES_60,

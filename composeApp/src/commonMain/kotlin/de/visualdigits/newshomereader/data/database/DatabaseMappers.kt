@@ -36,6 +36,7 @@ fun Settings.toSettingsEntity(): SettingsEntity {
     val settingsEntity = SettingsEntity(
         id = 0,
         displayTheme = get<DisplayThemeEnum>(SK.displayTheme)?.name ?: "LIGHT",
+        clockColor = get<Color>(SK.clockColor)?.toWebColor() ?: "",
         spotColor = get<Color>(SK.spotColor)?.toWebColor() ?: "",
         language = get<Language>(SK.language)?.name ?: "EN",
         hideRead = get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
@@ -59,6 +60,7 @@ fun SettingsEntity.toSettings(): Settings {
             fieldDescriptors = Settings.DESCRIPTORS,
             values = mapOf(
                 SK.displayTheme to DisplayThemeEnum.fromValue(displayTheme),
+                SK.clockColor to clockColor.toComposeColor(),
                 SK.spotColor to spotColor.toComposeColor(),
                 SK.language to Language.fromValue(language),
                 SK.hideRead to BooleanEnum.fromValue(hideRead),

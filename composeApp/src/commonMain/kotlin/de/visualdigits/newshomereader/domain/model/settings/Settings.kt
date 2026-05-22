@@ -10,7 +10,9 @@ import de.visualdigits.common.domain.model.configuration.PasswordFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.StringFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.IntKeyFactory
+import de.visualdigits.common.presentation.components.StudioClockColors
 import de.visualdigits.compose.resources.Res
+import de.visualdigits.compose.resources.label_clockColor
 import de.visualdigits.compose.resources.label_displayTheme
 import de.visualdigits.compose.resources.label_hide_read
 import de.visualdigits.compose.resources.label_keep_read_articles
@@ -24,6 +26,7 @@ import de.visualdigits.compose.resources.label_webDavDirectory
 import de.visualdigits.compose.resources.label_webDavPassword
 import de.visualdigits.compose.resources.label_webDavUrl
 import de.visualdigits.compose.resources.label_webDavUser
+import de.visualdigits.compose.resources.tooltip_clockColor
 import de.visualdigits.compose.resources.tooltip_displayTheme
 import de.visualdigits.compose.resources.tooltip_hide_read
 import de.visualdigits.compose.resources.tooltip_keep_read_articles
@@ -64,6 +67,7 @@ class Settings(
             /** Display Theme. */
             EnumFieldDescriptor(
                 fieldClass = DisplayThemeEnum::class,
+                group = UiText.DynamicString("group_display_theme"),
                 key = SK.displayTheme,
                 label =  UiText.StringResourceId(Res.string.label_displayTheme),
                 toolTip =  UiText.StringResourceId(Res.string.tooltip_displayTheme),
@@ -74,15 +78,26 @@ class Settings(
 
             /** The spot color. */
             ColorPickerFieldDescriptor(
+                group = UiText.DynamicString("group_display_theme"),
                 key = SK.spotColor,
                 label =  UiText.StringResourceId(Res.string.label_spotColor),
                 toolTip =  UiText.StringResourceId(Res.string.tooltip_spotColor),
                 default = DisplayThemeEnum.SPOT_COLOR_DEFAULT
             ),
 
+            /** The studio clock color. */
+            ColorPickerFieldDescriptor(
+                group = UiText.DynamicString("group_display_theme"),
+                key = SK.clockColor,
+                label =  UiText.StringResourceId(Res.string.label_clockColor),
+                toolTip =  UiText.StringResourceId(Res.string.tooltip_clockColor),
+                default = StudioClockColors.STUDIO_CLOCK_COLOR_DEFAULT
+            ),
+
             /** Refresh Interval. */
             EnumFieldDescriptor(
                 fieldClass = RefreshIntervalEnum::class,
+                group = UiText.DynamicString("group_feed_seetings"),
                 key = SK.refreshInterval,
                 label =  UiText.StringResourceId(Res.string.label_refresh_interval),
                 toolTip =  UiText.StringResourceId(Res.string.tooltip_refresh_interval),
@@ -94,6 +109,7 @@ class Settings(
             /** Refresh only when connection is free of charge. */
             EnumFieldDescriptor(
                 fieldClass = BooleanEnum::class,
+                group = UiText.DynamicString("group_feed_seetings"),
                 key = SK.refreshWifiOnly,
                 label =  UiText.StringResourceId(Res.string.label_refresh_wifi_only),
                 toolTip =  UiText.StringResourceId(Res.string.tooltip_refresh_wifi_only),
@@ -105,6 +121,7 @@ class Settings(
             /** Keep Read Articles. */
             EnumFieldDescriptor(
                 fieldClass = KeepArticlesEnum::class,
+                group = UiText.DynamicString("group_feed_seetings"),
                 key = SK.keepReadArticles,
                 label =  UiText.StringResourceId(Res.string.label_keep_read_articles),
                 toolTip =  UiText.StringResourceId(Res.string.tooltip_keep_read_articles),
@@ -116,6 +133,7 @@ class Settings(
             /** Keep Unread Articles. */
             EnumFieldDescriptor(
                 fieldClass = KeepArticlesEnum::class,
+                group = UiText.DynamicString("group_feed_seetings"),
                 key = SK.keepUnreadArticles,
                 label =  UiText.StringResourceId(Res.string.label_keep_unread_articles),
                 toolTip =  UiText.StringResourceId(Res.string.tooltip_keep_unread_articles),
@@ -127,6 +145,7 @@ class Settings(
             /** Load articles. */
             EnumFieldDescriptor(
                 fieldClass = BooleanEnum::class,
+                group = UiText.DynamicString("group_feed_seetings"),
                 key = SK.loadArticles,
                 label =  UiText.StringResourceId(Res.string.label_load_articles),
                 toolTip =  UiText.StringResourceId(Res.string.tooltip_load_articles),
@@ -138,6 +157,7 @@ class Settings(
             /** Hide read items. */
             EnumFieldDescriptor(
                 fieldClass = BooleanEnum::class,
+                group = UiText.DynamicString("group_feed_seetings"),
                 key = SK.hideRead,
                 label =  UiText.StringResourceId(Res.string.label_hide_read),
                 toolTip =  UiText.StringResourceId(Res.string.tooltip_hide_read),
@@ -148,6 +168,7 @@ class Settings(
 
             /** The webDav host URL. */
             StringFieldDescriptor(
+                group = UiText.DynamicString("group_webdav"),
                 key = SK.webDavUrl,
                 label = UiText.StringResourceId(Res.string.label_webDavUrl),
                 toolTip = UiText.StringResourceId(Res.string.tooltip_webDavUrl),
@@ -155,6 +176,7 @@ class Settings(
 
             /** The webDav host Directory. */
             StringFieldDescriptor(
+                group = UiText.DynamicString("group_webdav"),
                 key = SK.webDavDirectory,
                 label = UiText.StringResourceId(Res.string.label_webDavDirectory),
                 toolTip = UiText.StringResourceId(Res.string.tooltip_webDavDirectory),
@@ -162,6 +184,7 @@ class Settings(
 
             /** The webDav user name. */
             StringFieldDescriptor(
+                group = UiText.DynamicString("group_webdav"),
                 key = SK.webDavUser,
                 label = UiText.StringResourceId(Res.string.label_webDavUser),
                 toolTip = UiText.StringResourceId(Res.string.tooltip_webDavUser),
@@ -169,6 +192,7 @@ class Settings(
 
             /** The webDav password. */
             PasswordFieldDescriptor(
+                group = UiText.DynamicString("group_webdav"),
                 key = SK.webDavPassword,
                 label = UiText.StringResourceId(Res.string.label_webDavPassword),
                 toolTip = UiText.StringResourceId(Res.string.tooltip_webDavPassword),

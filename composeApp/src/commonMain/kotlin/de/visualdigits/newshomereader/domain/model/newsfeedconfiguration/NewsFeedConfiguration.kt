@@ -10,13 +10,11 @@ import de.visualdigits.common.domain.model.configuration.keyfactory.StringKeyFac
 import de.visualdigits.common.domain.model.configuration.keyfactory.StringListKeyFactory
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.label_feedName
-import de.visualdigits.compose.resources.label_imageUrl
 import de.visualdigits.compose.resources.label_maingroupName
 import de.visualdigits.compose.resources.label_stopWords
 import de.visualdigits.compose.resources.label_subgroupName
 import de.visualdigits.compose.resources.label_url
 import de.visualdigits.compose.resources.tooltip_feedName
-import de.visualdigits.compose.resources.tooltip_imageUrl
 import de.visualdigits.compose.resources.tooltip_stopWords
 import de.visualdigits.compose.resources.tooltip_url
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
@@ -76,9 +74,6 @@ class NewsFeedConfiguration(
                         ?.map { nfg -> Triple<String, UiText?, DrawableResource?>(nfg, null, null) }
                         ?.sortedBy { t -> t.first }
                         ?:listOf()
-                },
-                valid = { _, value ->
-                    (value as? String)?.isNotBlank() == true
                 }
             ),
 

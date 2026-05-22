@@ -1,6 +1,7 @@
 package de.visualdigits.newshomereader.repository
 
 import de.visualdigits.common.domain.model.errorhandling.Result
+import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.data.repository.DefaultArticleRepository
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
@@ -12,8 +13,10 @@ import java.io.File
 
 class MockArticleRepository(
     private val httpClient: HttpClient,
+    private val dao: NewsHomeReaderDatabaseQueries
 ) : DefaultArticleRepository(
-    httpClient = httpClient
+    httpClient = httpClient,
+    dao = dao
 ) {
 
     override suspend fun readFromFile(

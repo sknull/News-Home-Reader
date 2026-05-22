@@ -91,7 +91,7 @@ fun SettingsMenuBar(
             buttonTextAlign = TextAlign.Start,
             title = stringResource(Res.string.dialog_title_export_settings),
             fileMode = FileMode.FILES_ONLY,
-            suggestedFileName = "newshomereader-settings${
+            suggestedFileName = "newshomereader-settings_${
                 OffsetDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
             }.json",
             buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
@@ -99,6 +99,23 @@ fun SettingsMenuBar(
             homeDirectoryPath = homeDirectoryPath,
         ) { fileName, outs ->
             onAction(NewsHomeReaderAction.OnSettingsExport(fileName, outs))
+        }
+
+        PlatformFileSaver(
+            label = "Logs",
+            labelSaveButton = stringResource(Res.string.save),
+            buttonTextStyle = MaterialTheme.typography.bodySmall,
+            buttonTextAlign = TextAlign.Start,
+            title = stringResource(Res.string.dialog_title_export_settings),
+            fileMode = FileMode.FILES_ONLY,
+            suggestedFileName = "newshomereader-logs_${
+                OffsetDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
+            }.log",
+            buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+            leadingIcon = painterResource(Res.drawable.icon_upload_24px),
+            homeDirectoryPath = homeDirectoryPath,
+        ) { fileName, outs ->
+            onAction(NewsHomeReaderAction.OnLogsExport(fileName, outs))
         }
     }
 }

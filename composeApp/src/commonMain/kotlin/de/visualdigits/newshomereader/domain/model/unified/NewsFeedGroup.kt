@@ -27,4 +27,19 @@ data class NewsFeedGroup(
         return "NewsFeedGroup(id=$id, name='$name', newsFeeds=$newsFeeds, subGroups=$subGroups)"
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is NewsFeedGroup) return false
+
+        return parentId == other.parentId &&
+                parentGroupName == other.parentGroupName &&
+                name == other.name
+    }
+
+    override fun hashCode(): Int {
+        var result = parentId?.hashCode() ?: 0
+        result = 31 * result + (parentGroupName?.hashCode() ?: 0)
+        result = 31 * result + name.hashCode()
+        return result
+    }
 }

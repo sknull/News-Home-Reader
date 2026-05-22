@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,9 +29,11 @@ import de.visualdigits.common.domain.util.copyFactor
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
 import de.visualdigits.common.presentation.components.StudioClock
+import de.visualdigits.common.presentation.components.StudioClockColors
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.common.presentation.components.modifier.angledInnerShadow
 import de.visualdigits.common.presentation.components.modifier.tintedBackgroundImage
+import de.visualdigits.common.presentation.components.studioClockColors
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.compose.resources.Res
@@ -49,7 +50,6 @@ import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.NewsI
 import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
-import de.visualdigits.newshomereader.presentation.style.studioClockColors
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.painterResource
@@ -186,9 +186,9 @@ fun HorizontalNewsFeeds(
                         showSeconds = false,
                         showDate = true,
                         showYear = true,
-                        colors = state.settings?.get<Color>(SK.spotColor)
+                        colors = state.settings?.get<Color>(SK.clockColor)
                             ?.let { sc -> studioClockColors(sc) }
-                            ?: studioClockColors(DisplayThemeEnum.SPOT_COLOR_DEFAULT)
+                            ?: studioClockColors(StudioClockColors.STUDIO_CLOCK_COLOR_DEFAULT)
                     )
                 }
             }

@@ -1,7 +1,9 @@
 package de.visualdigits.newshomereader.data.repository
 
 import co.touchlab.kermit.Logger
+import co.touchlab.kermit.Severity
 import com.fleeksoft.ksoup.Ksoup
+import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.essence.Essence
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
@@ -98,7 +100,7 @@ open class DefaultArticleRepository(
                     }
                 }?:listOf()
         } catch (e: Exception) {
-            log.e("Could not parse app json for article url: $url", e)
+            log(Severity.Error, "Could not parse app json for article url: $url", e, withTag = "NHM")
             listOf()
         }
 

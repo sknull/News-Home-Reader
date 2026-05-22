@@ -9,6 +9,8 @@
   <string name="close">Close</string>
   <string name="delete">Delete</string>
 
+  <string name="label_clockColor">Clock Color</string>
+  <string name="tooltip_clockColor">Basecolor of the studio clock.</string>
   <string name="label_webDavUrl">WebDAV Url</string>
   <string name="tooltip_webDavUrl">Url of your WebDAV host in form http://host:port</string>
   <string name="label_webDavDirectory">WebDAV Directory</string>

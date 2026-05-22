@@ -1,6 +1,8 @@
 package de.visualdigits.newshomereader.data.webdav
 
 import co.touchlab.kermit.Logger
+import co.touchlab.kermit.Severity
+import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.settings.SK
@@ -40,7 +42,7 @@ class DefaultWebDavSyncService(
                             SyncState(OffsetDateTime.now().toInstant().toEpochMilli(), emptySet())
                         }
                     } catch (_: Exception) {
-                        log.w("Something went wrong while fetching sync file - falling back to empty sync file")
+                        log(Severity.Warn, "Something went wrong while fetching sync file - falling back to empty sync file", withTag = "NHM")
                         SyncState(OffsetDateTime.now().toInstant().toEpochMilli(), emptySet())
                     }
 
@@ -56,11 +58,11 @@ class DefaultWebDavSyncService(
                             setBody(newState)
                             contentType(ContentType.Application.Json)
                         }
-                        log.i("Synced read item: ${mergedIds.size}")
+                        log(Severity.Info, "Synced read item: ${mergedIds.size}", withTag = "NHM")
                     }
                     Result.Success(mergedIds)
                 } else {
-                    log.w("webDAV URL unset - not syncing remotely")
+                    log(Severity.Warn, "webDAV URL unset - not syncing remotely", withTag = "NHM")
                     Result.Success(localReadIds)
                 }
 
@@ -70,7 +72,7 @@ class DefaultWebDavSyncService(
                 Result.Error(DataError.Remote.UNKNOWN)
             }
         } catch (e: Exception) {
-            log.e("Something went wrong while syncing read items", e)
+            log(Severity.Error, "Something went wrong while syncing read items", e, withTag = "NHM")
             Result.Error(DataError.Remote.SERIALIZATION, e)
         }
     }

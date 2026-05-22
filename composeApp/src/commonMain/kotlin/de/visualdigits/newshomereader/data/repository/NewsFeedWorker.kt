@@ -1,7 +1,9 @@
 package de.visualdigits.newshomereader.data.repository
 
 import co.touchlab.kermit.Logger
+import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
+import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
 import de.visualdigits.newshomereader.domain.model.settings.SK
@@ -31,7 +33,7 @@ class NewsFeedWorker(
                 val keepUnreadArticles = settings?.get<KeepArticlesEnum>(SK.keepUnreadArticles)?.longValue ?: 30
                 val feedConfigurationResult = newsFeedConfigurationRepository.getNewsFeedGroups()
                 if (feedConfigurationResult is Result.Success) {
-                    log.i("Executing news feed worker")
+                    log(Severity.Info, "Executing news feed worker", withTag = "NHM")
                     val newsFeedGroups = feedConfigurationResult.data
                     val newsFeedConfigurations = newsFeedGroups.flatMap { nfg ->
                         nfg.newsFeeds + nfg.subGroups.flatMap { sg -> sg.newsFeeds }
@@ -46,7 +48,7 @@ class NewsFeedWorker(
                         progress = { _,_ -> }
                     )
                     if (result is Result.Success) {
-                        log.i("News feed worker prefetching images")
+                        log(Severity.Info, "News feed worker prefetching images", withTag = "NHM")
                         val (newsFeeds, changed) = result.data
                         if (changed) {
                             feedRepository.prefetchImages(
@@ -60,16 +62,16 @@ class NewsFeedWorker(
                             }
                         }
                     } else if (result is Result.Error) {
-                        log.e("Could not load news feeds", result.throwable)
+                        log(Severity.Error, "Could not load news feeds", result.throwable, withTag = "NHM")
                     }
                 } else if (feedConfigurationResult is Result.Error) {
-                    log.e("Could not load feed configuration", feedConfigurationResult.throwable)
+                    log(Severity.Error, "Could not load feed configuration", feedConfigurationResult.throwable, withTag = "NHM")
                 }
             } else if (settingsResult is Result.Error) {
-                log.e("Could not load settings", settingsResult.throwable)
+                log(Severity.Error, "Could not load settings", settingsResult.throwable, withTag = "NHM")
             }
         } catch (e: Exception) {
-            log.e("Could not execute news feed worker", e)
+            log(Severity.Error, "Could not execute news feed worker", e, withTag = "NHM")
         }
     }
 }

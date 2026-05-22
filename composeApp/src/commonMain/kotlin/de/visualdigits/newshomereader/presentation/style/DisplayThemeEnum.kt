@@ -15,8 +15,6 @@ import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.StringResourceEnumerable
 import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.keyfactory.KeyFactory
-import de.visualdigits.common.domain.util.copy
-import de.visualdigits.common.presentation.components.StudioClockColors
 import de.visualdigits.common.presentation.model.PlatformScrollbarStyle
 import org.jetbrains.compose.resources.DrawableResource
 
@@ -149,15 +147,6 @@ fun anthraciteTheme(spotColor: Color): ColorScheme = darkColorScheme(
     outline = Color(0xFFFFFFFF),
 
     primaryFixed = Color(0xAA000000),
-)
-
-fun studioClockColors(spotColor: Color): StudioClockColors = StudioClockColors(
-    colorHours = spotColor,
-    colorMinutes = spotColor,
-    colorSeconds = spotColor,
-    colorTime = spotColor,
-    colorDate = spotColor.copy(saturation = 0.25f, value = 0.75f),
-    colorBackground = Color(0xdd000000),
 )
 
 @Composable

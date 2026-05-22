@@ -1,5 +1,7 @@
 package de.visualdigits.newshomereader.data.http
 
+import co.touchlab.kermit.Severity
+import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.repository.SettingsRepository
@@ -51,7 +53,7 @@ object HttpClientFactory {
                                     null
                                 }
                             } else if (result is Result.Error) {
-                                log.e("Could not get settings for request", result.throwable)
+                                log(Severity.Error, "Could not get settings for request", result.throwable, withTag = "NHM")
                                 null
                             } else {
                                 null

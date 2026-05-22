@@ -15,12 +15,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Logger
+import co.touchlab.kermit.Severity
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import coil3.size.Size
+import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
 import de.visualdigits.common.presentation.components.util.conditional
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_hourglass_top_24px
@@ -49,7 +51,7 @@ fun Image(
                 onStart = {},
                 onSuccess = { _, _ -> },
                 onCancel = {},
-                onError = { _, result -> log.e("Image load failed: $url", result.throwable) }
+                onError = { _, result -> log(Severity.Error, "Image load failed: $url", result.throwable, withTag = "NHM") }
             )
             .crossfade(true)
             .diskCachePolicy(CachePolicy.ENABLED)

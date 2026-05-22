@@ -36,4 +36,20 @@ data class NewsFeedItem(
     override fun toString(): String {
         return "$name: $url"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is NewsFeedItem) return false
+
+        return mainGroupName == other.mainGroupName &&
+                subGroupName == other.subGroupName &&
+                name == other.name
+    }
+
+    override fun hashCode(): Int {
+        var result = mainGroupName.hashCode()
+        result = 31 * result + (subGroupName?.hashCode() ?: 0)
+        result = 31 * result + (name?.hashCode() ?: 0)
+        return result
+    }
 }
