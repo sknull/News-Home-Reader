@@ -51,7 +51,7 @@ fun Image(
                 onStart = {},
                 onSuccess = { _, _ -> },
                 onCancel = {},
-                onError = { _, result -> log(Severity.Error, "Image load failed: $url", result.throwable, withTag = "NHM") }
+                onError = { _, result -> log(Severity.Error, "Image load failed: $url", result.throwable, withTag = "NHR") }
             )
             .crossfade(true)
             .diskCachePolicy(CachePolicy.ENABLED)

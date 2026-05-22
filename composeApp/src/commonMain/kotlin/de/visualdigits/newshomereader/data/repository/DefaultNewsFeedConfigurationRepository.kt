@@ -50,7 +50,7 @@ class DefaultNewsFeedConfigurationRepository(
             dao.upsertNewsFeedGroup(newsFeedGroup.toNewsFeedGroupEntity())
             Result.Success(dao.getAllNewsFeedGroups())
         } catch (e: Exception) {
-            log(Severity.Error, "Error while upserting group", e, withTag = "NHM")
+            log(Severity.Error, "Error while upserting group", e, withTag = "NHR")
             Result.Error(DataError.Local.SERIALIZATION, e)
         }
     }
@@ -61,7 +61,7 @@ class DefaultNewsFeedConfigurationRepository(
             dao.upsertNewsFeedGroup(newsFeedGroup.toNewsFeedGroupEntity())
             Result.Success(dao.getNewsFeedGroupEntityByName(newsFeedGroup.name, newsFeedGroup.parentGroupName).executeAsOneOrNull()?.toNewsFeedGroup())
         } catch (e: Exception) {
-            log(Severity.Error, "Error while upserting group", e, withTag = "NHM")
+            log(Severity.Error, "Error while upserting group", e, withTag = "NHR")
             Result.Error(DataError.Local.SERIALIZATION, e)
         }
     }
@@ -81,27 +81,27 @@ class DefaultNewsFeedConfigurationRepository(
     override suspend fun deleteNewsFeedGroup(newsFeedGroup: NewsFeedGroup): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         try {
             dao.transaction {
-                log(Severity.Info, "Deleting newsFeedGroup: ${newsFeedGroup.name}", withTag = "NHM")
+                log(Severity.Info, "Deleting newsFeedGroup: ${newsFeedGroup.name}", withTag = "NHR")
                 dao.deleteNewsFeedGroupEntity(newsFeedGroup.id)
                 dao.deleteNewsFeedByFeedName(newsFeedGroup.name)
                 dao.deleteNewsItemsByFeedName(newsFeedGroup.name.trim().lowercase())
                 newsFeedGroup.subGroups.forEach { subGroup ->
                     dao.deleteNewsFeedGroupEntity(subGroup.id)
-                    log(Severity.Info, "Deleting newsFeedGroup: ${subGroup.name}", withTag = "NHM")
+                    log(Severity.Info, "Deleting newsFeedGroup: ${subGroup.name}", withTag = "NHR")
                     dao.deleteNewsFeedByFeedName(subGroup.name)
                     dao.deleteNewsItemsByFeedName(subGroup.name.trim().lowercase())
                 }
             }
             Result.Success(dao.getAllNewsFeedGroups())
         } catch (e: Exception) {
-            log(Severity.Error, "Error while deleting group", e, withTag = "NHM")
+            log(Severity.Error, "Error while deleting group", e, withTag = "NHR")
             Result.Error(DataError.Local.SERIALIZATION, e)
         }
     }
 
     override suspend fun deleteNewsFeedItem(newsFeedItem: NewsFeedItem): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         try {
-            log(Severity.Info, "Deleting newsFeedItem: ${newsFeedItem.name}", withTag = "NHM")
+            log(Severity.Info, "Deleting newsFeedItem: ${newsFeedItem.name}", withTag = "NHR")
             val newsFeedGroupEntity = getNewsFeedGroupEntity(newsFeedItem)
             if (newsFeedGroupEntity != null) {
                 val newsFeeds = newsFeedGroupEntity.newsFeeds.toMutableList()
@@ -109,14 +109,14 @@ class DefaultNewsFeedConfigurationRepository(
                 dao.transaction {
                     dao.upsertNewsFeedGroup(newsFeedGroupEntity.copy(newsFeeds = newsFeeds))
                     newsFeedItem.name?.also { name ->
-                        log(Severity.Info, "Deleting news items for newsfeed: ${newsFeedItem.name}", withTag = "NHM")
+                        log(Severity.Info, "Deleting news items for newsfeed: ${newsFeedItem.name}", withTag = "NHR")
                         dao.deleteNewsItemsByFeedName(name.trim().lowercase())
                     }
                 }
             }
             Result.Success(dao.getAllNewsFeedGroups())
         } catch (e: Exception) {
-            log(Severity.Error, "Error while deleting group", e, withTag = "NHM")
+            log(Severity.Error, "Error while deleting group", e, withTag = "NHR")
             Result.Error(DataError.Local.SERIALIZATION, e)
         }
     }
@@ -125,7 +125,7 @@ class DefaultNewsFeedConfigurationRepository(
         try {
             Result.Success(dao.getNewsFeedGroupEntityByName(name, parentGroupName).executeAsOneOrNull()?.toNewsFeedGroup())
         } catch (e: Exception) {
-            log(Severity.Error, "Error while getting group", e, withTag = "NHM")
+            log(Severity.Error, "Error while getting group", e, withTag = "NHR")
             Result.Error(DataError.Local.SERIALIZATION, e)
         }
     }
@@ -141,7 +141,7 @@ class DefaultNewsFeedConfigurationRepository(
             }
             Result.Success(dao.getAllNewsFeedGroups())
         } catch (e: Exception) {
-            log(Severity.Error, "Error while deleting group", e, withTag = "NHM")
+            log(Severity.Error, "Error while deleting group", e, withTag = "NHR")
             Result.Error(DataError.Local.SERIALIZATION, e)
         }
     }
@@ -166,7 +166,7 @@ class DefaultNewsFeedConfigurationRepository(
             val data = dao.getAllNewsFeedGroups()
             Result.Success(data)
         } catch (e: Exception) {
-            log(Severity.Error, "Error while deleting group", e, withTag = "NHM")
+            log(Severity.Error, "Error while deleting group", e, withTag = "NHR")
             Result.Error(DataError.Local.SERIALIZATION, e)
         }
     }
@@ -195,7 +195,7 @@ class DefaultNewsFeedConfigurationRepository(
             }
             Result.Success(dao.getAllNewsFeedGroups())
         } catch (e: Exception) {
-            log(Severity.Error, "Error while deleting groups", e, withTag = "NHM")
+            log(Severity.Error, "Error while deleting groups", e, withTag = "NHR")
             Result.Error(DataError.Local.SERIALIZATION, e)
         }
     }
@@ -209,7 +209,7 @@ class DefaultNewsFeedConfigurationRepository(
             }
             Result.Success(Unit)
         } catch (e: Exception) {
-            log(Severity.Error, "Error while saving groups", e, withTag = "NHM")
+            log(Severity.Error, "Error while saving groups", e, withTag = "NHR")
             Result.Error(DataError.Local.SERIALIZATION, e)
         }
     }

@@ -138,7 +138,7 @@ class DefaultFeedRepository(
             dao.upsertNewsFeed(newsFeed.toNewsFeedEntity())
             Result.Success(Unit)
         } catch (e: Exception) {
-            log(Severity.Error, "Something went wrong during upserting news feed", e, withTag = "NHM")
+            log(Severity.Error, "Something went wrong during upserting news feed", e, withTag = "NHR")
             Result.Error(DataError.Local.UNKNOWN)
         }
     }
@@ -154,7 +154,7 @@ class DefaultFeedRepository(
             }
             Result.Success(Unit)
         } catch (e: Exception) {
-            log(Severity.Error, "Something went wrong during marking news item as read", e, withTag = "NHM")
+            log(Severity.Error, "Something went wrong during marking news item as read", e, withTag = "NHR")
             Result.Error(DataError.Local.UNKNOWN)
         }
     }
@@ -183,12 +183,12 @@ class DefaultFeedRepository(
                     }
                 }
             } else if (syncResult is Result.Error) {
-                log(Severity.Error, "Something went wrong while synchronizing read news items with webdav host", syncResult.throwable, withTag = "NHM")
+                log(Severity.Error, "Something went wrong while synchronizing read news items with webdav host", syncResult.throwable, withTag = "NHR")
                 Result.Error(DataError.Local.UNKNOWN)
             }
             Result.Success(Unit)
         } catch (e: Exception) {
-            log(Severity.Error, "Something went wrong while synchronizing read news items with webdav host", e, withTag = "NHM")
+            log(Severity.Error, "Something went wrong while synchronizing read news items with webdav host", e, withTag = "NHR")
             Result.Error(DataError.Local.UNKNOWN)
         }
     }
@@ -198,7 +198,7 @@ class DefaultFeedRepository(
             val (insertedNewsItemEntity, changed) = dao.upsertNewsItem(newsItem.toNewsItemEntity(), forceUpdate)
             Result.Success(Pair(insertedNewsItemEntity.toNewsItem(), changed))
         } catch (e: Exception) {
-            log(Severity.Error, "Something went wrong during upserting news item", e, withTag = "NHM")
+            log(Severity.Error, "Something went wrong during upserting news item", e, withTag = "NHR")
             Result.Error(DataError.Local.UNKNOWN)
         }
     }
@@ -217,12 +217,12 @@ class DefaultFeedRepository(
         try {
             val finalNewsFeeds = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                 val newsFeeds = newsFeedItems.mapNotNull { newsFeedConfiguration ->
-                    log(Severity.Info, "Refreshing newsfeed '${newsFeedConfiguration.name}', loadArticles=$loadArticles...", withTag = "NHM")
+                    log(Severity.Info, "Refreshing newsfeed '${newsFeedConfiguration.name}', loadArticles=$loadArticles...", withTag = "NHR")
                     try {
                         val response = newsFeedConfiguration.url?.let { u -> httpClient.get(urlString = u) }
                         readFromBytes(newsFeedConfiguration.name, response?.readRawBytes())
                     } catch (e: Exception) {
-                        log(Severity.Error, "Could not load feed '${newsFeedConfiguration.name}'", e, withTag = "NHM")
+                        log(Severity.Error, "Could not load feed '${newsFeedConfiguration.name}'", e, withTag = "NHR")
                         null
                     }
                 }
@@ -263,11 +263,11 @@ class DefaultFeedRepository(
 
                 Pair(newsFeedsWithArticles, changedArticles)
             } else {
-                log(Severity.Info, "No free of charge internet connection available - fetching newsFeeds from database", withTag = "NHM")
+                log(Severity.Info, "No free of charge internet connection available - fetching newsFeeds from database", withTag = "NHR")
                 val newsFeeds = dao.getAllNewsFeeds().executeAsList().map { nf -> nf.toNewsFeed() }
                 Pair(newsFeeds, false)
             }
-            log(Severity.Info, "Refresh finished", withTag = "NHM")
+            log(Severity.Info, "Refresh finished", withTag = "NHR")
             Result.Success(finalNewsFeeds)
         } catch (e: Exception) {
             Result.Error(DataError.Remote.SERIALIZATION, e)
@@ -284,7 +284,7 @@ class DefaultFeedRepository(
         loadArticles: Boolean,
         progress: (Float, ProgressStage) -> Unit
     ): Result<Pair<NewsFeed?, Boolean>, DataError.Remote> = withContext(Dispatchers.IO) {
-        log(Severity.Info, "Refreshing newsfeed '$feedName', loadArticles=$loadArticles...", withTag = "NHM")
+        log(Severity.Info, "Refreshing newsfeed '$feedName', loadArticles=$loadArticles...", withTag = "NHR")
         try {
             val updatedNewsFeed = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                 val response = httpClient.get(urlString = url)
@@ -341,13 +341,13 @@ class DefaultFeedRepository(
         val totalSteps = urls.size
         if (totalSteps > 0) {
             currentStep.set(0)
-            log(Severity.Info, "Prefetching ${feedUrls.size} feed images, ${itemUrls.size} item images, ${articleUrls.size} article images = ${urls.size} distinct images", withTag = "NHM")
+            log(Severity.Info, "Prefetching ${feedUrls.size} feed images, ${itemUrls.size} item images, ${articleUrls.size} article images = ${urls.size} distinct images", withTag = "NHR")
             imageCache.prefetchImages(urls) {
                 val done = currentStep.incrementAndGet()
                 progress(done.toFloat() / totalSteps, ProgressStage.LOAD_IMAGES)
             }
         }
-        log(Severity.Info, "Finished prefetching", withTag = "NHM")
+        log(Severity.Info, "Finished prefetching", withTag = "NHR")
 
         Result.Success(Unit)
     }
@@ -381,7 +381,7 @@ class DefaultFeedRepository(
         totalSteps: Int,
         progress: (Float, ProgressStage) -> Unit
     ): Pair<List<NewsItem>, Boolean> {
-        log(Severity.Info, "Loading articles", withTag = "NHM")
+        log(Severity.Info, "Loading articles", withTag = "NHR")
         var changed = false
         val newsItemsWithArticles =  if (loadArticles) {
             coroutineScope {
@@ -398,7 +398,7 @@ class DefaultFeedRepository(
                                     }
 
                                     is Result.Error -> {
-                                        log(Severity.Error, "Could not read article [${newsItem.id}]: ${newsItem.link}", articleResult.throwable, withTag = "NHM")
+                                        log(Severity.Error, "Could not read article [${newsItem.id}]: ${newsItem.link}", articleResult.throwable, withTag = "NHR")
                                         newsItem
                                     }
                                 }
@@ -408,7 +408,7 @@ class DefaultFeedRepository(
                                 item
                             }
                         } catch (e: Exception) {
-                            log(Severity.Error, "Could not fetch article for newsItem [${newsItem.id}] ${newsItem.newsFeed?.feedName}/${newsItem.identifier}",e, withTag = "NHM")
+                            log(Severity.Error, "Could not fetch article for newsItem [${newsItem.id}] ${newsItem.newsFeed?.feedName}/${newsItem.identifier}",e, withTag = "NHR")
                             newsItem
                         }
                     }

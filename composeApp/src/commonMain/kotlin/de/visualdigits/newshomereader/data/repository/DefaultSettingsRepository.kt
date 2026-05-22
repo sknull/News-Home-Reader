@@ -57,7 +57,7 @@ class DefaultSettingsRepository(
                         }
                 } ?: Result.Success(null)
         } catch (e: Exception) {
-            log(Severity.Error, "Could not load settings", e, withTag = "NHM")
+            log(Severity.Error, "Could not load settings", e, withTag = "NHR")
             Result.Error(DataError.Local.UNKNOWN)
         }
     }
@@ -69,7 +69,7 @@ class DefaultSettingsRepository(
             dao.upsertSettings(settingsEntity)
             Result.Success(Unit)
         } catch (e: Exception) {
-            log(Severity.Error, "Could not set settings", e, withTag = "NHM")
+            log(Severity.Error, "Could not set settings", e, withTag = "NHR")
             Result.Error(DataError.Local.UNKNOWN)
         }
     }

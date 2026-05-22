@@ -100,7 +100,7 @@ open class DefaultArticleRepository(
                     }
                 }?:listOf()
         } catch (e: Exception) {
-            log(Severity.Error, "Could not parse app json for article url: $url", e, withTag = "NHM")
+            log(Severity.Error, "Could not parse app json for article url: $url", e, withTag = "NHR")
             listOf()
         }
 

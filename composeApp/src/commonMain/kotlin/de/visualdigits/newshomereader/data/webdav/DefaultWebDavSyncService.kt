@@ -42,7 +42,7 @@ class DefaultWebDavSyncService(
                             SyncState(OffsetDateTime.now().toInstant().toEpochMilli(), emptySet())
                         }
                     } catch (_: Exception) {
-                        log(Severity.Warn, "Something went wrong while fetching sync file - falling back to empty sync file", withTag = "NHM")
+                        log(Severity.Warn, "Something went wrong while fetching sync file - falling back to empty sync file", withTag = "NHR")
                         SyncState(OffsetDateTime.now().toInstant().toEpochMilli(), emptySet())
                     }
 
@@ -58,11 +58,11 @@ class DefaultWebDavSyncService(
                             setBody(newState)
                             contentType(ContentType.Application.Json)
                         }
-                        log(Severity.Info, "Synced read item: ${mergedIds.size}", withTag = "NHM")
+                        log(Severity.Info, "Synced read item: ${mergedIds.size}", withTag = "NHR")
                     }
                     Result.Success(mergedIds)
                 } else {
-                    log(Severity.Warn, "webDAV URL unset - not syncing remotely", withTag = "NHM")
+                    log(Severity.Warn, "webDAV URL unset - not syncing remotely", withTag = "NHR")
                     Result.Success(localReadIds)
                 }
 
@@ -72,7 +72,7 @@ class DefaultWebDavSyncService(
                 Result.Error(DataError.Remote.UNKNOWN)
             }
         } catch (e: Exception) {
-            log(Severity.Error, "Something went wrong while syncing read items", e, withTag = "NHM")
+            log(Severity.Error, "Something went wrong while syncing read items", e, withTag = "NHR")
             Result.Error(DataError.Remote.SERIALIZATION, e)
         }
     }

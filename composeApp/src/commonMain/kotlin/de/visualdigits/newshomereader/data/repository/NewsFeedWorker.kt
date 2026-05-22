@@ -33,7 +33,7 @@ class NewsFeedWorker(
                 val keepUnreadArticles = settings?.get<KeepArticlesEnum>(SK.keepUnreadArticles)?.longValue ?: 30
                 val feedConfigurationResult = newsFeedConfigurationRepository.getNewsFeedGroups()
                 if (feedConfigurationResult is Result.Success) {
-                    log(Severity.Info, "Executing news feed worker", withTag = "NHM")
+                    log(Severity.Info, "Executing news feed worker", withTag = "NHR")
                     val newsFeedGroups = feedConfigurationResult.data
                     val newsFeedConfigurations = newsFeedGroups.flatMap { nfg ->
                         nfg.newsFeeds + nfg.subGroups.flatMap { sg -> sg.newsFeeds }
@@ -48,7 +48,7 @@ class NewsFeedWorker(
                         progress = { _,_ -> }
                     )
                     if (result is Result.Success) {
-                        log(Severity.Info, "News feed worker prefetching images", withTag = "NHM")
+                        log(Severity.Info, "News feed worker prefetching images", withTag = "NHR")
                         val (newsFeeds, changed) = result.data
                         if (changed) {
                             feedRepository.prefetchImages(
@@ -62,16 +62,16 @@ class NewsFeedWorker(
                             }
                         }
                     } else if (result is Result.Error) {
-                        log(Severity.Error, "Could not load news feeds", result.throwable, withTag = "NHM")
+                        log(Severity.Error, "Could not load news feeds", result.throwable, withTag = "NHR")
                     }
                 } else if (feedConfigurationResult is Result.Error) {
-                    log(Severity.Error, "Could not load feed configuration", feedConfigurationResult.throwable, withTag = "NHM")
+                    log(Severity.Error, "Could not load feed configuration", feedConfigurationResult.throwable, withTag = "NHR")
                 }
             } else if (settingsResult is Result.Error) {
-                log(Severity.Error, "Could not load settings", settingsResult.throwable, withTag = "NHM")
+                log(Severity.Error, "Could not load settings", settingsResult.throwable, withTag = "NHR")
             }
         } catch (e: Exception) {
-            log(Severity.Error, "Could not execute news feed worker", e, withTag = "NHM")
+            log(Severity.Error, "Could not execute news feed worker", e, withTag = "NHR")
         }
     }
 }

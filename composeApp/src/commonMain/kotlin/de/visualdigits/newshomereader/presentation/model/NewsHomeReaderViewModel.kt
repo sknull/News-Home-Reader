@@ -87,9 +87,9 @@ class NewsHomeReaderViewModel(
     val editedSettings = _editedSettings.asStateFlow()
 
     init {
-        log(Severity.Info, "Application version ${AppVersion().version} initializing...", withTag = "NHM")
+        log(Severity.Info, "Application version ${AppVersion().version} initializing...", withTag = "NHR")
         loadData()
-        log(Severity.Info, "Application started", withTag = "NHM")
+        log(Severity.Info, "Application started", withTag = "NHR")
         log(Severity.Debug, "Settings: ${state.value.settings}")
 
         _state
@@ -154,7 +154,7 @@ class NewsHomeReaderViewModel(
                         )
                     }
                 }
-                log(Severity.Debug, "State:Flow: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:Flow: ${state.value}", withTag = "NHR")
             }
             .launchIn(viewModelScope)
     }
@@ -163,7 +163,7 @@ class NewsHomeReaderViewModel(
     fun onCommonAction(action: CommonAction) {
         when (action) {
             is CommonAction.OnScrollPositionChange -> {
-//                log(Severity.Debug, "State:OnScrollPositionChange: ${state.value}", withTag = "NHM")
+//                log(Severity.Debug, "State:OnScrollPositionChange: ${state.value}", withTag = "NHR")
                 scrollPosition[action.id] = Triple(action.position, action.offset, action.scrollIntent)
             }
         }
@@ -177,7 +177,7 @@ class NewsHomeReaderViewModel(
             // Settings
             //
             is NewsHomeReaderAction.OnEditSettingsClick -> {
-                log(Severity.Debug, "State:OnEditSettingsClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnEditSettingsClick: ${state.value}", withTag = "NHR")
                 _editedSettings.value = state.value.settings
                 _state.update {
                     it.copy(
@@ -201,7 +201,7 @@ class NewsHomeReaderViewModel(
                         value = action.keyValue.value
                     )
                 }
-                log(Severity.Debug, "State:OnSettingsValueChanged: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnSettingsValueChanged: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnEditSettingsCancelClick -> {
@@ -213,37 +213,37 @@ class NewsHomeReaderViewModel(
                         uiMessageSeverity = null
                     )
                 }
-                log(Severity.Debug, "State:OnEditSettingsCancelClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnEditSettingsCancelClick: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnSaveSettingsClick -> {
                 saveSettings(_editedSettings.value)
-                log(Severity.Debug, "State:OnSaveSettingsClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnSaveSettingsClick: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnOpmlImport -> {
                 importOpml(action.fileName, action.ins)
-                log(Severity.Debug, "State:OnOpmlImport: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnOpmlImport: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnOpmlExport -> {
                 exportOpml(action.fileName, action.outs)
-                log(Severity.Debug, "State:OnOpmlExport: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnOpmlExport: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnSettingsImport -> {
                 importSettings(action.fileName, action.ins)
-                log(Severity.Debug, "State:OnSettingsImport: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnSettingsImport: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnSettingsExport -> {
                 exportSettings(action.fileName, action.outs)
-                log(Severity.Debug, "State:OnSettingsExport: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnSettingsExport: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnLogsExport -> {
                 exportLogs(action.fileName, action.outs)
-                log(Severity.Debug, "State:OnLogsExport: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnLogsExport: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.UpdateMaxImageSize -> {
@@ -255,7 +255,7 @@ class NewsHomeReaderViewModel(
                         maxImageSize = action.maxImageSize
                     )
                 }
-                log(Severity.Debug, "State:UpdateMaxImageSize: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:UpdateMaxImageSize: ${state.value}", withTag = "NHR")
             }
 
             //
@@ -270,7 +270,7 @@ class NewsHomeReaderViewModel(
                         uiMessageSeverity = null
                     )
                 }
-                log(Severity.Debug, "State:OnEditModeClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnEditModeClick: ${state.value}", withTag = "NHR")
             }
 
             //
@@ -285,11 +285,11 @@ class NewsHomeReaderViewModel(
                         editedNewsFeedConfiguration = newsFeedConfiguration
                     )
                 }
-                log(Severity.Debug, "State:OnEditNewsFeedConfigurationClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnEditNewsFeedConfigurationClick: ${state.value}", withTag = "NHR")
             }
             is NewsHomeReaderAction.OnEditNewsFeedConfigurationOkClick -> {
                 editNewsFeedConfiguration(state.value.originalNewsFeedConfiguration , action.newsFeedConfiguration)
-                log(Severity.Debug, "State:OnEditNewsFeedConfigurationOkClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnEditNewsFeedConfigurationOkClick: ${state.value}", withTag = "NHR")
             }
             is NewsHomeReaderAction.OnEditNewsFeedConfigurationCancelClick -> {
                 _state.update {
@@ -298,7 +298,7 @@ class NewsHomeReaderViewModel(
                         isEditingNewsFeedConfiguration = false,
                     )
                 }
-                log(Severity.Debug, "State:OnEditNewsFeedConfigurationCancelClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnEditNewsFeedConfigurationCancelClick: ${state.value}", withTag = "NHR")
             }
             is NewsHomeReaderAction.OnAddNewsFeedConfigurationClick -> {
                 val newsFeedConfiguration = NewsFeedConfiguration(
@@ -319,7 +319,7 @@ class NewsHomeReaderViewModel(
                         editedNewsFeedConfiguration = newsFeedConfiguration
                     )
                 }
-                log(Severity.Debug, "State:OnAddNewsFeedConfigurationClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnAddNewsFeedConfigurationClick: ${state.value}", withTag = "NHR")
             }
             is NewsHomeReaderAction.OnAddNewsFeedConfigurationOkClick -> {
                 viewModelScope.launch {
@@ -335,7 +335,7 @@ class NewsHomeReaderViewModel(
                             )
                         }
                     } else if (upsertResult is Result.Error) {
-                        log(Severity.Error, "Could not add newsfeed item '${newsFeedItem?.name}'", upsertResult.throwable, withTag = "NHM")
+                        log(Severity.Error, "Could not add newsfeed item '${newsFeedItem?.name}'", upsertResult.throwable, withTag = "NHR")
                         _state.update {
                             it.copy(
                                 isAddingNewsFeedConfiguration = false,
@@ -346,7 +346,7 @@ class NewsHomeReaderViewModel(
                         }
                     }
                 }
-                log(Severity.Debug, "State:OnAddNewsFeedConfigurationOkClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnAddNewsFeedConfigurationOkClick: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnAddNewsFeedConfigurationCancelClick -> {
@@ -356,7 +356,7 @@ class NewsHomeReaderViewModel(
                         isEditingNewsFeedConfiguration = false,
                     )
                 }
-                log(Severity.Debug, "State:OnAddNewsFeedConfigurationCancelClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnAddNewsFeedConfigurationCancelClick: ${state.value}", withTag = "NHR")
             }
             is NewsHomeReaderAction.OnDeleteNewsFeedConfigurationCancelClick -> {
                 _state.update {
@@ -364,7 +364,7 @@ class NewsHomeReaderViewModel(
                         isDeletingNewsFeedConfiguration = false
                     )
                 }
-                log(Severity.Debug, "State:OnDeleteNewsFeedConfigurationCancelClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnDeleteNewsFeedConfigurationCancelClick: ${state.value}", withTag = "NHR")
             }
             is NewsHomeReaderAction.OnDeleteNewsFeedConfigurationClick -> {
                 _state.update {
@@ -377,7 +377,7 @@ class NewsHomeReaderViewModel(
                         deleteNewsFeedItem = action.newsFeedItem
                     )
                 }
-                log(Severity.Debug, "State:OnDeleteNewsFeedConfigurationClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnDeleteNewsFeedConfigurationClick: ${state.value}", withTag = "NHR")
             }
             is NewsHomeReaderAction.OnDeleteNewsFeedConfigurationOkClick -> {
                 viewModelScope.launch {
@@ -391,10 +391,10 @@ class NewsHomeReaderViewModel(
                             }
                         }
                         .onError { _, throwable ->
-                            log(Severity.Error, "Could not add newsfeed configuration '${state.value.deleteNewsFeedItem?.name}'", throwable, withTag = "NHM")
+                            log(Severity.Error, "Could not add newsfeed configuration '${state.value.deleteNewsFeedItem?.name}'", throwable, withTag = "NHR")
                         }
                 }
-                log(Severity.Debug, "State:OnDeleteNewsFeedConfigurationOkClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnDeleteNewsFeedConfigurationOkClick: ${state.value}", withTag = "NHR")
             }
             is NewsHomeReaderAction.OnNewsFeedConfigurationOkClick -> {
                 _state.update {
@@ -403,7 +403,7 @@ class NewsHomeReaderViewModel(
                         isEditingNewsFeedConfiguration = false,
                     )
                 }
-                log(Severity.Debug, "State:OnNewsFeedConfigurationOkClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnNewsFeedConfigurationOkClick: ${state.value}", withTag = "NHR")
             }
             is NewsHomeReaderAction.OnNewsFeedConfigurationCancelClick -> {
                 _state.update {
@@ -412,7 +412,7 @@ class NewsHomeReaderViewModel(
                         isEditingNewsFeedConfiguration = false,
                     )
                 }
-                log(Severity.Debug, "State:OnNewsFeedConfigurationCancelClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnNewsFeedConfigurationCancelClick: ${state.value}", withTag = "NHR")
             }
             is NewsHomeReaderAction.OnNewsFeedConfigurationValueChanged -> {
                 _state.update { state ->
@@ -436,7 +436,7 @@ class NewsHomeReaderViewModel(
                         editedNewsFeedConfiguration = newsFeedConfiguration,
                     )
                 }
-                log(Severity.Debug, "State:OnNewsFeedConfigurationValueChanged: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnNewsFeedConfigurationValueChanged: ${state.value}", withTag = "NHR")
             }
 
             //
@@ -449,11 +449,11 @@ class NewsHomeReaderViewModel(
                         originalNewsFeedGroup = action.originalNewsFeedGroup,
                     )
                 }
-                log(Severity.Debug, "State:OnEditNewsfeedGroupGroupClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnEditNewsfeedGroupGroupClick: ${state.value}", withTag = "NHR")
             }
             is NewsHomeReaderAction.OnEditNewsFeedGroupOkClick -> {
                 editNewsFeedGroup(newsFeedGroup = state.value.originalNewsFeedGroup, editedNewsFeedGroupName = action.editedNewsFeedGroupName)
-                log(Severity.Debug, "State:OnEditNewsFeedGroupOkClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnEditNewsFeedGroupOkClick: ${state.value}", withTag = "NHR")
             }
             is NewsHomeReaderAction.OnEditNewsFeedGroupCancelClick -> {
                 _state.update {
@@ -462,7 +462,7 @@ class NewsHomeReaderViewModel(
                         isEditingNewsFeedGroup = false,
                     )
                 }
-                log(Severity.Debug, "State:OnEditNewsFeedGroupCancelClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnEditNewsFeedGroupCancelClick: ${state.value}", withTag = "NHR")
             }
             is NewsHomeReaderAction.OnAddNewsfeedGroupGroupClick -> {
                 _state.update {
@@ -473,14 +473,14 @@ class NewsHomeReaderViewModel(
                         isAddingNewsFeedGroup = true
                     )
                 }
-                log(Severity.Debug, "State:OnAddNewsfeedGroupGroupClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnAddNewsfeedGroupGroupClick: ${state.value}", withTag = "NHR")
             }
             is NewsHomeReaderAction.OnAddNewsFeedGroupOkClick -> {
                 addNewsFeedGroup(
                     parentGroup = state.value.parentNewsFeedGroup,
                     newsFeedGroupName = action.newsFeedGroupName
                 )
-                log(Severity.Debug, "State:OnAddNewsFeedGroupOkClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnAddNewsFeedGroupOkClick: ${state.value}", withTag = "NHR")
             }
             is NewsHomeReaderAction.OnAddNewsFeedGroupCancelClick -> {
                 _state.update {
@@ -489,7 +489,7 @@ class NewsHomeReaderViewModel(
                         isEditingNewsFeedGroup = false,
                     )
                 }
-                log(Severity.Debug, "State:OnAddNewsFeedGroupCancelClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnAddNewsFeedGroupCancelClick: ${state.value}", withTag = "NHR")
             }
             is NewsHomeReaderAction.OnDeleteNewsfeedGroupCancelClick -> {
                 _state.update {
@@ -498,7 +498,7 @@ class NewsHomeReaderViewModel(
                         currentNewsFeedGroupToDelete = null
                     )
                 }
-                log(Severity.Debug, "State:OnDeleteNewsfeedGroupCancelClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnDeleteNewsfeedGroupCancelClick: ${state.value}", withTag = "NHR")
             }
             is NewsHomeReaderAction.OnDeleteNewsfeedGroupClick -> {
                 _state.update {
@@ -507,11 +507,11 @@ class NewsHomeReaderViewModel(
                         currentNewsFeedGroupToDelete = action.newsFeedGroup
                     )
                 }
-                log(Severity.Debug, "State:OnDeleteNewsfeedGroupClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnDeleteNewsfeedGroupClick: ${state.value}", withTag = "NHR")
             }
             is NewsHomeReaderAction.OnDeleteNewsfeedGroupOkClick -> {
                 deleteNewsFeedGroup(state.value.currentNewsFeedGroupToDelete)
-                log(Severity.Debug, "State:OnDeleteNewsfeedGroupOkClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnDeleteNewsfeedGroupOkClick: ${state.value}", withTag = "NHR")
             }
 
             //
@@ -519,22 +519,22 @@ class NewsHomeReaderViewModel(
             //
             is NewsHomeReaderAction.OnNewsFeedRefresh -> {
                 refreshNewsFeed(action.feedName, action.url)
-                log(Severity.Debug, "State:OnNewsFeedRefresh: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnNewsFeedRefresh: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnNewsFeedsRefresh -> {
                 refreshNewsFeeds()
-                log(Severity.Debug, "State:OnNewsFeedsRefresh: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnNewsFeedsRefresh: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnNewsFeedClicked -> {
                 loadFeedItems(action.feedName, action.currentFeedIItem)
-                log(Severity.Debug, "State:OnNewsFeedClicked: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnNewsFeedClicked: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnNewsItemClicked -> {
                 loadArticle(action.newsItem)
-                log(Severity.Debug, "State:OnNewsItemClicked: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnNewsItemClicked: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnNewsItemClosed -> {
@@ -543,12 +543,12 @@ class NewsHomeReaderViewModel(
                         currentNewsArticle = null
                     )
                 }
-                log(Severity.Debug, "State:OnNewsItemClosed: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnNewsItemClosed: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnMarkReadClicked -> {
                 markItemsAsRead(action.days)
-                log(Severity.Debug, "State:OnMarkReadClicked: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnMarkReadClicked: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnNewsItemBackClicked -> {
@@ -561,7 +561,7 @@ class NewsHomeReaderViewModel(
                         uiMessageSeverity = null
                     )
                 }
-                log(Severity.Debug, "State:OnNewsItemBackClicked: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnNewsItemBackClicked: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnNewsItemSearchExpandStateChanged -> {
@@ -570,7 +570,7 @@ class NewsHomeReaderViewModel(
                         isNewsItemSearchActive = action.expanded,
                     )
                 }
-                log(Severity.Debug, "State:OnNewsItemSearchExpandStateChanged: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnNewsItemSearchExpandStateChanged: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnNewsItemSearchTextChanged -> {
@@ -579,7 +579,7 @@ class NewsHomeReaderViewModel(
                         newsItemSearchText = action.text
                     )
                 }
-                log(Severity.Debug, "State:OnNewsItemSearchTextChanged: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnNewsItemSearchTextChanged: ${state.value}", withTag = "NHR")
             }
 
             //
@@ -591,7 +591,7 @@ class NewsHomeReaderViewModel(
                         collapsibleState = it.collapsibleState + (action.id to action.isExpanded)
                     )
                 }
-                log(Severity.Debug, "State:OnCollapsibleStateChange: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnCollapsibleStateChange: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnNewsFeedGroupCollapsibleStateChange -> {
@@ -611,17 +611,17 @@ class NewsHomeReaderViewModel(
                         }
                     )
                 }
-                log(Severity.Debug, "State:OnNewsFeedGroupCollapsibleStateChange: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnNewsFeedGroupCollapsibleStateChange: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnCatalogClicked -> {
                 loadCatalog(action.isExpanded)
-                log(Severity.Debug, "State:OnCatalogClicked: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnCatalogClicked: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnSubscriptionChanged -> {
                 maintainSubscription(action.newsFeedCatalogItem, action.subscribe)
-                log(Severity.Debug, "State:OnSubscriptionChanged: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnSubscriptionChanged: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnOnlySubscribedFeeds -> {
@@ -630,7 +630,7 @@ class NewsHomeReaderViewModel(
                         onlySubscribedFeeds = action.onlySubscribedFeeds
                     )
                 }
-                log(Severity.Debug, "State:OnOnlySubscribedFeeds: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnOnlySubscribedFeeds: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnCatalogSearchTextChanged -> {
@@ -640,7 +640,7 @@ class NewsHomeReaderViewModel(
                     )
                 }
                 filterCatalog(action.text)
-                log(Severity.Debug, "State:OnCatalogSearchTextChanged: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnCatalogSearchTextChanged: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnLanguageSelected -> {
@@ -650,7 +650,7 @@ class NewsHomeReaderViewModel(
                         language = action.language
                     )
                 }
-                log(Severity.Debug, "State:OnLanguageSelected: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnLanguageSelected: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnShowInfosClick -> {
@@ -662,7 +662,7 @@ class NewsHomeReaderViewModel(
                         uiMessageSeverity = null
                     )
                 }
-                log(Severity.Debug, "State:OnShowInfosClick: ${state.value}", withTag = "NHM")
+                log(Severity.Debug, "State:OnShowInfosClick: ${state.value}", withTag = "NHR")
             }
         }
     }
@@ -679,7 +679,7 @@ class NewsHomeReaderViewModel(
                 if (addResult is Result.Success) {
                     addResult.data
                 } else if (addResult is Result.Error) {
-                    log(Severity.Error, "Could not add root group '${mainCategory.name}'", addResult.throwable, withTag = "NHM")
+                    log(Severity.Error, "Could not add root group '${mainCategory.name}'", addResult.throwable, withTag = "NHR")
                     null
                 } else {
                     null
@@ -708,7 +708,7 @@ class NewsHomeReaderViewModel(
                 if (addResult is Result.Success) {
                     addResult.data
                 } else if (addResult is Result.Error) {
-                    log(Severity.Error, "Could not add root group '${mainCategory?.name}'", addResult.throwable, withTag = "NHM")
+                    log(Severity.Error, "Could not add root group '${mainCategory?.name}'", addResult.throwable, withTag = "NHR")
                     null
                 } else {
                     null
@@ -731,7 +731,7 @@ class NewsHomeReaderViewModel(
                             )
                         }
                     }.onError { error, throwable ->
-                        log(Severity.Error, "Could not get newsfeed groups", throwable, withTag = "NHM")
+                        log(Severity.Error, "Could not get newsfeed groups", throwable, withTag = "NHR")
                         _state.update {
                             it.copy(
                                 isLoading = false,
@@ -741,7 +741,7 @@ class NewsHomeReaderViewModel(
                         }
                     }
                 } else if (result is Result.Error) {
-                    log(Severity.Error, "Could not upsert news feed configuration", result.throwable, withTag = "NHM")
+                    log(Severity.Error, "Could not upsert news feed configuration", result.throwable, withTag = "NHR")
                     _state.update {
                         it.copy(
                             isLoading = false,
@@ -762,7 +762,7 @@ class NewsHomeReaderViewModel(
                     }
                 }
                 .onError { error, throwable ->
-                    log(Severity.Error, "Could not delete feed configuration", throwable, withTag = "NHM")
+                    log(Severity.Error, "Could not delete feed configuration", throwable, withTag = "NHR")
                     _state.update {
                         it.copy(
                             isLoading = false,
@@ -797,7 +797,7 @@ class NewsHomeReaderViewModel(
             }
 
             is Result.Error -> {
-                log(Severity.Error, "Could not add newsfeed group '$newsFeedGroupName'", addResult.throwable, withTag = "NHM")
+                log(Severity.Error, "Could not add newsfeed group '$newsFeedGroupName'", addResult.throwable, withTag = "NHR")
             }
         }
     }
@@ -805,7 +805,7 @@ class NewsHomeReaderViewModel(
     private suspend fun addGroup(
         newsFeedGroup: NewsFeedGroup
     ): Result<NewsFeedGroup?, DataError.Local> {
-        log(Severity.Info, "add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'", withTag = "NHM")
+        log(Severity.Info, "add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'", withTag = "NHR")
         val getResult = newsFeedConfigurationRepository.getNewsFeedGroupByName(newsFeedGroup.parentGroupName, newsFeedGroup.name)
         return if (getResult is Result.Success) {
             if(getResult.data == null) {
@@ -814,7 +814,7 @@ class NewsHomeReaderViewModel(
                 Result.Success(getResult.data)
             }
         } else if (getResult is Result.Error) {
-            log(Severity.Error, "Could not get root category '${newsFeedGroup.name}'", getResult.throwable, withTag = "NHM")
+            log(Severity.Error, "Could not get root category '${newsFeedGroup.name}'", getResult.throwable, withTag = "NHR")
             Result.Error(DataError.Local.UNKNOWN, getResult.throwable)
         } else {
             Result.Error(DataError.Local.UNKNOWN)
@@ -832,7 +832,7 @@ class NewsHomeReaderViewModel(
                 )
             }
         } else if (editResult is Result.Error) {
-            log(Severity.Error, "Could not get old newsfeed group '${newsFeedGroup?.name}'", editResult.throwable, withTag = "NHM")
+            log(Severity.Error, "Could not get old newsfeed group '${newsFeedGroup?.name}'", editResult.throwable, withTag = "NHR")
             _state.update {
                 it.copy(
                     isAddingNewsFeedGroup = false,
@@ -877,7 +877,7 @@ class NewsHomeReaderViewModel(
                     }
                 }
                 .onError { _, throwable ->
-                    log(Severity.Error, "Could not modify newsfeed configuration from '${oldEntity.name}' to '${newEntity.name}'", throwable, withTag = "NHM")
+                    log(Severity.Error, "Could not modify newsfeed configuration from '${oldEntity.name}' to '${newEntity.name}'", throwable, withTag = "NHR")
                 }
         } else {
             _state.update {
@@ -901,7 +901,7 @@ class NewsHomeReaderViewModel(
                     )
                 }
             } else if (deleteResult is Result.Error) {
-                log(Severity.Error, "Could not add newsfeed group '${newsFeedGroup.name}'", deleteResult.throwable, withTag = "NHM")
+                log(Severity.Error, "Could not add newsfeed group '${newsFeedGroup.name}'", deleteResult.throwable, withTag = "NHR")
             }
         }
     }
@@ -978,10 +978,10 @@ class NewsHomeReaderViewModel(
                             }
                         }
                         .onError { _, throwable ->
-                            log(Severity.Error, "Could not prefetch images", throwable, withTag = "NHM")
+                            log(Severity.Error, "Could not prefetch images", throwable, withTag = "NHR")
                         }
                 } else if (feedResult is Result.Error) {
-                    log(Severity.Error, "Could not load feed '$feedName'", feedResult.throwable, withTag = "NHM")
+                    log(Severity.Error, "Could not load feed '$feedName'", feedResult.throwable, withTag = "NHR")
                     _state.update {
                         it.copy(
                             isLoading = false,
@@ -1034,10 +1034,10 @@ class NewsHomeReaderViewModel(
                         }
                     }
                     .onError { _, throwable ->
-                        log(Severity.Error, "Could not prefetch images", throwable, withTag = "NHM")
+                        log(Severity.Error, "Could not prefetch images", throwable, withTag = "NHR")
                     }
             } else if (newsFeedResult is Result.Error) {
-                log(Severity.Error, "Could not refresh newsfeeds'", newsFeedResult.throwable, withTag = "NHM")
+                log(Severity.Error, "Could not refresh newsfeeds'", newsFeedResult.throwable, withTag = "NHR")
                 _state.update {
                     it.copy(
                         isLoading = false,
@@ -1050,7 +1050,7 @@ class NewsHomeReaderViewModel(
     }
 
     private fun importSettings(fileName: String, ins: InputStream) = viewModelScope.launch {
-        log(Severity.Info, "Importing settings", withTag = "NHM")
+        log(Severity.Info, "Importing settings", withTag = "NHR")
         if (fileName.endsWith(".json", ignoreCase = true)) {
             _state.update {
                 it.copy(
@@ -1069,7 +1069,7 @@ class NewsHomeReaderViewModel(
                     }
                 }
                 .onError { error, throwable ->
-                    log(Severity.Error, "Could not import settings", throwable, withTag = "NHM")
+                    log(Severity.Error, "Could not import settings", throwable, withTag = "NHR")
                     _state.update {
                         it.copy(
                             isLoading = false,
@@ -1092,7 +1092,7 @@ class NewsHomeReaderViewModel(
     }
 
     private fun exportSettings(fileName: String, outs: OutputStream) = viewModelScope.launch {
-        log(Severity.Info, "Exporting settings", withTag = "NHM")
+        log(Severity.Info, "Exporting settings", withTag = "NHR")
         if (fileName.endsWith(".json", ignoreCase = true)) {
             _state.update {
                 it.copy(
@@ -1111,7 +1111,7 @@ class NewsHomeReaderViewModel(
                         }
                     }
                     .onError { error, throwable ->
-                        log(Severity.Error, "Could not export settings", throwable, withTag = "NHM")
+                        log(Severity.Error, "Could not export settings", throwable, withTag = "NHR")
                         _state.update {
                             it.copy(
                                 isLoading = false,
@@ -1162,7 +1162,7 @@ class NewsHomeReaderViewModel(
     }
 
     private fun importOpml(fileName: String, ins: InputStream) = viewModelScope.launch {
-        log(Severity.Info, "Importing opml...", withTag = "NHM")
+        log(Severity.Info, "Importing opml...", withTag = "NHR")
         if (fileName.endsWith(".opml", ignoreCase = true)) {
             _state.update {
                 it.copy(
@@ -1211,15 +1211,15 @@ class NewsHomeReaderViewModel(
                             }
                         }
                         .onError { _, throwable ->
-                            log(Severity.Error, "Could not prefetch images", throwable, withTag = "NHM")
+                            log(Severity.Error, "Could not prefetch images", throwable, withTag = "NHR")
                         }
 
                     val syncResult = feedRepository.synchroniseReadNewsItems()
                     if (syncResult is Result.Error) {
-                        log(Severity.Error, "WebDAV Sync failed", syncResult.throwable, withTag = "NHM")
+                        log(Severity.Error, "WebDAV Sync failed", syncResult.throwable, withTag = "NHR")
                     }
                 } else if (newsFeedResult is Result.Error) {
-                    log(Severity.Error, "Could not import OPML", newsFeedResult.throwable, withTag = "NHM")
+                    log(Severity.Error, "Could not import OPML", newsFeedResult.throwable, withTag = "NHR")
                     _state.update {
                         it.copy(
                             isLoading = false,
@@ -1231,7 +1231,7 @@ class NewsHomeReaderViewModel(
                     }
                 }
             } else if (newFeedConfigurationResult is Result.Error){
-                log(Severity.Error, "Could not import OPML", newFeedConfigurationResult.throwable, withTag = "NHM")
+                log(Severity.Error, "Could not import OPML", newFeedConfigurationResult.throwable, withTag = "NHR")
                 _state.update {
                     it.copy(
                         isLoading = false,
@@ -1256,7 +1256,7 @@ class NewsHomeReaderViewModel(
     }
 
     private fun exportOpml(fileName: String, outs: OutputStream) = viewModelScope.launch {
-        log(Severity.Info, "Exporting opml...", withTag = "NHM")
+        log(Severity.Info, "Exporting opml...", withTag = "NHR")
         if (fileName.endsWith(".opml", ignoreCase = true)) {
             _state.update {
                 it.copy(
@@ -1273,7 +1273,7 @@ class NewsHomeReaderViewModel(
                     }
                 }
                 .onError { error, throwable ->
-                    log(Severity.Error, "Could not export opml", throwable, withTag = "NHM")
+                    log(Severity.Error, "Could not export opml", throwable, withTag = "NHR")
                     _state.update {
                         it.copy(
                             isLoading = false,
@@ -1350,7 +1350,7 @@ class NewsHomeReaderViewModel(
                 }
             }
             .onError { error, throwable ->
-                log(Severity.Error, "Could not refresh images", throwable, withTag = "NHM")
+                log(Severity.Error, "Could not refresh images", throwable, withTag = "NHR")
                 _state.update {
                     it.copy(
                         isLoading = false,
@@ -1384,7 +1384,7 @@ class NewsHomeReaderViewModel(
                 }
             }
             .onError { _, throwable ->
-                log(Severity.Error, "Could not log catalog", throwable, withTag = "NHM")
+                log(Severity.Error, "Could not log catalog", throwable, withTag = "NHR")
                 _state.update {
                     it.copy(
                         isLoading = false,
@@ -1422,7 +1422,7 @@ class NewsHomeReaderViewModel(
                 ))
                 settingsRepository.setSettings(newSettings)
                     .onError { _, throwable ->
-                        log(Severity.Error, "Could not safe initial settings", throwable, withTag = "NHM")
+                        log(Severity.Error, "Could not safe initial settings", throwable, withTag = "NHR")
                     }
                 newSettings
             }
@@ -1443,10 +1443,10 @@ class NewsHomeReaderViewModel(
 
             val syncResult = feedRepository.synchroniseReadNewsItems()
             if (syncResult is Result.Error) {
-                log(Severity.Error, "WebDAV Sync failed", syncResult.throwable, withTag = "NHM")
+                log(Severity.Error, "WebDAV Sync failed", syncResult.throwable, withTag = "NHR")
             }
         } else if (result is Result.Error) {
-            log(Severity.Error, "Could not load data", result.throwable, withTag = "NHM")
+            log(Severity.Error, "Could not load data", result.throwable, withTag = "NHR")
             _state.update {
                 it.copy(
                     isLoading = false,
@@ -1472,7 +1472,7 @@ class NewsHomeReaderViewModel(
                 }
             }
             .onError { _, throwable ->
-                log(Severity.Error, "Could not get settings", throwable, withTag = "NHM")
+                log(Severity.Error, "Could not get settings", throwable, withTag = "NHR")
                 _state.update {
                     it.copy(
                         isLoading = false,
@@ -1506,7 +1506,7 @@ class NewsHomeReaderViewModel(
 
         val syncResult = feedRepository.synchroniseReadNewsItems()
         if (syncResult is Result.Error) {
-            log(Severity.Error, "WebDAV Sync failed", syncResult.throwable, withTag = "NHM")
+            log(Severity.Error, "WebDAV Sync failed", syncResult.throwable, withTag = "NHR")
         }
     }
 
@@ -1539,10 +1539,10 @@ class NewsHomeReaderViewModel(
 
             val syncResult = feedRepository.synchroniseReadNewsItems()
             if (syncResult is Result.Error) {
-                log(Severity.Error, "WebDAV Sync failed", syncResult.throwable, withTag = "NHM")
+                log(Severity.Error, "WebDAV Sync failed", syncResult.throwable, withTag = "NHR")
             }
         } else if (markResult is Result.Error) {
-            log(Severity.Error, "Could not load article", markResult.throwable, withTag = "NHM")
+            log(Severity.Error, "Could not load article", markResult.throwable, withTag = "NHR")
             _state.update {
                 it.copy(
                     isLoading = false,
@@ -1586,7 +1586,7 @@ class NewsHomeReaderViewModel(
                 )
             }
         } else if (articleResult is Result.Error) {
-            log(Severity.Error, "Could not load article", articleResult.throwable, withTag = "NHM")
+            log(Severity.Error, "Could not load article", articleResult.throwable, withTag = "NHR")
             _state.update {
                 it.copy(
                     isLoading = false,
@@ -1603,10 +1603,10 @@ class NewsHomeReaderViewModel(
         if (markResult is Result.Success) {
             val syncResult = feedRepository.synchroniseReadNewsItems()
             if (syncResult is Result.Error) {
-                log(Severity.Error, "WebDAV Sync failed", syncResult.throwable, withTag = "NHM")
+                log(Severity.Error, "WebDAV Sync failed", syncResult.throwable, withTag = "NHR")
             }
         } else if (markResult is Result.Error) {
-            log(Severity.Error, "Could not mark news item as read", markResult.throwable, withTag = "NHM")
+            log(Severity.Error, "Could not mark news item as read", markResult.throwable, withTag = "NHR")
         }
     }
 
@@ -1641,7 +1641,7 @@ class NewsHomeReaderViewModel(
                 }
             }
             .onError { error, throwable ->
-                log(Severity.Error, "Could not save settings", throwable, withTag = "NHM")
+                log(Severity.Error, "Could not save settings", throwable, withTag = "NHR")
                 _state.update {
                     it.copy(
                         isLoading = false,

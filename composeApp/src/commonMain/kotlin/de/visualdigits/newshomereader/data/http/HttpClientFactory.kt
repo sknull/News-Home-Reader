@@ -53,7 +53,7 @@ object HttpClientFactory {
                                     null
                                 }
                             } else if (result is Result.Error) {
-                                log(Severity.Error, "Could not get settings for request", result.throwable, withTag = "NHM")
+                                log(Severity.Error, "Could not get settings for request", result.throwable, withTag = "NHR")
                                 null
                             } else {
                                 null
