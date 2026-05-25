@@ -20,8 +20,6 @@ import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.button.IndicatorButton
-import de.visualdigits.common.presentation.model.CommonAction
-import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_article_24px
 import de.visualdigits.compose.resources.icon_edit_24px
@@ -31,7 +29,6 @@ import de.visualdigits.compose.resources.icon_library_books_24px
 import de.visualdigits.compose.resources.icon_menu_24px
 import de.visualdigits.compose.resources.icon_refresh_24px
 import de.visualdigits.compose.resources.icon_settings_24px
-import de.visualdigits.compose.resources.icon_vertical_align_top_24px
 import de.visualdigits.compose.resources.tooltip_refresh_newsfeed
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.type.ProgressStage
@@ -45,15 +42,14 @@ import org.jetbrains.compose.resources.stringResource
 fun MainMenuBar(
     state: NewsHomeReaderState,
     onAction: (NewsHomeReaderAction) -> Unit,
-    onCommonAction: (CommonAction) -> Unit,
     connectivityManager: ConnectivityManager
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(50.dp)
+            .height(40.dp)
             .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-            .padding(5.dp),
+            .padding(2.dp),
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
         verticalAlignment = Alignment.CenterVertically
     ) {

@@ -54,7 +54,7 @@ fun CatalogSearchBar(
             iconDelete = painterResource(Res.drawable.icon_delete_24px),
             iconSearch = painterResource(Res.drawable.icon_search_24px),
             searchText = state.catalogSearchText,
-            isLargeScreen = screenWidth > 100.dp,
+            isLargeScreen = screenWidth > 1000.dp,
             onQueryChange = { v ->
                 onAction(NewsHomeReaderAction.OnCatalogSearchTextChanged(v))
             }

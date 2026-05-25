@@ -55,7 +55,6 @@ fun MainPage(
 
     val uriHandler = LocalUriHandler.current
 
-
     val onCommonAction: (CommonAction) -> Unit = { action ->
         viewModel.onCommonAction(action)
     }
@@ -82,7 +81,7 @@ fun MainPage(
 
         val sizeFactor = when {
             screenWidth < 500.dp -> 0.9f
-            screenWidth > 1500.dp -> 1.5f
+//            screenWidth > 1500.dp -> 1.5f
             else -> 1.0f
         }
 
@@ -146,7 +145,6 @@ fun MainPage(
                     MainMenuBar(
                         state = state,
                         onAction = onAction,
-                        onCommonAction = onCommonAction,
                         connectivityManager = connectivityManager
                     )
 
