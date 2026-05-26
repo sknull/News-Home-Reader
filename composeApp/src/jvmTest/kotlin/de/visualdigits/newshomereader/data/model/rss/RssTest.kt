@@ -67,7 +67,7 @@ class RssTest : KoinTest {
     @Test
     @Disabled("Only for local testing")
     fun testReadScript() {
-        val json = File(ClassLoader.getSystemResource("rdf/script.json").toURI()).readText()
+        val json = File(ClassLoader.getSystemResource("newsfeed/rdf/script.json").toURI()).readText()
         val appJsonDto = AppJsonDto.decodeFromString(json)
         println(appJsonDto)
     }
@@ -102,7 +102,7 @@ class RssTest : KoinTest {
         runBlocking {
             val article = fullArticleService.readFromFile(
                 newsItem,
-                File(ClassLoader.getSystemResource("rdf/focus-story.html").toURI())
+                File(ClassLoader.getSystemResource("newsfeed/rdf/focus-story.html").toURI())
             )
             println(article)
         }
@@ -125,39 +125,39 @@ class RssTest : KoinTest {
     @Disabled("Only for local testing")
     fun testReadModel() {
         runBlocking {
-            feedService.readFromFile("heise", File(ClassLoader.getSystemResource("rdf/heise.xml").toURI()))
+            feedService.readFromFile("heise", File(ClassLoader.getSystemResource("newsfeed/atom/heise.xml").toURI()))
             fullArticleService.readFromFile(
                 newsItem,
-                File(ClassLoader.getSystemResource("rdf/heise-story.html").toURI())
+                File(ClassLoader.getSystemResource("newsfeed/atom/heise-story.html").toURI())
             )
 
-            feedService.readFromFile("ndr", File(ClassLoader.getSystemResource("rdf/ndr.xml").toURI()))
-            fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("rdf/ndr-story.html").toURI()))
+            feedService.readFromFile("ndr", File(ClassLoader.getSystemResource("newsfeed/rdf/ndr.xml").toURI()))
+            fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/rdf/ndr-story.html").toURI()))
 
-            feedService.readFromFile("ntv", File(ClassLoader.getSystemResource("rdf/ntv.xml").toURI()))
-            fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("rdf/ntv-story.html").toURI()))
+            feedService.readFromFile("ntv", File(ClassLoader.getSystemResource("newsfeed/rss/ntv.xml").toURI()))
+            fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/rss/ntv-story.html").toURI()))
 
-            feedService.readFromFile("t3n", File(ClassLoader.getSystemResource("rdf/t3n.xml").toURI()))
-            fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("rdf/t3n-story.html").toURI()))
+            feedService.readFromFile("t3n", File(ClassLoader.getSystemResource("newsfeed/rss/t3n.xml").toURI()))
+            fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/rss/t3n-story.html").toURI()))
 
-            feedService.readFromFile("t-online", File(ClassLoader.getSystemResource("rdf/t-online.xml").toURI()))
+            feedService.readFromFile("t-online", File(ClassLoader.getSystemResource("newsfeed/rss/t-online.xml").toURI()))
 
-            feedService.readFromFile("tagesschau", File(ClassLoader.getSystemResource("rdf/tagesschau.xml").toURI()))
+            feedService.readFromFile("tagesschau", File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau.xml").toURI()))
             fullArticleService.readFromFile(
                 newsItem,
-                File(ClassLoader.getSystemResource("rdf/tagesschau-story.html").toURI())
+                File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau-story.html").toURI())
             )
 
-            feedService.readFromFile("tagesschau", File(ClassLoader.getSystemResource("rdf/tagesschau2.xml").toURI()))
+            feedService.readFromFile("tagesschau", File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau2.xml").toURI()))
             fullArticleService.readFromFile(
                 newsItem,
-                File(ClassLoader.getSystemResource("rdf/tagesschau-story2.html").toURI())
+                File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau-story2.html").toURI())
             )
 
-            feedService.readFromFile("tagesschau", File(ClassLoader.getSystemResource("rdf/tagesschau2a.xml").toURI()))
+            feedService.readFromFile("tagesschau", File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau2a.xml").toURI()))
 
-            feedService.readFromFile("wdr", File(ClassLoader.getSystemResource("rdf/wdr.xml").toURI()))
-            fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("rdf/wdr-story.html").toURI()))
+            feedService.readFromFile("wdr", File(ClassLoader.getSystemResource("newsfeed/atom/wdr.xml").toURI()))
+            fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/atom/wdr-story.html").toURI()))
         }
 
         println()

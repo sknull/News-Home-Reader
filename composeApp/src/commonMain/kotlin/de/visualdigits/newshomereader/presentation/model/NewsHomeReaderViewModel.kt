@@ -1646,6 +1646,7 @@ class NewsHomeReaderViewModel(
                     it.copy(
                         isLoading = false,
                         currentProgress = 0.0f,
+                        isEditingSettings = false,
                         progressStage = ProgressStage.NONE,
                         uiMessage = error.toUiText(),
                         uiMessageSeverity = Severity.Error
