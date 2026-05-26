@@ -1,6 +1,7 @@
 package de.visualdigits.newshomereader.presentation.page.newsfeedconfiguration
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.AlertDialog
@@ -27,7 +28,6 @@ import de.visualdigits.compose.resources.title_edit_newsfeedgroup
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import org.jetbrains.compose.resources.stringResource
-
 
 
 @Composable
@@ -58,22 +58,39 @@ fun NewsFeedConfigurationGroupDialog(
                 )
             },
             text = {
-                OutlinedTextField(
-                    modifier = Modifier
-                        .focusRequester(focusRequester)
-                        .fillMaxWidth()
-                        .height(70.dp),
-                    label = { Text(text = if (state.isAddingNewsFeedGroup) stringResource(Res.string.title_add_newsfeedgroup) else state.originalNewsFeedGroup?.name?:"") },
-                    value = currentNewsFeedGroupName,
-                    shape = MaterialTheme.shapes.extraSmall,
-                    onValueChange = { value -> currentNewsFeedGroupName = value },
-                    singleLine = true,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.outline,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
-                        cursorColor = MaterialTheme.colorScheme.onSurface,
+                Column(
+
+                ) {
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .focusRequester(focusRequester)
+                            .fillMaxWidth()
+                            .height(70.dp),
+                        label = { Text(text = if (state.isAddingNewsFeedGroup) stringResource(Res.string.title_add_newsfeedgroup) else state.originalNewsFeedGroup?.name?:"") },
+                        value = currentNewsFeedGroupName,
+                        shape = MaterialTheme.shapes.extraSmall,
+                        onValueChange = { value ->
+                            currentNewsFeedGroupName = value
+                        },
+                        singleLine = true,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = MaterialTheme.colorScheme.outline,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                            cursorColor = MaterialTheme.colorScheme.onSurface,
+                        )
                     )
-                )
+
+//                    SwitchBox(
+//                        space = MaterialTheme.shapes.gap,
+//                        label = TODO(),
+//                        fieldHeight = TODO(),
+//                        textStyle = MaterialTheme.typography.bodyMedium,
+//                        alignForForm = false,
+//                        onValueChange = { value ->
+//
+//                        }
+//                    )
+                }
             },
             confirmButton = {
                 IndicatorButton(

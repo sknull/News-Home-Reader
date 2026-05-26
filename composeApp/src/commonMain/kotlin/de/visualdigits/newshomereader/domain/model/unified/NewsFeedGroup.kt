@@ -10,6 +10,7 @@ data class NewsFeedGroup(
     val parentId: Long? = null,
     var parentGroupName: String? = null,
     val name: String,
+    val isKeywordBucket: Boolean = false,
     val newsFeeds: List<NewsFeedItem> = listOf(),
     val subGroups: List<NewsFeedGroup> = listOf()
 ) {

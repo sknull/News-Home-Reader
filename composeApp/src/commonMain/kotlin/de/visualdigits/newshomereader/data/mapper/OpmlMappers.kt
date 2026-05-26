@@ -37,12 +37,14 @@ fun Opml.toNewsFeedConfiguration(): List<NewsFeedGroup> {
                     }
                 NewsFeedGroup(
                     name = subGroupOutline.title?:"",
+                    isKeywordBucket = false,
                     parentGroupName = mainGroupOutline.title,
                     newsFeeds = newsFeedItems,
                 )
             }
             NewsFeedGroup(
                 name = mainGroupOutline.title?:"",
+                isKeywordBucket = if (mainGroupOutline.isKeywordBucket?.isNotEmpty() == true) mainGroupOutline.isKeywordBucket.toBoolean() else false,
                 newsFeeds = newsFeedItems,
                 subGroups = subGroups
             )

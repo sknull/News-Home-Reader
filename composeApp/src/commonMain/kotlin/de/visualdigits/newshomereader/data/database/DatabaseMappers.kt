@@ -86,6 +86,7 @@ fun NewsFeedGroup.toNewsFeedGroupEntity(): NewsFeedGroupEntity {
         parentId = parentId,
         parentGroupName = parentGroupName,
         name = name,
+        isKeywordBucket = isKeywordBucket,
         newsFeeds = newsFeeds,
         subGroups = subGroups
     )
@@ -97,6 +98,7 @@ fun NewsFeedGroupEntity.toNewsFeedGroup(): NewsFeedGroup {
         parentId = parentId,
         parentGroupName = parentGroupName,
         name = name,
+        isKeywordBucket = isKeywordBucket,
         newsFeeds = newsFeeds,
         subGroups = subGroups
     )

@@ -290,6 +290,7 @@ CREATE TABLE NewsFeedGroupEntity (
     parentId INTEGER,
     parentGroupName TEXT,
     name TEXT NOT NULL UNIQUE,
+    isKeywordBucket INTEGER AS Boolean NOT NULL DEFAULT 0,
     newsFeeds TEXT AS List<NewsFeedItem> NOT NULL,
     subGroups TEXT AS List<NewsFeedGroup> NOT NULL,
     FOREIGN KEY(parentId) REFERENCES NewsFeedGroupEntity(id) ON DELETE CASCADE
