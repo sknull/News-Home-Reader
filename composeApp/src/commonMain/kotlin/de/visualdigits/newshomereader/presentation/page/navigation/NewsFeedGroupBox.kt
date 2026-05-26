@@ -55,16 +55,18 @@ fun NewsFeedGroupBox(
                 }
             }
             .padding(start = if (newsFeedGroup.parentGroupName != null) 20.dp else 0.dp),
+        enabled = !newsFeedGroup.isKeywordBucket,
         titleContent = {
             IndicatorButton(
                 width = 180.dp - MaterialTheme.shapes.gap * 2,
                 height = 50.dp,
                 indicatorPosition = Alignment.CenterStart,
-                indicatorColor = MaterialTheme.colorScheme.onSurface,
+                indicatorColor = if (newsFeedGroup.isKeywordBucket) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onSurface,
                 text = newsFeedGroup.name,
                 textStyle = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Start,
-                buttonColor = Color.Transparent,
+                textColor = if (newsFeedGroup.isKeywordBucket) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onSurface,
+                buttonColor = if (newsFeedGroup.isKeywordBucket) MaterialTheme.colorScheme.onSurface else Color.Transparent,
                 shape = RoundedCornerShape(topStart = 4.dp, bottomStart = 4.dp),
                 selected = state.currentNewsFeedGroup?.name == newsFeedGroup.name
             )
@@ -77,8 +79,8 @@ fun NewsFeedGroupBox(
             onAction(NewsHomeReaderAction.OnNewsFeedGroupCollapsibleStateChange(newsFeedGroup, state))
         },
         isExpanded = collapsibleState == true,
-        iconArrowRight = painterResource(Res.drawable.icon_arrow_right_24px),
-        iconArrowDown = painterResource(Res.drawable.icon_arrow_drop_down_24px),
+        iconArrowRight = if (!newsFeedGroup.isKeywordBucket) painterResource(Res.drawable.icon_arrow_right_24px) else null,
+        iconArrowDown = if (!newsFeedGroup.isKeywordBucket) painterResource(Res.drawable.icon_arrow_drop_down_24px) else null,
         trailingIcon = {
             EditButtonsTop(
                 state,

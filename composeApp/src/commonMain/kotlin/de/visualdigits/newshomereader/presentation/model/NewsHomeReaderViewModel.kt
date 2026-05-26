@@ -2,7 +2,6 @@ package de.visualdigits.newshomereader.presentation.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
@@ -452,7 +451,11 @@ class NewsHomeReaderViewModel(
                 log(Severity.Debug, "State:OnEditNewsfeedGroupGroupClick: ${state.value}", withTag = "NHR")
             }
             is NewsHomeReaderAction.OnEditNewsFeedGroupOkClick -> {
-                editNewsFeedGroup(newsFeedGroup = state.value.originalNewsFeedGroup, editedNewsFeedGroupName = action.editedNewsFeedGroupName)
+                editNewsFeedGroup(
+                    newsFeedGroup = state.value.originalNewsFeedGroup,
+                    editedNewsFeedGroupName = action.editedNewsFeedGroupName,
+                    isKeywordBucket = action.isKeywordBucket
+                )
                 log(Severity.Debug, "State:OnEditNewsFeedGroupOkClick: ${state.value}", withTag = "NHR")
             }
             is NewsHomeReaderAction.OnEditNewsFeedGroupCancelClick -> {
@@ -478,7 +481,8 @@ class NewsHomeReaderViewModel(
             is NewsHomeReaderAction.OnAddNewsFeedGroupOkClick -> {
                 addNewsFeedGroup(
                     parentGroup = state.value.parentNewsFeedGroup,
-                    newsFeedGroupName = action.newsFeedGroupName
+                    newsFeedGroupName = action.newsFeedGroupName,
+                    isKeywordBucket = action.isKeywordBucket
                 )
                 log(Severity.Debug, "State:OnAddNewsFeedGroupOkClick: ${state.value}", withTag = "NHR")
             }
@@ -598,17 +602,25 @@ class NewsHomeReaderViewModel(
                 // keep collapsible box open when user switches from single feed to group
                 scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.scrollToStart)
                 _state.update {
-                    val stayInGroup = !action.isExpanded && it.currentNewsFeedName != null && it.previousNewsFeedGroup == it.currentNewsFeedGroup
+                    val stayInGroup = action.group.isKeywordBucket ||
+                            (!action.isExpanded &&
+                                it.currentNewsFeedName != null &&
+                                it.previousNewsFeedGroup == it.currentNewsFeedGroup)
+                    val newCollapsibleState = if (!action.group.isKeywordBucket) {
+                        it.collapsibleState + if (stayInGroup) {
+                            ("group_${action.group.name}" to true)
+                        } else {
+                            ("group_${action.group.name}" to action.isExpanded)
+                        }
+                    } else {
+                        it.collapsibleState
+                    }
                     it.copy(
                         previousNewsFeedGroup = it.currentNewsFeedGroup,
                         currentNewsFeedGroup = if (action.isExpanded || stayInGroup) action.group else null,
                         allowClearVisibleNewsItems = if (stayInGroup) false else !action.isExpanded,
                         currentNewsFeedName = null,
-                        collapsibleState = it.collapsibleState + if (stayInGroup) {
-                            ("group_${action.group.name}" to true)
-                        } else {
-                            ("group_${action.group.name}" to action.isExpanded)
-                        }
+                        collapsibleState = newCollapsibleState
                     )
                 }
                 log(Severity.Debug, "State:OnNewsFeedGroupCollapsibleStateChange: ${state.value}", withTag = "NHR")
@@ -776,13 +788,15 @@ class NewsHomeReaderViewModel(
 
     private fun addNewsFeedGroup(
         parentGroup: NewsFeedGroup?,
-        newsFeedGroupName: String
+        newsFeedGroupName: String,
+        isKeywordBucket: Boolean
     ) = viewModelScope.launch {
         val addResult = newsFeedConfigurationRepository.upsertNewsFeedGroup(
             NewsFeedGroup(
                 parentId = parentGroup?.id,
                 parentGroupName = parentGroup?.name,
-                name = newsFeedGroupName
+                name = newsFeedGroupName,
+                isKeywordBucket = isKeywordBucket
             )
         )
         when (addResult) {
@@ -821,8 +835,16 @@ class NewsHomeReaderViewModel(
         }
     }
 
-    private fun editNewsFeedGroup(newsFeedGroup: NewsFeedGroup?, editedNewsFeedGroupName: String) = viewModelScope.launch {
-        val editResult = newsFeedConfigurationRepository.editNewsFeedGroup(newsFeedGroup, editedNewsFeedGroupName)
+    private fun editNewsFeedGroup(
+        newsFeedGroup: NewsFeedGroup?,
+        editedNewsFeedGroupName: String,
+        isKeywordBucket: Boolean
+    ) = viewModelScope.launch {
+        val editResult = newsFeedConfigurationRepository.editNewsFeedGroup(
+            newsFeedGroup,
+            editedNewsFeedGroupName,
+            isKeywordBucket
+        )
         if (editResult is Result.Success) {
             _state.update {
                 it.copy(

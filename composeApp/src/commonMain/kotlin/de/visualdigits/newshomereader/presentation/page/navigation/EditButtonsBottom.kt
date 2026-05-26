@@ -19,7 +19,7 @@ fun EditButtonsBottom(
     onAction: (NewsHomeReaderAction) -> Unit,
     newsFeedGroup: NewsFeedGroup
 ) {
-    if (state.isEditMode) {
+    if (state.isEditMode && !newsFeedGroup.isKeywordBucket) {
         Row() {
             // only allow one sub group level
             if (newsFeedGroup.parentGroupName == null) {

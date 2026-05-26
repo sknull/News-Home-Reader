@@ -7,7 +7,6 @@ import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.NewsFeedGroupEntity
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.data.database.getAllNewsFeedGroups
-import de.visualdigits.newshomereader.data.database.insertNewsFeedGroup
 import de.visualdigits.newshomereader.data.database.isEqualTo
 import de.visualdigits.newshomereader.data.database.toNewsFeedGroup
 import de.visualdigits.newshomereader.data.database.toNewsFeedGroupEntity
@@ -68,10 +67,14 @@ class DefaultNewsFeedConfigurationRepository(
 
     override suspend fun editNewsFeedGroup(
         newsFeedGroup: NewsFeedGroup?,
-        editedNewsFeedGroupName: String
+        editedNewsFeedGroupName: String,
+        isKeywordBucket: Boolean
     ): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         if (newsFeedGroup != null) {
-            dao.upsertNewsFeedGroup(newsFeedGroup.copy(name = editedNewsFeedGroupName).toNewsFeedGroupEntity())
+            dao.upsertNewsFeedGroup(newsFeedGroup.copy(
+                name = editedNewsFeedGroupName,
+                isKeywordBucket = isKeywordBucket
+            ).toNewsFeedGroupEntity())
             Result.Success(dao.getAllNewsFeedGroups())
         } else {
             Result.Error(DataError.Local.SERIALIZATION)

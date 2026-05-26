@@ -24,7 +24,7 @@ interface NewsFeedConfigurationRepository {
 
     suspend fun upsertNewsFeedGroupSingle(newsFeedGroup: NewsFeedGroup?): Result<NewsFeedGroup?, DataError.Local>
 
-    suspend fun editNewsFeedGroup(newsFeedGroup: NewsFeedGroup?, editedNewsFeedGroupName: String): Result<List<NewsFeedGroup>, DataError.Local>
+    suspend fun editNewsFeedGroup(newsFeedGroup: NewsFeedGroup?, editedNewsFeedGroupName: String, isKeywordBucket: Boolean): Result<List<NewsFeedGroup>, DataError.Local>
 
     suspend fun deleteNewsFeedGroup(newsFeedGroup: NewsFeedGroup): Result<List<NewsFeedGroup>, DataError.Local>
 

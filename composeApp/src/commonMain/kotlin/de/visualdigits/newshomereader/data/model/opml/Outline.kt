@@ -21,7 +21,7 @@ data class Outline(
     @XmlElement(false) @XmlSerialName(prefix = "feeder", namespace="https://nononsenseapps.com/feeder", value = "alternateId") val alternateId: String? = null,
 
     @XmlElement(false) @XmlSerialName(prefix = "nhr", namespace="https://github.com/sknull", value = "stopWords") val stopWords: String? = null,
-    @XmlElement(false) @XmlSerialName(prefix = "nhr", namespace="https://github.com/sknull", value = "stopWords") val isKeywordBucket: String? = null,
+    @XmlElement(false) @XmlSerialName(prefix = "nhr", namespace="https://github.com/sknull", value = "isKeywordBucket") val isKeywordBucket: String? = null,
 
     @XmlSerialName("outline") val outlines: List<Outline> = listOf()
 )

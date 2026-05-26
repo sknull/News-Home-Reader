@@ -298,15 +298,16 @@ CREATE TABLE NewsFeedGroupEntity (
 
 insertNewsFeedGroupEntity:
 INSERT INTO NewsFeedGroupEntity (
-    parentId, parentGroupName, name, newsFeeds, subGroups
+    parentId, parentGroupName, name, isKeywordBucket, newsFeeds, subGroups
 )
-VALUES (?, ?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?, ?);
 
 updateNewsFeedGroupEntity:
 UPDATE NewsFeedGroupEntity
 SET parentId = :parentId,
     parentGroupName = :parentGroupName,
     name = :name,
+    isKeywordBucket = :isKeywordBucket,
     newsFeeds = :newsFeeds,
     subGroups = :subGroups
 WHERE id = :id;

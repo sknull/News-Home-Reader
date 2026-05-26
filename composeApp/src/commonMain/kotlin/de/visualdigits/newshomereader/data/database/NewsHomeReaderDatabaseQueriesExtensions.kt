@@ -37,6 +37,7 @@ private fun buildNodeRecursive(
         parentId = currentEntity.parentId,
         parentGroupName = currentEntity.parentGroupName,
         name = currentEntity.name,
+        isKeywordBucket = currentEntity.isKeywordBucket,
         newsFeeds = currentEntity.newsFeeds,
         subGroups = subGroups
     )
@@ -56,6 +57,7 @@ fun NewsHomeReaderDatabaseQueries.insertNewsFeedGroup(newsFeedGroupEntity: NewsF
         parentId = newsFeedGroupEntity.parentId,
         parentGroupName = newsFeedGroupEntity.parentGroupName,
         name = newsFeedGroupEntity.name,
+        isKeywordBucket = newsFeedGroupEntity.isKeywordBucket,
         newsFeeds = newsFeedGroupEntity.newsFeeds,
         subGroups = newsFeedGroupEntity.subGroups
     )
@@ -68,6 +70,7 @@ fun NewsHomeReaderDatabaseQueries.updateNewsFeedGroup(newsFeedGroupEntity: NewsF
         parentId = newsFeedGroupEntity.parentId,
         parentGroupName = newsFeedGroupEntity.parentGroupName,
         name = newsFeedGroupEntity.name,
+        isKeywordBucket = newsFeedGroupEntity.isKeywordBucket,
         newsFeeds = newsFeedGroupEntity.newsFeeds,
         subGroups = newsFeedGroupEntity.subGroups,
         id = newsFeedGroupEntity.id

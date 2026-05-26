@@ -147,7 +147,8 @@ sealed interface NewsHomeReaderAction {
     @Immutable
     data class OnEditNewsFeedGroupOkClick(
         val originalNewsFeedGroup: NewsFeedGroup?,
-        val editedNewsFeedGroupName: String
+        val editedNewsFeedGroupName: String,
+        val isKeywordBucket: Boolean
     ) : NewsHomeReaderAction
 
     @Immutable
@@ -160,7 +161,8 @@ sealed interface NewsHomeReaderAction {
 
     @Immutable
     data class OnAddNewsFeedGroupOkClick(
-        val newsFeedGroupName: String
+        val newsFeedGroupName: String,
+        val isKeywordBucket: Boolean
     ) : NewsHomeReaderAction
 
     @Immutable
