@@ -25,6 +25,9 @@ Bei einem Remote-Vorgang ist ein unbekannter Fehler aufgetreten.
 Feld in der Konfiguration unbekannt.
 Falsch.
 Field is not defined.
+Display Thema
+Feed Einstellungen
+WebDAV
 10 Minuten
 14 Tage
 15 Minuten
@@ -37,7 +40,7 @@ Field is not defined.
 60 Tage
 60 Minuten
 7 Tage
-New Szene
+Uhr Farbe
 Konfiguration
 Szene löschen
 Oberflächen Thema
@@ -55,9 +58,14 @@ Aktualisierungsintervall
 Nur im Wlan aktualisieren.
 Szenen Name
 Einstellungen
+Spot Farbe
 Stop Words
 Untergruppen Name
 Feed URL
+WebDAV Unterordner
+WebDAV Passwort
+WebDAV Url
+WebDAV Benutzername
 Deutsch
 Englisch
 Über
@@ -80,10 +88,12 @@ Gruppe löschen
 Newsfeed bearbeiten
 Gruppe bearbeiten
 Info
+Ist Stichwort Sammlung
 Suchen
 Einstellungen
 Neue Szene...
 Zurück
+Basisfarbe der Studio Uhr.
 Szene löschen...
 Definiert wie die Oberfläche angezeigt wird
 Artikel als PDF exportieren
@@ -100,13 +110,19 @@ Markiert alle Artikel als gelesen, die älter als einen Tag sind
 Markiert alle Artikel als gelesen, die älter als zwei Tage sind
 Chat in externem Browser öffnen
 Artikel in externem Browser öffnen
+Feed in externem Browser öffnen
 Zeitabstand in Minuten, in dem die Feeds aktualisiert werden
 News Feed neu laden.
 Aktualisiere Feeds nur, wenn eine kostenfreie Verbindung verfügbar ist.
 Szene zurücksetzen
+Die Akzentfarbe für das Basisthema
 News Items containing one of these words will not be shown
 Die URL des newsfeeds. # Zur Zeit werden folgende Feedtypen unterstützt: atom, rdf, rss
+Der Unterordner auf dem webdav host. Das Rootdirectory hat keine Schreibrechte. # Du musst einen freigegebenen Ordner angeben.
+Das Passwort zum Einloggen in deinen WebDAV host # (wird verschlüsselt in die Datenbank geschrieben)
+Die Url deines WebDAV hosts in der Form http://host:port
+Der Benutzername zum Einloggen in deinen WebDAV host
 True
 Möchtest Du diesen Eintrag wirklich löschen?
 Deine Konfiguration wurde auf die neueste Version migriert. # Eine Rückkehr zu einer älteren Version ist mit der neuen Konfiguration nicht möglich. # Von der alten Konfiguration wurde ein Backup angelegt.
-Keine Projekte.
+Keine Ergebnisse.

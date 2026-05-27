@@ -63,7 +63,6 @@ fun NewsItemCard(
     simple: Boolean = false,
     maxImageSize: Int?,
     newsItem: NewsItem,
-    displayTheme: DisplayThemeEnum?,
     uriHandler: UriHandler,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
@@ -221,6 +220,8 @@ fun NewsItemCard(
                     val highlightedTitle = remember(annotatedTitle, state.newsItemSearchText) {
                         if (!state.newsItemSearchText.isNullOrBlank()) {
                             annotatedTitle.highlightQuery(state.newsItemSearchText)
+                        } else if (!state.currentKeywordBucket.isNullOrBlank()){
+                            annotatedTitle.highlightQuery(state.currentKeywordBucket)
                         } else {
                             annotatedTitle
                         }
@@ -246,6 +247,8 @@ fun NewsItemCard(
                         val highlightedSummary = remember(annotatedSummary, state.newsItemSearchText) {
                             if (!state.newsItemSearchText.isNullOrBlank()) {
                                 annotatedSummary.highlightQuery(state.newsItemSearchText)
+                            } else if (!state.currentKeywordBucket.isNullOrBlank()){
+                                annotatedSummary.highlightQuery(state.currentKeywordBucket)
                             } else {
                                 annotatedSummary
                             }

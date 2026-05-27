@@ -48,6 +48,7 @@ fun NewsFeedItems(
                 IndicatorButton(
                     width = 200.dp - MaterialTheme.shapes.gap * 2,
                     height = 50.dp,
+                    hoverColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                     indicatorPosition = Alignment.CenterStart,
                     indicatorColor = MaterialTheme.colorScheme.onSurface,
                     text = newsFeedItem.name,

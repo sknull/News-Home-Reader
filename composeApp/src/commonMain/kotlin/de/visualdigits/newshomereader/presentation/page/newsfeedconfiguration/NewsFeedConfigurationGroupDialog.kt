@@ -27,6 +27,7 @@ import de.visualdigits.compose.resources.cancel
 import de.visualdigits.compose.resources.ok
 import de.visualdigits.compose.resources.title_add_newsfeedgroup
 import de.visualdigits.compose.resources.title_edit_newsfeedgroup
+import de.visualdigits.compose.resources.title_is_keyword_bucket
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.gap
@@ -87,7 +88,7 @@ fun NewsFeedConfigurationGroupDialog(
 
                     SwitchBox(
                         space = MaterialTheme.shapes.gap,
-                        label = stringResource(Res.string.title_add_newsfeedgroup),
+                        label = stringResource(Res.string.title_is_keyword_bucket),
                         currentValue = isKeywordBucket,
                         fieldHeight = 50.dp,
                         textStyle = MaterialTheme.typography.bodyMedium,

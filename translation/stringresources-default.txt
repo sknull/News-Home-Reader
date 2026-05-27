@@ -25,6 +25,9 @@ An unknown error occurred during a remote operation.
 Field unknown in configuration.
 False
 Field is not defined.
+Display Theme
+Feed Settings
+WebDAV
 10 Minutes
 14 Days
 15 Minutes
@@ -37,7 +40,7 @@ Field is not defined.
 60 Days
 60 Minutes
 7 Days
-
+Clock Color
 Configuration
 Delete Scene
 Display Theme
@@ -55,9 +58,14 @@ Refresh Interval
 Refresh Wifi Only.
 Scene name
 Settings
+Spot Color
 Stop Words
 Sub Group Name
 Feed URL
+WebDAV Directory
+WebDAV Password
+WebDAV Url
+WebDAV User
 German
 English
 About
@@ -80,10 +88,12 @@ Delete Newsfeed Group
 Edit Newsfeed
 Edit Newsfeed Group
 Info
+Is Keyword Bucket
 Search
 Settings
 Add scene...
 Back
+Basecolor of the studio clock.
 Delete Scene...
 Defines the look and feel of the UI
 Export article as PDF
@@ -100,13 +110,19 @@ Marks all items as read which are older than one day
 Marks all items as read which are older than two days
 Open chat page in external browser
 Open article page in external browser
+Open feed page in external browser
 Interval to refresh all feeds
 Refresh News Feed
 Refresh feeds only when a free of charge connection is available.
 Reset Scene...
+The accent color for the base theme
 News Items containing one of these words will not be shown
 The URL pointing to the actual newsfeed. # Currently supported feeds are atom, rdf, rss
+The directory on the host to use # as it is not allowed to write into the root directory # you must specify this.
+The password required to login to your WebDAV host # (will be encrypted in the database)
+Url of your WebDAV host in form http://host:port
+The username required to login to your WebDAV host
 True
 Do you really want to delete this entry?
 Your configuration has been migrated to the latest version. # It is not possible to revert to an older version with the new configuration. # A backup of the old configuration has been created.
-No projects.
+No results.

@@ -175,6 +175,8 @@ fun NewsArticleCard(
                             val highlightedTitle = remember(annotatedTile, state.newsItemSearchText) {
                                 if (!state.newsItemSearchText.isNullOrBlank()) {
                                     annotatedTile.highlightQuery(state.newsItemSearchText)
+                                } else if (!state.currentKeywordBucket.isNullOrBlank()){
+                                    annotatedTile.highlightQuery(state.currentKeywordBucket)
                                 } else {
                                     annotatedTile
                                 }
@@ -256,6 +258,8 @@ fun NewsArticleCard(
                             val highlightedSummary = remember(annotatedSummary, state.newsItemSearchText) {
                                 if (!state.newsItemSearchText.isNullOrBlank()) {
                                     annotatedSummary.highlightQuery(state.newsItemSearchText)
+                                } else if (!state.currentKeywordBucket.isNullOrBlank()){
+                                    annotatedSummary.highlightQuery(state.currentKeywordBucket)
                                 } else {
                                     annotatedSummary
                                 }
@@ -287,6 +291,8 @@ fun NewsArticleCard(
                         val highlightedText = remember(annotatedText, state.newsItemSearchText) {
                             if (!state.newsItemSearchText.isNullOrBlank()) {
                                 annotatedText.highlightQuery(state.newsItemSearchText)
+                            } else if (!state.currentKeywordBucket.isNullOrBlank()){
+                                annotatedText.highlightQuery(state.currentKeywordBucket)
                             } else {
                                 annotatedText
                             }

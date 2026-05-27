@@ -99,7 +99,13 @@ class NewsHomeReaderViewModel(
 
                 val sourceFlow = when {
                     isSearching -> feedRepository.observeNewsFeedItemSearchItems(searchText)
-                    group != null || !name.isNullOrBlank() -> feedRepository.observeFeedItems(group, name)
+                    group != null || !name.isNullOrBlank() -> {
+                        if (group?.isKeywordBucket == true) {
+                            feedRepository.observeNewsFeedItemSearchItems(group.name)
+                        } else {
+                            feedRepository.observeFeedItems(group, name)
+                        }
+                    }
                     else -> flowOf(emptyList())
                 }
 
@@ -599,29 +605,41 @@ class NewsHomeReaderViewModel(
             }
 
             is NewsHomeReaderAction.OnNewsFeedGroupCollapsibleStateChange -> {
-                // keep collapsible box open when user switches from single feed to group
                 scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.scrollToStart)
-                _state.update {
-                    val stayInGroup = action.group.isKeywordBucket ||
-                            (!action.isExpanded &&
-                                it.currentNewsFeedName != null &&
-                                it.previousNewsFeedGroup == it.currentNewsFeedGroup)
-                    val newCollapsibleState = if (!action.group.isKeywordBucket) {
-                        it.collapsibleState + if (stayInGroup) {
-                            ("group_${action.group.name}" to true)
-                        } else {
-                            ("group_${action.group.name}" to action.isExpanded)
-                        }
-                    } else {
-                        it.collapsibleState
+                if (action.group.isKeywordBucket) {
+                    _state.update {
+                        it.copy(
+                            previousNewsFeedGroup = it.currentNewsFeedGroup,
+                            currentNewsFeedGroup = action.group,
+                            currentKeywordBucket = action.group.name,
+                            allowClearVisibleNewsItems = true,
+                            currentNewsFeedName = null,
+                        )
                     }
-                    it.copy(
-                        previousNewsFeedGroup = it.currentNewsFeedGroup,
-                        currentNewsFeedGroup = if (action.isExpanded || stayInGroup) action.group else null,
-                        allowClearVisibleNewsItems = if (stayInGroup) false else !action.isExpanded,
-                        currentNewsFeedName = null,
-                        collapsibleState = newCollapsibleState
-                    )
+                } else {
+                    _state.update {
+                        // keep collapsible box open when user switches from single feed to group
+                        val stayInGroup = !action.isExpanded &&
+                                it.currentNewsFeedName != null &&
+                                it.previousNewsFeedGroup == it.currentNewsFeedGroup
+                        val newCollapsibleState = if (!action.group.isKeywordBucket) {
+                            it.collapsibleState + if (stayInGroup) {
+                                ("group_${action.group.name}" to true)
+                            } else {
+                                ("group_${action.group.name}" to action.isExpanded)
+                            }
+                        } else {
+                            it.collapsibleState
+                        }
+                        it.copy(
+                            previousNewsFeedGroup = it.currentNewsFeedGroup,
+                            currentNewsFeedGroup = if (action.isExpanded || stayInGroup) action.group else null,
+                            currentKeywordBucket = null,
+                            allowClearVisibleNewsItems = if (stayInGroup) false else !action.isExpanded,
+                            currentNewsFeedName = null,
+                            collapsibleState = newCollapsibleState
+                        )
+                    }
                 }
                 log(Severity.Debug, "State:OnNewsFeedGroupCollapsibleStateChange: ${state.value}", withTag = "NHR")
             }

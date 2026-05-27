@@ -17,8 +17,10 @@ import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.common.presentation.components.container.VerticalCollapsibleBox
 import de.visualdigits.common.presentation.components.util.conditional
 import de.visualdigits.compose.resources.Res
+import de.visualdigits.compose.resources.icon_ad_group_24px
 import de.visualdigits.compose.resources.icon_arrow_drop_down_24px
 import de.visualdigits.compose.resources.icon_arrow_right_24px
+import de.visualdigits.compose.resources.icon_collections_bookmark_24px
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
@@ -56,17 +58,21 @@ fun NewsFeedGroupBox(
             }
             .padding(start = if (newsFeedGroup.parentGroupName != null) 20.dp else 0.dp),
         enabled = !newsFeedGroup.isKeywordBucket,
+        isTitleHoverable = true,
+        titleHoverColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
         titleContent = {
             IndicatorButton(
+                isHoverable = false,
                 width = 180.dp - MaterialTheme.shapes.gap * 2,
                 height = 50.dp,
+                leadingIcon = if (newsFeedGroup.isKeywordBucket) painterResource(Res.drawable.icon_collections_bookmark_24px) else painterResource(Res.drawable.icon_ad_group_24px),
                 indicatorPosition = Alignment.CenterStart,
-                indicatorColor = if (newsFeedGroup.isKeywordBucket) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onSurface,
+                indicatorColor = MaterialTheme.colorScheme.onSurface,
                 text = newsFeedGroup.name,
                 textStyle = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Start,
-                textColor = if (newsFeedGroup.isKeywordBucket) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onSurface,
-                buttonColor = if (newsFeedGroup.isKeywordBucket) MaterialTheme.colorScheme.onSurface else Color.Transparent,
+                textColor = MaterialTheme.colorScheme.onSurface,
+                buttonColor = Color.Transparent,
                 shape = RoundedCornerShape(topStart = 4.dp, bottomStart = 4.dp),
                 selected = state.currentNewsFeedGroup?.name == newsFeedGroup.name
             )
@@ -106,7 +112,7 @@ fun NewsFeedGroupBox(
 
             NewsFeedItems(
                 modifier = Modifier
-                    .padding(start = if (newsFeedGroup.parentGroupName != null) 20.dp else 0.dp),
+                    .padding(start = 20.dp),
                 newsFeedGroup = newsFeedGroup,
                 state = state,
                 onAction = onAction

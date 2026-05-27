@@ -158,7 +158,6 @@ fun VerticalNewsFeeds(
                                     state = state,
                                     maxImageSize = maxImageSize,
                                     newsItem = newsItem,
-                                    displayTheme = displayTheme,
                                     uriHandler = uriHandler,
                                     onAction = onAction
                                 )

@@ -8,22 +8,6 @@
   <string name="choose_file">Datei auswählen</string>
   <string name="close">Schließen</string>
   <string name="delete">Löschen</string>
-
-  <string name="group_display_theme">Display Thema</string>
-  <string name="group_feed_seetings">Feed Einstellungen</string>
-  <string name="group_webdav">WebDAV</string>
-
-  <string name="label_clockColor">Uhr Farbe</string>
-  <string name="tooltip_clockColor">Basisfarbe der Studio Uhr.</string>
-  <string name="label_webDavUrl">WebDAV Url</string>
-  <string name="tooltip_webDavUrl">Die Url deines WebDAV hosts in der Form http://host:port</string>
-  <string name="label_webDavDirectory">WebDAV Unterordner</string>
-  <string name="tooltip_webDavDirectory">Der Unterordner auf dem webdav host. Das Rootdirectory hat keine Schreibrechte.\nDu musst einen freigegebenen Ordner angeben.</string>
-  <string name="label_webDavUser">WebDAV Benutzername</string>
-  <string name="tooltip_webDavUser">Der Benutzername zum Einloggen in deinen WebDAV host</string>
-  <string name="label_webDavPassword">WebDAV Passwort</string>
-  <string name="tooltip_webDavPassword">Das Passwort zum Einloggen in deinen WebDAV host\n(wird verschlüsselt in die Datenbank geschrieben)</string>
-
   <string name="dialog_title_export_opml">OPML Datei exportieren</string>
   <string name="dialog_title_export_pdf">PDF Datei exportieren</string>
   <string name="dialog_title_export_settings">Einstellungen exportieren</string>
@@ -43,6 +27,9 @@
   <string name="error_unknown_field">Feld in der Konfiguration unbekannt.</string>
   <string name="false">Falsch.</string>
   <string name="field_unset">Field is not defined.</string>
+  <string name="group_display_theme">Display Thema</string>
+  <string name="group_feed_seetings">Feed Einstellungen</string>
+  <string name="group_webdav">WebDAV</string>
   <string name="label_10_minutes">10 Minuten</string>
   <string name="label_14_days">14 Tage</string>
   <string name="label_15_minutes">15 Minuten</string>
@@ -55,6 +42,7 @@
   <string name="label_60_days">60 Tage</string>
   <string name="label_60_minutes">60 Minuten</string>
   <string name="label_7_days">7 Tage</string>
+  <string name="label_clockColor">Uhr Farbe</string>
   <string name="label_configuration">Konfiguration</string>
   <string name="label_delete_scene">Szene löschen</string>
   <string name="label_displayTheme">Oberflächen Thema</string>
@@ -72,11 +60,14 @@
   <string name="label_refresh_wifi_only">Nur im Wlan aktualisieren.</string>
   <string name="label_scene_name">Szenen Name</string>
   <string name="label_settings">Einstellungen</string>
+  <string name="label_spotColor">Spot Farbe</string>
   <string name="label_stopWords">Stop Words</string>
   <string name="label_subgroupName">Untergruppen Name</string>
-  <string name="label_spotColor">Spot Farbe</string>
-  <string name="tooltip_spotColor">Die Akzentfarbe für das Basisthema</string>
   <string name="label_url">Feed URL</string>
+  <string name="label_webDavDirectory">WebDAV Unterordner</string>
+  <string name="label_webDavPassword">WebDAV Passwort</string>
+  <string name="label_webDavUrl">WebDAV Url</string>
+  <string name="label_webDavUser">WebDAV Benutzername</string>
   <string name="language_de">Deutsch</string>
   <string name="language_en">Englisch</string>
   <string name="menu_about">Über</string>
@@ -99,10 +90,12 @@
   <string name="title_edit_newsfeedconfiguration">Newsfeed bearbeiten</string>
   <string name="title_edit_newsfeedgroup">Gruppe bearbeiten</string>
   <string name="title_info">Info</string>
+  <string name="title_is_keyword_bucket">Ist Stichwort Sammlung</string>
   <string name="title_search">Suchen</string>
   <string name="title_settings">Einstellungen</string>
   <string name="tooltip_add_scene">Neue Szene...</string>
   <string name="tooltip_back">Zurück</string>
+  <string name="tooltip_clockColor">Basisfarbe der Studio Uhr.</string>
   <string name="tooltip_delete_scene">Szene löschen...</string>
   <string name="tooltip_displayTheme">Definiert wie die Oberfläche angezeigt wird</string>
   <string name="tooltip_export_pdf">Artikel als PDF exportieren</string>
@@ -124,8 +117,13 @@
   <string name="tooltip_refresh_newsfeed">News Feed neu laden.</string>
   <string name="tooltip_refresh_wifi_only">Aktualisiere Feeds nur, wenn eine kostenfreie Verbindung verfügbar ist.</string>
   <string name="tooltip_reset_scene">Szene zurücksetzen</string>
+  <string name="tooltip_spotColor">Die Akzentfarbe für das Basisthema</string>
   <string name="tooltip_stopWords">News Items containing one of these words will not be shown</string>
   <string name="tooltip_url">Die URL des newsfeeds.\nZur Zeit werden folgende Feedtypen unterstützt: atom, rdf, rss</string>
+  <string name="tooltip_webDavDirectory">Der Unterordner auf dem webdav host. Das Rootdirectory hat keine Schreibrechte.\nDu musst einen freigegebenen Ordner angeben.</string>
+  <string name="tooltip_webDavPassword">Das Passwort zum Einloggen in deinen WebDAV host\n(wird verschlüsselt in die Datenbank geschrieben)</string>
+  <string name="tooltip_webDavUrl">Die Url deines WebDAV hosts in der Form http://host:port</string>
+  <string name="tooltip_webDavUser">Der Benutzername zum Einloggen in deinen WebDAV host</string>
   <string name="true">True</string>
   <string name="warning_delete">Möchtest Du diesen Eintrag wirklich löschen?</string>
   <string name="warning_migration">Deine Konfiguration wurde auf die neueste Version migriert.\nEine Rückkehr zu einer älteren Version ist mit der neuen Konfiguration nicht möglich.\nVon der alten Konfiguration wurde ein Backup angelegt.</string>

@@ -30,6 +30,7 @@ data class NewsHomeReaderState(
     val allowClearVisibleNewsItems: Boolean = false,
 
     val filteredNewsItems: List<NewsItem> = listOf(),
+    val currentKeywordBucket: String? = null,
     val newsItemSearchText: String? = null,
     val isNewsItemSearchActive: Boolean = false,
 
