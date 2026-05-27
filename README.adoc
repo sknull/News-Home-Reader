@@ -62,13 +62,14 @@ The project is currently in early beta. So there might be still bugs and flaws..
 News Home Reader is a privacy first newsreader which means that new items and articles are stored only on your device. Synchronization of read news items is only performed within your Wi-Fi zone at home. For now only WebDAV is supported to store the synchronization file, which is just a simple JSON file.
 
 - Reading from Atom, RDF and RSS feeds
-- Scraping full articles from the respective website including video, audio and image items when provided within metadata
-- Caching articles and images on your device so you can read your news completely offline without internat traffic when outside your home
-- Identical App provided for Android and Desktop (currently Windows, Linux distro will be provided asap)
+- Privacy first approach - nothing is stored outside your device except for syncfiles which may be stored on a WebDAV server of your choice.
+- Custom keyword buckets. You can add a dedicated group which is named with a search phrase. When selecting this group you see only news items containing this keyword. Making this the perfect tool if you want to monitor a certain topic across newsfeeds.
+- All news item data and optionally  full articles and their images are stored locally on your device for offline reading.
 - Synchronization of read news items across devices using WebDAV. While your devices are in your WLAN a little sync file is written to your webDav host and used across the devices
 - Export and Import of OPML to get started with a setup from another reader
 - Export and import of your settings. As the password is stored encrypted and the master key is device specific, you might export your settings on one device and import it on another, but you have to reenter the password afterward
-- Inbuilt Newsfeed catalog with german feeds from https://www.rss-verzeichnis.de/
+- Identical App provided for Android and Desktop (currently Windows, Linux distro will be provided asap)
+- Inbuilt Newsfeed catalog with german feeds from https://www.rss-verzeichnis.de/ to get started easily
 
 == Installation
 
