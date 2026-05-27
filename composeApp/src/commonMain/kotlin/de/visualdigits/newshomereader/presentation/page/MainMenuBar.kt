@@ -22,6 +22,7 @@ import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_article_24px
+import de.visualdigits.compose.resources.icon_breaking_news_alt_1_24px
 import de.visualdigits.compose.resources.icon_edit_24px
 import de.visualdigits.compose.resources.icon_image_24px
 import de.visualdigits.compose.resources.icon_info_24px
@@ -105,6 +106,13 @@ fun MainMenuBar(
             }
 
             when (state.progressStage) {
+                ProgressStage.LOAD_FEEDS -> Icon(
+                    modifier = Modifier
+                        .size(14.dp),
+                    painter = painterResource(Res.drawable.icon_breaking_news_alt_1_24px),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.inverseSurface,
+                )
                 ProgressStage.LOAD_ARTICLES -> Icon(
                     modifier = Modifier
                         .size(14.dp),

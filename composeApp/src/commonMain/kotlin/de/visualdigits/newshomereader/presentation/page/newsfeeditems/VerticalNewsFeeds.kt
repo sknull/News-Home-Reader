@@ -23,12 +23,16 @@ import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.util.copyFactor
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
+import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.common.presentation.components.modifier.angledInnerShadow
 import de.visualdigits.common.presentation.components.modifier.tintedBackgroundImage
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.circuit_board_squared
+import de.visualdigits.compose.resources.icon_add_notes_24px
+import de.visualdigits.compose.resources.label_keyword_buckets
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
@@ -38,6 +42,8 @@ import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import org.jetbrains.compose.resources.imageResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * Renders the news item card for a given newsfeed
@@ -58,10 +64,24 @@ fun VerticalNewsFeeds(
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
     val dimFactor = if (displayTheme == DisplayThemeEnum.ANTHRACITE) 1.5f else 1.25f
-    Box(
+    val labelKeywordBuckets = stringResource(Res.string.label_keyword_buckets)
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
+        if (state.isEditMode) {
+            IndicatorButton(
+                modifier = Modifier,
+                width = 30.dp,
+                height = 30.dp,
+                padding = 2.dp,
+                leadingIcon = painterResource(Res.drawable.icon_add_notes_24px)
+            ) {
+                onAction(NewsHomeReaderAction.OnAddNewsfeedGroupGroupClick())
+            }
+        }
+
         PlatformVerticalScrollbarBox(
             modifier = Modifier
                 .fillMaxSize()
@@ -112,9 +132,20 @@ fun VerticalNewsFeeds(
                         modifier = Modifier
                             .fillMaxWidth(),
                     ) {
-                        state.newsFeedGroups
-                            .sortedBy { nfg -> nfg.name }
-                            .forEach { newsFeedGroup ->
+                        (state.newsFeedGroups
+                            .filter { nfg -> !nfg.isKeywordBucket }
+                            .sortedBy { nfg -> nfg.name } +
+                                listOf(
+                                    NewsFeedGroup(
+                                        id = -1,
+                                        name = labelKeywordBuckets,
+                                        isKeywordBucket = true,
+                                        subGroups = state.newsFeedGroups
+                                            .filter { nfg -> nfg.isKeywordBucket }
+                                            .sortedBy { nfg -> nfg.name }
+                                    )
+                                )
+                                ).forEach { newsFeedGroup ->
                                 NewsFeedGroupBox(
                                     modifier = Modifier
                                         .background(MaterialTheme.colorScheme.background.copy(alpha = 0.8f)),

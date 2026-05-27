@@ -606,40 +606,28 @@ class NewsHomeReaderViewModel(
 
             is NewsHomeReaderAction.OnNewsFeedGroupCollapsibleStateChange -> {
                 scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.scrollToStart)
-                if (action.group.isKeywordBucket) {
-                    _state.update {
-                        it.copy(
-                            previousNewsFeedGroup = it.currentNewsFeedGroup,
-                            currentNewsFeedGroup = action.group,
-                            currentKeywordBucket = action.group.name,
-                            allowClearVisibleNewsItems = true,
-                            currentNewsFeedName = null,
-                        )
-                    }
-                } else {
-                    _state.update {
-                        // keep collapsible box open when user switches from single feed to group
-                        val stayInGroup = !action.isExpanded &&
-                                it.currentNewsFeedName != null &&
-                                it.previousNewsFeedGroup == it.currentNewsFeedGroup
-                        val newCollapsibleState = if (!action.group.isKeywordBucket) {
-                            it.collapsibleState + if (stayInGroup) {
-                                ("group_${action.group.name}" to true)
-                            } else {
-                                ("group_${action.group.name}" to action.isExpanded)
-                            }
+                _state.update {
+                    // keep collapsible box open when user switches from single feed to group
+                    val stayInGroup = !action.isExpanded &&
+                            it.currentNewsFeedName != null &&
+                            it.previousNewsFeedGroup == it.currentNewsFeedGroup
+                    val newCollapsibleState = if (!action.group.isKeywordBucket || action.group.subGroups.isNotEmpty() || action.group.newsFeeds.isNotEmpty()) {
+                        it.collapsibleState + if (stayInGroup) {
+                            ("group_${action.group.name}" to true)
                         } else {
-                            it.collapsibleState
+                            ("group_${action.group.name}" to action.isExpanded)
                         }
-                        it.copy(
-                            previousNewsFeedGroup = it.currentNewsFeedGroup,
-                            currentNewsFeedGroup = if (action.isExpanded || stayInGroup) action.group else null,
-                            currentKeywordBucket = null,
-                            allowClearVisibleNewsItems = if (stayInGroup) false else !action.isExpanded,
-                            currentNewsFeedName = null,
-                            collapsibleState = newCollapsibleState
-                        )
+                    } else {
+                        it.collapsibleState
                     }
+                    it.copy(
+                        previousNewsFeedGroup = it.currentNewsFeedGroup,
+                        currentNewsFeedGroup = if (action.isExpanded || action.group.isKeywordBucket || stayInGroup) action.group else null,
+                        currentKeywordBucket = if (action.group.isKeywordBucket) action.group.name else null,
+                        allowClearVisibleNewsItems = if (stayInGroup) false else !action.isExpanded,
+                        currentNewsFeedName = null,
+                        collapsibleState = newCollapsibleState
+                    )
                 }
                 log(Severity.Debug, "State:OnNewsFeedGroupCollapsibleStateChange: ${state.value}", withTag = "NHR")
             }

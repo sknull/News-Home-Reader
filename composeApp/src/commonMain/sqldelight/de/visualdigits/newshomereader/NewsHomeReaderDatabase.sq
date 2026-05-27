@@ -98,7 +98,7 @@ getNewsFeedById:
 SELECT * FROM NewsFeedEntity WHERE id = :id;
 
 getNewsFeedByFeedName:
-SELECT * FROM NewsFeedEntity WHERE feedName = :feedName;
+SELECT * FROM NewsFeedEntity WHERE LOWER(feedName) = LOWER(:feedName);
 
 updateNewsFeed:
 UPDATE NewsFeedEntity

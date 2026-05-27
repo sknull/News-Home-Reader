@@ -64,6 +64,7 @@ fun List<NewsFeedGroup>.toOpml(): Opml {
                 Outline(
                     title = mainGroup.name,
                     text = mainGroup.name,
+                    isKeywordBucket = mainGroup.isKeywordBucket.toString(),
                     outlines = mainGroup.newsFeeds.map { newsFeed ->
                         createNewsFeedOutline(newsFeed)
                     } + mainGroup.subGroups.map { subGroup ->
@@ -104,7 +105,7 @@ private fun createNewsFeedOutline(newsFeed: NewsFeedItem): Outline = Outline(
     xmlUrl = newsFeed.url,
     type = "rss",
     imageUrl = newsFeed.imageUrl,
-    stopWords = if (newsFeed.stopWords?.isNotEmpty() == true) newsFeed.stopWords.filter { sw -> sw.isNotEmpty() }
+    stopWords = if (newsFeed.stopWords.isNotEmpty()) newsFeed.stopWords.filter { sw -> sw.isNotEmpty() }
         .joinToString(",") else null,
 )
 

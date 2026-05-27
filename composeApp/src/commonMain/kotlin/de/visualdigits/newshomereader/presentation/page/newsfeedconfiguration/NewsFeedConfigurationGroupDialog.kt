@@ -92,7 +92,6 @@ fun NewsFeedConfigurationGroupDialog(
                         currentValue = isKeywordBucket,
                         fieldHeight = 50.dp,
                         textStyle = MaterialTheme.typography.bodyMedium,
-                        alignForForm = false,
                         onValueChange = { value ->
                             isKeywordBucket = value.booleanValue
                         }

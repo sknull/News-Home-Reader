@@ -13,6 +13,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -97,7 +98,6 @@ class RssTest : KoinTest {
     }
 
     @Test
-    @Disabled("Only for local testing")
     fun testReadArticleFile() {
         runBlocking {
             val article = fullArticleService.readFromFile(
@@ -109,7 +109,7 @@ class RssTest : KoinTest {
     }
 
     @Test
-//    @Disabled("Only for local testing")
+    @Disabled("Only for local testing")
     fun testReadArticleUrl() {
         runBlocking {
             val response = httpClient.get(urlString = "https://www.spiegel.de/ausland/iran-krieg-us-senat-stimmt-dafuer-befugnisse-von-donald-trump-einzuschraenken-mit-republikaner-stimmen-a-12f9e1fa-16cf-4426-8b6c-39d72e5adcb6#ref=rss")
@@ -122,44 +122,69 @@ class RssTest : KoinTest {
     }
 
     @Test
-    @Disabled("Only for local testing")
-    fun testReadModel() {
-        runBlocking {
-            feedService.readFromFile("heise", File(ClassLoader.getSystemResource("newsfeed/atom/heise.xml").toURI()))
-            fullArticleService.readFromFile(
-                newsItem,
-                File(ClassLoader.getSystemResource("newsfeed/atom/heise-story.html").toURI())
-            )
+    fun testReadArbeitstips() = runTest {
+        val article = fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/rss/arbeitstips-story.html").toURI()))
+        println(article)
+    }
 
-            feedService.readFromFile("ndr", File(ClassLoader.getSystemResource("newsfeed/rdf/ndr.xml").toURI()))
-            fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/rdf/ndr-story.html").toURI()))
+    @Test
+    fun testReadNdr() = runTest {
+        feedService.readFromFile("ndr", File(ClassLoader.getSystemResource("newsfeed/rdf/ndr.xml").toURI()))
+        fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/rdf/ndr-story.html").toURI()))
+    }
 
-            feedService.readFromFile("ntv", File(ClassLoader.getSystemResource("newsfeed/rss/ntv.xml").toURI()))
-            fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/rss/ntv-story.html").toURI()))
+    @Test
+    fun testReadNtv() = runTest {
+        feedService.readFromFile("ntv", File(ClassLoader.getSystemResource("newsfeed/rss/ntv.xml").toURI()))
+        fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/rss/ntv-story.html").toURI()))
+    }
 
-            feedService.readFromFile("t3n", File(ClassLoader.getSystemResource("newsfeed/rss/t3n.xml").toURI()))
-            fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/rss/t3n-story.html").toURI()))
+    @Test
+    fun testReadT3n() = runTest {
+        feedService.readFromFile("t3n", File(ClassLoader.getSystemResource("newsfeed/rss/t3n.xml").toURI()))
+        fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/rss/t3n-story.html").toURI()))
+    }
 
-            feedService.readFromFile("t-online", File(ClassLoader.getSystemResource("newsfeed/rss/t-online.xml").toURI()))
+    @Test
+    fun testReadTOnline() = runTest {
+        feedService.readFromFile("t-online", File(ClassLoader.getSystemResource("newsfeed/rss/t-online.xml").toURI()))
+    }
 
-            feedService.readFromFile("tagesschau", File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau.xml").toURI()))
-            fullArticleService.readFromFile(
-                newsItem,
-                File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau-story.html").toURI())
-            )
+    @Test
+    fun testReadTagesschau1() = runTest {
+        feedService.readFromFile("tagesschau", File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau.xml").toURI()))
+        fullArticleService.readFromFile(
+            newsItem,
+            File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau-story.html").toURI())
+        )
+    }
 
-            feedService.readFromFile("tagesschau", File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau2.xml").toURI()))
-            fullArticleService.readFromFile(
-                newsItem,
-                File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau-story2.html").toURI())
-            )
+    @Test
+    fun testReadTagesschau2() = runTest {
+        feedService.readFromFile("tagesschau", File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau2.xml").toURI()))
+        fullArticleService.readFromFile(
+            newsItem,
+            File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau-story2.html").toURI())
+        )
+    }
 
-            feedService.readFromFile("tagesschau", File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau2a.xml").toURI()))
+    @Test
+    fun testReadTagesschau2a() = runTest {
+        feedService.readFromFile("tagesschau", File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau2a.xml").toURI()))
+    }
 
-            feedService.readFromFile("wdr", File(ClassLoader.getSystemResource("newsfeed/atom/wdr.xml").toURI()))
-            fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/atom/wdr-story.html").toURI()))
-        }
+    @Test
+    fun testReadHeise() = runTest {
+        feedService.readFromFile("heise", File(ClassLoader.getSystemResource("newsfeed/atom/heise.xml").toURI()))
+        fullArticleService.readFromFile(
+            newsItem,
+            File(ClassLoader.getSystemResource("newsfeed/atom/heise-story.html").toURI())
+        )
+    }
 
-        println()
+    @Test
+    fun testReadWdr() = runTest {
+        feedService.readFromFile("wdr", File(ClassLoader.getSystemResource("newsfeed/atom/wdr.xml").toURI()))
+        fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/atom/wdr-story.html").toURI()))
     }
 }

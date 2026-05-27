@@ -1,6 +1,7 @@
 package de.visualdigits.newshomereader.presentation.page.navigation
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,6 +22,8 @@ import de.visualdigits.compose.resources.icon_ad_group_24px
 import de.visualdigits.compose.resources.icon_arrow_drop_down_24px
 import de.visualdigits.compose.resources.icon_arrow_right_24px
 import de.visualdigits.compose.resources.icon_collections_bookmark_24px
+import de.visualdigits.compose.resources.icon_delete_24px
+import de.visualdigits.compose.resources.icon_edit_24px
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
@@ -85,14 +88,32 @@ fun NewsFeedGroupBox(
             onAction(NewsHomeReaderAction.OnNewsFeedGroupCollapsibleStateChange(newsFeedGroup, state))
         },
         isExpanded = collapsibleState == true,
-        iconArrowRight = if (!newsFeedGroup.isKeywordBucket) painterResource(Res.drawable.icon_arrow_right_24px) else null,
-        iconArrowDown = if (!newsFeedGroup.isKeywordBucket) painterResource(Res.drawable.icon_arrow_drop_down_24px) else null,
+        iconArrowRight = if (!newsFeedGroup.isKeywordBucket || newsFeedGroup.subGroups.isNotEmpty() || newsFeedGroup.newsFeeds.isNotEmpty()) painterResource(Res.drawable.icon_arrow_right_24px) else null,
+        iconArrowDown = if (!newsFeedGroup.isKeywordBucket || newsFeedGroup.subGroups.isNotEmpty() || newsFeedGroup.newsFeeds.isNotEmpty()) painterResource(Res.drawable.icon_arrow_drop_down_24px) else null,
         trailingIcon = {
-            EditButtonsTop(
-                state,
-                onAction,
-                newsFeedGroup
-            )
+            if (state.isEditMode) {
+                Row() {
+                    IndicatorButton(
+                        modifier = Modifier,
+                        width = 30.dp,
+                        height = 30.dp,
+                        padding = 2.dp,
+                        leadingIcon = painterResource(Res.drawable.icon_edit_24px)
+                    ) {
+                        onAction(NewsHomeReaderAction.OnEditNewsfeedGroupGroupClick(newsFeedGroup))
+                    }
+
+                    IndicatorButton(
+                        modifier = Modifier,
+                        width = 30.dp,
+                        height = 30.dp,
+                        padding = 2.dp,
+                        leadingIcon = painterResource(Res.drawable.icon_delete_24px)
+                    ) {
+                        onAction(NewsHomeReaderAction.OnDeleteNewsfeedGroupClick(newsFeedGroup))
+                    }
+                }
+            }
         },
     ) {
         Column(
