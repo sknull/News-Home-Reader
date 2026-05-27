@@ -611,7 +611,7 @@ class NewsHomeReaderViewModel(
                     val stayInGroup = !action.isExpanded &&
                             it.currentNewsFeedName != null &&
                             it.previousNewsFeedGroup == it.currentNewsFeedGroup
-                    val newCollapsibleState = if (!action.group.isKeywordBucket || action.group.subGroups.isNotEmpty() || action.group.newsFeeds.isNotEmpty()) {
+                    val newCollapsibleState = if (state.value.isEditMode || !action.group.isKeywordBucket && (action.group.subGroups.isNotEmpty() || action.group.newsFeeds.isNotEmpty())) {
                         it.collapsibleState + if (stayInGroup) {
                             ("group_${action.group.name}" to true)
                         } else {
