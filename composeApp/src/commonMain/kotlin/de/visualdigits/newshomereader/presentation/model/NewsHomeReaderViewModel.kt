@@ -611,7 +611,10 @@ class NewsHomeReaderViewModel(
                     val stayInGroup = !action.isExpanded &&
                             it.currentNewsFeedName != null &&
                             it.previousNewsFeedGroup == it.currentNewsFeedGroup
-                    val newCollapsibleState = if (state.value.isEditMode || !action.group.isKeywordBucket && (action.group.subGroups.isNotEmpty() || action.group.newsFeeds.isNotEmpty())) {
+                    val newCollapsibleState = if (
+                        (state.value.isEditMode && !action.group.isKeywordBucket) ||
+                        (action.group.subGroups.isNotEmpty() || action.group.newsFeeds.isNotEmpty())
+                        ) {
                         it.collapsibleState + if (stayInGroup) {
                             ("group_${action.group.name}" to true)
                         } else {
@@ -818,6 +821,12 @@ class NewsHomeReaderViewModel(
 
             is Result.Error -> {
                 log(Severity.Error, "Could not add newsfeed group '$newsFeedGroupName'", addResult.throwable, withTag = "NHR")
+                _state.update {
+                    it.copy(
+                        isAddingNewsFeedGroup = false,
+                        isEditingNewsFeedGroup = false,
+                    )
+                }
             }
         }
     }

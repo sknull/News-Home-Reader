@@ -91,7 +91,7 @@ fun NewsFeedGroupBox(
         iconArrowRight = if (!newsFeedGroup.isKeywordBucket || newsFeedGroup.subGroups.isNotEmpty() || newsFeedGroup.newsFeeds.isNotEmpty()) painterResource(Res.drawable.icon_arrow_right_24px) else null,
         iconArrowDown = if (!newsFeedGroup.isKeywordBucket || newsFeedGroup.subGroups.isNotEmpty() || newsFeedGroup.newsFeeds.isNotEmpty()) painterResource(Res.drawable.icon_arrow_drop_down_24px) else null,
         trailingIcon = {
-            if (state.isEditMode) {
+            if (state.isEditMode && newsFeedGroup.isEditable) {
                 Row() {
                     IndicatorButton(
                         modifier = Modifier,

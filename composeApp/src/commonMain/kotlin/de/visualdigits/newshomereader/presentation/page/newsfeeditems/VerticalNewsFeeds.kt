@@ -140,6 +140,7 @@ fun VerticalNewsFeeds(
                                         id = -1,
                                         name = labelKeywordBuckets,
                                         isKeywordBucket = true,
+                                        isEditable = false,
                                         subGroups = state.newsFeedGroups
                                             .filter { nfg -> nfg.isKeywordBucket }
                                             .sortedBy { nfg -> nfg.name }
