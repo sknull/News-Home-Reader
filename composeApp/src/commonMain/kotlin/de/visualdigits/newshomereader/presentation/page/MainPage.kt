@@ -14,11 +14,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import de.visualdigits.common.domain.model.HsvColor
 import de.visualdigits.common.presentation.components.BindBackHandler
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.container.ErrorCard
@@ -49,17 +49,10 @@ fun MainPage(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val displayTheme = state.settings?.get<DisplayThemeEnum>(SK.displayTheme) ?: LIGHT
-    val spotColor = state.settings?.get<Color>(SK.spotColor)?: DisplayThemeEnum.SPOT_COLOR_DEFAULT
+    val spotColor = state.settings?.get<HsvColor>(SK.spotColor)?: DisplayThemeEnum.SPOT_COLOR_DEFAULT
     val maxImageSize = state.settings?.get<Int>(SK.maxImageSize) ?: 1200
 
     val uriHandler = LocalUriHandler.current
-
-//    val onCommonAction: (CommonAction) -> Unit = { action ->
-//        viewModel.onCommonAction(action)
-//    }
-//    val onAction: (NewsHomeReaderAction) -> Unit = { action ->
-//        viewModel.onAction(action)
-//    }
 
     BindBackHandler(isEnabled = state.currentNewsArticle != null) {
         viewModel.onAction(NewsHomeReaderAction.OnNewsItemClosed())

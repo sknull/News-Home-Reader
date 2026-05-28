@@ -91,6 +91,7 @@ fun NewsHomeReaderDatabaseQueries.upsertSettings(settingsEntity: SettingsEntity)
 fun NewsHomeReaderDatabaseQueries.insertSettings(settingsEntity: SettingsEntity) {
     insertSettings(
         displayTheme = settingsEntity.displayTheme,
+        clockColor = settingsEntity.clockColor,
         spotColor = settingsEntity.spotColor,
         language = settingsEntity.language,
         hideRead = settingsEntity.hideRead,
@@ -110,6 +111,7 @@ fun NewsHomeReaderDatabaseQueries.insertSettings(settingsEntity: SettingsEntity)
 fun NewsHomeReaderDatabaseQueries.updateSettings(settingsEntity: SettingsEntity) {
     updateSettingsEntity(
         displayTheme = settingsEntity.displayTheme,
+        clockColor = settingsEntity.clockColor,
         spotColor = settingsEntity.spotColor,
         language = settingsEntity.language,
         hideRead = settingsEntity.hideRead,

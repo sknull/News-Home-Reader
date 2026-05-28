@@ -20,12 +20,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import de.visualdigits.common.domain.model.HsvColor
 import de.visualdigits.common.domain.util.copyFactor
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
@@ -218,7 +218,7 @@ fun HorizontalNewsFeeds(
                         showSeconds = false,
                         showDate = true,
                         showYear = true,
-                        colors = state.settings?.get<Color>(SK.clockColor)
+                        colors = state.settings?.get<HsvColor>(SK.clockColor)
                             ?.let { sc -> studioClockColors(sc) }
                             ?: studioClockColors(StudioClockColors.STUDIO_CLOCK_COLOR_DEFAULT)
                     )

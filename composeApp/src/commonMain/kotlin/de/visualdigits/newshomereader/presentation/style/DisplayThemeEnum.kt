@@ -12,6 +12,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import de.visualdigits.common.domain.model.HsvColor
 import de.visualdigits.common.domain.model.StringResourceEnumerable
 import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.keyfactory.KeyFactory
@@ -50,7 +51,7 @@ enum class DisplayThemeEnum(
 
     companion object : KeyFactory<DisplayThemeEnum> {
 
-        val SPOT_COLOR_DEFAULT: Color = Color(0xFF439DDE)
+        val SPOT_COLOR_DEFAULT: HsvColor = HsvColor.fromComposeColor(Color(0xFF439DDE))
 
         override val options: List<Triple<DisplayThemeEnum, UiText?, DrawableResource?>> = entries.map { e -> Triple(e, e.uiText, e.drawableResourceId) }
 
@@ -72,14 +73,14 @@ enum class DisplayThemeEnum(
     }
 }
 
-fun textLinkStyles(spotColor: Color): TextLinkStyles = TextLinkStyles(
+fun textLinkStyles(spotColor: HsvColor): TextLinkStyles = TextLinkStyles(
     style = SpanStyle(
-        color = spotColor,
+        color = spotColor.toComposeColor(),
         textDecoration = TextDecoration.Underline
     )
 )
 
-fun lightTheme(spotColor: Color): ColorScheme = lightColorScheme(
+fun lightTheme(spotColor: HsvColor): ColorScheme = lightColorScheme(
     primary = Color(0xFFFFFFFF),
     onPrimary = Color(0xff000000),
     onPrimaryContainer = Color(0xFFFFFFFF),
@@ -94,7 +95,7 @@ fun lightTheme(spotColor: Color): ColorScheme = lightColorScheme(
     onBackground = Color(0xFF000000),
 
     surface = Color.Transparent,
-    onSurface = spotColor, // deco color
+    onSurface = spotColor.toComposeColor(), // deco color
     primaryFixedDim = Color(0xFFBCBCBC),
 
     inverseSurface = Color(0xFF000000),
@@ -114,7 +115,7 @@ fun lightTheme(spotColor: Color): ColorScheme = lightColorScheme(
     primaryFixed = Color(0xAA000000)
 )
 
-fun anthraciteTheme(spotColor: Color): ColorScheme = darkColorScheme(
+fun anthraciteTheme(spotColor: HsvColor): ColorScheme = darkColorScheme(
     primary = Color(0xFF3C3F40),
     onPrimary = Color(0xFFFFFFFF),
     onPrimaryContainer = Color(0xFFFFFFFF),
@@ -129,7 +130,7 @@ fun anthraciteTheme(spotColor: Color): ColorScheme = darkColorScheme(
     onBackground = Color(0xFFFFFFFF),
 
     surface = Color.Transparent,
-    onSurface = spotColor, // spot color
+    onSurface = spotColor.toComposeColor(), // spot color
     primaryFixedDim = Color(0x77000000),
 
     inverseSurface = Color(0xFFFFFFFF),

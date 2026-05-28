@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import be.digitalia.compose.htmlconverter.HtmlStyle
 import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
+import de.visualdigits.common.domain.model.HsvColor
 import de.visualdigits.common.presentation.components.util.conditional
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_paid_24px
@@ -68,8 +69,7 @@ fun NewsItemCard(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val feedName = newsItem.newsFeed?.feedName?:newsItem.feedName
-    val spotColor = state.settings?.get<Color>(SK.spotColor)?: DisplayThemeEnum.SPOT_COLOR_DEFAULT
-
+    val spotColor = state.settings?.get<HsvColor>(SK.spotColor)?: DisplayThemeEnum.SPOT_COLOR_DEFAULT
 
     Box(
         modifier = modifier

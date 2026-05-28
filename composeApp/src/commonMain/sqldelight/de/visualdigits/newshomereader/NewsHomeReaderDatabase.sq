@@ -13,8 +13,8 @@ import de.visualdigits.common.domain.model.EncryptedString;
 CREATE TABLE SettingsEntity (
     id INTEGER NOT NULL DEFAULT 0,
     displayTheme TEXT NOT NULL,
-    clockColor TEXT NOT NULL DEFAULT "0xFFFF0040",
-    spotColor TEXT NOT NULL DEFAULT "0xffffffff",
+    clockColor TEXT NOT NULL DEFAULT "0159ffff",
+    spotColor TEXT NOT NULL DEFAULT "00cdb2de",
     language TEXT NOT NULL,
     refreshInterval TEXT NOT NULL,
     refreshWifiOnly INTEGER AS Boolean NOT NULL DEFAULT 0,
@@ -31,10 +31,10 @@ CREATE TABLE SettingsEntity (
 
 insertSettings:
 INSERT INTO SettingsEntity (
-    displayTheme, spotColor, language, refreshInterval, refreshWifiOnly, lastMaxImageSize, keepReadArticles,
+    displayTheme, clockColor, spotColor, language, refreshInterval, refreshWifiOnly, lastMaxImageSize, keepReadArticles,
     keepUnreadArticles, loadArticles, hideRead, webDavUrl, webDavDirectory, webDavUser, webDavPassword
 )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 getSettingsById:
 SELECT * FROM SettingsEntity WHERE id = :id;
@@ -42,6 +42,7 @@ SELECT * FROM SettingsEntity WHERE id = :id;
 updateSettingsEntity:
 UPDATE SettingsEntity
 SET displayTheme = :displayTheme,
+    clockColor = :clockColor,
     spotColor = :spotColor,
     language = :language,
     refreshInterval = :refreshInterval,

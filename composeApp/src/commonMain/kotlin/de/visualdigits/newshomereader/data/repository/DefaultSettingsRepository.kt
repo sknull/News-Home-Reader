@@ -1,15 +1,14 @@
 package de.visualdigits.newshomereader.data.repository
 
-import androidx.compose.ui.graphics.Color
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.CryptoBox
 import de.visualdigits.common.domain.model.EncryptedString
+import de.visualdigits.common.domain.model.HsvColor
 import de.visualdigits.common.domain.model.configuration.AbstractConfiguration.Companion.valueMap
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
 import de.visualdigits.common.domain.model.errorhandling.Result
-import de.visualdigits.common.domain.util.toWebColor
 import de.visualdigits.common.presentation.components.StudioClockColors
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.data.database.toSettings
@@ -133,8 +132,8 @@ private fun Settings.toSettingsRepositoryEntity(cryptoBox: CryptoBox): SettingsR
     val settingsEntity = SettingsRepositoryEntity(
         id = 0,
         displayTheme = get<DisplayThemeEnum>(SK.displayTheme)?.name ?: "LIGHT",
-        clockColor = get<Color>(SK.clockColor)?.toWebColor() ?: StudioClockColors.STUDIO_CLOCK_COLOR_DEFAULT.toWebColor(),
-        spotColor = get<Color>(SK.spotColor)?.toWebColor() ?: DisplayThemeEnum.SPOT_COLOR_DEFAULT.toWebColor(),
+        clockColor = get<HsvColor>(SK.clockColor)?.hex() ?: StudioClockColors.STUDIO_CLOCK_COLOR_DEFAULT.hex(),
+        spotColor = get<HsvColor>(SK.spotColor)?.hex() ?: DisplayThemeEnum.SPOT_COLOR_DEFAULT.hex(),
         language = get<Language>(SK.language)?.name ?: "EN",
         hideRead = get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
         loadArticles = get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false,

@@ -1,11 +1,9 @@
 package de.visualdigits.newshomereader.data.database
 
-import androidx.compose.ui.graphics.Color
 import app.cash.sqldelight.ColumnAdapter
+import de.visualdigits.common.domain.model.HsvColor
 import de.visualdigits.common.domain.model.configuration.AbstractConfiguration.Companion.valueMap
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
-import de.visualdigits.common.domain.util.toComposeColor
-import de.visualdigits.common.domain.util.toWebColor
 import de.visualdigits.newshomereader.FullArticleEntity
 import de.visualdigits.newshomereader.GetAllNewsItemsWithArticles
 import de.visualdigits.newshomereader.NewsFeedEntity
@@ -36,8 +34,8 @@ fun Settings.toSettingsEntity(): SettingsEntity {
     val settingsEntity = SettingsEntity(
         id = 0,
         displayTheme = get<DisplayThemeEnum>(SK.displayTheme)?.name ?: "LIGHT",
-        clockColor = get<Color>(SK.clockColor)?.toWebColor() ?: "",
-        spotColor = get<Color>(SK.spotColor)?.toWebColor() ?: "",
+        clockColor = get<HsvColor>(SK.clockColor)?.hex() ?: "",
+        spotColor = get<HsvColor>(SK.spotColor)?.hex() ?: "",
         language = get<Language>(SK.language)?.name ?: "EN",
         hideRead = get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
         loadArticles = get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false,
@@ -60,8 +58,8 @@ fun SettingsEntity.toSettings(): Settings {
             fieldDescriptors = Settings.DESCRIPTORS,
             values = mapOf(
                 SK.displayTheme to DisplayThemeEnum.fromValue(displayTheme),
-                SK.clockColor to clockColor.toComposeColor(),
-                SK.spotColor to spotColor.toComposeColor(),
+                SK.clockColor to HsvColor.fromHex(clockColor),
+                SK.spotColor to HsvColor.fromHex(spotColor),
                 SK.language to Language.fromValue(language),
                 SK.hideRead to BooleanEnum.fromValue(hideRead),
                 SK.loadArticles to BooleanEnum.fromValue(loadArticles),
