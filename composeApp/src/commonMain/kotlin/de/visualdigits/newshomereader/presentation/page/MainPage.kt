@@ -11,7 +11,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -19,10 +18,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.visualdigits.common.presentation.components.BindBackHandler
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.container.ErrorCard
-import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
@@ -48,19 +47,19 @@ fun MainPage(
     viewModel: NewsHomeReaderViewModel,
     connectivityManager: ConnectivityManager
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
     val displayTheme = state.settings?.get<DisplayThemeEnum>(SK.displayTheme) ?: LIGHT
     val spotColor = state.settings?.get<Color>(SK.spotColor)?: DisplayThemeEnum.SPOT_COLOR_DEFAULT
     val maxImageSize = state.settings?.get<Int>(SK.maxImageSize) ?: 1200
 
     val uriHandler = LocalUriHandler.current
 
-    val onCommonAction: (CommonAction) -> Unit = { action ->
-        viewModel.onCommonAction(action)
-    }
-    val onAction: (NewsHomeReaderAction) -> Unit = { action ->
-        viewModel.onAction(action)
-    }
+//    val onCommonAction: (CommonAction) -> Unit = { action ->
+//        viewModel.onCommonAction(action)
+//    }
+//    val onAction: (NewsHomeReaderAction) -> Unit = { action ->
+//        viewModel.onAction(action)
+//    }
 
     BindBackHandler(isEnabled = state.currentNewsArticle != null) {
         viewModel.onAction(NewsHomeReaderAction.OnNewsItemClosed())
@@ -110,7 +109,7 @@ fun MainPage(
                 // Umrechnung von Dp in Pixel für Coil
                 val wPx = with(density) { screenWidth.roundToPx() }
                 val hPx = with(density) { screenHeight.roundToPx() }
-                onAction(NewsHomeReaderAction.UpdateMaxImageSize(state.settings, max(wPx, hPx)))
+                viewModel.onAction(NewsHomeReaderAction.UpdateMaxImageSize(state.settings, max(wPx, hPx)))
             }
 
             Box(
@@ -133,9 +132,9 @@ fun MainPage(
                     NewsItemSearchBar(
                         state = state,
                         screenWidth = screenWidth,
-                        onAction = onAction,
+                        onAction = viewModel::onAction,
                         scrollPosition = viewModel.scrollPosition,
-                        onCommonAction = onCommonAction,
+                        onCommonAction = viewModel::onCommonAction,
                         rowDataFiltered = rowDataFiltered,
                         maxImageSize = maxImageSize,
                         displayTheme = displayTheme,
@@ -144,7 +143,7 @@ fun MainPage(
 
                     MainMenuBar(
                         state = state,
-                        onAction = onAction,
+                        onAction = viewModel::onAction,
                         connectivityManager = connectivityManager
                     )
 
@@ -152,7 +151,7 @@ fun MainPage(
                         state.isShowInfos -> {
                             InfoPage(
                                 uriHandler = uriHandler,
-                                onAction = onAction
+                                onAction = viewModel::onAction
                             )
                         }
                         state.isEditingSettings -> {
@@ -160,27 +159,27 @@ fun MainPage(
                                 viewModel = viewModel,
                                 state = state,
                                 scrollPosition = viewModel.scrollPosition,
-                                onCommonAction = onCommonAction,
-                                onAction = onAction
+                                onCommonAction = viewModel::onCommonAction,
+                                onAction = viewModel::onAction
                             )
                         }
                         state.isAddingNewsFeedConfiguration || state.isEditingNewsFeedConfiguration -> {
                             NewsFeedConfigurationPage(
                                 state = state,
                                 viewModel = viewModel,
-                                onCommonAction = onCommonAction,
-                                onAction = onAction
+                                onCommonAction = viewModel::onCommonAction,
+                                onAction = viewModel::onAction
                             )
                         }
                         state.isViewingCatalog -> {
                             CatalogPage(
                                 state = state,
                                 screenWidth = screenWidth,
-                                onAction = onAction,
+                                onAction = viewModel::onAction,
                                 viewModel = viewModel,
                                 uriHandler = uriHandler,
                                 displayTheme = displayTheme,
-                                onCommonAction = onCommonAction
+                                onCommonAction = viewModel::onCommonAction
                             )
                         }
                         else -> {
@@ -194,8 +193,8 @@ fun MainPage(
                                 uriHandler = uriHandler,
                                 connectivityManager = connectivityManager,
                                 displayTheme = displayTheme,
-                                onCommonAction = onCommonAction,
-                                onAction = onAction
+                                onCommonAction = viewModel::onCommonAction,
+                                onAction = viewModel::onAction
                             )
                         }
                     }
@@ -203,12 +202,12 @@ fun MainPage(
 
                 NewsFeedConfigurationGroupDialog(
                     state = state,
-                    onAction = onAction
+                    onAction = viewModel::onAction
                 )
 
                 ConfirmDeleteNewsFeedGroupDialog(
                     state = state,
-                    onAction = onAction
+                    onAction = viewModel::onAction
                 )
             }
         }

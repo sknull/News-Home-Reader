@@ -52,7 +52,7 @@
   <string name="label_imageUrl">Image URL</string>
   <string name="label_keep_read_articles">Keep Read Articles</string>
   <string name="label_keep_unread_articles">Keep Unread Articles</string>
-  <string name="label_keyword_buckets">Keyword Buckets</string>
+  <string name="label_keyword_buckets">Keywords</string>
   <string name="label_language">Language</string>
   <string name="label_load_articles">Prefetch Articles</string>
   <string name="label_maingroupName">Group Name</string>

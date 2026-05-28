@@ -52,7 +52,7 @@
   <string name="label_imageUrl">Icon URL</string>
   <string name="label_keep_read_articles">Behalte gelesene Artikel</string>
   <string name="label_keep_unread_articles">Behalte ungelesene Artikel</string>
-  <string name="label_keyword_buckets">Stichwort Sammlungen</string>
+  <string name="label_keyword_buckets">Stichworte</string>
   <string name="label_language">Sprache</string>
   <string name="label_load_articles">Artikel vorladen</string>
   <string name="label_maingroupName">Gruppen Name</string>
