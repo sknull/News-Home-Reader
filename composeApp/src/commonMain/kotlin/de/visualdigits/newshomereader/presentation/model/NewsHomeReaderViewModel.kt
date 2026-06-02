@@ -39,7 +39,10 @@ import de.visualdigits.newshomereader.domain.repository.CatalogRepository
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
 import de.visualdigits.newshomereader.domain.repository.NewsFeedConfigurationRepository
 import de.visualdigits.newshomereader.domain.repository.SettingsRepository
-import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
+import de.visualdigits.newshomereader.presentation.style.BACKGROUND_COLOR_DEFAULT
+import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
+import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
+import de.visualdigits.newshomereader.presentation.style.TEXT_COLOR_DEFAULT
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -1381,9 +1384,11 @@ class NewsHomeReaderViewModel(
                 settings
             } else {
                 val newSettings = Settings(mapOf(
-                    SK.displayTheme to DisplayThemeEnum.LIGHT,
+                    SK.backgroundColor to BACKGROUND_COLOR_DEFAULT,
+                    SK.buttonColor to BUTTON_COLOR_DEFAULT,
+                    SK.textColor to TEXT_COLOR_DEFAULT,
+                    SK.spotColor to SPOT_COLOR_DEFAULT,
                     SK.clockColor to StudioClockColors.STUDIO_CLOCK_COLOR_DEFAULT,
-                    SK.spotColor to DisplayThemeEnum.SPOT_COLOR_DEFAULT,
                     SK.language to Language.EN,
                     SK.refreshInterval to RefreshIntervalEnum.MINUTES_60,
                     SK.refreshWifiOnly to BooleanEnum.TRUE,

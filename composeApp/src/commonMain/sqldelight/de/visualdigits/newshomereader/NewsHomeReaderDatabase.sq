@@ -12,9 +12,11 @@ import de.visualdigits.common.domain.model.EncryptedString;
 --
 CREATE TABLE SettingsEntity (
     id INTEGER NOT NULL DEFAULT 0,
-    displayTheme TEXT NOT NULL,
-    clockColor TEXT NOT NULL DEFAULT "0159ffff",
+    backgroundColor TEXT NOT NULL DEFAULT "00ffffff",
+    buttonColor TEXT NOT NULL DEFAULT "00888888",
+    textColor TEXT NOT NULL DEFAULT "00000000",
     spotColor TEXT NOT NULL DEFAULT "00cdb2de",
+    clockColor TEXT NOT NULL DEFAULT "0159ffff",
     language TEXT NOT NULL,
     refreshInterval TEXT NOT NULL,
     refreshWifiOnly INTEGER AS Boolean NOT NULL DEFAULT 0,
@@ -31,19 +33,21 @@ CREATE TABLE SettingsEntity (
 
 insertSettings:
 INSERT INTO SettingsEntity (
-    displayTheme, clockColor, spotColor, language, refreshInterval, refreshWifiOnly, lastMaxImageSize, keepReadArticles,
+    backgroundColor, buttonColor, textColor, spotColor, clockColor, language, refreshInterval, refreshWifiOnly, lastMaxImageSize, keepReadArticles,
     keepUnreadArticles, loadArticles, hideRead, webDavUrl, webDavDirectory, webDavUser, webDavPassword
 )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 getSettingsById:
 SELECT * FROM SettingsEntity WHERE id = :id;
 
 updateSettingsEntity:
 UPDATE SettingsEntity
-SET displayTheme = :displayTheme,
-    clockColor = :clockColor,
+SET backgroundColor = :backgroundColor,
+    buttonColor = :buttonColor,
+    textColor = :textColor,
     spotColor = :spotColor,
+    clockColor = :clockColor,
     language = :language,
     refreshInterval = :refreshInterval,
     refreshWifiOnly = :refreshWifiOnly,

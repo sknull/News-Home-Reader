@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import de.visualdigits.common.domain.model.FileMode
+import de.visualdigits.common.domain.model.HsvColor
 import de.visualdigits.common.presentation.components.PlatformFileChooser
 import de.visualdigits.common.presentation.components.PlatformFileSaver
 import de.visualdigits.compose.resources.Res
@@ -20,7 +22,10 @@ import de.visualdigits.compose.resources.icon_upload_24px
 import de.visualdigits.compose.resources.label_opml
 import de.visualdigits.compose.resources.label_settings
 import de.visualdigits.compose.resources.save
+import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
+import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -31,8 +36,11 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun SettingsMenuBar(
+    state: NewsHomeReaderState,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
+    val buttonColor = remember { (state.settings?.get<HsvColor>(SK.buttonColor) ?: BUTTON_COLOR_DEFAULT).toComposeColor() }
+
     val homeDirectoryPath: String = koinInject(qualifier = named("homeDirectory"))
 
     FlowRow(
@@ -47,7 +55,7 @@ fun SettingsMenuBar(
             buttonTextAlign = TextAlign.Start,
             title = stringResource(Res.string.dialog_title_import_opml),
             fileMode = FileMode.FILES_ONLY,
-            buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+            buttonColor = buttonColor,
             leadingIcon = painterResource(Res.drawable.icon_download_24px),
             homeDirectoryPath = homeDirectoryPath,
         ) { fileName, ins ->
@@ -64,7 +72,7 @@ fun SettingsMenuBar(
             suggestedFileName = "newshomereader-export_${
                 OffsetDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
             }.opml",
-            buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+            buttonColor = buttonColor,
             leadingIcon = painterResource(Res.drawable.icon_upload_24px),
             homeDirectoryPath = homeDirectoryPath,
         ) { fileName, outs ->
@@ -77,7 +85,7 @@ fun SettingsMenuBar(
             buttonTextAlign = TextAlign.Start,
             title = stringResource(Res.string.dialog_title_import_settings),
             fileMode = FileMode.FILES_ONLY,
-            buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+            buttonColor = buttonColor,
             leadingIcon = painterResource(Res.drawable.icon_download_24px),
             homeDirectoryPath = homeDirectoryPath,
         ) { fileName, ins ->
@@ -94,7 +102,7 @@ fun SettingsMenuBar(
             suggestedFileName = "newshomereader-settings_${
                 OffsetDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
             }.json",
-            buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+            buttonColor = buttonColor,
             leadingIcon = painterResource(Res.drawable.icon_upload_24px),
             homeDirectoryPath = homeDirectoryPath,
         ) { fileName, outs ->
@@ -111,7 +119,7 @@ fun SettingsMenuBar(
             suggestedFileName = "newshomereader-logs_${
                 OffsetDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
             }.log",
-            buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+            buttonColor = buttonColor,
             leadingIcon = painterResource(Res.drawable.icon_upload_24px),
             homeDirectoryPath = homeDirectoryPath,
         ) { fileName, outs ->

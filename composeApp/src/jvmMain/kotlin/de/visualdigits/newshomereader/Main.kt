@@ -10,6 +10,9 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
+import com.formdev.flatlaf.FlatDarculaLaf
+import com.formdev.flatlaf.FlatLightLaf
+import de.visualdigits.common.domain.model.HsvColor
 import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.domain.service.getPlatformLogWriters
 import de.visualdigits.compose.resources.Res
@@ -20,7 +23,7 @@ import de.visualdigits.newshomereader.di.sharedModule
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
-import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
+import de.visualdigits.newshomereader.presentation.style.BACKGROUND_COLOR_DEFAULT
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -79,10 +82,11 @@ fun main() {
 
         LaunchedEffect(viewModel) {
             viewModel.state.collect { state ->
-                val displayTheme = state.settings?.get<DisplayThemeEnum>(SK.displayTheme) ?: DisplayThemeEnum.LIGHT
+                val backgroundColorValue = (state.settings?.get<HsvColor>(SK.backgroundColor) ?: BACKGROUND_COLOR_DEFAULT).value
+                val laf = if (backgroundColorValue < 0.5f) FlatDarculaLaf() else FlatLightLaf()
                 withContext(Dispatchers.Main) {
                     try {
-                        UIManager.setLookAndFeel(displayTheme.laf)
+                        UIManager.setLookAndFeel(laf)
                         SwingUtilities.invokeLater {
                             for (window in Window.getWindows()) {
                                 SwingUtilities.updateComponentTreeUI(window)

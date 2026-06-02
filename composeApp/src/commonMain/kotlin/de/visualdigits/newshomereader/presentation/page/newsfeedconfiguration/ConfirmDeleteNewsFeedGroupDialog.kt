@@ -38,8 +38,8 @@ fun ConfirmDeleteNewsFeedGroupDialog(
         AlertDialog(
             modifier = Modifier
                 .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.small),
-            containerColor = MaterialTheme.colorScheme.error,
-            textContentColor = MaterialTheme.colorScheme.onError,
+            containerColor = MaterialTheme.colorScheme.errorContainer,
+            textContentColor = MaterialTheme.colorScheme.onErrorContainer,
             shape = MaterialTheme.shapes.small,
             onDismissRequest = {},
             title = {
@@ -80,8 +80,8 @@ fun ConfirmDeleteNewsFeedGroupDialog(
                 IndicatorButton(
                     modifier = Modifier,
                     text = stringResource(Res.string.ok),
-                    textColor = MaterialTheme.colorScheme.error,
-                    buttonColor = MaterialTheme.colorScheme.onError
+                    textColor = MaterialTheme.colorScheme.errorContainer,
+                    buttonColor = MaterialTheme.colorScheme.onErrorContainer
                 ) {
                     if (state.isDeletingNewsFeedConfiguration) {
                         onAction(NewsHomeReaderAction.OnDeleteNewsFeedConfigurationOkClick())
@@ -95,7 +95,7 @@ fun ConfirmDeleteNewsFeedGroupDialog(
                     modifier = Modifier,
                     text = stringResource(Res.string.cancel),
                     textColor = MaterialTheme.colorScheme.error,
-                    buttonColor = MaterialTheme.colorScheme.onError
+                    buttonColor = MaterialTheme.colorScheme.onErrorContainer
                 ) {
                     if (state.isDeletingNewsFeedConfiguration) {
                         onAction(NewsHomeReaderAction.OnDeleteNewsFeedConfigurationCancelClick())

@@ -30,6 +30,14 @@
   <string name="group_display_theme">Display Theme</string>
   <string name="group_feed_seetings">Feed Settings</string>
   <string name="group_webdav">WebDAV</string>
+
+  <string name="label_backgroundColor">Background Color</string>
+  <string name="tooltip_backgroundColor">Background Color</string>
+  <string name="label_buttonColor">Button Color</string>
+  <string name="tooltip_buttonColor">Button Color</string>
+  <string name="label_textColor">Text Color</string>
+  <string name="tooltip_textColor">Text Color</string>
+
   <string name="label_10_minutes">10 Minutes</string>
   <string name="label_14_days">14 Days</string>
   <string name="label_15_minutes">15 Minutes</string>

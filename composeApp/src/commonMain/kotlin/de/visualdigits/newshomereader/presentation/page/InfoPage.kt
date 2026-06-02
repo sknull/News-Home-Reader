@@ -16,11 +16,15 @@ import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.unit.dp
 import be.digitalia.compose.htmlconverter.HtmlStyle
 import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
+import de.visualdigits.common.domain.model.HsvColor
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.ok
 import de.visualdigits.generated.AppVersion
+import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
+import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
 import org.jetbrains.compose.resources.stringResource
 import java.time.LocalDate
@@ -29,13 +33,16 @@ import java.time.temporal.ChronoField
 
 @Composable
 fun InfoPage(
+    state: NewsHomeReaderState,
     uriHandler: UriHandler,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
+    val buttonColor = remember { (state.settings?.get<HsvColor>(SK.buttonColor) ?: BUTTON_COLOR_DEFAULT).toComposeColor() }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surfaceContainerLow, MaterialTheme.shapes.small)
+            .background(MaterialTheme.colorScheme.surfaceContainer, MaterialTheme.shapes.small)
             .padding(MaterialTheme.shapes.gap)
     ) {
         val linkColor = MaterialTheme.colorScheme.onSurface
@@ -65,7 +72,7 @@ fun InfoPage(
         IndicatorButton(
             modifier = Modifier,
             text = stringResource(Res.string.ok),
-            buttonColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+            buttonColor = buttonColor,
             width = 50.dp,
             height = 50.dp,
         ) {

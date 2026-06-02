@@ -15,8 +15,9 @@ import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.group_display_theme
 import de.visualdigits.compose.resources.group_feed_seetings
 import de.visualdigits.compose.resources.group_webdav
+import de.visualdigits.compose.resources.label_backgroundColor
+import de.visualdigits.compose.resources.label_buttonColor
 import de.visualdigits.compose.resources.label_clockColor
-import de.visualdigits.compose.resources.label_displayTheme
 import de.visualdigits.compose.resources.label_hide_read
 import de.visualdigits.compose.resources.label_keep_read_articles
 import de.visualdigits.compose.resources.label_keep_unread_articles
@@ -25,12 +26,14 @@ import de.visualdigits.compose.resources.label_load_articles
 import de.visualdigits.compose.resources.label_refresh_interval
 import de.visualdigits.compose.resources.label_refresh_wifi_only
 import de.visualdigits.compose.resources.label_spotColor
+import de.visualdigits.compose.resources.label_textColor
 import de.visualdigits.compose.resources.label_webDavDirectory
 import de.visualdigits.compose.resources.label_webDavPassword
 import de.visualdigits.compose.resources.label_webDavUrl
 import de.visualdigits.compose.resources.label_webDavUser
+import de.visualdigits.compose.resources.tooltip_backgroundColor
+import de.visualdigits.compose.resources.tooltip_buttonColor
 import de.visualdigits.compose.resources.tooltip_clockColor
-import de.visualdigits.compose.resources.tooltip_displayTheme
 import de.visualdigits.compose.resources.tooltip_hide_read
 import de.visualdigits.compose.resources.tooltip_keep_read_articles
 import de.visualdigits.compose.resources.tooltip_keep_unread_articles
@@ -39,6 +42,7 @@ import de.visualdigits.compose.resources.tooltip_load_articles
 import de.visualdigits.compose.resources.tooltip_refresh_interval
 import de.visualdigits.compose.resources.tooltip_refresh_wifi_only
 import de.visualdigits.compose.resources.tooltip_spotColor
+import de.visualdigits.compose.resources.tooltip_textColor
 import de.visualdigits.compose.resources.tooltip_webDavDirectory
 import de.visualdigits.compose.resources.tooltip_webDavPassword
 import de.visualdigits.compose.resources.tooltip_webDavUrl
@@ -46,7 +50,10 @@ import de.visualdigits.compose.resources.tooltip_webDavUser
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum
 import de.visualdigits.newshomereader.domain.model.type.Language
-import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
+import de.visualdigits.newshomereader.presentation.style.BACKGROUND_COLOR_DEFAULT
+import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
+import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
+import de.visualdigits.newshomereader.presentation.style.TEXT_COLOR_DEFAULT
 
 @Immutable
 class Settings(
@@ -67,25 +74,40 @@ class Settings(
                 default = Language.EN
             ),
 
-            /** Display Theme. */
-            EnumFieldDescriptor(
-                fieldClass = DisplayThemeEnum::class,
+            /** The background color. */
+            ColorPickerFieldDescriptor(
                 group = UiText.StringResourceId(Res.string.group_display_theme),
-                key = SK.displayTheme,
-                label =  UiText.StringResourceId(Res.string.label_displayTheme),
-                toolTip =  UiText.StringResourceId(Res.string.tooltip_displayTheme),
-                options = { _, _ -> DisplayThemeEnum.options },
-                keyFactory = DisplayThemeEnum,
-                default = DisplayThemeEnum.LIGHT
+                key = SK.backgroundColor,
+                label = UiText.StringResourceId(Res.string.label_backgroundColor),
+                toolTip = UiText.StringResourceId(Res.string.tooltip_backgroundColor),
+                default = BACKGROUND_COLOR_DEFAULT,
+            ),
+
+            /** The button color. */
+            ColorPickerFieldDescriptor(
+                group = UiText.StringResourceId(Res.string.group_display_theme),
+                key = SK.buttonColor,
+                label = UiText.StringResourceId(Res.string.label_buttonColor),
+                toolTip = UiText.StringResourceId(Res.string.tooltip_buttonColor),
+                default = BUTTON_COLOR_DEFAULT,
+            ),
+
+            /** The text color. */
+            ColorPickerFieldDescriptor(
+                group = UiText.StringResourceId(Res.string.group_display_theme),
+                key = SK.textColor,
+                label = UiText.StringResourceId(Res.string.label_textColor),
+                toolTip = UiText.StringResourceId(Res.string.tooltip_textColor),
+                default = TEXT_COLOR_DEFAULT,
             ),
 
             /** The spot color. */
             ColorPickerFieldDescriptor(
                 group = UiText.StringResourceId(Res.string.group_display_theme),
                 key = SK.spotColor,
-                label =  UiText.StringResourceId(Res.string.label_spotColor),
-                toolTip =  UiText.StringResourceId(Res.string.tooltip_spotColor),
-                default = DisplayThemeEnum.SPOT_COLOR_DEFAULT
+                label = UiText.StringResourceId(Res.string.label_spotColor),
+                toolTip = UiText.StringResourceId(Res.string.tooltip_spotColor),
+                default = SPOT_COLOR_DEFAULT,
             ),
 
             /** The studio clock color. */

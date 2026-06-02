@@ -32,12 +32,11 @@ import de.visualdigits.newshomereader.presentation.page.newsfeedconfiguration.Ne
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.NewsContent
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.NewsItemSearchBar
 import de.visualdigits.newshomereader.presentation.page.settings.SettingsPage
-import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
-import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum.ANTHRACITE
-import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum.LIGHT
+import de.visualdigits.newshomereader.presentation.style.BACKGROUND_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.MyShapes
-import de.visualdigits.newshomereader.presentation.style.anthraciteTheme
-import de.visualdigits.newshomereader.presentation.style.lightTheme
+import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
+import de.visualdigits.newshomereader.presentation.style.TEXT_COLOR_DEFAULT
+import de.visualdigits.newshomereader.presentation.style.theme
 import de.visualdigits.newshomereader.presentation.style.typography
 import kotlin.math.max
 
@@ -48,8 +47,9 @@ fun MainPage(
     connectivityManager: ConnectivityManager
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val displayTheme = state.settings?.get<DisplayThemeEnum>(SK.displayTheme) ?: LIGHT
-    val spotColor = state.settings?.get<HsvColor>(SK.spotColor)?: DisplayThemeEnum.SPOT_COLOR_DEFAULT
+    val backgroundColor = state.settings?.get<HsvColor>(SK.backgroundColor)?: BACKGROUND_COLOR_DEFAULT
+    val textColor = state.settings?.get<HsvColor>(SK.textColor) ?: TEXT_COLOR_DEFAULT
+    val spotColor = state.settings?.get<HsvColor>(SK.spotColor) ?: SPOT_COLOR_DEFAULT
     val maxImageSize = state.settings?.get<Int>(SK.maxImageSize) ?: 1200
 
     val uriHandler = LocalUriHandler.current
@@ -58,10 +58,11 @@ fun MainPage(
         viewModel.onAction(NewsHomeReaderAction.OnNewsItemClosed())
     }
 
-    val colorScheme = when (displayTheme) {
-        LIGHT -> lightTheme(spotColor)
-        ANTHRACITE -> anthraciteTheme(spotColor)
-    }
+    val colorScheme = theme(
+        backgroundColor = backgroundColor,
+        textColor = textColor,
+        spotColor = spotColor
+    )
 
     BoxWithConstraints(
         modifier = Modifier
@@ -93,7 +94,7 @@ fun MainPage(
         MaterialTheme(
             colorScheme = colorScheme,
             typography = typography(
-                textColor = displayTheme.textColor,
+                textColor = textColor.toComposeColor(),
                 sizeFactor = sizeFactor
             ),
             shapes = MyShapes
@@ -130,7 +131,6 @@ fun MainPage(
                         onCommonAction = viewModel::onCommonAction,
                         rowDataFiltered = rowDataFiltered,
                         maxImageSize = maxImageSize,
-                        displayTheme = displayTheme,
                         uriHandler = uriHandler
                     )
 
@@ -143,6 +143,7 @@ fun MainPage(
                     when {
                         state.isShowInfos -> {
                             InfoPage(
+                                state = state,
                                 uriHandler = uriHandler,
                                 onAction = viewModel::onAction
                             )
@@ -171,7 +172,6 @@ fun MainPage(
                                 onAction = viewModel::onAction,
                                 viewModel = viewModel,
                                 uriHandler = uriHandler,
-                                displayTheme = displayTheme,
                                 onCommonAction = viewModel::onCommonAction
                             )
                         }
@@ -185,7 +185,6 @@ fun MainPage(
                                 maxImageSize = maxImageSize,
                                 uriHandler = uriHandler,
                                 connectivityManager = connectivityManager,
-                                displayTheme = displayTheme,
                                 onCommonAction = viewModel::onCommonAction,
                                 onAction = viewModel::onAction
                             )

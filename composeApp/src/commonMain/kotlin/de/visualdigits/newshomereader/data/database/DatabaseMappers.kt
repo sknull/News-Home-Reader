@@ -4,6 +4,7 @@ import app.cash.sqldelight.ColumnAdapter
 import de.visualdigits.common.domain.model.HsvColor
 import de.visualdigits.common.domain.model.configuration.AbstractConfiguration.Companion.valueMap
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
+import de.visualdigits.common.presentation.components.StudioClockColors
 import de.visualdigits.newshomereader.FullArticleEntity
 import de.visualdigits.newshomereader.GetAllNewsItemsWithArticles
 import de.visualdigits.newshomereader.NewsFeedEntity
@@ -24,7 +25,10 @@ import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
-import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
+import de.visualdigits.newshomereader.presentation.style.BACKGROUND_COLOR_DEFAULT
+import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
+import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
+import de.visualdigits.newshomereader.presentation.style.TEXT_COLOR_DEFAULT
 import kotlinx.serialization.json.Json
 import java.time.Instant
 import java.time.OffsetDateTime
@@ -33,9 +37,11 @@ import java.time.ZoneOffset
 fun Settings.toSettingsEntity(): SettingsEntity {
     val settingsEntity = SettingsEntity(
         id = 0,
-        displayTheme = get<DisplayThemeEnum>(SK.displayTheme)?.name ?: "LIGHT",
-        clockColor = get<HsvColor>(SK.clockColor)?.hex() ?: "",
-        spotColor = get<HsvColor>(SK.spotColor)?.hex() ?: "",
+        backgroundColor = get<HsvColor>(SK.backgroundColor)?.hex() ?: BACKGROUND_COLOR_DEFAULT.hex(),
+        buttonColor = get<HsvColor>(SK.buttonColor)?.hex() ?: BUTTON_COLOR_DEFAULT.hex(),
+        textColor = get<HsvColor>(SK.textColor)?.hex() ?: TEXT_COLOR_DEFAULT.hex(),
+        spotColor = get<HsvColor>(SK.spotColor)?.hex() ?: SPOT_COLOR_DEFAULT.hex(),
+        clockColor = get<HsvColor>(SK.clockColor)?.hex() ?: StudioClockColors.STUDIO_CLOCK_COLOR_DEFAULT.hex(),
         language = get<Language>(SK.language)?.name ?: "EN",
         hideRead = get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
         loadArticles = get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false,
@@ -57,9 +63,11 @@ fun SettingsEntity.toSettings(): Settings {
         valueMap(
             fieldDescriptors = Settings.DESCRIPTORS,
             values = mapOf(
-                SK.displayTheme to DisplayThemeEnum.fromValue(displayTheme),
-                SK.clockColor to HsvColor.fromHex(clockColor),
+                SK.backgroundColor to HsvColor.fromHex(backgroundColor),
+                SK.buttonColor to HsvColor.fromHex(buttonColor),
+                SK.textColor to HsvColor.fromHex(textColor),
                 SK.spotColor to HsvColor.fromHex(spotColor),
+                SK.clockColor to HsvColor.fromHex(clockColor),
                 SK.language to Language.fromValue(language),
                 SK.hideRead to BooleanEnum.fromValue(hideRead),
                 SK.loadArticles to BooleanEnum.fromValue(loadArticles),

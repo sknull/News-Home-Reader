@@ -50,7 +50,6 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.page.navigation.NewsFeedGroupBox
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.NewsItemCard
-import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import org.jetbrains.compose.resources.Font
@@ -66,7 +65,6 @@ import org.jetbrains.compose.resources.stringResource
 fun HorizontalNewsFeeds(
     state: NewsHomeReaderState,
     scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
-    displayTheme: DisplayThemeEnum,
     connectivityManager: ConnectivityManager,
     maxWidth: Dp,
     rowData: List<List<NewsItem>>,
@@ -76,7 +74,8 @@ fun HorizontalNewsFeeds(
     onCommonAction: (CommonAction) -> Unit,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
-    val dimFactor = if (displayTheme == DisplayThemeEnum.ANTHRACITE) 1.5f else 1.25f
+    val backgroundColorValue = HsvColor.fromComposeColor(MaterialTheme.colorScheme.background).value
+    val dimFactor = if (backgroundColorValue < 0.5f) 1.5f else 1.25f
     val labelKeywordBuckets = stringResource(Res.string.label_keyword_buckets)
 
     Row(

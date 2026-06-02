@@ -64,6 +64,7 @@ News Home Reader is a privacy first newsreader which means that new items and ar
 - Reading from Atom, RDF and RSS feeds
 - Privacy first approach - nothing is stored outside your device except for syncfiles which may be stored on a WebDAV server of your choice.
 - Custom keyword buckets. You can add a dedicated group which is named with a search phrase. When selecting this group you see only news items containing this keyword. Making this the perfect tool if you want to monitor a certain topic across newsfeeds.
+- Customizable UI colors
 - All news item data and optionally  full articles and their images are stored locally on your device for offline reading.
 - Synchronization of read news items across devices using WebDAV. While your devices are in your WLAN a little sync file is written to your webDav host and used across the devices
 - Export and Import of OPML to get started with a setup from another reader

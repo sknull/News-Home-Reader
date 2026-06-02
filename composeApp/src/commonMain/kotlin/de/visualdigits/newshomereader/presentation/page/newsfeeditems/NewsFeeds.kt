@@ -12,7 +12,6 @@ import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
-import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 
 /**
  * Renders the news item card for a given newsfeed.
@@ -22,7 +21,6 @@ fun NewsFeeds(
     state: NewsHomeReaderState,
     scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     chunks: Int,
-    displayTheme: DisplayThemeEnum,
     maxWidth: Dp,
     maxHeight: Dp,
     maxImageSize: Int?,
@@ -47,7 +45,6 @@ fun NewsFeeds(
         HorizontalNewsFeeds(
             state = state,
             scrollPosition = scrollPosition,
-            displayTheme = displayTheme,
             connectivityManager = connectivityManager,
             maxWidth = maxWidth,
             rowData = rowData,
@@ -65,7 +62,6 @@ fun NewsFeeds(
             maxWidth = maxWidth,
             rowData = rowData,
             maxImageSize = maxImageSize,
-            displayTheme = displayTheme,
             uriHandler = uriHandler,
             chunks = chunks,
             onCommonAction = onCommonAction,

@@ -10,7 +10,9 @@ import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
 import de.visualdigits.newshomereader.domain.repository.SettingsRepository
-import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
+import de.visualdigits.newshomereader.presentation.style.BACKGROUND_COLOR_DEFAULT
+import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
+import de.visualdigits.newshomereader.presentation.style.TEXT_COLOR_DEFAULT
 import io.ktor.client.HttpClient
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
@@ -46,9 +48,10 @@ class WebDavTest : KoinTest {
     fun testWebDavClient() = runTest {
         val webDavCredentials = Json.decodeFromString<WebDavCredentials>(File("E:\\temp\\.newshomereader\\webDav_credentials.json").readText())
         val newSettings = Settings(mapOf(
-            SK.displayTheme to DisplayThemeEnum.LIGHT,
+            SK.backgroundColor to BACKGROUND_COLOR_DEFAULT,
+            SK.textColor to TEXT_COLOR_DEFAULT,
+            SK.spotColor to SPOT_COLOR_DEFAULT,
             SK.clockColor to StudioClockColors.STUDIO_CLOCK_COLOR_DEFAULT,
-            SK.spotColor to DisplayThemeEnum.SPOT_COLOR_DEFAULT,
             SK.language to Language.EN,
             SK.refreshInterval to RefreshIntervalEnum.MINUTES_60,
             SK.refreshWifiOnly to BooleanEnum.TRUE,

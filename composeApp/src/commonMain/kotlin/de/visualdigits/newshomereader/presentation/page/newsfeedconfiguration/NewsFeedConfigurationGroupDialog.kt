@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.common.presentation.components.form.SwitchBox
+import de.visualdigits.common.presentation.components.util.outlinedTextFieldColors
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.cancel
 import de.visualdigits.compose.resources.ok
@@ -79,10 +79,9 @@ fun NewsFeedConfigurationGroupDialog(
                             currentNewsFeedGroupName = value
                         },
                         singleLine = true,
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = MaterialTheme.colorScheme.outline,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
-                            cursorColor = MaterialTheme.colorScheme.onSurface,
+                        colors = outlinedTextFieldColors(
+                            MaterialTheme.colorScheme.outline,
+                            MaterialTheme.colorScheme.onSurface
                         )
                     )
 

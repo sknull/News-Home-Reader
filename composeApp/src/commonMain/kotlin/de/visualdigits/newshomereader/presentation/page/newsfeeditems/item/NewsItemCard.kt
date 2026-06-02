@@ -48,7 +48,8 @@ import de.visualdigits.newshomereader.domain.util.StringEscapeUtils.normalizeXml
 import de.visualdigits.newshomereader.domain.util.getFaviconUrl
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
-import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
+import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
+import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.textLinkStyles
 import de.visualdigits.newshomereader.presentation.util.highlightQuery
@@ -68,14 +69,16 @@ fun NewsItemCard(
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+    val buttonColor = remember { (state.settings?.get<HsvColor>(SK.buttonColor) ?: BUTTON_COLOR_DEFAULT).toComposeColor() }
+
     val feedName = newsItem.newsFeed?.feedName?:newsItem.feedName
-    val spotColor = state.settings?.get<HsvColor>(SK.spotColor)?: DisplayThemeEnum.SPOT_COLOR_DEFAULT
+    val spotColor = state.settings?.get<HsvColor>(SK.spotColor)?: SPOT_COLOR_DEFAULT
 
     Box(
         modifier = modifier
             .conditional(simple) { height(100.dp) }
             .conditional(!simple) { dropShadow(
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(10.dp),
                 shadow = Shadow(
                     radius = 6.dp,
                     spread = 2.dp,
@@ -87,7 +90,7 @@ fun NewsItemCard(
         Column(
             modifier = modifier
                 .clip(MaterialTheme.shapes.small)
-                .background(MaterialTheme.colorScheme.surfaceContainerLowest, MaterialTheme.shapes.small)
+                .background(buttonColor, MaterialTheme.shapes.small)
                 .hoverable(interactionSource)
                 .pointerHoverIcon(PointerIcon.Hand)
                 .clickable {

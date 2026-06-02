@@ -1,6 +1,5 @@
 package de.visualdigits.newshomereader.data.repository
 
-import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.CryptoBox
 import de.visualdigits.common.domain.model.EncryptedString
@@ -21,7 +20,10 @@ import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
 import de.visualdigits.newshomereader.domain.repository.SettingsRepository
-import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
+import de.visualdigits.newshomereader.presentation.style.BACKGROUND_COLOR_DEFAULT
+import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
+import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
+import de.visualdigits.newshomereader.presentation.style.TEXT_COLOR_DEFAULT
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -36,8 +38,6 @@ class DefaultSettingsRepository(
     private val dao: NewsHomeReaderDatabaseQueries,
     private val cryptoBox: CryptoBox
 ): SettingsRepository {
-
-    private val log = Logger.withTag("DefaultSettingsRepository")
 
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 
@@ -131,17 +131,19 @@ class DefaultSettingsRepository(
 private fun Settings.toSettingsRepositoryEntity(cryptoBox: CryptoBox): SettingsRepositoryEntity {
     val settingsEntity = SettingsRepositoryEntity(
         id = 0,
-        displayTheme = get<DisplayThemeEnum>(SK.displayTheme)?.name ?: "LIGHT",
+        backgroundColor = get<HsvColor>(SK.backgroundColor)?.hex() ?: BACKGROUND_COLOR_DEFAULT.hex(),
+        buttonColor = get<HsvColor>(SK.buttonColor)?.hex() ?: BUTTON_COLOR_DEFAULT.hex(),
+        textColor = get<HsvColor>(SK.textColor)?.hex() ?: TEXT_COLOR_DEFAULT.hex(),
+        spotColor = get<HsvColor>(SK.spotColor)?.hex() ?: SPOT_COLOR_DEFAULT.hex(),
         clockColor = get<HsvColor>(SK.clockColor)?.hex() ?: StudioClockColors.STUDIO_CLOCK_COLOR_DEFAULT.hex(),
-        spotColor = get<HsvColor>(SK.spotColor)?.hex() ?: DisplayThemeEnum.SPOT_COLOR_DEFAULT.hex(),
         language = get<Language>(SK.language)?.name ?: "EN",
-        hideRead = get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-        loadArticles = get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false,
         refreshInterval = get<RefreshIntervalEnum>(SK.refreshInterval)?.name ?: "MINUTES_60",
         refreshWifiOnly = get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false,
         lastMaxImageSize = get<Int>(SK.maxImageSize)?.toLong() ?: 1200L,
         keepReadArticles = get<KeepArticlesEnum>(SK.keepReadArticles)?.name ?: "DAYS_30",
         keepUnreadArticles = get<KeepArticlesEnum>(SK.keepUnreadArticles)?.name ?: "DAYS_30",
+        loadArticles = get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false,
+        hideRead = get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
         webDavUrl = get<String>(SK.webDavUrl) ?: "",
         webDavDirectory = get<String>(SK.webDavDirectory) ?: "",
         webDavUser = get<String>(SK.webDavUser) ?: "",
@@ -153,9 +155,11 @@ private fun Settings.toSettingsRepositoryEntity(cryptoBox: CryptoBox): SettingsR
 @Serializable
 private data class SettingsRepositoryEntity(
     val id: Long,
-    val displayTheme: String,
-    val clockColor: String,
+    val backgroundColor: String,
+    val buttonColor: String,
+    val textColor: String,
     val spotColor: String,
+    val clockColor: String,
     val language: String,
     val refreshInterval: String,
     val refreshWifiOnly: Boolean,

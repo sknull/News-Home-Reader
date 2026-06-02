@@ -3,7 +3,6 @@ package de.visualdigits.newshomereader.presentation.page.newsfeeditems
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import de.visualdigits.common.domain.model.HsvColor
 import de.visualdigits.common.domain.util.copyFactor
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
@@ -38,7 +38,6 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.page.navigation.NewsFeedGroupBox
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.NewsItemCard
-import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import org.jetbrains.compose.resources.imageResource
@@ -57,13 +56,13 @@ fun VerticalNewsFeeds(
     maxWidth: Dp,
     rowData: List<List<NewsItem>>,
     maxImageSize: Int?,
-    displayTheme: DisplayThemeEnum?,
     uriHandler: UriHandler,
     chunks: Int,
     onCommonAction: (CommonAction) -> Unit,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
-    val dimFactor = if (displayTheme == DisplayThemeEnum.ANTHRACITE) 1.5f else 1.25f
+    val backgroundColorValue = HsvColor.fromComposeColor(MaterialTheme.colorScheme.background).value
+    val dimFactor = if (backgroundColorValue < 0.5f) 1.5f else 1.25f
     val labelKeywordBuckets = stringResource(Res.string.label_keyword_buckets)
 
     Column(
@@ -99,7 +98,7 @@ fun VerticalNewsFeeds(
                     insetColorLight = MaterialTheme.colorScheme.background.copyFactor(valueFactor = dimFactor),
                     insetColorShadow = MaterialTheme.colorScheme.background.copyFactor(valueFactor = 1f / dimFactor)
                 ),
-            backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
+            backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
             scrollbarModifier = Modifier
                 .clip(MaterialTheme.shapes.small)
                 .width(10.dp)

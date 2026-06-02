@@ -38,7 +38,7 @@ fun NewsArticleMenuBar(
             .fillMaxWidth()
             .height(60.dp)
             .padding(5.dp)
-            .background(MaterialTheme.colorScheme.surfaceContainerHigh, MaterialTheme.shapes.small),
+            .background(MaterialTheme.colorScheme.surfaceContainer, MaterialTheme.shapes.small),
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
         verticalAlignment = Alignment.CenterVertically
     ) {

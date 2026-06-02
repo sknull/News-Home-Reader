@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,6 +17,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.presentation.components.container.FlexibleSearchBar
+import de.visualdigits.common.presentation.components.util.switchBoxColors
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_close_24px
@@ -27,7 +27,6 @@ import de.visualdigits.compose.resources.title_search
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
-import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.presentation.style.gap
 import org.jetbrains.compose.resources.painterResource
 
@@ -38,7 +37,6 @@ fun CatalogSearchBar(
     onAction: (NewsHomeReaderAction) -> Unit,
     viewModel: NewsHomeReaderViewModel,
     uriHandler: UriHandler,
-    displayTheme: DisplayThemeEnum,
     onCommonAction: (CommonAction) -> Unit
 ) {
     Row(
@@ -65,7 +63,6 @@ fun CatalogSearchBar(
                 catalog = state.filteredCatalog,
                 state = state,
                 uriHandler = uriHandler,
-                displayTheme = displayTheme,
                 onCommonAction = onCommonAction,
                 onAction = onAction,
                 onSubscriptionChanged = { newsFeedCatalogItem, subscribe ->
@@ -88,14 +85,7 @@ fun CatalogSearchBar(
                 onAction(NewsHomeReaderAction.OnOnlySubscribedFeeds(v))
             },
             interactionSource = interactionSource,
-            colors = SwitchDefaults.colors().copy(
-                checkedTrackColor = MaterialTheme.colorScheme.onSurface,
-                checkedThumbColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                checkedBorderColor = MaterialTheme.colorScheme.onSurface,
-                uncheckedTrackColor = MaterialTheme.colorScheme.secondaryContainer,
-                uncheckedThumbColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                uncheckedBorderColor = MaterialTheme.colorScheme.onSecondaryContainer
-            )
+            colors = switchBoxColors()
         )
     }
 }

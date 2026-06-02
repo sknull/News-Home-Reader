@@ -15,7 +15,6 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,6 +31,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
 import de.visualdigits.common.presentation.components.container.VerticalCollapsibleBox
+import de.visualdigits.common.presentation.components.util.switchBoxColors
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.compose.resources.Res
@@ -41,7 +41,6 @@ import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalog
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
-import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import org.jetbrains.compose.resources.painterResource
@@ -53,7 +52,6 @@ fun NewsFeedCatalog(
     scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     state: NewsHomeReaderState,
     uriHandler: UriHandler,
-    displayTheme: DisplayThemeEnum,
     onCommonAction: (CommonAction) -> Unit,
     onAction: (NewsHomeReaderAction) -> Unit,
     onSubscriptionChanged: (NewsFeedCatalogItem, Boolean) -> Unit
@@ -108,7 +106,7 @@ fun NewsFeedCatalog(
                     title = mainCategory.name,
                     focusedBorderColor = Color.Transparent,
                     unfocusedBorderColor = Color.Transparent,
-                    backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                    backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
                     shape = MaterialTheme.shapes.small,
                     iconArrowRight = painterResource(Res.drawable.icon_arrow_right_24px),
                     iconArrowDown = painterResource(Res.drawable.icon_arrow_drop_down_24px),
@@ -135,7 +133,7 @@ fun NewsFeedCatalog(
                                 title = subCategory.name,
                                 focusedBorderColor = Color.Transparent,
                                 unfocusedBorderColor = Color.Transparent,
-                                backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                                backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
                                 shape = MaterialTheme.shapes.small,
                                 iconArrowRight = painterResource(Res.drawable.icon_arrow_right_24px),
                                 iconArrowDown = painterResource(Res.drawable.icon_arrow_drop_down_24px),
@@ -176,7 +174,7 @@ fun NewsFeedCatalog(
                                                             uriHandler.openUri(feed.url)
                                                         },
                                                     text = feed.name,
-                                                    color = if (isHovered) displayTheme.textColor else MaterialTheme.colorScheme.onSurface,
+                                                    color = if (isHovered) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onSurface,
                                                     maxLines = 1,
                                                     style = MaterialTheme.typography.titleMedium.copy(
                                                         textDecoration = if (isHovered) TextDecoration.Underline else TextDecoration.None
@@ -210,14 +208,7 @@ fun NewsFeedCatalog(
                                                         onSubscriptionChanged(feed, v)
                                                     },
                                                     interactionSource = interactionSource,
-                                                    colors = SwitchDefaults.colors().copy(
-                                                        checkedTrackColor = MaterialTheme.colorScheme.onSurface,
-                                                        checkedThumbColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                                        checkedBorderColor = MaterialTheme.colorScheme.onSurface,
-                                                        uncheckedTrackColor = MaterialTheme.colorScheme.secondaryContainer,
-                                                        uncheckedThumbColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                                                        uncheckedBorderColor = MaterialTheme.colorScheme.onSecondaryContainer
-                                                    )
+                                                    colors = switchBoxColors()
                                                 )
                                             },
                                             colors = ListItemDefaults.colors(),

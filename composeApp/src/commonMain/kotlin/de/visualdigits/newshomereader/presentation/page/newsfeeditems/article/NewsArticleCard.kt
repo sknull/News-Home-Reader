@@ -55,7 +55,7 @@ import de.visualdigits.newshomereader.domain.util.getFaviconUrl
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.Image
-import de.visualdigits.newshomereader.presentation.style.DisplayThemeEnum
+import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import de.visualdigits.newshomereader.presentation.style.textLinkStyles
@@ -80,7 +80,7 @@ fun NewsArticleCard(
     onAction: (NewsHomeReaderAction) -> Unit,
     connectivityManager: ConnectivityManager
 ) {
-    val spotColor = state.settings?.get<HsvColor>(SK.spotColor)?: DisplayThemeEnum.SPOT_COLOR_DEFAULT
+    val spotColor = state.settings?.get<HsvColor>(SK.spotColor)?: SPOT_COLOR_DEFAULT
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -92,8 +92,6 @@ fun NewsArticleCard(
                 .widthIn(max = 1000.dp)
                 .padding(MaterialTheme.shapes.gap)
         ) {
-            val displayTheme = settings?.get<DisplayThemeEnum>(SK.displayTheme) ?: DisplayThemeEnum.LIGHT
-
             NewsArticleMenuBar(
                 newsItem = newsItem,
                 newsArticle = newsArticle,
@@ -145,7 +143,7 @@ fun NewsArticleCard(
                                             uriHandler.openUri(newsItem.newsFeed.link)
                                         },
                                     text = fn,
-                                    color = if (isHovered) MaterialTheme.colorScheme.onSurface else displayTheme.textColor,
+                                    color = if (isHovered) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onBackground,
                                     style = (if (maxWidth > 600.dp) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleSmall).copy(
                                         textDecoration = if (isHovered) TextDecoration.Underline else TextDecoration.None
                                     )
@@ -190,7 +188,7 @@ fun NewsArticleCard(
                                         uriHandler.openUri(newsItem.link)
                                     },
                                 text = highlightedTitle,
-                                color = if (isHovered) MaterialTheme.colorScheme.onSurface else displayTheme.textColor,
+                                color = if (isHovered) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onBackground,
                                 style = (if (maxWidth > 600.dp) MaterialTheme.typography.headlineLarge else MaterialTheme.typography.headlineMedium).copy(
                                     textDecoration = if (isHovered) TextDecoration.Underline else TextDecoration.None
                                 )
@@ -234,6 +232,7 @@ fun NewsArticleCard(
                         val wifiOnly = settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
                         if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                             MediaItemButtons(
+                                state = state,
                                 mediaItems = newsArticle.videoItems + newsArticle.audioItems,
                                 uriHandler = uriHandler,
                                 newsItem = newsItem

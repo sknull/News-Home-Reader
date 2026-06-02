@@ -82,7 +82,7 @@ fun NewsFeedGroupBox(
         },
         focusedBorderColor = Color.Transparent,
         unfocusedBorderColor = Color.Transparent,
-        backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
         shape = MaterialTheme.shapes.small,
         onStateChange = { state ->
             onAction(NewsHomeReaderAction.OnNewsFeedGroupCollapsibleStateChange(newsFeedGroup, state))

@@ -14,9 +14,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import de.visualdigits.common.domain.model.HsvColor
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.button.IndicatorButton
@@ -35,6 +37,7 @@ import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
+import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -45,11 +48,13 @@ fun MainMenuBar(
     onAction: (NewsHomeReaderAction) -> Unit,
     connectivityManager: ConnectivityManager
 ) {
+    val buttonColor = remember { (state.settings?.get<HsvColor>(SK.buttonColor) ?: BUTTON_COLOR_DEFAULT).toComposeColor() }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(40.dp)
-            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(2.dp),
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
         verticalAlignment = Alignment.CenterVertically
@@ -100,7 +105,7 @@ fun MainMenuBar(
                         .size(24.dp),
                     color = MaterialTheme.colorScheme.onSurface,
                     strokeWidth = ProgressIndicatorDefaults.CircularStrokeWidth,
-                    trackColor = MaterialTheme.colorScheme.surfaceDim,
+                    trackColor = buttonColor,
                     strokeCap = ProgressIndicatorDefaults.CircularDeterminateStrokeCap,
                 )
             }
@@ -111,21 +116,21 @@ fun MainMenuBar(
                         .size(14.dp),
                     painter = painterResource(Res.drawable.icon_breaking_news_alt_1_24px),
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.inverseSurface,
+                    tint = MaterialTheme.colorScheme.onBackground,
                 )
                 ProgressStage.LOAD_ARTICLES -> Icon(
                     modifier = Modifier
                         .size(14.dp),
                     painter = painterResource(Res.drawable.icon_article_24px),
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.inverseSurface,
+                    tint = MaterialTheme.colorScheme.onBackground,
                 )
                 ProgressStage.LOAD_IMAGES -> Icon(
                     modifier = Modifier
                         .size(14.dp),
                     painter = painterResource(Res.drawable.icon_image_24px),
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.inverseSurface
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
                 else -> {}
             }
