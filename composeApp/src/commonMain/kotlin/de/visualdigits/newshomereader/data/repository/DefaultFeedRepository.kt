@@ -238,7 +238,6 @@ class DefaultFeedRepository(
         progress: (Float, ProgressStage) -> Unit
     ): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> = withContext(Dispatchers.IO) {
         try {
-
             val finalNewsFeeds = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                 val totalSteps1 = newsFeedItems.size
                 currentStep.set(0)

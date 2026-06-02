@@ -566,7 +566,6 @@ class NewsHomeReaderViewModel(
                     it.copy(
                         currentNewsItem = null,
                         currentNewsArticle = null,
-                        isLoading = false,
                         uiMessage = null,
                         uiMessageSeverity = null
                     )
@@ -747,7 +746,6 @@ class NewsHomeReaderViewModel(
                     .onSuccess { newsFeedGroups ->
                         _state.update {
                             it.copy(
-                                isLoading = false,
                                 newsFeedGroups = newsFeedGroups
                             )
                         }
@@ -755,7 +753,6 @@ class NewsHomeReaderViewModel(
                         log(Severity.Error, "Could not get newsfeed groups", throwable, withTag = "NHR")
                         _state.update {
                             it.copy(
-                                isLoading = false,
                                 uiMessage = error.toUiText(),
                                 uiMessageSeverity = Severity.Error
                             )
@@ -765,7 +762,6 @@ class NewsHomeReaderViewModel(
                     log(Severity.Error, "Could not upsert news feed configuration", result.throwable, withTag = "NHR")
                     _state.update {
                         it.copy(
-                            isLoading = false,
                             uiMessage = result.error.toUiText(),
                             uiMessageSeverity = Severity.Error
                         )
@@ -777,7 +773,6 @@ class NewsHomeReaderViewModel(
                 .onSuccess { newsFeedGroups ->
                     _state.update {
                         it.copy(
-                            isLoading = false,
                             newsFeedGroups = newsFeedGroups ?: listOf()
                         )
                     }
@@ -786,7 +781,6 @@ class NewsHomeReaderViewModel(
                     log(Severity.Error, "Could not delete feed configuration", throwable, withTag = "NHR")
                     _state.update {
                         it.copy(
-                            isLoading = false,
                             uiMessage = error.toUiText(),
                             uiMessageSeverity = Severity.Error
                         )
@@ -955,11 +949,6 @@ class NewsHomeReaderViewModel(
         feedName: String?,
         url: String?
     ) = viewModelScope.launch {
-        _state.update {
-            it.copy(
-                isLoading = true,
-            )
-        }
         scrollPosition["newsfeed_$feedName"] = Triple(0, 0, ScrollIntent.scrollToStart)
         val wifiOnly = state.value.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
         val loadArticles = state.value.settings?.get<BooleanEnum>(SK.loadArticles)?.booleanValue?:false
@@ -999,7 +988,6 @@ class NewsHomeReaderViewModel(
                                 hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
                                 stopWords = it.currentNewsFeedGroup?.let { g -> determineStopWords(g) } ?: it.currentNewsFeedItem?.stopWords?.toSet() ?: setOf()
                             ),
-                            isLoading = false,
                             uiMessage = null,
                             uiMessageSeverity = null
                         )
@@ -1008,7 +996,6 @@ class NewsHomeReaderViewModel(
                         .onSuccess {
                             _state.update {
                                 it.copy(
-                                    isLoading = false,
                                     currentProgress = 0.0f,
                                     progressStage = ProgressStage.NONE,
                                 )
@@ -1021,7 +1008,6 @@ class NewsHomeReaderViewModel(
                     log(Severity.Error, "Could not load feed '$feedName'", feedResult.throwable, withTag = "NHR")
                     _state.update {
                         it.copy(
-                            isLoading = false,
                             currentProgress = 0.0f,
                             progressStage = ProgressStage.NONE,
                             uiMessage = feedResult.error.toUiText(),
@@ -1047,7 +1033,6 @@ class NewsHomeReaderViewModel(
                     val currentNewsItems = newsFeeds.find { nf -> nf.feedName == it.currentNewsFeedName }?.items ?: listOf()
                     it.currentNewsFeedGroup
                     it.copy(
-                        isLoading = false,
                         currentProgress = 0.0f,
                         progressStage = ProgressStage.NONE,
                         isEditingSettings = false,
@@ -1064,7 +1049,6 @@ class NewsHomeReaderViewModel(
                     .onSuccess {
                         _state.update {
                             it.copy(
-                                isLoading = false,
                                 currentProgress = 0.0f,
                                 progressStage = ProgressStage.NONE,
                             )
@@ -1077,7 +1061,6 @@ class NewsHomeReaderViewModel(
                 log(Severity.Error, "Could not refresh newsfeeds'", newsFeedResult.throwable, withTag = "NHR")
                 _state.update {
                     it.copy(
-                        isLoading = false,
                         currentProgress = 0.0f,
                         progressStage = ProgressStage.NONE,
                     )
@@ -1089,16 +1072,10 @@ class NewsHomeReaderViewModel(
     private fun importSettings(fileName: String, ins: InputStream) = viewModelScope.launch {
         log(Severity.Info, "Importing settings", withTag = "NHR")
         if (fileName.endsWith(".json", ignoreCase = true)) {
-            _state.update {
-                it.copy(
-                    isLoading = true,
-                )
-            }
             settingsRepository.importSettings(ins)
                 .onSuccess { settings ->
                     _state.update {
                         it.copy(
-                            isLoading = false,
                             settings = settings,
                             isEditingSettings = false,
                             uiMessage = null,
@@ -1109,7 +1086,6 @@ class NewsHomeReaderViewModel(
                     log(Severity.Error, "Could not import settings", throwable, withTag = "NHR")
                     _state.update {
                         it.copy(
-                            isLoading = false,
                             uiMessage = error.toUiText(),
                             uiMessageSeverity = Severity.Error
                         )
@@ -1118,7 +1094,6 @@ class NewsHomeReaderViewModel(
         } else {
             _state.update {
                 it.copy(
-                    isLoading = false,
                     currentProgress = 0.0f,
                     progressStage = ProgressStage.NONE,
                     uiMessage = UiText.StringResourceId(Res.string.error_local_wrong_filetype),
@@ -1131,18 +1106,12 @@ class NewsHomeReaderViewModel(
     private fun exportSettings(fileName: String, outs: OutputStream) = viewModelScope.launch {
         log(Severity.Info, "Exporting settings", withTag = "NHR")
         if (fileName.endsWith(".json", ignoreCase = true)) {
-            _state.update {
-                it.copy(
-                    isLoading = true,
-                )
-            }
             val settings = state.value.settings
             if(settings != null) {
                 settingsRepository.exportSettings(settings, outs)
                     .onSuccess {
                         _state.update {
                             it.copy(
-                                isLoading = false,
                                 uiMessage = null,
                             )
                         }
@@ -1151,7 +1120,6 @@ class NewsHomeReaderViewModel(
                         log(Severity.Error, "Could not export settings", throwable, withTag = "NHR")
                         _state.update {
                             it.copy(
-                                isLoading = false,
                                 uiMessage = error.toUiText(),
                                 uiMessageSeverity = Severity.Error
                             )
@@ -1161,7 +1129,6 @@ class NewsHomeReaderViewModel(
         } else {
             _state.update {
                 it.copy(
-                    isLoading = false,
                     currentProgress = 0.0f,
                     progressStage = ProgressStage.NONE,
                     uiMessage = UiText.StringResourceId(Res.string.error_local_wrong_filetype),
@@ -1173,11 +1140,6 @@ class NewsHomeReaderViewModel(
 
     private fun exportLogs(fileName: String, outs: OutputStream) = viewModelScope.launch {
         if (fileName.endsWith(".log", ignoreCase = true)) {
-            _state.update {
-                it.copy(
-                    isLoading = true,
-                )
-            }
             val lines = LogMessage.logs
                 .joinToString("\n") { lm ->
                     val timeStamp = lm.timestamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss-SSS"))
@@ -1188,7 +1150,6 @@ class NewsHomeReaderViewModel(
         } else {
             _state.update {
                 it.copy(
-                    isLoading = false,
                     currentProgress = 0.0f,
                     progressStage = ProgressStage.NONE,
                     uiMessage = UiText.StringResourceId(Res.string.error_local_wrong_filetype),
@@ -1201,11 +1162,6 @@ class NewsHomeReaderViewModel(
     private fun importOpml(fileName: String, ins: InputStream) = viewModelScope.launch {
         log(Severity.Info, "Importing opml...", withTag = "NHR")
         if (fileName.endsWith(".opml", ignoreCase = true)) {
-            _state.update {
-                it.copy(
-                    isLoading = true,
-                )
-            }
             val newFeedConfigurationResult = newsFeedConfigurationRepository.setNewsFeedGroups(ins)
             if (newFeedConfigurationResult is Result.Success) {
                 val feedResult = newsFeedConfigurationRepository.getNewsFeedGroups()
@@ -1223,7 +1179,6 @@ class NewsHomeReaderViewModel(
                     _state.update {
                         val currentNewsItems = newsFeeds.find { nf -> nf.feedName == it.currentNewsFeedName }?.items ?: listOf()
                         it.copy(
-                            isLoading = false,
                             currentProgress = 0.0f,
                             progressStage = ProgressStage.NONE,
                             isEditingSettings = false,
@@ -1240,7 +1195,6 @@ class NewsHomeReaderViewModel(
                         .onSuccess {
                             _state.update {
                                 it.copy(
-                                    isLoading = false,
                                     currentProgress = 0.0f,
                                     progressStage = ProgressStage.NONE,
                                     uiMessage = null,
@@ -1259,7 +1213,6 @@ class NewsHomeReaderViewModel(
                     log(Severity.Error, "Could not import OPML", newsFeedResult.throwable, withTag = "NHR")
                     _state.update {
                         it.copy(
-                            isLoading = false,
                             currentProgress = 0.0f,
                             progressStage = ProgressStage.NONE,
                             uiMessage = newsFeedResult.error.toUiText(),
@@ -1271,7 +1224,6 @@ class NewsHomeReaderViewModel(
                 log(Severity.Error, "Could not import OPML", newFeedConfigurationResult.throwable, withTag = "NHR")
                 _state.update {
                     it.copy(
-                        isLoading = false,
                         currentProgress = 0.0f,
                         progressStage = ProgressStage.NONE,
                         uiMessage = newFeedConfigurationResult.error.toUiText(),
@@ -1282,7 +1234,6 @@ class NewsHomeReaderViewModel(
         } else {
             _state.update {
                 it.copy(
-                    isLoading = false,
                     currentProgress = 0.0f,
                     progressStage = ProgressStage.NONE,
                     uiMessage = UiText.StringResourceId(Res.string.error_local_wrong_filetype),
@@ -1295,16 +1246,10 @@ class NewsHomeReaderViewModel(
     private fun exportOpml(fileName: String, outs: OutputStream) = viewModelScope.launch {
         log(Severity.Info, "Exporting opml...", withTag = "NHR")
         if (fileName.endsWith(".opml", ignoreCase = true)) {
-            _state.update {
-                it.copy(
-                    isLoading = true,
-                )
-            }
             newsFeedConfigurationRepository.saveNewsFeedGroups(outs)
                 .onSuccess {
                     _state.update {
                         it.copy(
-                            isLoading = false,
                             uiMessage = null,
                         )
                     }
@@ -1313,7 +1258,6 @@ class NewsHomeReaderViewModel(
                     log(Severity.Error, "Could not export opml", throwable, withTag = "NHR")
                     _state.update {
                         it.copy(
-                            isLoading = false,
                             uiMessage = error.toUiText(),
                             uiMessageSeverity = Severity.Error
                         )
@@ -1322,7 +1266,6 @@ class NewsHomeReaderViewModel(
         } else {
             _state.update {
                 it.copy(
-                    isLoading = false,
                     currentProgress = 0.0f,
                     progressStage = ProgressStage.NONE,
                     uiMessage = UiText.StringResourceId(Res.string.error_local_wrong_filetype),
@@ -1380,7 +1323,6 @@ class NewsHomeReaderViewModel(
             ).onSuccess {
                 _state.update {
                     it.copy(
-                        isLoading = false,
                         currentProgress = 0.0f,
                         progressStage = ProgressStage.NONE
                     )
@@ -1390,7 +1332,6 @@ class NewsHomeReaderViewModel(
                 log(Severity.Error, "Could not refresh images", throwable, withTag = "NHR")
                 _state.update {
                     it.copy(
-                        isLoading = false,
                         uiMessage = error.toUiText(),
                         uiMessageSeverity = Severity.Error,
                         currentProgress = 0.0f,
@@ -1404,16 +1345,10 @@ class NewsHomeReaderViewModel(
     }
 
     private fun loadCatalog(isExpanded: Boolean) = viewModelScope.launch {
-        _state.update {
-            it.copy(
-                isLoading = true
-            )
-        }
         catalogRepository.loadCatalog()
             .onSuccess { newsFeedCatalog ->
                 _state.update {
                     it.copy(
-                        isLoading = false,
                         isViewingCatalog = isExpanded,
                         newsFeedCatalog = newsFeedCatalog,
                         filteredCatalog = newsFeedCatalog
@@ -1424,7 +1359,9 @@ class NewsHomeReaderViewModel(
                 log(Severity.Error, "Could not log catalog", throwable, withTag = "NHR")
                 _state.update {
                     it.copy(
-                        isLoading = false,
+                        isViewingCatalog = false,
+                        newsFeedCatalog = null,
+                        filteredCatalog = null
                     )
                 }
             }
@@ -1433,7 +1370,6 @@ class NewsHomeReaderViewModel(
     private fun loadData() = viewModelScope.launch {
         _state.update {
             it.copy(
-                isLoading = true,
                 currentProgress = 0.0f,
                 progressStage = ProgressStage.NONE,
             )
@@ -1469,7 +1405,6 @@ class NewsHomeReaderViewModel(
             _state.update {
                 it.copy(
                     settings = finalSettings,
-                    isLoading = false,
                     currentProgress = 0.0f,
                     progressStage = ProgressStage.NONE,
                     uiMessage = null,
@@ -1486,7 +1421,6 @@ class NewsHomeReaderViewModel(
             log(Severity.Error, "Could not load data", result.throwable, withTag = "NHR")
             _state.update {
                 it.copy(
-                    isLoading = false,
                     currentProgress = 0.0f,
                     progressStage = ProgressStage.NONE,
                     uiMessage = result.error.toUiText(),
@@ -1500,7 +1434,6 @@ class NewsHomeReaderViewModel(
                 _state.update {
                     it.copy(
                         newsFeedGroups = newsFeedGroups,
-                        isLoading = false,
                         currentProgress = 0.0f,
                         progressStage = ProgressStage.NONE,
                         uiMessage = null,
@@ -1512,7 +1445,6 @@ class NewsHomeReaderViewModel(
                 log(Severity.Error, "Could not get settings", throwable, withTag = "NHR")
                 _state.update {
                     it.copy(
-                        isLoading = false,
                         currentProgress = 0.0f,
                         progressStage = ProgressStage.NONE,
                         uiMessage = null,
@@ -1533,7 +1465,6 @@ class NewsHomeReaderViewModel(
                 currentNewsFeedGroup = null,
                 currentNewsFeedItem = currentFeedItem,
                 currentNewsArticle = null,
-                isLoading = false,
                 currentProgress = 0.0f,
                 progressStage = ProgressStage.NONE,
                 uiMessage = null,
@@ -1548,11 +1479,6 @@ class NewsHomeReaderViewModel(
     }
 
     private fun markItemsAsRead(days: Long) = viewModelScope.launch {
-        _state.update {
-            it.copy(
-                isLoading = true,
-            )
-        }
         val threshold = OffsetDateTime.now().minus(days, ChronoUnit.DAYS)
         val newsItems = state.value.currentNewsItems
             .filter { newsItem -> newsItem.updated.isBefore(threshold) }
@@ -1561,7 +1487,6 @@ class NewsHomeReaderViewModel(
         if (markResult is Result.Success) {
             _state.update {
                 it.copy(
-                    isLoading = false,
                     currentProgress = 0.0f,
                     allowClearVisibleNewsItems = days == 0L,
                     progressStage = ProgressStage.NONE,
@@ -1582,7 +1507,6 @@ class NewsHomeReaderViewModel(
             log(Severity.Error, "Could not load article", markResult.throwable, withTag = "NHR")
             _state.update {
                 it.copy(
-                    isLoading = false,
                     currentProgress = 0.0f,
                     progressStage = ProgressStage.NONE,
                     uiMessage = markResult.error.toUiText(),
@@ -1593,11 +1517,6 @@ class NewsHomeReaderViewModel(
     }
 
     private fun loadArticle(newsItem: NewsItem) = viewModelScope.launch {
-        _state.update {
-            it.copy(
-                isLoading = true,
-            )
-        }
         val articleResult = articleRepository.readFullArticle(newsItem)
         if (articleResult is Result.Success) {
             val copy = newsItem.copy(newsArticle = articleResult.data.first)
@@ -1615,7 +1534,6 @@ class NewsHomeReaderViewModel(
                         hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false,
                         stopWords = it.currentNewsFeedGroup?.let { g -> determineStopWords(g) } ?: it.currentNewsFeedItem?.stopWords?.toSet() ?: setOf()
                     ),
-                    isLoading = false,
                     currentProgress = 0.0f,
                     progressStage = ProgressStage.NONE,
                     uiMessage = null,
@@ -1626,7 +1544,6 @@ class NewsHomeReaderViewModel(
             log(Severity.Error, "Could not load article", articleResult.throwable, withTag = "NHR")
             _state.update {
                 it.copy(
-                    isLoading = false,
                     isNewsItemSearchActive = false,
                     newsItemSearchText = null,
                     currentProgress = 0.0f,
@@ -1651,12 +1568,6 @@ class NewsHomeReaderViewModel(
         editedSettings: Settings?,
     ) = viewModelScope.launch {
         checkNotNull(editedSettings) { "No settings to save" }
-        _state.update {
-            it.copy(
-                isLoading = true,
-            )
-        }
-
         settingsRepository.setSettings(editedSettings)
             .onSuccess {
                 _editedSettings.value = null
@@ -1668,7 +1579,6 @@ class NewsHomeReaderViewModel(
                             hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue?:false,
                             stopWords = it.currentNewsFeedGroup?.let { g -> determineStopWords(g) } ?: it.currentNewsFeedItem?.stopWords?.toSet() ?: setOf()
                         ),
-                        isLoading = false,
                         currentProgress = 0.0f,
                         progressStage = ProgressStage.NONE,
                         isEditingSettings = false,
@@ -1681,7 +1591,6 @@ class NewsHomeReaderViewModel(
                 log(Severity.Error, "Could not save settings", throwable, withTag = "NHR")
                 _state.update {
                     it.copy(
-                        isLoading = false,
                         currentProgress = 0.0f,
                         isEditingSettings = false,
                         progressStage = ProgressStage.NONE,

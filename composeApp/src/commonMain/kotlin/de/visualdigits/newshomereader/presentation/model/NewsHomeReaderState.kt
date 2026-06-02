@@ -50,8 +50,6 @@ data class NewsHomeReaderState(
     val catalogSearchText: String = "",
     val filteredCatalog: NewsFeedCatalog? = null,
 
-    val isLoading: Boolean = false,
-
     val uiMessage: UiText? = null,
     val uiMessageSeverity: Severity? = null,
 
@@ -100,15 +98,15 @@ data class NewsHomeReaderState(
         append(currentNewsFeedItem?.name)
         append(", currentNewsFeedName=")
         append(currentNewsFeedName)
-        append(", currentNewsItems=")
-        append(currentNewsItems.joinToString(",") { e -> e.id.toString() })
-        append(", visibleNewsItems=")
-        append(visibleNewsItems.joinToString(",") { e -> e.id.toString() })
-        append(", allowClearVisibleNewsItems=")
+        append(", currentNewsItems [")
+        append(currentNewsItems.size)
+        append("], visibleNewsItems [")
+        append(visibleNewsItems.size)
+        append("], allowClearVisibleNewsItems=")
         append(allowClearVisibleNewsItems)
-        append(", filteredNewsItems=")
-        append(filteredNewsItems.joinToString(",") { e -> e.id.toString() })
-        append(", newsItemSearchText=")
+        append(", filteredNewsItems [")
+        append(filteredNewsItems.size)
+        append("], newsItemSearchText=")
         append(newsItemSearchText)
         append(", isNewsItemSearchActive=")
         append(isNewsItemSearchActive)
@@ -126,8 +124,6 @@ data class NewsHomeReaderState(
         append(isViewingCatalog)
         append(", catalogSearchText='")
         append(catalogSearchText)
-        append("', filteredCatalog=")
-        append(isLoading)
         append(", uiMessage=")
         append(uiMessage)
         append(", uiMessageSeverity=")
