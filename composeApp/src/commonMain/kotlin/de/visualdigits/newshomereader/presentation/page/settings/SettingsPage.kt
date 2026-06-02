@@ -73,12 +73,6 @@ fun SettingsPage(
             )
         }
 
-        Spacer(Modifier.height(16.dp))
-
-        SettingsMenuBar(state = state, onAction = onAction)
-
-        Spacer(Modifier.height(16.dp))
-
         ConfigurationEditForm(
             titleChooseDirectory = UiText.StringResourceId(Res.string.choose_directory),
             titleChooseFile = UiText.StringResourceId(Res.string.choose_file),
@@ -109,6 +103,7 @@ fun SettingsPage(
                 .width(10.dp)
                 .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
             scrollbarStyle = scrollbarStyle(),
+            colorPickerUseOnlySliders = false,
             fieldHeight = 50.dp,
             onValueChange = { keyValue ->
                 onAction(
@@ -129,6 +124,12 @@ fun SettingsPage(
                 )
             },
             onCommonAction = onCommonAction
-        )
+        ) {
+            Spacer(Modifier.height(16.dp))
+
+            SettingsMenuBar(state = state, onAction = onAction)
+
+            Spacer(Modifier.height(16.dp))
+        }
     }
 }
