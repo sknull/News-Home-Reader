@@ -175,7 +175,7 @@ fun VerticalNewsFeeds(
                 })
             ) + rowData.flatMapIndexed { index, rowItems ->
                 listOf(
-                    Pair("row_" + rowItems.joinToString("_") { item -> item.id.toString() }, @Composable {
+                    Pair("row_${index}_" + rowItems.joinToString("_") { item -> item.id.toString() }, @Composable {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
