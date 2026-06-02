@@ -285,8 +285,8 @@ fun HorizontalNewsFeeds(
                     }
                 }
             ) {
-                rowData.map { rowItems ->
-                    Pair(rowItems.joinToString("_") { item -> item.id.toString() }, @Composable {
+                rowData.mapIndexed{ index, rowItems ->
+                    Pair("row_${index}_" + rowItems.joinToString("_") { item -> item.id.toString() }, @Composable {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
