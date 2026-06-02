@@ -34,6 +34,14 @@ class MockFeedRepository(
         return readFromBytes(feedName, file.readBytes())
     }
 
+    override suspend fun getAllNewsFeeds(): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> {
+        return Result.Success(Pair(listOf(), false))
+    }
+
+    override suspend fun getNewsFeedByFeedName(feedName: String): Result<Pair<NewsFeed?, Boolean>, DataError.Remote> {
+        return Result.Success(Pair(null, false))
+    }
+
     override suspend fun getAllFeedItems(): Result<List<NewsItem>, DataError.Remote> {
         return Result.Success(listOf())
     }
@@ -68,6 +76,14 @@ class MockFeedRepository(
 
     override suspend fun refreshNewsFeeds(
         newsFeedItems: List<NewsFeedItem>,
+        progress: (Float, ProgressStage) -> Unit
+    ): Result<Pair<List<NewsFeed>, List<NewsItem>>, DataError.Remote> {
+        return Result.Success(Pair(listOf(), listOf()))
+    }
+
+    override suspend fun refreshNewsFeedItems(
+        newsFeeds: List<NewsFeed>,
+        newsItems: List<NewsItem>,
         wifiOnly: Boolean,
         keepReadArticlesInDays: Long,
         keepUnreadArticlesInDays: Long,

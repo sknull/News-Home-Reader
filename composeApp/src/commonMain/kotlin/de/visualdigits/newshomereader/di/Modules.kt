@@ -95,5 +95,6 @@ val sharedModule = module {
         feedRepository = get(),
         newsFeedConfigurationRepository = get(),
         settingsRepository = get(),
+        connectivityManager = get()
     ) }
 }

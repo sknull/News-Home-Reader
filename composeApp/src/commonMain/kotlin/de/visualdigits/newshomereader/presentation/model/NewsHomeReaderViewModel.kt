@@ -11,6 +11,7 @@ import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.common.domain.model.errorhandling.onError
 import de.visualdigits.common.domain.model.errorhandling.onSuccess
 import de.visualdigits.common.domain.model.platform.PlatformType
+import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.StudioClockColors
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.common.presentation.model.ScrollIntent
@@ -72,6 +73,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class NewsHomeReaderViewModel(
+    val connectivityManager: ConnectivityManager,
     val feedRepository: FeedRepository,
     val articleRepository: ArticleRepository,
     val settingsRepository: SettingsRepository,
@@ -960,23 +962,27 @@ class NewsHomeReaderViewModel(
         val maxImageSize = state.value.settings?.get<Int>(SK.maxImageSize)?:1200
         feedName?.also { fn ->
             url?.also { u ->
-                val feedResult = feedRepository.refreshNewsFeed(
-                    feedName = fn,
-                    url = u,
-                    wifiOnly = wifiOnly,
-                    keepReadArticlesInDays = keepReadArticles,
-                    keepUnreadArticlesInDays = keepUnreadArticles,
-                    maxImageSize = maxImageSize,
-                    loadArticles = loadArticles
-                ) { progress, progressStage ->
-                    viewModelScope.launch {
-                        _state.update {
-                            it.copy(
-                                currentProgress = progress,
-                                progressStage = progressStage
-                            )
+                val feedResult = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
+                    feedRepository.refreshNewsFeed(
+                        feedName = fn,
+                        url = u,
+                        wifiOnly = wifiOnly,
+                        keepReadArticlesInDays = keepReadArticles,
+                        keepUnreadArticlesInDays = keepUnreadArticles,
+                        maxImageSize = maxImageSize,
+                        loadArticles = loadArticles
+                    ) { progress, progressStage ->
+                        viewModelScope.launch {
+                            _state.update {
+                                it.copy(
+                                    currentProgress = progress,
+                                    progressStage = progressStage
+                                )
+                            }
                         }
                     }
+                } else {
+                    feedRepository.getNewsFeedByFeedName(feedName)
                 }
                 if (feedResult is Result.Success) {
                     val (newsFeed, changed) = feedResult.data
@@ -1029,7 +1035,7 @@ class NewsHomeReaderViewModel(
             val newsFeedConfigurations = newsFeedGroups.flatMap { nfg ->
                 nfg.newsFeeds + nfg.subGroups.flatMap { sg -> sg.newsFeeds}
             }
-            val newsFeedResult = refreshNewsFeeds(newsFeedConfigurations)
+            val newsFeedResult = refreshNewsFeeds(newsFeedGroups, newsFeedConfigurations)
             if (newsFeedResult is Result.Success) {
                 val (newsFeeds, changed) = newsFeedResult.data
                 _state.update {
@@ -1176,7 +1182,7 @@ class NewsHomeReaderViewModel(
                 val newsFeedConfigurations = newsFeedGroups.flatMap { nfg ->
                     nfg.newsFeeds + nfg.subGroups.flatMap { sg -> sg.newsFeeds }
                 }
-                val newsFeedResult = refreshNewsFeeds(newsFeedConfigurations)
+                val newsFeedResult = refreshNewsFeeds(newsFeedGroups, newsFeedConfigurations)
                 if (newsFeedResult is Result.Success) {
                     val (newsFeeds, changed) = newsFeedResult.data
                     _state.update {
@@ -1278,7 +1284,10 @@ class NewsHomeReaderViewModel(
         }
     }
 
-    private suspend fun refreshNewsFeeds(newsFeedItems: List<NewsFeedItem>): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> {
+    private suspend fun refreshNewsFeeds(
+        newsFeedGroups: List<NewsFeedGroup>,
+        newsFeedItems: List<NewsFeedItem>
+    ): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> {
         val wifiOnly = state.value.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
         val loadArticles = state.value.settings?.get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false
         val keepReadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue ?: 30
@@ -1290,22 +1299,61 @@ class NewsHomeReaderViewModel(
             .filter { k -> k.startsWith("newsfeed_") }
             .forEach { k -> scrollPosition[k] = Triple(0, 0, ScrollIntent.scrollToStart)}
 
-        return feedRepository.refreshNewsFeeds(
-            newsFeedItems = newsFeedItems,
-            wifiOnly = wifiOnly,
-            keepReadArticlesInDays = keepReadArticles,
-            keepUnreadArticlesInDays = keepUnreadArticles,
-            maxImageSize = maxImageSize,
-            loadArticles = loadArticles,
-            progress = { progress, progressStage ->
+        return if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
+            val newsFeedsResult = feedRepository.refreshNewsFeeds(
+                newsFeedItems = newsFeedItems,
+                progress = { progress, progressStage ->
+                    _state.update {
+                        it.copy(
+                            currentProgress = progress,
+                            progressStage = progressStage
+                        )
+                    }
+                }
+            )
+            if (newsFeedsResult is Result.Success) {
+                val (newsFeeds, newsItems) = newsFeedsResult.data
                 _state.update {
                     it.copy(
-                        currentProgress = progress,
-                        progressStage = progressStage
+                        currentNewsItems = newsItems,
+                        visibleNewsItems = calculateVisibleNewsItems(
+                            newsItems = newsItems,
+                            hideRead = it.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
+                            stopWords = it.currentNewsFeedGroup?.let { g -> determineStopWords(g) } ?: it.currentNewsFeedItem?.stopWords?.toSet() ?: setOf()
+                        ),
+                        newsFeedGroups = newsFeedGroups,
+                        isEditingSettings = false
                     )
                 }
+                feedRepository.refreshNewsFeedItems(
+                    newsFeeds = newsFeeds,
+                    newsItems = newsItems,
+                    wifiOnly = wifiOnly,
+                    keepReadArticlesInDays = keepReadArticles,
+                    keepUnreadArticlesInDays = keepUnreadArticles,
+                    maxImageSize = maxImageSize,
+                    loadArticles = loadArticles,
+                    progress = { progress, progressStage ->
+                        _state.update {
+                            it.copy(
+                                currentProgress = progress,
+                                progressStage = progressStage
+                            )
+                        }
+                    }
+                )
+            } else if (newsFeedsResult is Result.Error) {
+                log(Severity.Error, "Could not refresh news feeds", newsFeedsResult.throwable, withTag = "NHR")
+                feedRepository.getAllNewsFeeds()
+            } else {
+                log(Severity.Info, "Could not get news feeds from remote - fetching newsFeeds from database", withTag = "NHR")
+                feedRepository.getAllNewsFeeds()
             }
-        )
+        } else {
+            log(Severity.Info, "No free of charge internet connection available - fetching newsFeeds from database", withTag = "NHR")
+            feedRepository.getAllNewsFeeds()
+        }
+
     }
 
     private suspend fun prefetchImages(

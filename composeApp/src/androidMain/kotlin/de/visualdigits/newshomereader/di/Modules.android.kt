@@ -50,12 +50,17 @@ actual val platformModule: Module
             )
         }
 
-        single { NewsFeedWorker(get(), get(), get()) }
-        worker { FeedUpdateWorker(get(), get()) }
-        single { FeedScheduler(get()) }
+        single { NewsFeedWorker(
+            connectivityManager = get(),
+            feedRepository = get(),
+            newsFeedConfigurationRepository = get(),
+            settingsRepository = get()
+        ) }
+        worker { FeedUpdateWorker(context = get(), workerParams = get()) }
+        single { FeedScheduler(context = get()) }
 
-        single { DriverFactory(androidApplication()) }
-        single { ConnectivityManager(get()) }
+        single { DriverFactory(context = androidApplication()) }
+        single { ConnectivityManager(context = get()) }
 
-        single { ImageCache(get(), get()) }
+        single { ImageCache(context = get(), httpClient = get()) }
 }

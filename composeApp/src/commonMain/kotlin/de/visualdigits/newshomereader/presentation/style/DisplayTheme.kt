@@ -14,7 +14,7 @@ import de.visualdigits.common.domain.model.HsvColor
 import de.visualdigits.common.presentation.model.PlatformScrollbarStyle
 
 val BACKGROUND_COLOR_DEFAULT: HsvColor = HsvColor.fromComposeColor(Color(0xFFFFFFFF))
-val BUTTON_COLOR_DEFAULT: HsvColor = HsvColor.fromComposeColor(Color(0xFF888888))
+val BUTTON_COLOR_DEFAULT: HsvColor = HsvColor.fromComposeColor(Color(0xFFCCCCCC))
 val TEXT_COLOR_DEFAULT: HsvColor = HsvColor.fromComposeColor(Color(0xFF000000))
 val SPOT_COLOR_DEFAULT: HsvColor = HsvColor.fromComposeColor(Color(0xFF439DDE))
 

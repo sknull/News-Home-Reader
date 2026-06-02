@@ -17,6 +17,10 @@ interface FeedRepository {
         file: File
     ): NewsFeed?
 
+    suspend fun getAllNewsFeeds(): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote>
+
+    suspend fun getNewsFeedByFeedName(feedName: String): Result<Pair<NewsFeed?, Boolean>, DataError.Remote>
+
     suspend fun getAllFeedItems(): Result<List<NewsItem>, DataError.Remote>
 
     suspend fun getFeedItemsByNewsFeedName(
@@ -44,6 +48,12 @@ interface FeedRepository {
 
     suspend fun refreshNewsFeeds(
         newsFeedItems: List<NewsFeedItem>,
+        progress: (Float, ProgressStage) -> Unit
+    ): Result<Pair<List<NewsFeed>, List<NewsItem>>, DataError.Remote>
+
+    suspend fun refreshNewsFeedItems(
+        newsFeeds: List<NewsFeed>,
+        newsItems: List<NewsItem>,
         wifiOnly: Boolean,
         keepReadArticlesInDays: Long,
         keepUnreadArticlesInDays: Long,

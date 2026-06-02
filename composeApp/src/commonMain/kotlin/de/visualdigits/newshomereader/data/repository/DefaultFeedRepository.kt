@@ -3,13 +3,11 @@ package de.visualdigits.newshomereader.data.repository
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOneOrNull
-import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.parser.Parser
 import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
 import de.visualdigits.common.domain.model.errorhandling.Result
-import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.data.database.toNewsFeed
 import de.visualdigits.newshomereader.data.database.toNewsFeedEntity
@@ -58,13 +56,26 @@ import java.util.concurrent.atomic.AtomicInteger
 class DefaultFeedRepository(
     private val httpClient: HttpClient,
     private val dao: NewsHomeReaderDatabaseQueries,
-    private val connectivityManager: ConnectivityManager,
     private val imageCache: ImageCache,
     private val articleRepository: ArticleRepository,
     private val webDavSyncService: WebDavSyncService
 ) : FeedRepository {
 
-    private val log = Logger.withTag("DefaultFeedRepository")
+    override suspend fun getAllNewsFeeds(): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> = withContext(Dispatchers.IO) {
+        try {
+            Result.Success(Pair(dao.getAllNewsFeeds().executeAsList().map { nf -> nf.toNewsFeed() }, false))
+        } catch (e: Exception) {
+            Result.Error(DataError.Remote.SERIALIZATION, e)
+        }
+    }
+
+    override suspend fun getNewsFeedByFeedName(feedName: String): Result<Pair<NewsFeed?, Boolean>, DataError.Remote> = withContext(Dispatchers.IO) {
+        try {
+            Result.Success(Pair(dao.getNewsFeedByFeedName(feedName).executeAsOneOrNull()?.toNewsFeed(), false))
+        } catch (e: Exception) {
+            Result.Error(DataError.Remote.SERIALIZATION, e)
+        }
+    }
 
     override suspend fun getAllFeedItems(): Result<List<NewsItem>, DataError.Remote> = withContext(Dispatchers.IO) {
         try {
@@ -229,6 +240,35 @@ class DefaultFeedRepository(
 
     override suspend fun refreshNewsFeeds(
         newsFeedItems: List<NewsFeedItem>,
+        progress: (Float, ProgressStage) -> Unit
+    ): Result<Pair<List<NewsFeed>, List<NewsItem>>, DataError.Remote> = withContext(Dispatchers.IO) {
+        val totalSteps1 = newsFeedItems.size
+        currentStep.set(0)
+        val newsFeeds = newsFeedItems.mapNotNull { newsFeedItem ->
+            log(
+                Severity.Info,
+                "Refreshing newsfeed '${newsFeedItem.name}'",
+                withTag = "NHR"
+            )
+            try {
+                val response = newsFeedItem.url?.let { u -> httpClient.get(urlString = u) }
+                val newsFeed = readFromBytes(newsFeedItem.name, response?.readRawBytes())
+                val done = currentStep.incrementAndGet()
+                progress(done.toFloat() / totalSteps1, ProgressStage.LOAD_FEEDS)
+                newsFeed
+            } catch (e: Exception) {
+                log(Severity.Error, "Could not load feed '${newsFeedItem.name}'", e, withTag = "NHR")
+                null
+            }
+        }
+        val newsItems = newsFeeds.flatMap { newsFeed -> newsFeed.items }
+
+        Result.Success(Pair(newsFeeds, newsItems))
+    }
+
+    override suspend fun refreshNewsFeedItems(
+        newsFeeds: List<NewsFeed>,
+        newsItems: List<NewsItem>,
         wifiOnly: Boolean,
         keepReadArticlesInDays: Long,
         keepUnreadArticlesInDays: Long,
@@ -237,63 +277,41 @@ class DefaultFeedRepository(
         progress: (Float, ProgressStage) -> Unit
     ): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> = withContext(Dispatchers.IO) {
         try {
-            val finalNewsFeeds = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
-                val totalSteps1 = newsFeedItems.size
-                currentStep.set(0)
-                val newsFeeds = newsFeedItems.mapNotNull { newsFeedItem ->
-                    log(Severity.Info, "Refreshing newsfeed '${newsFeedItem.name}', loadArticles=$loadArticles...", withTag = "NHR")
-                    try {
-                        val response = newsFeedItem.url?.let { u -> httpClient.get(urlString = u) }
-                        val newsFeed = readFromBytes(newsFeedItem.name, response?.readRawBytes())
-                        val done = currentStep.incrementAndGet()
-                        progress(done.toFloat() / totalSteps1, ProgressStage.LOAD_FEEDS)
-                        newsFeed
-                    } catch (e: Exception) {
-                        log(Severity.Error, "Could not load feed '${newsFeedItem.name}'", e, withTag = "NHR")
-                        null
-                    }
+            val totalSteps2 = newsFeeds.size + newsItems.size * (if (loadArticles) 2 else 1)
+            currentStep.set(0)
+
+            val (persistedItems, _) = dao.transactionWithResult {
+                val persistedNewsFeeds = newsFeeds.map { newsFeed ->
+                    persistNewsFeed(newsFeed, totalSteps2, progress)
                 }
-
-                val newsItems = newsFeeds.flatMap { newsFeed -> newsFeed.items }
-                val totalSteps2 = newsFeeds.size + newsItems.size * (if (loadArticles) 2 else 1)
-                currentStep.set(0)
-
-                val (persistedItems, _) = dao.transactionWithResult {
-                    val persistedNewsFeeds = newsFeeds.map { newsFeed ->
-                        persistNewsFeed(newsFeed, totalSteps2, progress)
+                val result = if (persistedNewsFeeds.isNotEmpty()) {
+                    persistedNewsFeeds.reduce { acc, pair ->
+                        Pair(acc.first + pair.first, acc.second || pair.second)
                     }
-                    val result = if (persistedNewsFeeds.isNotEmpty()) {
-                        persistedNewsFeeds.reduce { acc, pair ->
-                            Pair(acc.first + pair.first, acc.second || pair.second)
-                        }
-                    } else {
-                        Pair(listOf(), false)
-                    }
-                    dao.cleanupOldReadNewsItems(OffsetDateTime.now().minus(Duration.of(keepReadArticlesInDays, ChronoUnit.DAYS)).toInstant().toEpochMilli())
-                    dao.cleanupOldUnreadNewsItems(OffsetDateTime.now().minus(Duration.of(keepUnreadArticlesInDays, ChronoUnit.DAYS)).toInstant().toEpochMilli())
-                    result
+                } else {
+                    Pair(listOf(), false)
                 }
-
-                val newsFeedsMap = newsFeeds
-                    .associate { nf -> Pair(nf.feedName, nf.copy(items = listOf())) }
-                    .toMutableMap()
-
-                val (newsItemsWithArticles, changedArticles) = loadArticles(loadArticles, persistedItems, totalSteps2, progress)
-                val newsFeedsWithArticles = newsItemsWithArticles.mapNotNull { item ->
-                    item.newsFeed?.let { nf ->
-                        val newsFeed = newsFeedsMap[nf.feedName]
-                        newsFeed
-                            ?.copy(items = newsFeed.items + item)
-                            ?.also { nf -> newsFeedsMap[nf.feedName] = nf }
-                    }
-                }
-
-                Pair(newsFeedsWithArticles, changedArticles)
-            } else {
-                log(Severity.Info, "No free of charge internet connection available - fetching newsFeeds from database", withTag = "NHR")
-                val newsFeeds = dao.getAllNewsFeeds().executeAsList().map { nf -> nf.toNewsFeed() }
-                Pair(newsFeeds, false)
+                dao.cleanupOldReadNewsItems(OffsetDateTime.now().minus(Duration.of(keepReadArticlesInDays, ChronoUnit.DAYS)).toInstant().toEpochMilli())
+                dao.cleanupOldUnreadNewsItems(OffsetDateTime.now().minus(Duration.of(keepUnreadArticlesInDays, ChronoUnit.DAYS)).toInstant().toEpochMilli())
+                result
             }
+
+            val newsFeedsMap = newsFeeds
+                .associate { nf -> Pair(nf.feedName, nf.copy(items = listOf())) }
+                .toMutableMap()
+
+            val (newsItemsWithArticles, changedArticles) = loadArticles(loadArticles, persistedItems, totalSteps2, progress)
+            val newsFeedsWithArticles = newsItemsWithArticles.mapNotNull { item ->
+                item.newsFeed?.let { nf ->
+                    val newsFeed = newsFeedsMap[nf.feedName]
+                    newsFeed
+                        ?.copy(items = newsFeed.items + item)
+                        ?.also { nf -> newsFeedsMap[nf.feedName] = nf }
+                }
+            }
+
+            val finalNewsFeeds = Pair(newsFeedsWithArticles, changedArticles)
+
             log(Severity.Info, "Refresh finished", withTag = "NHR")
             Result.Success(finalNewsFeeds)
         } catch (e: Exception) {
@@ -313,28 +331,24 @@ class DefaultFeedRepository(
     ): Result<Pair<NewsFeed?, Boolean>, DataError.Remote> = withContext(Dispatchers.IO) {
         log(Severity.Info, "Refreshing newsfeed '$feedName', loadArticles=$loadArticles...", withTag = "NHR")
         try {
-            val updatedNewsFeed = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
-                val response = httpClient.get(urlString = url)
-                val newsFeed = readFromBytes(feedName, response.readRawBytes())
+            val response = httpClient.get(urlString = url)
+            val newsFeed = readFromBytes(feedName, response.readRawBytes())
 
-                val totalItems = (newsFeed?.items?.size?:0) + 1
-                val totalSteps = totalItems * (if (loadArticles) 2 else 1)
-                currentStep.set(0)
+            val totalItems = (newsFeed?.items?.size?:0) + 1
+            val totalSteps = totalItems * (if (loadArticles) 2 else 1)
+            currentStep.set(0)
 
-                val (persistedItems, changedNewsItems) = dao.transactionWithResult {
-                    val newsItems = persistNewsFeed(newsFeed, totalSteps, progress)
-                    dao.cleanupOldReadNewsItems(OffsetDateTime.now().minus(Duration.of(keepReadArticlesInDays, ChronoUnit.DAYS)).toInstant().toEpochMilli())
-                    dao.cleanupOldUnreadNewsItems(OffsetDateTime.now().minus(Duration.of(keepUnreadArticlesInDays, ChronoUnit.DAYS)).toInstant().toEpochMilli())
-                    newsItems
-                }
-
-                val (articles, changedArticles) = loadArticles(loadArticles, persistedItems, totalSteps, progress)
-                val newsFeedWithArticles = newsFeed?.copy(items = articles)
-
-                Pair(newsFeedWithArticles, changedNewsItems || changedArticles)
-            } else {
-                Pair(dao.getNewsFeedByFeedName(feedName).executeAsOneOrNull()?.toNewsFeed(), false)
+            val (persistedItems, changedNewsItems) = dao.transactionWithResult {
+                val newsItems = persistNewsFeed(newsFeed, totalSteps, progress)
+                dao.cleanupOldReadNewsItems(OffsetDateTime.now().minus(Duration.of(keepReadArticlesInDays, ChronoUnit.DAYS)).toInstant().toEpochMilli())
+                dao.cleanupOldUnreadNewsItems(OffsetDateTime.now().minus(Duration.of(keepUnreadArticlesInDays, ChronoUnit.DAYS)).toInstant().toEpochMilli())
+                newsItems
             }
+
+            val (articles, changedArticles) = loadArticles(loadArticles, persistedItems, totalSteps, progress)
+            val newsFeedWithArticles = newsFeed?.copy(items = articles)
+
+            val updatedNewsFeed = Pair(newsFeedWithArticles, changedNewsItems || changedArticles)
 
             Result.Success(updatedNewsFeed)
         } catch (e: Exception) {
