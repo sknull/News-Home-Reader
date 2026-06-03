@@ -1,6 +1,5 @@
 package de.visualdigits.newshomereader.domain.util
 
-import de.visualdigits.newshomereader.domain.util.XmlUtil.xmlMapper
 import kotlinx.serialization.SerializationStrategy
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import nl.adaptivity.xmlutil.XmlDeclMode
@@ -56,7 +55,7 @@ inline fun <reified T : Any> decodeValue(file: File, removeNamespaces: Boolean =
 inline fun <reified T : Any> decodeFromString(xml: String, removeNamespaces: Boolean = true): T {
     return try {
         val rawXml = if (removeNamespaces) xml.removeNamespaces() else xml
-        xmlMapper.decodeFromString<T>(rawXml, null)
+        XmlUtil.xmlMapper.decodeFromString<T>(rawXml, null)
     } catch (e: Exception) {
         throw IllegalStateException("Could not parse string", e)
     }
@@ -65,7 +64,7 @@ inline fun <reified T : Any> decodeFromString(xml: String, removeNamespaces: Boo
 @OptIn(ExperimentalXmlUtilApi::class)
 fun <T> encodeToString(serializer: SerializationStrategy<T>, value: T): String  {
     return try {
-        xmlMapper
+        XmlUtil.xmlMapper
             .encodeToString(serializer, value)
             .replace("\r\n", "\n")
             .replace("\r", "\n")

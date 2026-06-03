@@ -48,8 +48,6 @@ fun NewsListMenuBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(40.dp)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(2.dp),
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
         verticalAlignment = Alignment.CenterVertically

@@ -78,9 +78,9 @@ fun NewsItemCard(
         modifier = modifier
             .conditional(simple) { height(100.dp) }
             .conditional(!simple) { dropShadow(
-                shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(8.dp),
                 shadow = Shadow(
-                    radius = 6.dp,
+                    radius = 4.dp,
                     spread = 2.dp,
                     color = Color.Black.copy(alpha = 0.5f),
                     offset = DpOffset((-5).dp, 5.dp)

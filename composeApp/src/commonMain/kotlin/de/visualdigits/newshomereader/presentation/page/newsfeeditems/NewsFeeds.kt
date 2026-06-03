@@ -6,6 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.common.presentation.model.ScrollIntent
@@ -19,6 +20,7 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 @Composable
 fun NewsFeeds(
     state: NewsHomeReaderState,
+    platformType: PlatformType,
     scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     chunks: Int,
     maxWidth: Dp,
@@ -44,6 +46,7 @@ fun NewsFeeds(
     if (maxWidth > maxHeight && maxWidth > 600.dp) {
         HorizontalNewsFeeds(
             state = state,
+            platformType = platformType,
             scrollPosition = scrollPosition,
             connectivityManager = connectivityManager,
             maxWidth = maxWidth,

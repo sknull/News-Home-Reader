@@ -21,11 +21,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.HsvColor
+import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.domain.util.copyFactor
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
@@ -35,6 +37,7 @@ import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.common.presentation.components.modifier.angledInnerShadow
 import de.visualdigits.common.presentation.components.modifier.tintedBackgroundImage
 import de.visualdigits.common.presentation.components.studioClockColors
+import de.visualdigits.common.presentation.components.util.conditional
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.compose.resources.Res
@@ -64,6 +67,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun HorizontalNewsFeeds(
     state: NewsHomeReaderState,
+    platformType: PlatformType,
     scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     connectivityManager: ConnectivityManager,
     maxWidth: Dp,
@@ -115,21 +119,7 @@ fun HorizontalNewsFeeds(
 
                         PlatformVerticalScrollbarBox(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .tintedBackgroundImage(
-                                    image = imageResource(Res.drawable.circuit_board_squared),
-                                    tint = MaterialTheme.colorScheme.onSurface,
-                                    finalAlpha = 0.2f
-                                )
-                                .angledInnerShadow(
-                                    angle = 45f,
-                                    distance = 20.dp,
-                                    spread = 10.dp,
-                                    alpha = 0.5f,
-                                    insetSize = 2.dp,
-                                    insetColorLight = MaterialTheme.colorScheme.background.copyFactor(valueFactor = dimFactor),
-                                    insetColorShadow = MaterialTheme.colorScheme.background.copyFactor(valueFactor = 1f / dimFactor)
-                                ),
+                                .fillMaxWidth(),
                             scrollbarModifier = Modifier
                                 .clip(MaterialTheme.shapes.small)
                                 .width(10.dp)
@@ -228,9 +218,11 @@ fun HorizontalNewsFeeds(
         //
         // Main area
         //
+        val gap = MaterialTheme.shapes.gap
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .conditional(platformType != PlatformType.android) { padding(end = gap) }
                 .tintedBackgroundImage(
                     image = imageResource(Res.drawable.circuit_board_squared),
                     tint = MaterialTheme.colorScheme.onSurface,

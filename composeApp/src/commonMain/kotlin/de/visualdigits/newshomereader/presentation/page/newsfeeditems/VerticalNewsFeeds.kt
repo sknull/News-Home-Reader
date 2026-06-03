@@ -3,6 +3,7 @@ package de.visualdigits.newshomereader.presentation.page.newsfeeditems
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -97,7 +99,8 @@ fun VerticalNewsFeeds(
                     insetSize = 2.dp,
                     insetColorLight = MaterialTheme.colorScheme.background.copyFactor(valueFactor = dimFactor),
                     insetColorShadow = MaterialTheme.colorScheme.background.copyFactor(valueFactor = 1f / dimFactor)
-                ),
+                )
+            ,
             backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
             scrollbarModifier = Modifier
                 .clip(MaterialTheme.shapes.small)
@@ -129,7 +132,8 @@ fun VerticalNewsFeeds(
                 listOf(Pair("newsfeed_navigation", @Composable {
                     Column(
                         modifier = Modifier
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.background),
                     ) {
                         (state.newsFeedGroups
                             .filter { nfg -> !nfg.isKeywordBucket }
@@ -147,8 +151,6 @@ fun VerticalNewsFeeds(
                                 )
                                 ).forEach { newsFeedGroup ->
                                 NewsFeedGroupBox(
-                                    modifier = Modifier
-                                        .background(MaterialTheme.colorScheme.background.copy(alpha = 0.8f)),
                                     newsFeedGroup = newsFeedGroup,
                                     onAction = onAction,
                                     state = state,
@@ -162,15 +164,20 @@ fun VerticalNewsFeeds(
             } + listOf(
                 Pair("newslist_menubar", @Composable {
                     if (state.currentNewsFeedGroup != null || state.currentNewsFeedName != null) {
-                        NewsListMenuBar(
+                        Box(
                             modifier = Modifier
-                                .background(MaterialTheme.colorScheme.background),
-                            connectivityManager = connectivityManager,
-                            state = state,
-                            maxWidth = maxWidth,
-                            onAction = onAction
-                        )
-                        Spacer(Modifier.size(MaterialTheme.shapes.gap))
+                                .fillMaxWidth()
+                                .padding(bottom = MaterialTheme.shapes.gap)
+                        ) {
+                            NewsListMenuBar(
+                                modifier = Modifier
+                                    .background(MaterialTheme.colorScheme.background),
+                                connectivityManager = connectivityManager,
+                                state = state,
+                                maxWidth = maxWidth,
+                                onAction = onAction
+                            )
+                        }
                     }
                 })
             ) + rowData.flatMapIndexed { index, rowItems ->

@@ -1,5 +1,6 @@
 package de.visualdigits.newshomereader.presentation.page.newsfeeditems.article
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.hoverable
@@ -29,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.style.TextDecoration
@@ -39,11 +41,15 @@ import be.digitalia.compose.htmlconverter.HtmlStyle
 import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
 import de.visualdigits.common.domain.model.HsvColor
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
+import de.visualdigits.common.domain.util.copyFactor
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
+import de.visualdigits.common.presentation.components.modifier.angledInnerShadow
+import de.visualdigits.common.presentation.components.modifier.tintedBackgroundImage
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.compose.resources.Res
+import de.visualdigits.compose.resources.circuit_board_squared
 import de.visualdigits.compose.resources.icon_paid_24px
 import de.visualdigits.compose.resources.icon_timelapse_24px
 import de.visualdigits.newshomereader.domain.model.settings.SK
@@ -61,6 +67,7 @@ import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import de.visualdigits.newshomereader.presentation.style.textLinkStyles
 import de.visualdigits.newshomereader.presentation.util.highlightQuery
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
+import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.painterResource
 import java.time.format.DateTimeFormatter
 
@@ -81,15 +88,39 @@ fun NewsArticleCard(
     connectivityManager: ConnectivityManager
 ) {
     val spotColor = state.settings?.get<HsvColor>(SK.spotColor)?: SPOT_COLOR_DEFAULT
+    val backgroundColorValue = HsvColor.fromComposeColor(MaterialTheme.colorScheme.background).value
+    val dimFactor = if (backgroundColorValue < 0.5f) 1.5f else 1.25f
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.TopCenter
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
     ) {
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .tintedBackgroundImage(
+                    image = imageResource(Res.drawable.circuit_board_squared),
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    finalAlpha = 0.2f,
+                    contentScale = ContentScale.FillHeight
+                )
+                .angledInnerShadow(
+                    angle = 45f,
+                    distance = 10.dp,
+                    spread = 5.dp,
+                    alpha = 0.5f,
+                    insetSize = 2.dp,
+                    insetColorLight = MaterialTheme.colorScheme.background.copyFactor(valueFactor = dimFactor),
+                    insetColorShadow = MaterialTheme.colorScheme.background.copyFactor(valueFactor = 1f / dimFactor)
+                )
+        ) {}
+
         Column(
             modifier = modifier
                 .fillMaxHeight()
                 .widthIn(max = 1000.dp)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(MaterialTheme.shapes.gap)
         ) {
             NewsArticleMenuBar(
@@ -305,5 +336,26 @@ fun NewsArticleCard(
                 )
             }
         }
+
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .tintedBackgroundImage(
+                    image = imageResource(Res.drawable.circuit_board_squared),
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    finalAlpha = 0.2f,
+                    contentScale = ContentScale.FillHeight
+                )
+                .angledInnerShadow(
+                    angle = 45f,
+                    distance = 10.dp,
+                    spread = 5.dp,
+                    alpha = 0.5f,
+                    insetSize = 2.dp,
+                    insetColorLight = MaterialTheme.colorScheme.background.copyFactor(valueFactor = dimFactor),
+                    insetColorShadow = MaterialTheme.colorScheme.background.copyFactor(valueFactor = 1f / dimFactor)
+                )
+        ) {}
     }
 }

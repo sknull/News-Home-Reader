@@ -48,7 +48,7 @@ fun ArticleImage(
                 maxImageSize = maxImageSize
             )
 
-            if (newsItem.imageCaption.isNotEmpty()) {
+            if (newsItem.imageCaption.isNotEmpty() && !newsItem.summary.contains(newsItem.imageCaption)) {
                 Text(
                     text = newsItem.imageCaption,
                     style = MaterialTheme.typography.bodySmall

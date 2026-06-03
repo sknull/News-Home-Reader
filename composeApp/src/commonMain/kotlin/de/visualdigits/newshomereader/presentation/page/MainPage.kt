@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.visualdigits.common.domain.model.HsvColor
+import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.presentation.components.BindBackHandler
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.container.ErrorCard
@@ -44,6 +45,7 @@ import kotlin.math.max
 @Composable
 fun MainPage(
     viewModel: NewsHomeReaderViewModel,
+    platformType: PlatformType,
     connectivityManager: ConnectivityManager
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -178,6 +180,7 @@ fun MainPage(
                         else -> {
                             NewsContent(
                                 state = state,
+                                platformType = platformType,
                                 chunks = chunks,
                                 viewModel = viewModel,
                                 maxWidth = screenWidth,

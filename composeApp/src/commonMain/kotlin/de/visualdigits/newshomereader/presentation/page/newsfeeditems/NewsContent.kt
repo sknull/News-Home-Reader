@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.Dp
+import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
@@ -19,6 +20,7 @@ import de.visualdigits.newshomereader.presentation.style.gap
 @Composable
 fun NewsContent(
     state: NewsHomeReaderState,
+    platformType: PlatformType,
     chunks: Int,
     viewModel: NewsHomeReaderViewModel,
     maxWidth: Dp,
@@ -51,6 +53,7 @@ fun NewsContent(
         } else {
             NewsFeeds(
                 state = state,
+                platformType = platformType,
                 scrollPosition = viewModel.scrollPosition,
                 chunks = chunks,
                 maxWidth = maxWidth,
