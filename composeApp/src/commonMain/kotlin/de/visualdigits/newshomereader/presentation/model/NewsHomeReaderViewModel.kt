@@ -209,7 +209,6 @@ class NewsHomeReaderViewModel(
                         value = action.keyValue.value
                     )
                 }
-                log(Severity.Debug, "State:OnSettingsValueChanged: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.OnEditSettingsCancelClick -> {
@@ -611,7 +610,7 @@ class NewsHomeReaderViewModel(
                     val newCollapsibleState = if (
                         (state.value.isEditMode && !action.group.isKeywordBucket) ||
                         (action.group.subGroups.isNotEmpty() || action.group.newsFeeds.isNotEmpty())
-                        ) {
+                    ) {
                         it.collapsibleState + if (stayInGroup) {
                             ("group_${action.group.name}" to true)
                         } else {
@@ -622,8 +621,8 @@ class NewsHomeReaderViewModel(
                     }
                     it.copy(
                         previousNewsFeedGroup = it.currentNewsFeedGroup,
-                        currentNewsFeedGroup = if (action.isExpanded || action.group.isKeywordBucket || stayInGroup) action.group else null,
-                        currentKeywordBucket = if (action.group.isKeywordBucket) action.group.name else null,
+                        currentNewsFeedGroup = if ((action.isExpanded && (!action.group.isKeywordBucket || (action.group.isKeywordBucket && action.group.isEditable))) || stayInGroup) action.group else null,
+                        currentKeywordBucket = if (action.group.isKeywordBucket && action.group.isEditable) action.group.name else null,
                         allowClearVisibleNewsItems = if (stayInGroup) false else !action.isExpanded,
                         currentNewsFeedName = null,
                         collapsibleState = newCollapsibleState
