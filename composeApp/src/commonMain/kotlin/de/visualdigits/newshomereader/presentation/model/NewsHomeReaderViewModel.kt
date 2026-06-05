@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
-import de.visualdigits.common.domain.model.errorhandling.LogMessage
 import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.common.domain.model.errorhandling.onError
@@ -66,7 +65,6 @@ import kotlinx.coroutines.launch
 import java.io.InputStream
 import java.io.OutputStream
 import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.Locale
 import kotlin.time.Duration.Companion.milliseconds
@@ -249,11 +247,6 @@ class NewsHomeReaderViewModel(
             is NewsHomeReaderAction.OnSettingsExport -> {
                 exportSettings(action.fileName, action.outs)
                 log(Severity.Debug, "State:OnSettingsExport: ${state.value}", withTag = "NHR")
-            }
-
-            is NewsHomeReaderAction.OnLogsExport -> {
-                exportLogs(action.fileName, action.outs)
-                log(Severity.Debug, "State:OnLogsExport: ${state.value}", withTag = "NHR")
             }
 
             is NewsHomeReaderAction.UpdateMaxImageSize -> {
@@ -1135,27 +1128,6 @@ class NewsHomeReaderViewModel(
                         }
                     }
             }
-        } else {
-            _state.update {
-                it.copy(
-                    currentProgress = 0.0f,
-                    progressStage = ProgressStage.NONE,
-                    uiMessage = UiText.StringResourceId(Res.string.error_local_wrong_filetype),
-                    uiMessageSeverity = Severity.Error
-                )
-            }
-        }
-    }
-
-    private fun exportLogs(fileName: String, outs: OutputStream) = viewModelScope.launch {
-        if (fileName.endsWith(".log", ignoreCase = true)) {
-            val lines = LogMessage.logs
-                .joinToString("\n") { lm ->
-                    val timeStamp = lm.timestamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss-SSS"))
-                    val stackTrace = lm.throwable?.let { st -> "\n${st.stackTraceToString()}" } ?: ""
-                    "$timeStamp ${lm.tag} [${lm.severity}] ${lm.message}$stackTrace"
-                }
-            outs.use { o -> o.write(lines.toByteArray()) }
         } else {
             _state.update {
                 it.copy(

@@ -68,7 +68,7 @@ fun main() {
     val writers = getPlatformLogWriters(homeDirectoryPath, "NewsHomeReader.log")
     Logger.setLogWriters(writers)
     Logger.setTag("NewsHomeReader")
-    Logger.setMinSeverity(Severity.Info)
+    Logger.setMinSeverity(Severity.Debug)
 
     System.setProperty("flatlaf.useWindowDecorations", "true")
 

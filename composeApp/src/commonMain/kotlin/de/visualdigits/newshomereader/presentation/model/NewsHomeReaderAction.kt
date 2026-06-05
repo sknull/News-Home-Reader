@@ -56,12 +56,6 @@ sealed interface NewsHomeReaderAction {
     ): NewsHomeReaderAction
 
     @Immutable
-    data class OnLogsExport(
-        val fileName: String,
-        val outs: OutputStream
-    ): NewsHomeReaderAction
-
-    @Immutable
     class OnSaveSettingsClick : NewsHomeReaderAction
 
     @Immutable
