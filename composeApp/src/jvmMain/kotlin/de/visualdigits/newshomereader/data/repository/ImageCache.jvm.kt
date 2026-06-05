@@ -41,8 +41,6 @@ actual class ImageCache(
                             .build()
                         try {
                             sharedImageLoader.execute(request)
-                        } catch (e: Exception) {
-                            log.e("Could not fetch image: $url", e)
                         } finally {
                             onImageDone()
                         }
