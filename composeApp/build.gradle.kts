@@ -177,7 +177,7 @@ kotlin {
             implementation(libs.flatlaf)
             implementation(compose.desktop.currentOs)
             implementation(libs.skiko.awt.runtime.windows.x64)
-            implementation(libs.kotlinx.coroutinesSwing)
+            implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.sqldelight.jvm)
             implementation(libs.kotlinx.io.core.jvm)
         }
@@ -456,9 +456,6 @@ configurations.all {
                     .using(module("com.fleeksoft.ksoup:ksoup:${libs.versions.version.ksoup.get()}"))
             }
         }
-
-        val versionOkHttp = libs.versions.version.okhttp
-        val versionOkio = libs.versions.version.okio
 
         val versionIo = libs.versions.version.kotlinx.io.core.get()
         force("org.jetbrains.kotlinx:kotlinx-io-core:$versionIo")
