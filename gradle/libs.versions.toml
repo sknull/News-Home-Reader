@@ -71,7 +71,7 @@ kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "vers
 kotlin-xml-serialization = { module = "io.github.pdvrieze.xmlutil:serialization", version.ref = "version-kotlin-xml-util" }
 kotlin-xml-util = { module = "io.github.pdvrieze.xmlutil:core", version.ref = "version-kotlin-xml-util" }
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "version-kotlinx-coroutines" }
-kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "version-jetbrains-kotlin" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "version-kotlinx-coroutines" }
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "version-kotlinx-coroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "version-kotlinx-datetime" }
 kotlinx-io-core = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "version-kotlinx-io-core" }
