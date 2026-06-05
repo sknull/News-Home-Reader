@@ -39,7 +39,9 @@ fun NewsFeedItems(
         modifier = modifier
             .fillMaxWidth(),
     ) {
-        newsFeedGroup.newsFeeds.forEach { newsFeedItem ->
+        newsFeedGroup.newsFeeds
+            .sortedBy { nf -> nf.name }
+            .forEach { newsFeedItem ->
             Row(
                 modifier = Modifier,
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
