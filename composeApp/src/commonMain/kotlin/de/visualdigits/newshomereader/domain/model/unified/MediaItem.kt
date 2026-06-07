@@ -15,6 +15,7 @@ data class MediaItem(
     val author: String? = null,
     val width: Int? = null,
     val height: Int? = null,
+    val duration: String? = null,
     @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) val datePublished: OffsetDateTime? = null,
     @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) val dateModified: OffsetDateTime? = null,
     @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) val uploadDate: OffsetDateTime? = null,

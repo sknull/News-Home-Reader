@@ -25,6 +25,7 @@ data class VideoDto(
     fun toMediaItem(): MediaItem {
         return MediaItem(
             url = contentUrl.firstOrNull(),
+            duration = duration,
             description = description,
             datePublished = uploadDate,
             dateModified = uploadDate,

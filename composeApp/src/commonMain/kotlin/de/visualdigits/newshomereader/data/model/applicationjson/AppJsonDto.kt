@@ -97,6 +97,7 @@ data class AppJsonDto @OptIn(ExperimentalSerializationApi::class, ExperimentalSe
         return MediaItem(
             url = contentUrl?:url,
             headline = headline,
+            duration = duration,
             description = description,
             datePublished = datePublished,
             dateModified = dateModified,

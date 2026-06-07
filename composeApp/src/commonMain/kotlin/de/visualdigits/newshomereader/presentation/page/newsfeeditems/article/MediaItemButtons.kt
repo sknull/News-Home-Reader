@@ -32,6 +32,7 @@ import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem
 import de.visualdigits.newshomereader.domain.model.unified.MediaType
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
+import de.visualdigits.newshomereader.domain.util.parseDuration
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.Image
 import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
@@ -131,8 +132,9 @@ fun MediaItemButtons(
                                                 )
                                             }
 
+                                            val durationString = mediaItem.duration?.parseDuration()?.let { d -> " [$d]" }?:""
                                             Text(
-                                                text = mediaItem.headline ?: "",
+                                                text = "${mediaItem.headline}$durationString",
                                                 style = MaterialTheme.typography.bodySmall
                                             )
                                         }
