@@ -6,6 +6,7 @@ import de.visualdigits.newshomereader.NewsFeedGroupEntity
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.NewsItemEntity
 import de.visualdigits.newshomereader.SettingsEntity
+import de.visualdigits.newshomereader.data.model.opml.OutlineType
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 
 fun NewsHomeReaderDatabaseQueries.getAllNewsFeedGroups(): List<NewsFeedGroup> {
@@ -37,7 +38,7 @@ private fun buildNodeRecursive(
         parentId = currentEntity.parentId,
         parentGroupName = currentEntity.parentGroupName,
         name = currentEntity.name,
-        isKeywordBucket = currentEntity.isKeywordBucket,
+        outlineType = OutlineType.valueOf(currentEntity.type),
         newsFeeds = currentEntity.newsFeeds,
         subGroups = subGroups
     )
@@ -52,14 +53,25 @@ fun NewsHomeReaderDatabaseQueries.upsertNewsFeedGroup(newsFeedGroupEntity: NewsF
     }
 }
 
+fun NewsHomeReaderDatabaseQueries.upsertNewsFeedGroupByName(newsFeedGroupEntity: NewsFeedGroupEntity): NewsFeedGroupEntity {
+    val existingNewsFeedEntity = getNewsFeedGroupEntityByName(
+        name = newsFeedGroupEntity.name,
+        parentGroupName = newsFeedGroupEntity.parentGroupName
+    ).executeAsOneOrNull()
+    return if (existingNewsFeedEntity != null) {
+        updateNewsFeedGroup(newsFeedGroupEntity)
+    } else {
+        insertNewsFeedGroup(newsFeedGroupEntity)
+    }
+}
+
 fun NewsHomeReaderDatabaseQueries.insertNewsFeedGroup(newsFeedGroupEntity: NewsFeedGroupEntity): NewsFeedGroupEntity {
     insertNewsFeedGroupEntity(
         parentId = newsFeedGroupEntity.parentId,
         parentGroupName = newsFeedGroupEntity.parentGroupName,
         name = newsFeedGroupEntity.name,
-        isKeywordBucket = newsFeedGroupEntity.isKeywordBucket,
-        newsFeeds = newsFeedGroupEntity.newsFeeds,
-        subGroups = newsFeedGroupEntity.subGroups
+        type = newsFeedGroupEntity.type,
+        newsFeeds = newsFeedGroupEntity.newsFeeds
     )
 
     return getNewsFeedGroupEntityByName(name = newsFeedGroupEntity.name, parentGroupName = newsFeedGroupEntity.parentGroupName).executeAsOne()
@@ -70,9 +82,8 @@ fun NewsHomeReaderDatabaseQueries.updateNewsFeedGroup(newsFeedGroupEntity: NewsF
         parentId = newsFeedGroupEntity.parentId,
         parentGroupName = newsFeedGroupEntity.parentGroupName,
         name = newsFeedGroupEntity.name,
-        isKeywordBucket = newsFeedGroupEntity.isKeywordBucket,
+        type = newsFeedGroupEntity.type,
         newsFeeds = newsFeedGroupEntity.newsFeeds,
-        subGroups = newsFeedGroupEntity.subGroups,
         id = newsFeedGroupEntity.id
     )
 
@@ -273,7 +284,7 @@ fun NewsHomeReaderDatabaseQueries.insertFullArticle(fullArticleEntity: FullArtic
         articleImage = fullArticleEntity.articleImage,
         discussionUrl = fullArticleEntity.discussionUrl,
         commentCount = fullArticleEntity.commentCount,
-        isFree = fullArticleEntity.isFree,
+        isPaid = fullArticleEntity.isPaid,
         wordCount = fullArticleEntity.wordCount,
         readingTime = fullArticleEntity.readingTime,
     )
@@ -290,7 +301,7 @@ fun NewsHomeReaderDatabaseQueries.updateFullArticle(fullArticleEntity: FullArtic
         articleImage = fullArticleEntity.articleImage,
         discussionUrl = fullArticleEntity.discussionUrl,
         commentCount = fullArticleEntity.commentCount,
-        isFree = fullArticleEntity.isFree,
+        isPaid = fullArticleEntity.isPaid,
         wordCount = fullArticleEntity.wordCount,
         readingTime = fullArticleEntity.readingTime,
         id = fullArticleEntity.id
@@ -302,8 +313,7 @@ fun NewsFeedGroupEntity.isEqualTo(other: NewsFeedGroupEntity): Boolean {
     parentId == other.parentId &&
     parentGroupName == other.parentGroupName &&
     name == other.name &&
-    newsFeeds == other.newsFeeds &&
-    subGroups == other.subGroups
+    newsFeeds == other.newsFeeds
 }
 
 fun NewsFeedEntity.isEqualTo(other: NewsFeedEntity): Boolean {
@@ -354,7 +364,7 @@ fun FullArticleEntity.isEqualto(other: FullArticleEntity): Boolean {
     articleImage == other.articleImage &&
     discussionUrl == other.discussionUrl &&
     commentCount == other.commentCount &&
-    isFree == other.isFree &&
+    isPaid == other.isPaid &&
     wordCount == other.wordCount &&
     readingTime == other.readingTime
 

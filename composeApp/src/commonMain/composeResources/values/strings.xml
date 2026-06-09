@@ -27,6 +27,9 @@
   <string name="error_unknown_field">Field unknown in configuration.</string>
   <string name="false">False</string>
   <string name="field_unset">Field is not defined.</string>
+  <string name="group_name">Name</string>
+  <string name="group_group">Group</string>
+  <string name="group_settings">Settings</string>
   <string name="group_display_theme">Display Theme</string>
   <string name="group_feed_seetings">Feed Settings</string>
   <string name="group_webdav">WebDAV</string>
@@ -101,7 +104,7 @@
   <string name="title_edit_newsfeedconfiguration">Edit Newsfeed</string>
   <string name="title_edit_newsfeedgroup">Edit Newsfeed Group</string>
   <string name="title_info">Info</string>
-  <string name="title_is_keyword_bucket">Is Keyword Bucket</string>
+  <string name="label_is_keyword_bucket">Is Keyword Bucket</string>
   <string name="title_search">Search</string>
   <string name="title_settings">Settings</string>
   <string name="tooltip_add_scene">Add scene...</string>

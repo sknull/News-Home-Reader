@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -34,7 +33,6 @@ import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.circuit_board_squared
 import de.visualdigits.compose.resources.icon_add_notes_24px
 import de.visualdigits.compose.resources.label_keyword_buckets
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
@@ -135,21 +133,8 @@ fun VerticalNewsFeeds(
                             .fillMaxWidth()
                             .background(MaterialTheme.colorScheme.background),
                     ) {
-                        (state.newsFeedGroups
-                            .filter { nfg -> !nfg.isKeywordBucket }
-                            .sortedBy { nfg -> nfg.name } +
-                                listOf(
-                                    NewsFeedGroup(
-                                        id = -1,
-                                        name = labelKeywordBuckets,
-                                        isKeywordBucket = true,
-                                        isEditable = false,
-                                        subGroups = state.newsFeedGroups
-                                            .filter { nfg -> nfg.isKeywordBucket }
-                                            .sortedBy { nfg -> nfg.name }
-                                    )
-                                )
-                                ).forEach { newsFeedGroup ->
+                        state.newsFeedGroups
+                            .forEach { newsFeedGroup ->
                                 NewsFeedGroupBox(
                                     newsFeedGroup = newsFeedGroup,
                                     onAction = onAction,

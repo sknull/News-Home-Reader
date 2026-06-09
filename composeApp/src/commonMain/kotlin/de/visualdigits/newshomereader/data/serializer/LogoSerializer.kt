@@ -12,6 +12,7 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 
 object LogoSerializer : KSerializer<LogoDto> {
+
     override val descriptor: SerialDescriptor = buildClassSerialDescriptor(
         serialName = "Image"
     ) {

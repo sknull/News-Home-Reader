@@ -158,7 +158,7 @@ fun NewsItemCard(
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                     ) {
-                        if (state.currentNewsFeedGroup != null || simple) {
+                        if (state.currentNewsFeedGroup != null || state.currentKeywordBucket != null || simple) {
                             state.lookupNewsFeedMap[feedName.trim().lowercase()]?.url?.let { url ->
                                 // favicon
                                 Image(
@@ -198,7 +198,7 @@ fun NewsItemCard(
                             )
                         }
 
-                        if (newsItem.newsArticle?.isFree == false) {
+                        if (newsItem.newsArticle?.isPaid == true) {
                             Icon(
                                 modifier = Modifier.size(18.dp),
                                 painter = painterResource(Res.drawable.icon_paid_24px),

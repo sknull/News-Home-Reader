@@ -5,6 +5,7 @@ import coil3.PlatformContext
 import coil3.annotation.ExperimentalCoilApi
 import coil3.disk.DiskCache
 import coil3.network.ktor3.KtorNetworkFetcherFactory
+import coil3.svg.SvgDecoder
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.UserAgent
@@ -20,6 +21,7 @@ fun createImageLoader(
 ): ImageLoader.Builder {
     return ImageLoader.Builder(context)
         .components {
+            add(SvgDecoder.Factory())
             add(
                 KtorNetworkFetcherFactory(
                     httpClient = HttpClient {
@@ -28,6 +30,7 @@ fun createImageLoader(
                         }
                         install(HttpTimeout) {
                             requestTimeoutMillis = 10000
+                            socketTimeoutMillis = 10000
                         }
                         install(ContentEncoding) {
                             deflate(1.0F)
@@ -35,7 +38,6 @@ fun createImageLoader(
                         }
                         defaultRequest {
                             header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
-                            header("Accept-Encoding", "gzip, deflate, br, zstd")
                             header("Accept-Language", "de,en-US;q=0.9,en;q=0.8")
                         }
                     }

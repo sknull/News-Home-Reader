@@ -14,7 +14,6 @@ import de.visualdigits.newshomereader.data.database.applicationJsonAdapter
 import de.visualdigits.newshomereader.data.database.mediaItemAdapter
 import de.visualdigits.newshomereader.data.database.newsFeedsAdapter
 import de.visualdigits.newshomereader.data.database.stringListAdapter
-import de.visualdigits.newshomereader.data.database.subGroupsAdapter
 import de.visualdigits.newshomereader.data.http.HttpClientFactory
 import de.visualdigits.newshomereader.data.repository.DefaultSettingsRepository
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
@@ -56,8 +55,7 @@ val testModule = module {
                 keywordsAdapter = stringListAdapter
             ),
             NewsFeedGroupEntityAdapter = NewsFeedGroupEntity.Adapter(
-                newsFeedsAdapter = newsFeedsAdapter,
-                subGroupsAdapter = subGroupsAdapter
+                newsFeedsAdapter = newsFeedsAdapter
             ),
             SettingsEntityAdapter = SettingsEntity.Adapter(
                 webDavPasswordAdapter = passwordAdapter

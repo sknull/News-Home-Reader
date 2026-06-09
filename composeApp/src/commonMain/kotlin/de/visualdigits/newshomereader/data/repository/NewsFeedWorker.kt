@@ -1,11 +1,11 @@
 package de.visualdigits.newshomereader.data.repository
 
-import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.common.presentation.components.ConnectivityManager
+import de.visualdigits.newshomereader.data.model.opml.OutlineType
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
@@ -21,8 +21,6 @@ class NewsFeedWorker(
     private val newsFeedConfigurationRepository: NewsFeedConfigurationRepository,
     private val settingsRepository: SettingsRepository,
 ) {
-
-    private val log = Logger.withTag("NewsFeedWorker")
 
     suspend fun execute(maxImageSize: Int) {
         try {
@@ -40,7 +38,7 @@ class NewsFeedWorker(
                     val newsFeedGroups = feedConfigurationResult.data
                     val newsFeedConfigurations = newsFeedGroups.flatMap { nfg ->
                         nfg.newsFeeds + nfg.subGroups.flatMap { sg -> sg.newsFeeds }
-                    }
+                    }.filter { nfi -> nfi.outlineType != OutlineType.keyword }
                     val result = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                         val newsFeedsResult = feedRepository.refreshNewsFeeds(
                             newsFeedItems = newsFeedConfigurations,
@@ -77,11 +75,9 @@ class NewsFeedWorker(
                                 feedRepository.prefetchImages(
                                     newsFeeds = newsFeeds
                                 ) { _, _ -> }
-                                settings?.also { s ->
-                                    val sc = s.copy(SK.feedsChanged, BooleanEnum.TRUE)
-                                    CoroutineScope(Dispatchers.Default).launch {
-                                        settingsRepository.setSettings(sc)
-                                    }
+                                val sc = settings.copy(SK.feedsChanged, BooleanEnum.TRUE)
+                                CoroutineScope(Dispatchers.Default).launch {
+                                    settingsRepository.setSettings(sc)
                                 }
                             }
                         }

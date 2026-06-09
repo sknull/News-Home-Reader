@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,8 +16,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.compose.resources.Res
+import de.visualdigits.compose.resources.icon_collections_bookmark_24px
 import de.visualdigits.compose.resources.icon_delete_24px
 import de.visualdigits.compose.resources.icon_edit_24px
+import de.visualdigits.newshomereader.data.model.opml.OutlineType
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.util.getFaviconUrl
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
@@ -60,23 +63,30 @@ fun NewsFeedItems(
                     shape = MaterialTheme.shapes.extraSmall,
                     selected = state.currentNewsFeedName == newsFeedItem.name,
                     leadingImage = {
-                        newsFeedItem.url?.getFaviconUrl(48)?.let { url ->
-                            Image(
-                                modifier = Modifier
-                                    .width(24.dp)
-                                    .height(24.dp),
-                                url = url,
-                                contentDescription = newsFeedItem.name ?: "",
-                                maxImageSize = 48,
-                                showLoadingIcon = false
+                        if (newsFeedItem.outlineType == OutlineType.newsfeed) {
+                            newsFeedItem.url?.getFaviconUrl(48)?.let { url ->
+                                Image(
+                                    modifier = Modifier
+                                        .width(24.dp)
+                                        .height(24.dp),
+                                    url = url,
+                                    contentDescription = newsFeedItem.name ?: "",
+                                    maxImageSize = 48,
+                                    showLoadingIcon = false
+                                )
+                            }
+                        } else if (newsFeedItem.outlineType == OutlineType.keyword) {
+                            Icon(
+                                painter = painterResource(Res.drawable.icon_collections_bookmark_24px),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     }
                 ) {
                     onAction(
                         NewsHomeReaderAction.OnNewsFeedClicked(
-                            feedName = newsFeedItem.name,
-                            currentFeedIItem = newsFeedItem
+                            currentFeedItem = newsFeedItem
                         )
                     )
                 }

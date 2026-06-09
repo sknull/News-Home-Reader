@@ -20,14 +20,12 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.presentation.components.button.IndicatorButton
-import de.visualdigits.common.presentation.components.form.SwitchBox
 import de.visualdigits.common.presentation.components.util.outlinedTextFieldColors
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.cancel
 import de.visualdigits.compose.resources.ok
 import de.visualdigits.compose.resources.title_add_newsfeedgroup
 import de.visualdigits.compose.resources.title_edit_newsfeedgroup
-import de.visualdigits.compose.resources.title_is_keyword_bucket
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.gap
@@ -43,7 +41,6 @@ fun NewsFeedConfigurationGroupDialog(
 
     if (state.isAddingNewsFeedGroup || state.isEditingNewsFeedGroup) {
         var currentNewsFeedGroupName by remember { mutableStateOf<String>(state.originalNewsFeedGroup?.name?:"") }
-        var isKeywordBucket by remember { mutableStateOf<Boolean>(state.originalNewsFeedGroup?.isKeywordBucket?:false) }
 
         AlertDialog(
             modifier = Modifier
@@ -84,17 +81,6 @@ fun NewsFeedConfigurationGroupDialog(
                             MaterialTheme.colorScheme.onSurface
                         )
                     )
-
-                    SwitchBox(
-                        space = MaterialTheme.shapes.gap,
-                        label = stringResource(Res.string.title_is_keyword_bucket),
-                        currentValue = isKeywordBucket,
-                        fieldHeight = 50.dp,
-                        textStyle = MaterialTheme.typography.bodyMedium,
-                        onValueChange = { value ->
-                            isKeywordBucket = value.booleanValue
-                        }
-                    )
                 }
             },
             confirmButton = {
@@ -104,14 +90,12 @@ fun NewsFeedConfigurationGroupDialog(
                 ) {
                     if (state.isAddingNewsFeedGroup) {
                         onAction(NewsHomeReaderAction.OnAddNewsFeedGroupOkClick(
-                            newsFeedGroupName = currentNewsFeedGroupName,
-                            isKeywordBucket = isKeywordBucket
+                            newsFeedGroupName = currentNewsFeedGroupName
                         ))
                     } else if (state.isEditingNewsFeedGroup) {
                         onAction(NewsHomeReaderAction.OnEditNewsFeedGroupOkClick(
                             originalNewsFeedGroup = state.originalNewsFeedGroup,
-                            editedNewsFeedGroupName = currentNewsFeedGroupName,
-                            isKeywordBucket = isKeywordBucket
+                            editedNewsFeedGroupName = currentNewsFeedGroupName
                         ))
                     }
                 }

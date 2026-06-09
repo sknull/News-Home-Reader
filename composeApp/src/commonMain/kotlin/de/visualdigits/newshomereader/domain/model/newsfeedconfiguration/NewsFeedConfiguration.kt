@@ -1,15 +1,22 @@
 package de.visualdigits.newshomereader.domain.model.newsfeedconfiguration
 
 import androidx.compose.runtime.Immutable
+import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.AbstractConfiguration
+import de.visualdigits.common.domain.model.configuration.EnumFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.ListFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.ReferenceListFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.StringFieldDescriptor
+import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.StringKeyFactory
 import de.visualdigits.common.domain.model.configuration.keyfactory.StringListKeyFactory
 import de.visualdigits.compose.resources.Res
+import de.visualdigits.compose.resources.group_group
+import de.visualdigits.compose.resources.group_name
+import de.visualdigits.compose.resources.group_settings
 import de.visualdigits.compose.resources.label_feedName
+import de.visualdigits.compose.resources.label_is_keyword_bucket
 import de.visualdigits.compose.resources.label_maingroupName
 import de.visualdigits.compose.resources.label_stopWords
 import de.visualdigits.compose.resources.label_subgroupName
@@ -38,17 +45,27 @@ class NewsFeedConfiguration(
 
     companion object {
         val DESCRIPTORS = listOf(
+            EnumFieldDescriptor(
+                fieldClass = BooleanEnum::class,
+                group = UiText.StringResourceId(Res.string.group_name),
+                key = NC.isKeyword,
+                label =  UiText.StringResourceId(Res.string.label_is_keyword_bucket),
+                toolTip =  UiText.StringResourceId(Res.string.label_is_keyword_bucket),
+                options = { _, _ -> BooleanEnum.options },
+                keyFactory = BooleanEnum,
+                default = BooleanEnum.FALSE
+            ),
+
             StringFieldDescriptor(
                 key = NC.feedName,
+                group = UiText.StringResourceId(Res.string.group_name),
                 label = UiText.StringResourceId(Res.string.label_feedName),
                 toolTip =  UiText.StringResourceId(Res.string.tooltip_feedName),
-                valid = { _, value ->
-                    (value as? String)?.isNotBlank() == true
-                }
             ),
 
             ReferenceListFieldDescriptor(
                 fieldClass = String::class,
+                group = UiText.StringResourceId(Res.string.group_group),
                 key = NC.mainGroupName,
                 label =  UiText.StringResourceId(Res.string.label_maingroupName),
                 keyFactory = StringKeyFactory,
@@ -58,13 +75,11 @@ class NewsFeedConfiguration(
                         ?.sortedBy { t -> t.first }
                         ?:listOf()
                 },
-                valid = { _, value ->
-                    (value as? String)?.isNotBlank() == true
-                }
             ),
 
             ReferenceListFieldDescriptor(
                 fieldClass = String::class,
+                group = UiText.StringResourceId(Res.string.group_group),
                 key = NC.subGroupName,
                 label =  UiText.StringResourceId(Res.string.label_subgroupName),
                 keyFactory = StringKeyFactory,
@@ -78,21 +93,28 @@ class NewsFeedConfiguration(
             ),
 
             StringFieldDescriptor(
+                group = UiText.StringResourceId(Res.string.group_settings),
                 key = NC.url,
                 label =  UiText.StringResourceId(Res.string.label_url),
                 toolTip =  UiText.StringResourceId(Res.string.tooltip_url),
-                valid = { _, value ->
-                    (value as? String)?.isNotBlank() == true
+//                enabledCondition = { configuration, _ -> configuration.get<BooleanEnum>(NC.isKeyword)?.booleanValue != true },
+                valid = { configuration, value ->
+                    if ((value as? String)?.isNotBlank() == true || configuration.get<BooleanEnum>(NC.isKeyword)?.booleanValue == true) {
+                        Severity.Info
+                    } else {
+                        Severity.Error
+                    }
                 }
             ),
 
             ListFieldDescriptor(
                 fieldClass = String::class,
+                group = UiText.StringResourceId(Res.string.group_settings),
                 key = NC.stopWords,
                 label =  UiText.StringResourceId(Res.string.label_stopWords),
                 toolTip =  UiText.StringResourceId(Res.string.tooltip_stopWords),
                 keyFactory = StringListKeyFactory,
-                valid = { _, _ -> true }
+//                enabledCondition = { configuration, _ -> configuration.get<BooleanEnum>(NC.isKeyword)?.booleanValue != true },
             ),
         )
     }

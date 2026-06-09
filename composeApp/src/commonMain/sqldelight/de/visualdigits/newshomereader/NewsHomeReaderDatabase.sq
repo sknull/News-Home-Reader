@@ -1,11 +1,10 @@
+import de.visualdigits.common.domain.model.EncryptedString;
 import de.visualdigits.newshomereader.domain.model.applicationjson.AppJson;
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem;
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup;
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem;
 import kotlin.Boolean;
 import kotlin.String;
 import kotlin.collections.List;
-import de.visualdigits.common.domain.model.EncryptedString;
 
 --
 -- SETTINGS
@@ -239,7 +238,7 @@ CREATE TABLE FullArticleEntity (
     articleImage TEXT,
     discussionUrl TEXT,
     commentCount INTEGER NOT NULL,
-    isFree INTEGER AS Boolean NOT NULL DEFAULT 1,
+    isPaid INTEGER AS Boolean NOT NULL DEFAULT 1,
     wordCount INTEGER NOT NULL,
     readingTime INTEGER NOT NULL,
     FOREIGN KEY(itemId) REFERENCES NewsItemEntity(id) ON DELETE CASCADE
@@ -248,7 +247,7 @@ CREATE TABLE FullArticleEntity (
 insertFullArticle:
 INSERT INTO FullArticleEntity (
     itemId, applicationJson, html, imageItems, videoItems,
-    audioItems, articleImage, discussionUrl, commentCount, isFree, wordCount, readingTime
+    audioItems, articleImage, discussionUrl, commentCount, isPaid, wordCount, readingTime
 )
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
@@ -263,7 +262,7 @@ SET id = :id,
     articleImage = :articleImage,
     discussionUrl = :discussionUrl,
     commentCount = :commentCount,
-    isFree = :isFree,
+    isPaid = :isPaid,
     wordCount = :wordCount,
     readingTime = :readingTime
 WHERE itemId = :itemId;
@@ -298,26 +297,24 @@ CREATE TABLE NewsFeedGroupEntity (
     parentId INTEGER,
     parentGroupName TEXT,
     name TEXT NOT NULL UNIQUE,
-    isKeywordBucket INTEGER AS Boolean NOT NULL DEFAULT 0,
+    type TEXT NOT NULL,
     newsFeeds TEXT AS List<NewsFeedItem> NOT NULL,
-    subGroups TEXT AS List<NewsFeedGroup> NOT NULL,
     FOREIGN KEY(parentId) REFERENCES NewsFeedGroupEntity(id) ON DELETE CASCADE
 );
 
 insertNewsFeedGroupEntity:
 INSERT INTO NewsFeedGroupEntity (
-    parentId, parentGroupName, name, isKeywordBucket, newsFeeds, subGroups
+    parentId, parentGroupName, name, type, newsFeeds
 )
-VALUES (?, ?, ?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?);
 
 updateNewsFeedGroupEntity:
 UPDATE NewsFeedGroupEntity
 SET parentId = :parentId,
     parentGroupName = :parentGroupName,
     name = :name,
-    isKeywordBucket = :isKeywordBucket,
-    newsFeeds = :newsFeeds,
-    subGroups = :subGroups
+    type = :type,
+    newsFeeds = :newsFeeds
 WHERE id = :id;
 
 getAllNewsFeedGroupEntities:

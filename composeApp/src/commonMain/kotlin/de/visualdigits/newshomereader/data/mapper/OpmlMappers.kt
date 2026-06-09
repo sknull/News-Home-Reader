@@ -15,6 +15,7 @@ fun Opml.toNewsFeedConfiguration(): List<NewsFeedGroup> {
                 .map { feedOutline ->
                     NewsFeedItem(
                         mainGroupName = feedOutline.title?:"",
+                        outlineType = feedOutline.outlineType,
                         name = feedOutline.title,
                         imageUrl = feedOutline.imageUrl,
                         url = feedOutline.xmlUrl,
@@ -29,6 +30,7 @@ fun Opml.toNewsFeedConfiguration(): List<NewsFeedGroup> {
                     .map { feedOutline ->
                         NewsFeedItem(
                             mainGroupName = feedOutline.title?:"",
+                            outlineType = feedOutline.outlineType,
                             name = feedOutline.title,
                             imageUrl = feedOutline.imageUrl,
                             url = feedOutline.xmlUrl,
@@ -36,16 +38,16 @@ fun Opml.toNewsFeedConfiguration(): List<NewsFeedGroup> {
                         )
                     }
                 NewsFeedGroup(
+                    outlineType = subGroupOutline.outlineType,
                     name = subGroupOutline.title?:"",
-                    isKeywordBucket = false,
                     parentGroupName = mainGroupOutline.title,
                     newsFeeds = newsFeedItems,
                 )
             }
             NewsFeedGroup(
-                name = mainGroupOutline.title?:"",
-                isKeywordBucket = if (mainGroupOutline.isKeywordBucket?.isNotEmpty() == true) mainGroupOutline.isKeywordBucket.toBoolean() else false,
+                outlineType = mainGroupOutline.outlineType,
                 newsFeeds = newsFeedItems,
+                name = mainGroupOutline.title?:"",
                 subGroups = subGroups
             )
         } ?: listOf()
@@ -64,13 +66,14 @@ fun List<NewsFeedGroup>.toOpml(): Opml {
                 Outline(
                     title = mainGroup.name,
                     text = mainGroup.name,
-                    isKeywordBucket = mainGroup.isKeywordBucket.toString(),
+                    outlineType = mainGroup.outlineType,
                     outlines = mainGroup.newsFeeds.map { newsFeed ->
                         createNewsFeedOutline(newsFeed)
                     } + mainGroup.subGroups.map { subGroup ->
                         Outline(
                             title = subGroup.name,
                             text = subGroup.name,
+                            outlineType = subGroup.outlineType,
                             outlines = subGroup.newsFeeds.map { newsFeed ->
                                 createNewsFeedOutline(newsFeed)
                             }
@@ -99,13 +102,16 @@ fun List<NewsFeedItem>.mergeNewsFeedItems(other: List<NewsFeedItem>): List<NewsF
             lookupOther.filter { (k, v) -> !lookup.contains(k) }.values
 }
 
-private fun createNewsFeedOutline(newsFeed: NewsFeedItem): Outline = Outline(
-    title = newsFeed.name,
-    text = newsFeed.name,
-    xmlUrl = newsFeed.url,
-    type = "rss",
-    imageUrl = newsFeed.imageUrl,
-    stopWords = if (newsFeed.stopWords.isNotEmpty()) newsFeed.stopWords.filter { sw -> sw.isNotEmpty() }
-        .joinToString(",") else null,
-)
+private fun createNewsFeedOutline(newsFeedItem: NewsFeedItem): Outline {
+    return Outline(
+        title = newsFeedItem.name,
+        text = newsFeedItem.name,
+        xmlUrl = newsFeedItem.url,
+        type = "rss",
+        outlineType = newsFeedItem.outlineType,
+        imageUrl = newsFeedItem.imageUrl,
+        stopWords = if (newsFeedItem.stopWords.isNotEmpty()) newsFeedItem.stopWords.filter { sw -> sw.isNotEmpty() }
+            .joinToString(",") else null,
+    )
+}
 

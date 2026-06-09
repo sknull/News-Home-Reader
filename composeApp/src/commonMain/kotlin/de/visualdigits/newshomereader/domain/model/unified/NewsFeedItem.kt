@@ -1,11 +1,13 @@
 package de.visualdigits.newshomereader.domain.model.unified
 
+import de.visualdigits.newshomereader.data.model.opml.OutlineType
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.io.File
 
 @Serializable
 data class NewsFeedItem(
+    val outlineType: OutlineType = OutlineType.newsfeed,
     var mainGroupName: String,
     var subGroupName: String? = null,
     val name: String? = null,
@@ -18,7 +20,7 @@ data class NewsFeedItem(
         val mapper = Json {
             ignoreUnknownKeys = true
             explicitNulls = false
-            encodeDefaults = false
+            encodeDefaults = true
         }
 
         fun decodeFromString(json: String): NewsFeedItem {

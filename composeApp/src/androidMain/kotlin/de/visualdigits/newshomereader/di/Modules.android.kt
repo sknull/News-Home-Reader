@@ -62,5 +62,5 @@ actual val platformModule: Module
         single { DriverFactory(context = androidApplication()) }
         single { ConnectivityManager(context = get()) }
 
-        single { ImageCache(context = get(), httpClient = get()) }
+        single { ImageCache(context = get()) }
 }

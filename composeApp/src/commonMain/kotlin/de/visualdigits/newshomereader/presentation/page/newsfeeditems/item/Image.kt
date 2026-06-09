@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
@@ -40,8 +39,6 @@ fun Image(
     showLoadingIcon: Boolean = true
 ) {
 
-    val log = Logger.withTag("NewsItemImage")
-
     val context = LocalPlatformContext.current
     val request = remember(url, maxImageSize) {
         val builder = ImageRequest
@@ -50,8 +47,7 @@ fun Image(
             .listener(
                 onStart = {},
                 onSuccess = { _, _ -> },
-                onCancel = {},
-                onError = { _, result -> log(Severity.Error, "Image load failed: $url", result.throwable, withTag = "NHR") }
+                onCancel = {}
             )
             .crossfade(true)
             .diskCachePolicy(CachePolicy.ENABLED)

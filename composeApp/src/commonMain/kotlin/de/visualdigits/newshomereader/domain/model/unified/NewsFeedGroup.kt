@@ -2,6 +2,7 @@ package de.visualdigits.newshomereader.domain.model.unified
 
 import de.visualdigits.newshomereader.data.mapper.mergeNewsFeedGroups
 import de.visualdigits.newshomereader.data.mapper.mergeNewsFeedItems
+import de.visualdigits.newshomereader.data.model.opml.OutlineType
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -9,9 +10,8 @@ data class NewsFeedGroup(
     val id: Long = 0L,
     val parentId: Long? = null,
     var parentGroupName: String? = null,
+    val outlineType: OutlineType = OutlineType.group,
     val name: String,
-    val isKeywordBucket: Boolean = false,
-    val isEditable: Boolean = true,
     val newsFeeds: List<NewsFeedItem> = listOf(),
     val subGroups: List<NewsFeedGroup> = listOf()
 ) {

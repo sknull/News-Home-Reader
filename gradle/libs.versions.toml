@@ -46,6 +46,7 @@ coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "versio
 coil-mp = { module = "io.coil-kt.coil3:coil", version.ref = "version-coil3" }
 coil-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "version-coil3" }
 coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "version-coil3" }
+coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "version-coil3" }
 compose-components = { module = "org.jetbrains.compose.components:components-resources", version.ref = "version-jetbrains-kotlin" }
 compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "version-jetbrains-kotlin" }
 compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "version-material3" }
@@ -133,5 +134,6 @@ coil = [
     "coil-compose",
     "coil-mp",
     "coil-network",
-    "coil-network-ktor3"
+    "coil-network-ktor3",
+    "coil-svg"
 ]

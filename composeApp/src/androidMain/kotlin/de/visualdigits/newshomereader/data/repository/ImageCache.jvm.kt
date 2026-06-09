@@ -13,8 +13,7 @@ import okio.Path.Companion.toPath
 private val log = Logger.withTag("ImageCache")
 
 actual class ImageCache(
-    private val context: Context,
-    private val httpClient: HttpClient
+    private val context: Context
 ) {
 
     private val sharedImageLoader by lazy {

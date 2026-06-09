@@ -180,7 +180,7 @@ fun NewsArticleCard(
                                     )
                                 )
 
-                                if (newsItem.newsArticle?.isFree == false) {
+                                if (newsItem.newsArticle?.isPaid == true) {
                                     Icon(
                                         modifier = Modifier.size(24.dp)
                                             .width(24.dp)

@@ -15,12 +15,15 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun EditButtonsBottom(
+    modifier: Modifier = Modifier,
     state: NewsHomeReaderState,
     onAction: (NewsHomeReaderAction) -> Unit,
     newsFeedGroup: NewsFeedGroup
 ) {
-    if (state.isEditMode && !newsFeedGroup.isKeywordBucket) {
-        Row() {
+    if (state.isEditMode) {
+        Row(
+            modifier = modifier,
+        ) {
             // only allow one sub group level
             if (newsFeedGroup.parentGroupName == null) {
                 IndicatorButton(

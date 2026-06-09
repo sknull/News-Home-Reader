@@ -11,8 +11,8 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 data class Outline(
     @XmlElement(false) val title: String? = null,
     @XmlElement(false) val text: String? = null,
-    @XmlElement(false) val type: String? = null,
     @XmlElement(false) val xmlUrl: String? = null,
+    @XmlElement(false) val type: String? = null,
 
     @XmlElement(false) @XmlSerialName(prefix = "feeder", namespace="https://nononsenseapps.com/feeder", value = "notify") val notify: String? = null,
     @XmlElement(false) @XmlSerialName(prefix = "feeder", namespace="https://nononsenseapps.com/feeder", value = "imageUrl") val imageUrl: String? = null,
@@ -20,8 +20,8 @@ data class Outline(
     @XmlElement(false) @XmlSerialName(prefix = "feeder", namespace="https://nononsenseapps.com/feeder", value = "openArticlesWith") val openArticlesWith: String? = null,
     @XmlElement(false) @XmlSerialName(prefix = "feeder", namespace="https://nononsenseapps.com/feeder", value = "alternateId") val alternateId: String? = null,
 
+    @XmlElement(false) @XmlSerialName(prefix = "nhr", namespace="https://github.com/sknull", value = "outlineType") val outlineType: OutlineType = OutlineType.newsfeed,
     @XmlElement(false) @XmlSerialName(prefix = "nhr", namespace="https://github.com/sknull", value = "stopWords") val stopWords: String? = null,
-    @XmlElement(false) @XmlSerialName(prefix = "nhr", namespace="https://github.com/sknull", value = "isKeywordBucket") val isKeywordBucket: String? = null,
 
     @XmlSerialName("outline") val outlines: List<Outline> = listOf()
 )

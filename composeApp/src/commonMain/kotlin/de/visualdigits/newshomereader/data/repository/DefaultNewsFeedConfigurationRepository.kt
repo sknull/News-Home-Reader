@@ -67,13 +67,11 @@ class DefaultNewsFeedConfigurationRepository(
 
     override suspend fun editNewsFeedGroup(
         newsFeedGroup: NewsFeedGroup?,
-        editedNewsFeedGroupName: String,
-        isKeywordBucket: Boolean
+        editedNewsFeedGroupName: String
     ): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         if (newsFeedGroup != null) {
             dao.upsertNewsFeedGroup(newsFeedGroup.copy(
-                name = editedNewsFeedGroupName,
-                isKeywordBucket = isKeywordBucket
+                name = editedNewsFeedGroupName
             ).toNewsFeedGroupEntity())
             Result.Success(dao.getAllNewsFeedGroups())
         } else {
@@ -194,12 +192,18 @@ class DefaultNewsFeedConfigurationRepository(
             dao.transaction {
                 val existingNewsFeedGroups = dao.getAllNewsFeedGroups()
                 val mergedNewsFeedGroups = existingNewsFeedGroups.mergeNewsFeedGroups(newsFeedGroups)
-                mergedNewsFeedGroups.forEach { mfg -> dao.upsertNewsFeedGroup(mfg.toNewsFeedGroupEntity()) }
-            }
+                mergedNewsFeedGroups.forEach { mfg -> persistNewsFeedGroup(mfg) } }
             Result.Success(dao.getAllNewsFeedGroups())
         } catch (e: Exception) {
             log(Severity.Error, "Error while deleting groups", e, withTag = "NHR")
             Result.Error(DataError.Local.SERIALIZATION, e)
+        }
+    }
+
+    private fun persistNewsFeedGroup(newsfeedGroup: NewsFeedGroup) {
+        val insertedNewsFeedGroup = dao.upsertNewsFeedGroup(newsfeedGroup.toNewsFeedGroupEntity())
+        newsfeedGroup.subGroups.forEach { subGroup ->
+            persistNewsFeedGroup(subGroup.copy(parentId = insertedNewsFeedGroup.id))
         }
     }
 

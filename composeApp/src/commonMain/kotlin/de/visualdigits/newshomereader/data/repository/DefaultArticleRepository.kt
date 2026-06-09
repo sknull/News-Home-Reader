@@ -78,7 +78,7 @@ open class DefaultArticleRepository(
                                 articleImage = readFullArticle.articleImage,
                                 discussionUrl = readFullArticle.discussionUrl,
                                 commentCount = readFullArticle.commentCount,
-                                isFree = readFullArticle.isFree,
+                                isPaid = readFullArticle.isPaid,
                                 wordCount = readFullArticle.wordCount,
                                 readingTime = readFullArticle.readingTime,
                                 retries = fullArticle.retries + 1
@@ -145,7 +145,7 @@ open class DefaultArticleRepository(
                 .map { script -> script.graphs.find { g -> g.type?.lowercase()?.contains("newsarticle") == true } }
                 .firstOrNull()
 
-        val isFree = newsArticle?.isAccessibleForFree?:true
+        val isPaid = !(newsArticle?.isAccessibleForFree?:true)
 
         val discussionUrl = newsArticle?.discussionUrl
         val commentCount = newsArticle?.commentCount?.toLong()?:0L
@@ -190,7 +190,7 @@ open class DefaultArticleRepository(
             articleImage = articleImage,
             discussionUrl = discussionUrl,
             commentCount = commentCount,
-            isFree = isFree,
+            isPaid = isPaid,
             wordCount = wordCount,
             readingTime = kotlin.math.ceil(wordCount.toDouble() / 225.0).roundToLong()
         )

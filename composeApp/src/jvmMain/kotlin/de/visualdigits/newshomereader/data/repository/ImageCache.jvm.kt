@@ -16,8 +16,7 @@ private val log = Logger.withTag("ImageCache")
 
 actual class ImageCache(
     private val basePath: String,
-    private val context: PlatformContext,
-    private val httpClient: HttpClient
+    private val context: PlatformContext
 ) {
     private val sharedImageLoader by lazy {
         createImageLoader(

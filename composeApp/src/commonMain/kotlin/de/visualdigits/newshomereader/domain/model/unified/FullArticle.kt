@@ -15,7 +15,7 @@ data class FullArticle(
     val articleImage: String? = null,
     val discussionUrl: String? = null,
     val commentCount: Long = 0L,
-    val isFree: Boolean = true,
+    val isPaid: Boolean = false,
     val wordCount: Long = 0L,
     val readingTime: Long = 0L,
     val retries: Long = 0L,
@@ -26,7 +26,7 @@ data class FullArticle(
 
         return itemId == other.itemId &&
                 commentCount == other.commentCount &&
-                isFree == other.isFree &&
+                isPaid == other.isPaid &&
                 wordCount == other.wordCount &&
                 readingTime == other.readingTime &&
                 applicationJson == other.applicationJson &&
@@ -40,7 +40,7 @@ data class FullArticle(
 
     override fun hashCode(): Int {
         var result = commentCount.hashCode()
-        result = 31 * result + isFree.hashCode()
+        result = 31 * result + isPaid.hashCode()
         result = 31 * result + wordCount.hashCode()
         result = 31 * result + readingTime.hashCode()
         result = 31 * result + applicationJson.hashCode()

@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
@@ -47,7 +46,6 @@ import de.visualdigits.compose.resources.digital_dream_skew_fat
 import de.visualdigits.compose.resources.icon_add_notes_24px
 import de.visualdigits.compose.resources.label_keyword_buckets
 import de.visualdigits.newshomereader.domain.model.settings.SK
-import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
@@ -80,7 +78,6 @@ fun HorizontalNewsFeeds(
 ) {
     val backgroundColorValue = HsvColor.fromComposeColor(MaterialTheme.colorScheme.background).value
     val dimFactor = if (backgroundColorValue < 0.5f) 1.5f else 1.25f
-    val labelKeywordBuckets = stringResource(Res.string.label_keyword_buckets)
 
     Row(
         modifier = Modifier
@@ -145,21 +142,8 @@ fun HorizontalNewsFeeds(
                                 }
                             }
                         ) {
-                            (state.newsFeedGroups
-                                .filter { nfg -> !nfg.isKeywordBucket }
-                                .sortedBy { nfg -> nfg.name } +
-                                    listOf(
-                                        NewsFeedGroup(
-                                            id = -1,
-                                            name = labelKeywordBuckets,
-                                            isKeywordBucket = true,
-                                            isEditable = false,
-                                            subGroups = state.newsFeedGroups
-                                                .filter { nfg -> nfg.isKeywordBucket }
-                                                .sortedBy { nfg -> nfg.name }
-                                        )
-                                    )
-                            ).map { newsFeedGroup ->
+                            state.newsFeedGroups
+                                .map { newsFeedGroup ->
                                     Pair("newsfeed_navigation_${newsFeedGroup.name}", @Composable {
                                         NewsFeedGroupBox(
                                             modifier = Modifier

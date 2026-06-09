@@ -48,8 +48,7 @@ actual val platformModule: Module
         single {
             ImageCache(
                 basePath = get<String>(named("homeDirectory")),
-                context = coil3.PlatformContext.INSTANCE,
-                httpClient = get()
+                context = coil3.PlatformContext.INSTANCE
             )
         }
     }

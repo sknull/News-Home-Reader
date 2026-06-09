@@ -21,13 +21,19 @@ object OffsetDateTimeHeuristicDeserializer : KSerializer<OffsetDateTime> {
     }
 
     override fun deserialize(decoder: Decoder): OffsetDateTime {
-        val text = decoder.decodeString()
-        return parseDateOnly(text)
+        return parse(decoder.decodeString())
+    }
+
+    fun parse(text: String): OffsetDateTime {
+        val time = (parseDateOnly(text)
             ?: parseRfc1123EN(text)
             ?: parseRfc1123DE(text)
             ?: parseOffsetDateTimeWithMillis(text)
-            ?: parseOffsetDateTimeWithoutMillis(text)
-            ?: OffsetDateTime.now()
+            ?: parseOffsetDateTimeWithoutMillis(
+                text
+            )
+            ?: OffsetDateTime.now())
+        return time
     }
 
     override fun serialize(encoder: Encoder, value: OffsetDateTime) {

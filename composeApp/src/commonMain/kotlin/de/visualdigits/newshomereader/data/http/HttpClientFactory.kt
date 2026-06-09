@@ -38,6 +38,7 @@ object HttpClientFactory {
             }
             install(HttpTimeout) {
                 requestTimeoutMillis = 10000
+                socketTimeoutMillis = 10000
             }
             install(ContentEncoding) {
                 deflate(1.0F)
@@ -80,10 +81,6 @@ object HttpClientFactory {
                     }
                 }
             }
-            install(HttpTimeout) {
-                socketTimeoutMillis = 20_000L
-                requestTimeoutMillis = 20_000L
-            }
             install(Logging) {
                 level = LogLevel.NONE
                 logger = object : Logger {
@@ -94,7 +91,7 @@ object HttpClientFactory {
             }
             defaultRequest {
                 header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
-                header("Accept-Encoding", "gzip, deflate, br, zstd")
+                header("Accept-Encoding", "gzip, deflate, zstd")
                 header("Accept-Language", "de,en-US;q=0.9,en;q=0.8")
             }
         }

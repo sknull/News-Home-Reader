@@ -13,7 +13,8 @@ import kotlinx.serialization.json.JsonDecoder
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 
-class AppJsonWrapperSerializer : KSerializer<AppJsonWrapper> {
+object AppJsonWrapperSerializer : KSerializer<AppJsonWrapper> {
+
     override val descriptor: SerialDescriptor = buildClassSerialDescriptor(
         serialName = "Image"
     ) {

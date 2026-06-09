@@ -1,5 +1,7 @@
 package de.visualdigits.newshomereader.domain.mapper
 
+import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
+import de.visualdigits.newshomereader.data.model.opml.OutlineType
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogCategory
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
 import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NC
@@ -10,6 +12,7 @@ import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 
 fun NewsFeedConfiguration.toNewsFeedItem(): NewsFeedItem {
     val newsFeedItem = NewsFeedItem(
+        outlineType = if (get<BooleanEnum>(NC.isKeyword)?.booleanValue == true) OutlineType.keyword else OutlineType.newsfeed,
         name = get<String>(NC.feedName),
         mainGroupName = get<String>(NC.mainGroupName) ?: error("No main group given"),
         subGroupName = get<String>(NC.subGroupName),
@@ -21,6 +24,7 @@ fun NewsFeedConfiguration.toNewsFeedItem(): NewsFeedItem {
 
 fun NewsFeedItem.toNewsFeedConfiguration(newsFeedGroups: List<NewsFeedGroup>): NewsFeedConfiguration {
     val newsFeedConfiguration = NewsFeedConfiguration(newsFeedGroups = newsFeedGroups, values = mapOf(
+        NC.isKeyword to BooleanEnum.fromValue(outlineType == OutlineType.keyword),
         NC.feedName to name,
         NC.mainGroupName to mainGroupName,
         NC.subGroupName to subGroupName,
@@ -34,6 +38,7 @@ fun NewsFeedItem.toNewsFeedConfiguration(newsFeedGroups: List<NewsFeedGroup>): N
 fun NewsFeedCatalogItem.toNewsFeedItem(): NewsFeedItem {
     return if (parentCategory?.parentCategory != null) {
         NewsFeedItem(
+            outlineType = OutlineType.newsfeed,
             name = name,
             mainGroupName = parentCategory?.parentCategory?.name?:error("No root category given"),
             subGroupName = parentCategory?.name,
@@ -41,6 +46,7 @@ fun NewsFeedCatalogItem.toNewsFeedItem(): NewsFeedItem {
         )
     } else {
         NewsFeedItem(
+            outlineType = OutlineType.newsfeed,
             name = name,
             mainGroupName = parentCategory?.name?:error("No parent category given"),
             subGroupName = null,
@@ -54,6 +60,7 @@ fun NewsFeedCatalogCategory.toNewsFeedGroup(): NewsFeedGroup {
         id = 0L,
         parentId = 0L,
         parentGroupName = parentCategory?.name,
+        outlineType = OutlineType.group,
         name = name,
         newsFeeds = feeds.map { f -> f.toNewsFeedItem() },
         subGroups = subCategories.map { sc -> sc.toNewsFeedGroup() }

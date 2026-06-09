@@ -18,12 +18,11 @@ import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.common.presentation.components.container.VerticalCollapsibleBox
 import de.visualdigits.common.presentation.components.util.conditional
 import de.visualdigits.compose.resources.Res
-import de.visualdigits.compose.resources.icon_ad_group_24px
 import de.visualdigits.compose.resources.icon_arrow_drop_down_24px
 import de.visualdigits.compose.resources.icon_arrow_right_24px
-import de.visualdigits.compose.resources.icon_collections_bookmark_24px
 import de.visualdigits.compose.resources.icon_delete_24px
 import de.visualdigits.compose.resources.icon_edit_24px
+import de.visualdigits.newshomereader.data.model.opml.OutlineType
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
@@ -43,6 +42,7 @@ fun NewsFeedGroupBox(
 ) {
     val edgeColor = MaterialTheme.colorScheme.onSurface
     val collapsibleState = state.collapsibleState["group_${newsFeedGroup.name}"]
+    val isRootGroup = newsFeedGroup.outlineType == OutlineType.root
     VerticalCollapsibleBox(
         modifier = modifier
             .fillMaxWidth()
@@ -60,7 +60,7 @@ fun NewsFeedGroupBox(
                 }
             }
             .padding(start = if (newsFeedGroup.parentGroupName != null) 20.dp else 0.dp),
-        enabled = !newsFeedGroup.isKeywordBucket,
+        enabled = !isRootGroup,
         isTitleHoverable = true,
         titleHoverColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
         titleContent = {
@@ -68,7 +68,6 @@ fun NewsFeedGroupBox(
                 isHoverable = false,
                 width = 180.dp - MaterialTheme.shapes.gap * 2,
                 height = 50.dp,
-                leadingIcon = if (newsFeedGroup.isKeywordBucket) painterResource(Res.drawable.icon_collections_bookmark_24px) else painterResource(Res.drawable.icon_ad_group_24px),
                 indicatorPosition = Alignment.CenterStart,
                 indicatorColor = MaterialTheme.colorScheme.onSurface,
                 text = newsFeedGroup.name,
@@ -88,10 +87,10 @@ fun NewsFeedGroupBox(
             onAction(NewsHomeReaderAction.OnNewsFeedGroupCollapsibleStateChange(newsFeedGroup, state))
         },
         isExpanded = collapsibleState == true,
-        iconArrowRight = if (!newsFeedGroup.isKeywordBucket || newsFeedGroup.subGroups.isNotEmpty() || newsFeedGroup.newsFeeds.isNotEmpty()) painterResource(Res.drawable.icon_arrow_right_24px) else null,
-        iconArrowDown = if (!newsFeedGroup.isKeywordBucket || newsFeedGroup.subGroups.isNotEmpty() || newsFeedGroup.newsFeeds.isNotEmpty()) painterResource(Res.drawable.icon_arrow_drop_down_24px) else null,
+        iconArrowRight = if (newsFeedGroup.subGroups.isNotEmpty() || newsFeedGroup.newsFeeds.isNotEmpty()) painterResource(Res.drawable.icon_arrow_right_24px) else null,
+        iconArrowDown = if (newsFeedGroup.subGroups.isNotEmpty() || newsFeedGroup.newsFeeds.isNotEmpty()) painterResource(Res.drawable.icon_arrow_drop_down_24px) else null,
         trailingIcon = {
-            if (state.isEditMode && newsFeedGroup.isEditable) {
+            if (state.isEditMode && !isRootGroup) {
                 Row() {
                     IndicatorButton(
                         modifier = Modifier,
@@ -140,9 +139,11 @@ fun NewsFeedGroupBox(
             )
 
             EditButtonsBottom(
-                state,
-                onAction,
-                newsFeedGroup
+                modifier = Modifier
+                    .padding(start = 20.dp),
+                state = state,
+                onAction = onAction,
+                newsFeedGroup = newsFeedGroup
             )
         }
     }

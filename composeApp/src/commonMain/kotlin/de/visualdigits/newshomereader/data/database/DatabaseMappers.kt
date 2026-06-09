@@ -12,6 +12,7 @@ import de.visualdigits.newshomereader.NewsFeedGroupEntity
 import de.visualdigits.newshomereader.NewsItemEntity
 import de.visualdigits.newshomereader.SearchNewsItems
 import de.visualdigits.newshomereader.SettingsEntity
+import de.visualdigits.newshomereader.data.model.opml.OutlineType
 import de.visualdigits.newshomereader.domain.model.applicationjson.AppJson
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum
@@ -33,6 +34,12 @@ import kotlinx.serialization.json.Json
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+
+private val mapper = Json {
+    ignoreUnknownKeys = true
+    explicitNulls = false
+    encodeDefaults = true
+}
 
 fun Settings.toSettingsEntity(): SettingsEntity {
     val settingsEntity = SettingsEntity(
@@ -94,9 +101,8 @@ fun NewsFeedGroup.toNewsFeedGroupEntity(): NewsFeedGroupEntity {
         parentId = parentId,
         parentGroupName = parentGroupName,
         name = name,
-        isKeywordBucket = isKeywordBucket,
-        newsFeeds = newsFeeds,
-        subGroups = subGroups
+        type = outlineType.name,
+        newsFeeds = newsFeeds
     )
 }
 
@@ -106,9 +112,8 @@ fun NewsFeedGroupEntity.toNewsFeedGroup(): NewsFeedGroup {
         parentId = parentId,
         parentGroupName = parentGroupName,
         name = name,
-        isKeywordBucket = isKeywordBucket,
-        newsFeeds = newsFeeds,
-        subGroups = subGroups
+        outlineType = OutlineType.valueOf(type),
+        newsFeeds = newsFeeds
     )
 }
 
@@ -220,7 +225,7 @@ fun GetAllNewsItemsWithArticles.toNewsItem(): NewsItem {
         articleImage = articleImage,
         discussionUrl = discussionUrl,
         commentCount = commentCount?:0L,
-        isFree = isFree?:false,
+        isPaid = isPaid?:false,
         wordCount = wordCount?:0L,
         readingTime = readingTime?:0
     ).toFullArticle())
@@ -256,7 +261,7 @@ fun SearchNewsItems.toNewsItem(): NewsItem {
         articleImage = articleImage,
         discussionUrl = discussionUrl,
         commentCount = commentCount?:0L,
-        isFree = isFree?:false,
+        isPaid = isPaid?:false,
         wordCount = wordCount?:0L,
         readingTime = readingTime?:0
     ).toFullArticle())
@@ -269,34 +274,28 @@ val stringListAdapter = object : ColumnAdapter<List<String>, String> {
 
 val newsFeedsAdapter = object : ColumnAdapter<List<NewsFeedItem>, String> {
     override fun decode(databaseValue: String): List<NewsFeedItem> =
-        if (databaseValue.isEmpty()) listOf() else Json.decodeFromString(databaseValue)
+        if (databaseValue.isEmpty()) listOf() else mapper.decodeFromString(databaseValue)
 
-    override fun encode(value: List<NewsFeedItem>): String =
-        Json.encodeToString(value)
-}
-
-val subGroupsAdapter = object : ColumnAdapter<List<NewsFeedGroup>, String> {
-    override fun decode(databaseValue: String): List<NewsFeedGroup> =
-        if (databaseValue.isEmpty()) listOf() else Json.decodeFromString(databaseValue)
-
-    override fun encode(value: List<NewsFeedGroup>): String =
-        Json.encodeToString(value)
+    override fun encode(value: List<NewsFeedItem>): String {
+        val encodeToString = mapper.encodeToString(value)
+        return encodeToString
+    }
 }
 
 val mediaItemAdapter = object : ColumnAdapter<List<MediaItem>, String> {
     override fun decode(databaseValue: String): List<MediaItem> =
-        if (databaseValue.isEmpty()) listOf() else Json.decodeFromString(databaseValue)
+        if (databaseValue.isEmpty()) listOf() else mapper.decodeFromString(databaseValue)
 
     override fun encode(value: List<MediaItem>): String =
-        Json.encodeToString(value)
+        mapper.encodeToString(value)
 }
 
 val applicationJsonAdapter = object : ColumnAdapter<List<AppJson>, String> {
     override fun decode(databaseValue: String): List<AppJson> =
-        if (databaseValue.isEmpty()) emptyList() else Json.decodeFromString(databaseValue)
+        if (databaseValue.isEmpty()) emptyList() else mapper.decodeFromString(databaseValue)
 
     override fun encode(value: List<AppJson>): String =
-        Json.encodeToString(value)
+        mapper.encodeToString(value)
 }
 
 fun FullArticle.toFullArticleEntity(): FullArticleEntity {
@@ -311,7 +310,7 @@ fun FullArticle.toFullArticleEntity(): FullArticleEntity {
         articleImage = articleImage,
         discussionUrl = discussionUrl,
         commentCount = commentCount,
-        isFree = isFree,
+        isPaid = isPaid,
         wordCount = wordCount,
         readingTime = readingTime
     )
@@ -329,7 +328,7 @@ fun FullArticleEntity.toFullArticle(): FullArticle {
         articleImage = articleImage,
         discussionUrl = discussionUrl,
         commentCount = commentCount,
-        isFree = isFree,
+        isPaid = isPaid,
         wordCount = wordCount,
         readingTime = readingTime
     )

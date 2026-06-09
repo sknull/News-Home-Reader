@@ -17,6 +17,7 @@ import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.error_local_wrong_filetype
 import de.visualdigits.generated.AppVersion
+import de.visualdigits.newshomereader.data.model.opml.OutlineType
 import de.visualdigits.newshomereader.domain.mapper.toNewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.mapper.toNewsFeedItem
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
@@ -95,19 +96,21 @@ class NewsHomeReaderViewModel(
         log(Severity.Debug, "Settings: ${state.value.settings}")
 
         _state
-            .map { Triple(it.currentNewsFeedGroup, it.currentNewsFeedName, it.newsItemSearchText) }
+            .map { SubState(
+                currentNewsFeedGroup = it.currentNewsFeedGroup,
+                currentNewsFeedName = it.currentNewsFeedName,
+                newsItemSearchText = it.newsItemSearchText,
+                keyword = it.currentKeywordBucket
+            ) }
             .distinctUntilChanged()
-            .flatMapLatest { (group, name, searchText) ->
+            .flatMapLatest { (group, name, searchText, keyword) ->
                 val isSearching = !searchText.isNullOrBlank()
-
+                val isKeyword = !keyword.isNullOrBlank()
                 val sourceFlow = when {
                     isSearching -> feedRepository.observeNewsFeedItemSearchItems(searchText)
+                    isKeyword -> feedRepository.observeNewsFeedItemSearchItems(keyword)
                     group != null || !name.isNullOrBlank() -> {
-                        if (group?.isKeywordBucket == true) {
-                            feedRepository.observeNewsFeedItemSearchItems(group.name)
-                        } else {
-                            feedRepository.observeFeedItems(group, name)
-                        }
+                        feedRepository.observeFeedItems(group, name)
                     }
                     else -> flowOf(emptyList())
                 }
@@ -132,7 +135,17 @@ class NewsHomeReaderViewModel(
                             if (isSearching) {
                                 emit(SearchResult(
                                     enriched = enriched,
-                                    isSearch = true
+                                    searchType = SearchType.search
+                                ))
+                            } else if (isKeyword) {
+                                val currentState = _state.value
+                                val hideRead = currentState.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
+                                val stopWords = group?.let { g -> determineStopWords(g) } ?: currentState.currentNewsFeedItem?.stopWords?.toSet() ?: setOf()
+                                val visible = calculateVisibleNewsItems(enriched, hideRead, stopWords)
+                                emit(SearchResult(
+                                    enriched = enriched,
+                                    visible = visible,
+                                    searchType = SearchType.keyword
                                 ))
                             } else {
                                 val currentState = _state.value
@@ -142,7 +155,7 @@ class NewsHomeReaderViewModel(
                                 emit(SearchResult(
                                     enriched = enriched,
                                     visible = visible,
-                                    isSearch = false
+                                    searchType = SearchType.standard
                                 ))
                             }
                         }
@@ -151,9 +164,14 @@ class NewsHomeReaderViewModel(
             .flowOn(Dispatchers.Default)
             .onEach { result ->
                 _state.update {
-                    if (result.isSearch) {
+                    if (result.searchType == SearchType.search) {
                         it.copy(
                             filteredNewsItems = result.enriched
+                        )
+                    } else if (result.searchType == SearchType.keyword) {
+                        it.copy(
+                            currentNewsItems = result.enriched,
+                            visibleNewsItems = result.visible
                         )
                     } else {
                         it.copy(
@@ -432,8 +450,7 @@ class NewsHomeReaderViewModel(
             is NewsHomeReaderAction.OnEditNewsFeedGroupOkClick -> {
                 editNewsFeedGroup(
                     newsFeedGroup = state.value.originalNewsFeedGroup,
-                    editedNewsFeedGroupName = action.editedNewsFeedGroupName,
-                    isKeywordBucket = action.isKeywordBucket
+                    editedNewsFeedGroupName = action.editedNewsFeedGroupName
                 )
             }
             is NewsHomeReaderAction.OnEditNewsFeedGroupCancelClick -> {
@@ -457,8 +474,7 @@ class NewsHomeReaderViewModel(
             is NewsHomeReaderAction.OnAddNewsFeedGroupOkClick -> {
                 addNewsFeedGroup(
                     parentGroup = state.value.parentNewsFeedGroup,
-                    newsFeedGroupName = action.newsFeedGroupName,
-                    isKeywordBucket = action.isKeywordBucket
+                    newsFeedGroupName = action.newsFeedGroupName
                 )
             }
             is NewsHomeReaderAction.OnAddNewsFeedGroupCancelClick -> {
@@ -501,7 +517,7 @@ class NewsHomeReaderViewModel(
             }
 
             is NewsHomeReaderAction.OnNewsFeedClicked -> {
-                loadFeedItems(action.feedName, action.currentFeedIItem)
+                loadFeedItems(action.currentFeedItem)
             }
 
             is NewsHomeReaderAction.OnNewsItemClicked -> {
@@ -566,8 +582,9 @@ class NewsHomeReaderViewModel(
                             it.currentNewsFeedName != null &&
                             it.previousNewsFeedGroup == it.currentNewsFeedGroup
                     val newCollapsibleState = if (
-                        (state.value.isEditMode && !action.group.isKeywordBucket) ||
-                        (action.group.subGroups.isNotEmpty() || action.group.newsFeeds.isNotEmpty())
+                        state.value.isEditMode ||
+                        action.group.subGroups.isNotEmpty() ||
+                        action.group.newsFeeds.isNotEmpty()
                     ) {
                         it.collapsibleState + if (stayInGroup) {
                             ("group_${action.group.name}" to true)
@@ -579,8 +596,8 @@ class NewsHomeReaderViewModel(
                     }
                     it.copy(
                         previousNewsFeedGroup = it.currentNewsFeedGroup,
-                        currentNewsFeedGroup = if ((action.isExpanded && (!action.group.isKeywordBucket || (action.group.isKeywordBucket && action.group.isEditable))) || stayInGroup) action.group else null,
-                        currentKeywordBucket = if (action.group.isKeywordBucket && action.group.isEditable) action.group.name else null,
+                        currentKeywordBucket = null,
+                        currentNewsFeedGroup = if (action.isExpanded || stayInGroup) action.group else null,
                         allowClearVisibleNewsItems = if (stayInGroup) false else !action.isExpanded,
                         currentNewsFeedName = null,
                         collapsibleState = newCollapsibleState
@@ -739,15 +756,13 @@ class NewsHomeReaderViewModel(
 
     private fun addNewsFeedGroup(
         parentGroup: NewsFeedGroup?,
-        newsFeedGroupName: String,
-        isKeywordBucket: Boolean
+        newsFeedGroupName: String
     ) = viewModelScope.launch {
         val addResult = newsFeedConfigurationRepository.upsertNewsFeedGroup(
             NewsFeedGroup(
                 parentId = parentGroup?.id,
                 parentGroupName = parentGroup?.name,
-                name = newsFeedGroupName,
-                isKeywordBucket = isKeywordBucket
+                name = newsFeedGroupName
             )
         )
         when (addResult) {
@@ -794,13 +809,11 @@ class NewsHomeReaderViewModel(
 
     private fun editNewsFeedGroup(
         newsFeedGroup: NewsFeedGroup?,
-        editedNewsFeedGroupName: String,
-        isKeywordBucket: Boolean
+        editedNewsFeedGroupName: String
     ) = viewModelScope.launch {
         val editResult = newsFeedConfigurationRepository.editNewsFeedGroup(
             newsFeedGroup,
-            editedNewsFeedGroupName,
-            isKeywordBucket
+            editedNewsFeedGroupName
         )
         if (editResult is Result.Success) {
             _state.update {
@@ -981,7 +994,7 @@ class NewsHomeReaderViewModel(
             val newsFeedGroups = result.data
             val newsFeedConfigurations = newsFeedGroups.flatMap { nfg ->
                 nfg.newsFeeds + nfg.subGroups.flatMap { sg -> sg.newsFeeds}
-            }
+            }.filter { nfi -> nfi.outlineType != OutlineType.keyword }
             val newsFeedResult = refreshNewsFeeds(newsFeedGroups, newsFeedConfigurations)
             if (newsFeedResult is Result.Success) {
                 val (newsFeeds, changed) = newsFeedResult.data
@@ -1110,7 +1123,7 @@ class NewsHomeReaderViewModel(
                 }
                 val newsFeedConfigurations = newsFeedGroups.flatMap { nfg ->
                     nfg.newsFeeds + nfg.subGroups.flatMap { sg -> sg.newsFeeds }
-                }
+                }.filter { nfi -> nfi.outlineType != OutlineType.keyword }
                 val newsFeedResult = refreshNewsFeeds(newsFeedGroups, newsFeedConfigurations)
                 if (newsFeedResult is Result.Success) {
                     val (newsFeeds, changed) = newsFeedResult.data
@@ -1440,15 +1453,15 @@ class NewsHomeReaderViewModel(
     }
 
     private fun loadFeedItems(
-        feedName: String?,
-        currentFeedItem: NewsFeedItem
+        newsFeedItem: NewsFeedItem
     ) = viewModelScope.launch {
         _state.update {
             it.copy(
-                currentNewsFeedName = feedName,
+                currentKeywordBucket = if (newsFeedItem.outlineType == OutlineType.keyword) newsFeedItem.name else null,
+                currentNewsFeedName = newsFeedItem.name,
                 allowClearVisibleNewsItems = true,
                 currentNewsFeedGroup = null,
-                currentNewsFeedItem = currentFeedItem,
+                currentNewsFeedItem = newsFeedItem,
                 currentNewsArticle = null,
                 currentProgress = 0.0f,
                 progressStage = ProgressStage.NONE,
@@ -1633,8 +1646,21 @@ class NewsHomeReaderViewModel(
 
 private fun String.nostop(stopWords: Set<String>): Boolean = stopWords.none { w -> this.contains(w, ignoreCase = true) }
 
+private data class SubState(
+    val currentNewsFeedGroup: NewsFeedGroup?,
+    val currentNewsFeedName: String?,
+    val newsItemSearchText: String?,
+    val keyword: String?
+)
+
 private data class SearchResult(
     val enriched: List<NewsItem>,
     val visible: List<NewsItem> = emptyList(),
-    val isSearch: Boolean
+    val searchType: SearchType
 )
+
+private enum class SearchType {
+    search,
+    keyword,
+    standard
+}

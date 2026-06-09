@@ -14,7 +14,7 @@ import de.visualdigits.newshomereader.data.database.applicationJsonAdapter
 import de.visualdigits.newshomereader.data.database.mediaItemAdapter
 import de.visualdigits.newshomereader.data.database.newsFeedsAdapter
 import de.visualdigits.newshomereader.data.database.stringListAdapter
-import de.visualdigits.newshomereader.data.database.subGroupsAdapter
+import de.visualdigits.newshomereader.data.database.upsertNewsFeedGroupByName
 import de.visualdigits.newshomereader.data.http.HttpClientFactory
 import de.visualdigits.newshomereader.data.repository.DefaultArticleRepository
 import de.visualdigits.newshomereader.data.repository.DefaultCatalogRepository
@@ -56,7 +56,7 @@ val sharedModule = module {
             override fun encode(value: EncryptedString): String = cryptoBox.encrypt(value)
         }
 
-        SettingsDatabase(driver,
+        val database = SettingsDatabase(driver,
             FullArticleEntityAdapter = FullArticleEntity.Adapter(
                 applicationJsonAdapter = applicationJsonAdapter,
                 imageItemsAdapter = mediaItemAdapter,
@@ -67,13 +67,29 @@ val sharedModule = module {
                 keywordsAdapter = stringListAdapter
             ),
             NewsFeedGroupEntityAdapter = NewsFeedGroupEntity.Adapter(
-                newsFeedsAdapter = newsFeedsAdapter,
-                subGroupsAdapter = subGroupsAdapter
+                newsFeedsAdapter = newsFeedsAdapter
             ),
             SettingsEntityAdapter = SettingsEntity.Adapter(
                 webDavPasswordAdapter = passwordAdapter
             )
         )
+        database.newsHomeReaderDatabaseQueries.upsertNewsFeedGroupByName(NewsFeedGroupEntity(
+            id = 0L,
+            parentId = null,
+            parentGroupName = null,
+            name = "News Feeds",
+            type = "root",
+            newsFeeds = listOf()
+        ))
+        database.newsHomeReaderDatabaseQueries.upsertNewsFeedGroupByName(NewsFeedGroupEntity(
+            id = 0L,
+            parentId = null,
+            parentGroupName = null,
+            name = "Keywords",
+            type = "root",
+            newsFeeds = listOf()
+        ))
+        database
     }
 
     single<NewsHomeReaderDatabaseQueries> {
