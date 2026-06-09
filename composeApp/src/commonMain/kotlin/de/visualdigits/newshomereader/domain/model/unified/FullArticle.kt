@@ -17,7 +17,8 @@ data class FullArticle(
     val commentCount: Long = 0L,
     val isFree: Boolean = true,
     val wordCount: Long = 0L,
-    val readingTime: Long = 0L
+    val readingTime: Long = 0L,
+    val retries: Long = 0L,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
