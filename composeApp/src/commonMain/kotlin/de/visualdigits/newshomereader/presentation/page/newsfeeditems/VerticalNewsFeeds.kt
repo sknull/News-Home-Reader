@@ -193,7 +193,7 @@ fun VerticalNewsFeeds(
                 ) + if (index < lastRow) {
                     listOf(
                         Pair(
-                            "spacer_" + rowItems.joinToString("_") { item -> item.id.toString() },
+                            "spacer_${index}_" + rowItems.joinToString("_") { item -> item.id.toString() },
                             @Composable { Spacer(Modifier.size(MaterialTheme.shapes.gap)) })
                     )
                 } else {
