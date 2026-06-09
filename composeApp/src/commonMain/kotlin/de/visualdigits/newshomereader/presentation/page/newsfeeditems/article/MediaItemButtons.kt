@@ -134,7 +134,7 @@ fun MediaItemButtons(
 
                                             val durationString = mediaItem.duration?.parseDuration()?.let { d -> " [$d]" }?:""
                                             Text(
-                                                text = "${mediaItem.headline}$durationString",
+                                                text = "${mediaItem.headline?:""}$durationString",
                                                 style = MaterialTheme.typography.bodySmall
                                             )
                                         }

@@ -8,17 +8,18 @@ import de.visualdigits.newshomereader.domain.repository.SettingsRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.UserAgent
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BasicAuthCredentials
 import io.ktor.client.plugins.auth.providers.basic
+import io.ktor.client.plugins.compression.ContentEncoding
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.http.ContentType
+import io.ktor.client.request.header
 import io.ktor.http.Url
-import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.java.KoinJavaComponent.getKoin
@@ -32,6 +33,16 @@ object HttpClientFactory {
                settingsRepositoryProvider: () -> SettingsRepository
     ): HttpClient {
         return HttpClient(engine) {
+            install(UserAgent) {
+                agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0"
+            }
+            install(HttpTimeout) {
+                requestTimeoutMillis = 10000
+            }
+            install(ContentEncoding) {
+                deflate(1.0F)
+                gzip(0.9F)
+            }
             install(ContentNegotiation) {
                 json(
                     json = Json {
@@ -82,7 +93,9 @@ object HttpClientFactory {
                 }
             }
             defaultRequest {
-                contentType(ContentType.Application.Json)
+                header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+                header("Accept-Encoding", "gzip, deflate, br, zstd")
+                header("Accept-Language", "de,en-US;q=0.9,en;q=0.8")
             }
         }
     }

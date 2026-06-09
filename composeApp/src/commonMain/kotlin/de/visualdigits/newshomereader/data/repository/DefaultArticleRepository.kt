@@ -53,16 +53,47 @@ open class DefaultArticleRepository(
 
     override suspend fun readFullArticle(
         newsItem: NewsItem
-    ): Result<Pair<FullArticle, Boolean>, DataError.Remote> = withContext(Dispatchers.IO) {
+    ): Result<Pair<FullArticle?, Boolean>, DataError.Remote> = withContext(Dispatchers.IO) {
         val lock = articleLocks.computeIfAbsent(newsItem.id) { Mutex() }
         lock.withLock {
             try {
                 var fullArticle = dao.getFullArticleByItemId(newsItem.id).executeAsOneOrNull()?.toFullArticle()
-                val changedArticle = if (fullArticle == null || newsItem.isChanged) {
+                val changedArticle = if (fullArticle == null || newsItem.isChanged || (fullArticle.html.isEmpty() && fullArticle.retries < 3)) {
                     val response = httpClient.get(urlString = newsItem.link)
-                    val rawHtml = response.bodyAsText()
-                    fullArticle = readFromString(newsItem, rawHtml, newsItem.link)
-                    dao.upsertFullArticle(fullArticle.toFullArticleEntity())
+                    val readFullArticle = if (response.status.value == 200) {
+                        readFromString(newsItem, response.bodyAsText(), newsItem.link)
+                    } else {
+                        null
+                    }
+                    if (readFullArticle != null) {
+                        if (fullArticle == null) {
+                            fullArticle = readFullArticle
+                        } else {
+                            fullArticle = fullArticle.copy(
+                                applicationJson = readFullArticle.applicationJson,
+                                html = readFullArticle.html,
+                                imageItems = readFullArticle.imageItems,
+                                videoItems = readFullArticle.videoItems,
+                                audioItems = readFullArticle.audioItems,
+                                articleImage = readFullArticle.articleImage,
+                                discussionUrl = readFullArticle.discussionUrl,
+                                commentCount = readFullArticle.commentCount,
+                                isFree = readFullArticle.isFree,
+                                wordCount = readFullArticle.wordCount,
+                                readingTime = readFullArticle.readingTime,
+                                retries = fullArticle.retries + 1
+                            )
+                        }
+                    } else if (fullArticle != null){
+                        fullArticle = fullArticle.copy(
+                            retries = fullArticle.retries + 1
+                        )
+                    }
+                    if (fullArticle != null) {
+                        dao.upsertFullArticle(fullArticle.toFullArticleEntity())
+                    } else {
+                        false
+                    }
                 } else {
                     false
                 }
@@ -83,7 +114,10 @@ open class DefaultArticleRepository(
         url: String?
     ): FullArticle = withContext(Dispatchers.IO) {
         // extract main text from raw html using essence's heuristics
-        val htmlElement = rawHtml?.let { rh -> Essence.extract(rh).html }
+        val htmlElement = rawHtml?.let { rh ->
+            val result = Essence.extract(rh)
+            result.html
+        }
         var html = htmlElement?.html()?:""
 
         val words = htmlElement?.text()?.split("\\s+".toRegex())?.filter { it.isNotBlank() }
