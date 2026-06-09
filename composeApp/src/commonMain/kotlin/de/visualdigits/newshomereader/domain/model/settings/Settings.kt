@@ -23,6 +23,7 @@ import de.visualdigits.compose.resources.label_keep_read_articles
 import de.visualdigits.compose.resources.label_keep_unread_articles
 import de.visualdigits.compose.resources.label_language
 import de.visualdigits.compose.resources.label_load_articles
+import de.visualdigits.compose.resources.label_prefetch_images
 import de.visualdigits.compose.resources.label_refresh_interval
 import de.visualdigits.compose.resources.label_refresh_wifi_only
 import de.visualdigits.compose.resources.label_spotColor
@@ -39,6 +40,7 @@ import de.visualdigits.compose.resources.tooltip_keep_read_articles
 import de.visualdigits.compose.resources.tooltip_keep_unread_articles
 import de.visualdigits.compose.resources.tooltip_language
 import de.visualdigits.compose.resources.tooltip_load_articles
+import de.visualdigits.compose.resources.tooltip_prefetch_images
 import de.visualdigits.compose.resources.tooltip_refresh_interval
 import de.visualdigits.compose.resources.tooltip_refresh_wifi_only
 import de.visualdigits.compose.resources.tooltip_spotColor
@@ -177,6 +179,18 @@ class Settings(
                 options = { _, _ -> BooleanEnum.options },
                 keyFactory = BooleanEnum,
                 default = BooleanEnum.TRUE
+            ),
+
+            /** Prefetch images. */
+            EnumFieldDescriptor(
+                fieldClass = BooleanEnum::class,
+                group = UiText.StringResourceId(Res.string.group_feed_seetings),
+                key = SK.prefetchImages,
+                label =  UiText.StringResourceId(Res.string.label_prefetch_images),
+                toolTip =  UiText.StringResourceId(Res.string.tooltip_prefetch_images),
+                options = { _, _ -> BooleanEnum.options },
+                keyFactory = BooleanEnum,
+                default = BooleanEnum.FALSE
             ),
 
             /** Hide read items. */

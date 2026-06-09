@@ -31,6 +31,7 @@ class NewsFeedWorker(
                 val settings = settingsResult.data
                 val wifiOnly = settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
                 val loadArticles = settings?.get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false
+                val prefetchImages = settings?.get<BooleanEnum>(SK.prefetchImages)?.booleanValue ?: false
                 val keepReadArticles = settings?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue ?: 30
                 val keepUnreadArticles = settings?.get<KeepArticlesEnum>(SK.keepUnreadArticles)?.longValue ?: 30
                 val feedConfigurationResult = newsFeedConfigurationRepository.getNewsFeedGroups()
@@ -69,16 +70,18 @@ class NewsFeedWorker(
                         feedRepository.getAllNewsFeeds()
                     }
                     if (result is Result.Success) {
-                        log(Severity.Info, "News feed worker prefetching images", withTag = "NHR")
-                        val (newsFeeds, changed) = result.data
-                        if (changed) {
-                            feedRepository.prefetchImages(
-                                newsFeeds = newsFeeds
-                            ) { _, _ -> }
-                            settings?.also { s ->
-                                val sc = s.copy(SK.feedsChanged, BooleanEnum.TRUE)
-                                CoroutineScope(Dispatchers.Default).launch {
-                                    settingsRepository.setSettings(sc)
+                        if (prefetchImages) {
+                            log(Severity.Info, "News feed worker prefetching images", withTag = "NHR")
+                            val (newsFeeds, changed) = result.data
+                            if (changed) {
+                                feedRepository.prefetchImages(
+                                    newsFeeds = newsFeeds
+                                ) { _, _ -> }
+                                settings?.also { s ->
+                                    val sc = s.copy(SK.feedsChanged, BooleanEnum.TRUE)
+                                    CoroutineScope(Dispatchers.Default).launch {
+                                        settingsRepository.setSettings(sc)
+                                    }
                                 }
                             }
                         }

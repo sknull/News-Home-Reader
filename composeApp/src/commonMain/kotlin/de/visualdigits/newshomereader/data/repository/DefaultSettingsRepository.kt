@@ -103,7 +103,8 @@ class DefaultSettingsRepository(
                             }
                         }
                         .toMap()
-                ))
+                )
+            )
             setSettings(settings)
             Result.Success(settings)
         } catch (e: Exception) {
@@ -143,6 +144,7 @@ private fun Settings.toSettingsRepositoryEntity(cryptoBox: CryptoBox): SettingsR
         keepReadArticles = get<KeepArticlesEnum>(SK.keepReadArticles)?.name ?: "DAYS_30",
         keepUnreadArticles = get<KeepArticlesEnum>(SK.keepUnreadArticles)?.name ?: "DAYS_30",
         loadArticles = get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false,
+        prefetchImages = get<BooleanEnum>(SK.prefetchImages)?.booleanValue ?: false,
         hideRead = get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
         webDavUrl = get<String>(SK.webDavUrl) ?: "",
         webDavDirectory = get<String>(SK.webDavDirectory) ?: "",
@@ -167,6 +169,7 @@ private data class SettingsRepositoryEntity(
     val keepReadArticles: String,
     val keepUnreadArticles: String,
     val loadArticles: Boolean,
+    val prefetchImages: Boolean,
     val hideRead: Boolean,
     val webDavUrl: String,
     val webDavDirectory: String,

@@ -31,6 +31,8 @@
   <string name="group_feed_seetings">Feed Einstellungen</string>
   <string name="group_webdav">WebDAV</string>
 
+  <string name="label_prefetch_images">Bilder laden</string>
+  <string name="tooltip_prefetch_images">Bilder beim Aktualisieren der Feeds mitladen</string>
   <string name="label_backgroundColor">Hintergrund Farbe</string>
   <string name="tooltip_backgroundColor">Hintergrund Farbe</string>
   <string name="label_buttonColor">Button Farbe</string>

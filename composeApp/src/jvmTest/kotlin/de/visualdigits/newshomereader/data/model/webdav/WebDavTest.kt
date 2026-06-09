@@ -57,6 +57,7 @@ class WebDavTest : KoinTest {
             SK.refreshWifiOnly to BooleanEnum.TRUE,
             SK.maxImageSize to 1200,
             SK.loadArticles to BooleanEnum.FALSE,
+            SK.prefetchImages to BooleanEnum.FALSE,
             SK.hideRead to BooleanEnum.TRUE,
             SK.keepReadArticles to KeepArticlesEnum.DAYS_3,
             SK.keepUnreadArticles to KeepArticlesEnum.DAYS_7,

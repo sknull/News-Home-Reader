@@ -33,7 +33,7 @@ enum class KeepArticlesEnum(
         override val options: List<Triple<KeepArticlesEnum, UiText?, DrawableResource?>> = entries.map { e -> Triple(e, e.uiText, e.drawableResourceId) }
 
         override fun fromString(value: String?): KeepArticlesEnum? {
-            return entries.find { e -> e.name == value }
+            return entries.find { e -> e.name.equals(value, ignoreCase = true) }
         }
 
         override fun fromValue(value: Any?): KeepArticlesEnum? {

@@ -300,7 +300,11 @@ class DefaultFeedRepository(
                 .associate { nf -> Pair(nf.feedName, nf.copy(items = listOf())) }
                 .toMutableMap()
 
-            val (newsItemsWithArticles, changedArticles) = loadArticles(loadArticles, persistedItems, totalSteps2, progress)
+            val (newsItemsWithArticles, changedArticles) = if (loadArticles) {
+                loadArticles(persistedItems, totalSteps2, progress)
+            } else {
+                Pair(persistedItems, false)
+            }
             val newsFeedsWithArticles = newsItemsWithArticles.mapNotNull { item ->
                 item.newsFeed?.let { nf ->
                     val newsFeed = newsFeedsMap[nf.feedName]
@@ -345,7 +349,11 @@ class DefaultFeedRepository(
                 newsItems
             }
 
-            val (articles, changedArticles) = loadArticles(loadArticles, persistedItems, totalSteps, progress)
+            val (articles, changedArticles) = if (loadArticles) {
+                loadArticles(persistedItems, totalSteps, progress)
+            } else {
+                Pair(persistedItems, false)
+            }
             val newsFeedWithArticles = newsFeed?.copy(items = articles)
 
             val updatedNewsFeed = Pair(newsFeedWithArticles, changedNewsItems || changedArticles)
@@ -417,46 +425,51 @@ class DefaultFeedRepository(
     }
 
     private suspend fun loadArticles(
-        loadArticles: Boolean,
         newsItems: List<NewsItem>,
         totalSteps: Int,
         progress: (Float, ProgressStage) -> Unit
     ): Pair<List<NewsItem>, Boolean> {
         log(Severity.Info, "Loading articles", withTag = "NHR")
         var changed = false
-        val newsItemsWithArticles =  if (loadArticles) {
-            coroutineScope {
-                val semaphore = Semaphore(5)
-                newsItems.map { newsItem ->
-                    async {
-                        try {
-                            semaphore.withPermit {
-                                val articleResult = articleRepository.readFullArticle(newsItem = newsItem)
-                                val item = when (articleResult) {
-                                    is Result.Success -> {
-                                        changed = changed || articleResult.data.second
-                                        newsItem.copy(newsArticle = articleResult.data.first)
-                                    }
-
-                                    is Result.Error -> {
-                                        log(Severity.Error, "Could not read article [${newsItem.id}]: ${newsItem.link}", articleResult.throwable, withTag = "NHR")
-                                        newsItem
-                                    }
+        val newsItemsWithArticles = coroutineScope {
+            val semaphore = Semaphore(5)
+            newsItems.map { newsItem ->
+                async {
+                    try {
+                        semaphore.withPermit {
+                            val articleResult = articleRepository.readFullArticle(newsItem = newsItem)
+                            val item = when (articleResult) {
+                                is Result.Success -> {
+                                    changed = changed || articleResult.data.second
+                                    newsItem.copy(newsArticle = articleResult.data.first)
                                 }
 
-                                val done = currentStep.incrementAndGet()
-                                progress(done.toFloat() / totalSteps, ProgressStage.LOAD_ARTICLES)
-                                item
+                                is Result.Error -> {
+                                    log(
+                                        Severity.Error,
+                                        "Could not read article [${newsItem.id}]: ${newsItem.link}",
+                                        articleResult.throwable,
+                                        withTag = "NHR"
+                                    )
+                                    newsItem
+                                }
                             }
-                        } catch (e: Exception) {
-                            log(Severity.Error, "Could not fetch article for newsItem [${newsItem.id}] ${newsItem.newsFeed?.feedName}/${newsItem.identifier}",e, withTag = "NHR")
-                            newsItem
+
+                            val done = currentStep.incrementAndGet()
+                            progress(done.toFloat() / totalSteps, ProgressStage.LOAD_ARTICLES)
+                            item
                         }
+                    } catch (e: Exception) {
+                        log(
+                            Severity.Error,
+                            "Could not fetch article for newsItem [${newsItem.id}] ${newsItem.newsFeed?.feedName}/${newsItem.identifier}",
+                            e,
+                            withTag = "NHR"
+                        )
+                        newsItem
                     }
-                }.awaitAll()
-            }
-        } else {
-            newsItems
+                }
+            }.awaitAll()
         }
 
         return Pair(newsItemsWithArticles, changed)

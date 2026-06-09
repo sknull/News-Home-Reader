@@ -24,6 +24,7 @@ CREATE TABLE SettingsEntity (
     keepReadArticles TEXT NOT NULL,
     keepUnreadArticles TEXT NOT NULL,
     loadArticles INTEGER AS Boolean NOT NULL DEFAULT 0,
+    prefetchImages INTEGER AS Boolean NOT NULL DEFAULT 0,
     hideRead INTEGER AS Boolean NOT NULL DEFAULT 0,
     webDavUrl TEXT NOT NULL DEFAULT "",
     webDavDirectory TEXT NOT NULL DEFAULT "",
@@ -34,9 +35,9 @@ CREATE TABLE SettingsEntity (
 insertSettings:
 INSERT INTO SettingsEntity (
     backgroundColor, buttonColor, textColor, spotColor, clockColor, language, refreshInterval, refreshWifiOnly, lastMaxImageSize, keepReadArticles,
-    keepUnreadArticles, loadArticles, hideRead, webDavUrl, webDavDirectory, webDavUser, webDavPassword
+    keepUnreadArticles, loadArticles, prefetchImages, hideRead, webDavUrl, webDavDirectory, webDavUser, webDavPassword
 )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 getSettingsById:
 SELECT * FROM SettingsEntity WHERE id = :id;
@@ -55,6 +56,7 @@ SET backgroundColor = :backgroundColor,
     keepReadArticles = :keepReadArticles,
     keepUnreadArticles = :keepUnreadArticles,
     loadArticles = :loadArticles,
+    prefetchImages = :prefetchImages,
     hideRead = :hideRead,
     webDavUrl = :webDavUrl,
     webDavDirectory = :webDavDirectory,

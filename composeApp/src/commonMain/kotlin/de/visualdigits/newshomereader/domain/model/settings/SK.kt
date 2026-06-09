@@ -13,6 +13,7 @@ enum class SK : FieldKey<SK> {
     refreshInterval,
     refreshWifiOnly,
     loadArticles,
+    prefetchImages,
     hideRead,
     keepReadArticles,
     keepUnreadArticles,

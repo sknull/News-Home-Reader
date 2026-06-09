@@ -29,7 +29,7 @@ enum class RefreshIntervalEnum(
         override val options: List<Triple<RefreshIntervalEnum, UiText?, DrawableResource?>> = entries.map { e -> Triple(e, e.uiText, e.drawableResourceId) }
 
         override fun fromString(value: String?): RefreshIntervalEnum? {
-            return entries.find { e -> e.name == value }
+            return entries.find { e -> e.name.equals(value, ignoreCase = true) }
         }
 
         override fun fromValue(value: Any?): RefreshIntervalEnum? {
