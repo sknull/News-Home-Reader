@@ -12,6 +12,7 @@ import de.visualdigits.newshomereader.data.database.toFullArticleEntity
 import de.visualdigits.newshomereader.data.database.upsertFullArticle
 import de.visualdigits.newshomereader.data.mapper.toAppJson
 import de.visualdigits.newshomereader.data.model.applicationjson.AppJsonWrapper
+import de.visualdigits.newshomereader.data.model.youtube.OEmbed
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
@@ -23,7 +24,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import java.io.File
+import java.net.URI
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.roundToLong
 
@@ -150,18 +153,32 @@ open class DefaultArticleRepository(
         val discussionUrl = newsArticle?.discussionUrl
         val commentCount = newsArticle?.commentCount?.toLong()?:0L
 
+        val document = Ksoup.parse(html = rawHtml?:"")
+
         val imageItems = applicationJson
             .filter { script -> script.type?.lowercase() == "imageobject" }
             .map { ao -> ao.toMediaItem() }
         val audioItems = applicationJson
             .filter { script -> script.type?.lowercase() == "audioobject" }
             .map { ao -> ao.toMediaItem() }
+        val youtubeVideos = document
+            .select("lite-youtube")
+            .mapNotNull { elem ->
+                try {
+                    val videoUrl = "https://www.youtube.com/watch?v=${elem.attr("videoid")}"
+                    val embedUrl = "https://www.youtube.com/oembed?url=$videoUrl&format=json"
+                    val json = URI(embedUrl).toURL().readText()
+                    Json.decodeFromString<OEmbed>(json).toMediaItem(videoUrl)
+                } catch (_: Exception) {
+                    null
+                }
+            }
         val videoItems = applicationJson
             .filter { script -> script.type?.lowercase() == "videoobject" }
             .map { vo -> vo.toMediaItem() } +
                 applicationJson.flatMap { aj ->
                     aj.video?.videos?.map { video -> video.toMediaItem() }?:listOf()
-                }
+                } + youtubeVideos
 
         val imageDto = newsArticle
             ?.image

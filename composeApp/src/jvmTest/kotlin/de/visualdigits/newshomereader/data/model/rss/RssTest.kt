@@ -122,6 +122,17 @@ class RssTest : KoinTest {
     }
 
     @Test
+    fun testReadYoutubeVideo() {
+        runBlocking {
+            val article = fullArticleService.readFromFile(
+                newsItem,
+                File(ClassLoader.getSystemResource("newsfeed/rdf/nickyt-story.html").toURI())
+            )
+            println(article)
+        }
+    }
+
+    @Test
     fun testReadArbeitstips() = runTest {
         val article = fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/rss/arbeitstips-story.html").toURI()))
         println(article)
