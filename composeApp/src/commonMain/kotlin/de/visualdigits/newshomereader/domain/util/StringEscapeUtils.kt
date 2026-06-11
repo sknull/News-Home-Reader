@@ -14,5 +14,8 @@ object StringEscapeUtils {
 
     fun unescapeXml(xml: String): String = Entities.unescape(xml)
 
-    fun normalizeXml(xml: String): String = xml.replace("&amp;", "&").replace("&", "&amp;")
+    fun normalizeXml(xml: String): String = xml
+        .replace("&nbsp;", " ")
+        .replace("&amp;", "&")
+        .replace("&", "&amp;")
 }
