@@ -44,7 +44,6 @@ import de.visualdigits.compose.resources.circuit_board_squared
 import de.visualdigits.compose.resources.circuit_board_with_circle
 import de.visualdigits.compose.resources.digital_dream_skew_fat
 import de.visualdigits.compose.resources.icon_add_notes_24px
-import de.visualdigits.compose.resources.label_keyword_buckets
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
@@ -56,7 +55,6 @@ import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.stringResource
 
 /**
  * Renders the news item card for a given newsfeed
