@@ -133,6 +133,7 @@ fun NewsArticleCard(
             PlatformVerticalScrollbarBox(
                 modifier = Modifier
                     .fillMaxWidth(),
+                space = MaterialTheme.shapes.gap,
                 scrollbarModifier = Modifier
                     .clip(MaterialTheme.shapes.small)
                     .width(10.dp)
@@ -149,7 +150,8 @@ fun NewsArticleCard(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             val feedName = newsItem.newsFeed?.feedName
-                            state.lookupNewsFeedMap[feedName?.trim()?.lowercase()]?.url?.let { url ->
+                            val feedUrl = state.lookupNewsFeedMap[feedName?.trim()?.lowercase()]?.url
+                            feedUrl?.let { url ->
                                 Image(
                                     modifier = Modifier
                                         .width(24.dp)
@@ -171,7 +173,7 @@ fun NewsArticleCard(
                                         .pointerHoverIcon(PointerIcon.Hand)
                                         .hoverable(interactionSource)
                                         .clickable {
-                                            uriHandler.openUri(newsItem.newsFeed.link)
+                                            uriHandler.openUri(feedUrl?:newsItem.newsFeed.link)
                                         },
                                     text = fn,
                                     color = if (isHovered) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onBackground,

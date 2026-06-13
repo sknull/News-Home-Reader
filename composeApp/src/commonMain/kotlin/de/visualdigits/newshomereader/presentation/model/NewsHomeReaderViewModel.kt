@@ -188,7 +188,7 @@ class NewsHomeReaderViewModel(
     fun onCommonAction(action: CommonAction) {
         when (action) {
             is CommonAction.OnScrollPositionChange -> {
-//                scrollPosition[action.id] = Triple(action.position, action.offset, action.scrollIntent)
+                scrollPosition[action.id] = Triple(action.position, action.offset, action.scrollIntent)
             }
         }
     }
@@ -575,7 +575,7 @@ class NewsHomeReaderViewModel(
             }
 
             is NewsHomeReaderAction.OnNewsFeedGroupCollapsibleStateChange -> {
-                scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.scrollToStart)
+//                scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.scrollToStart)
                 _state.update {
                     // keep collapsible box open when user switches from single feed to group
                     val stayInGroup = !action.isExpanded &&
@@ -596,6 +596,7 @@ class NewsHomeReaderViewModel(
                     }
                     it.copy(
                         previousNewsFeedGroup = it.currentNewsFeedGroup,
+                        newsItemSearchText = null,
                         currentKeywordBucket = null,
                         currentNewsFeedGroup = if (action.isExpanded || stayInGroup) action.group else null,
                         allowClearVisibleNewsItems = if (stayInGroup) false else !action.isExpanded,
@@ -910,7 +911,7 @@ class NewsHomeReaderViewModel(
         feedName: String?,
         url: String?
     ) = viewModelScope.launch {
-        scrollPosition["newsfeed_$feedName"] = Triple(0, 0, ScrollIntent.scrollToStart)
+//        scrollPosition["newsfeed_$feedName"] = Triple(0, 0, ScrollIntent.scrollToStart)
         val wifiOnly = state.value.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
         val loadArticles = state.value.settings?.get<BooleanEnum>(SK.loadArticles)?.booleanValue?:false
         val prefetchImages = state.value.settings?.get<BooleanEnum>(SK.prefetchImages)?.booleanValue?:false
@@ -1238,10 +1239,10 @@ class NewsHomeReaderViewModel(
         val keepUnreadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepUnreadArticles)?.longValue ?: 30
         val maxImageSize = state.value.settings?.get<Int>(SK.maxImageSize) ?: 1200
 
-        scrollPosition
-            .keys
-            .filter { k -> k.startsWith("newsfeed_") }
-            .forEach { k -> scrollPosition[k] = Triple(0, 0, ScrollIntent.scrollToStart)}
+//        scrollPosition
+//            .keys
+//            .filter { k -> k.startsWith("newsfeed_") }
+//            .forEach { k -> scrollPosition[k] = Triple(0, 0, ScrollIntent.scrollToStart)}
 
         return if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
             val newsFeedsResult = feedRepository.refreshNewsFeeds(
@@ -1457,6 +1458,7 @@ class NewsHomeReaderViewModel(
     ) = viewModelScope.launch {
         _state.update {
             it.copy(
+                newsItemSearchText = null,
                 currentKeywordBucket = if (newsFeedItem.outlineType == OutlineType.keyword) newsFeedItem.name else null,
                 currentNewsFeedName = newsFeedItem.name,
                 allowClearVisibleNewsItems = true,
