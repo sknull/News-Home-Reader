@@ -189,7 +189,6 @@ class NewsHomeReaderViewModel(
         when (action) {
             is CommonAction.OnScrollPositionChange -> {
                 action.id?.also { id ->
-log(Severity.Info, "Set scrollbar position [$id] ${action.position}, ${action.offset}, ${action.scrollIntent}")
                     scrollPosition[id] = Triple(action.position, action.offset, action.scrollIntent)
                 }
             }
