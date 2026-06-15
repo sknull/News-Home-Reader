@@ -161,11 +161,24 @@ open class DefaultArticleRepository(
         val audioItems = applicationJson
             .filter { script -> script.type?.lowercase() == "audioobject" }
             .map { ao -> ao.toMediaItem() }
-        val youtubeVideos = document
-            .select("lite-youtube")
+
+        // scrape from inline player
+        val youtubeVideos1 = document.select("lite-youtube")
             .mapNotNull { elem ->
                 try {
                     val videoUrl = "https://www.youtube.com/watch?v=${elem.attr("videoid")}"
+                    val embedUrl = "https://www.youtube.com/oembed?url=$videoUrl&format=json"
+                    val json = URI(embedUrl).toURL().readText()
+                    Json.decodeFromString<OEmbed>(json).toMediaItem(videoUrl)
+                } catch (_: Exception) {
+                    null
+                }
+            }
+        // scrape from links
+        val youtubeVideos2 = document.select("a[href^=https://www.youtube.com/watch?v=]")
+            .mapNotNull { elem ->
+                try {
+                    val videoUrl = elem.attr("href")
                     val embedUrl = "https://www.youtube.com/oembed?url=$videoUrl&format=json"
                     val json = URI(embedUrl).toURL().readText()
                     Json.decodeFromString<OEmbed>(json).toMediaItem(videoUrl)
@@ -178,7 +191,7 @@ open class DefaultArticleRepository(
             .map { vo -> vo.toMediaItem() } +
                 applicationJson.flatMap { aj ->
                     aj.video?.videos?.map { video -> video.toMediaItem() }?:listOf()
-                } + youtubeVideos
+                } + youtubeVideos1 + youtubeVideos2
 
         val imageDto = newsArticle
             ?.image

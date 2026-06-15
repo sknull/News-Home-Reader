@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.UriHandler
@@ -109,21 +108,7 @@ fun VerticalNewsFeeds(
             scrollbarId = "newsfeed_items",
             scrollPosition = scrollPosition,
             onCommonAction = onCommonAction,
-            verticalArrangementGap = 0.dp,
-            scrollToTop = { scrollState, scrollIntent ->
-                LaunchedEffect(state.collapsibleState["group_newsfeeds_navigation"], scrollIntent) {
-                    if (state.collapsibleState["group_newsfeeds_navigation"] == true || scrollIntent != ScrollIntent.standard) {
-                        scrollState.animateScrollTo(0)
-                    }
-                }
-            },
-            scrollToTopLazy = { lazyListState, scrollIntent ->
-                LaunchedEffect(state.collapsibleState["group_newsfeeds_navigation"], scrollIntent) {
-                    if (state.collapsibleState["group_newsfeeds_navigation"] == true || scrollIntent != ScrollIntent.standard) {
-                        lazyListState.animateScrollToItem(0)
-                    }
-                }
-            }
+            verticalArrangementGap = 0.dp
         ) {
             val lastRow = rowData.size - 1
             if (state.collapsibleState["group_newsfeeds_navigation"] == true) {
