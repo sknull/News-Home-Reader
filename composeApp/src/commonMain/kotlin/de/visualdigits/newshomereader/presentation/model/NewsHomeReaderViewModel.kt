@@ -539,6 +539,8 @@ class NewsHomeReaderViewModel(
             }
 
             is NewsHomeReaderAction.OnNewsItemBackClicked -> {
+                val current = scrollPosition["newsfeed_items"]
+                scrollPosition["newsfeed_items"] = Triple(current?.first?:0, current?.second, ScrollIntent.standard)
                 _state.update {
                     it.copy(
                         currentNewsItem = null,
@@ -569,6 +571,9 @@ class NewsHomeReaderViewModel(
             //
             //
             is NewsHomeReaderAction.OnCollapsibleStateChange -> {
+                if (action.id == "group_newsfeeds_navigation") {
+                    scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.scrollToStart)
+                }
                 _state.update {
                     it.copy(
                         collapsibleState = it.collapsibleState + (action.id to action.isExpanded)
@@ -577,7 +582,11 @@ class NewsHomeReaderViewModel(
             }
 
             is NewsHomeReaderAction.OnNewsFeedGroupCollapsibleStateChange -> {
-                scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.scrollToStart)
+                if (action.isExpanded) {
+                    scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.scrollToStart)
+                } else {
+                    scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.standard)
+                }
                 _state.update {
                     // keep collapsible box open when user switches from single feed to group
                     val stayInGroup = !action.isExpanded &&
@@ -1455,11 +1464,14 @@ class NewsHomeReaderViewModel(
     private fun loadFeedItems(
         newsFeedItem: NewsFeedItem
     ) = viewModelScope.launch {
-        scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.scrollToStart)
+        if (state.value.currentNewsFeedName != newsFeedItem.name) {
+            scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.scrollToStart)
+        }
         _state.update {
             it.copy(
                 newsItemSearchText = null,
                 currentKeywordBucket = if (newsFeedItem.outlineType == OutlineType.keyword) newsFeedItem.name else null,
+                previousNewsFeedName = it.currentNewsFeedName,
                 currentNewsFeedName = newsFeedItem.name,
                 allowClearVisibleNewsItems = true,
                 currentNewsFeedGroup = null,
