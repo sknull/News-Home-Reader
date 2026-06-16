@@ -3,6 +3,7 @@ package de.visualdigits.newshomereader.presentation.model
 import androidx.compose.runtime.Stable
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.UiText
+import de.visualdigits.newshomereader.data.model.opml.OutlineType
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalog
 import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.model.settings.Settings
@@ -24,6 +25,7 @@ data class NewsHomeReaderState(
     val currentNewsFeedGroup: NewsFeedGroup? = null,
 
     val currentNewsFeedItem: NewsFeedItem? = null,
+    val previousOutlineType: OutlineType? = null,
     val previousNewsFeedName: String? = null,
     val currentNewsFeedName: String? = null,
     val currentNewsItems: List<NewsItem> = listOf(),

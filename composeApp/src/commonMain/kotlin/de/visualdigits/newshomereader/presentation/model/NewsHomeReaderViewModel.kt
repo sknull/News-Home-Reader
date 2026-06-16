@@ -582,18 +582,18 @@ class NewsHomeReaderViewModel(
             }
 
             is NewsHomeReaderAction.OnNewsFeedGroupCollapsibleStateChange -> {
-                if (action.isExpanded) {
+                val stayInGroup = !action.isExpanded &&
+                        state.value.currentNewsFeedName != null &&
+                        state.value.previousNewsFeedGroup == state.value.currentNewsFeedGroup
+                if (action.isExpanded && !stayInGroup && (action.group.outlineType != OutlineType.root)) {
                     scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.scrollToStart)
                 } else {
                     scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.standard)
                 }
                 _state.update {
                     // keep collapsible box open when user switches from single feed to group
-                    val stayInGroup = !action.isExpanded &&
-                            it.currentNewsFeedName != null &&
-                            it.previousNewsFeedGroup == it.currentNewsFeedGroup
                     val newCollapsibleState = if (
-                        state.value.isEditMode ||
+                        it.isEditMode ||
                         action.group.subGroups.isNotEmpty() ||
                         action.group.newsFeeds.isNotEmpty()
                     ) {
@@ -1464,12 +1464,19 @@ class NewsHomeReaderViewModel(
     private fun loadFeedItems(
         newsFeedItem: NewsFeedItem
     ) = viewModelScope.launch {
-        if (state.value.currentNewsFeedName != newsFeedItem.name) {
+log(Severity.Info, "loadFeedItems", withTag = "NHR")
+        if ((newsFeedItem.outlineType == OutlineType.newsfeed || newsFeedItem.outlineType == OutlineType.keyword) &&
+            ((newsFeedItem.outlineType != OutlineType.keyword && state.value.currentNewsFeedName != newsFeedItem.name) ||
+                (newsFeedItem.outlineType == OutlineType.keyword && state.value.currentKeywordBucket != newsFeedItem.name) ||
+                state.value.previousOutlineType != newsFeedItem.outlineType)
+        ) {
+log(Severity.Info, "loadFeedItems - SCROLL TO TOP", withTag = "NHR")
             scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.scrollToStart)
         }
         _state.update {
             it.copy(
                 newsItemSearchText = null,
+                previousOutlineType = newsFeedItem.outlineType,
                 currentKeywordBucket = if (newsFeedItem.outlineType == OutlineType.keyword) newsFeedItem.name else null,
                 previousNewsFeedName = it.currentNewsFeedName,
                 currentNewsFeedName = newsFeedItem.name,
