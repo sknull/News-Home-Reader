@@ -93,7 +93,7 @@ class NewsHomeReaderViewModel(
         log(Severity.Info, "Application version ${AppVersion().version} initializing...", withTag = "NHR")
         loadData()
         log(Severity.Info, "Application started", withTag = "NHR")
-        log(Severity.Debug, "Settings: ${state.value.settings}")
+        log(Severity.Debug, "Settings: ${state.value.settings}", withTag = "NHR")
 
         _state
             .map { SubState(
