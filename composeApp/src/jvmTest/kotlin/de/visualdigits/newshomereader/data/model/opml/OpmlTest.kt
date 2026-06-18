@@ -1,8 +1,8 @@
 package de.visualdigits.newshomereader.data.model.opml
 
-import de.visualdigits.newshomereader.data.mapper.mergeNewsFeedGroups
 import de.visualdigits.newshomereader.data.mapper.toNewsFeedConfiguration
 import de.visualdigits.newshomereader.data.mapper.toOpml
+import de.visualdigits.newshomereader.domain.mapper.mergeNewsFeedGroups
 import de.visualdigits.newshomereader.domain.util.decodeValue
 import de.visualdigits.newshomereader.domain.util.encodeToString
 import nl.adaptivity.xmlutil.XmlDeclMode

@@ -11,10 +11,10 @@ import de.visualdigits.newshomereader.data.database.isEqualTo
 import de.visualdigits.newshomereader.data.database.toNewsFeedGroup
 import de.visualdigits.newshomereader.data.database.toNewsFeedGroupEntity
 import de.visualdigits.newshomereader.data.database.upsertNewsFeedGroup
-import de.visualdigits.newshomereader.data.mapper.mergeNewsFeedGroups
 import de.visualdigits.newshomereader.data.mapper.toNewsFeedConfiguration
 import de.visualdigits.newshomereader.data.mapper.toOpml
 import de.visualdigits.newshomereader.data.model.opml.Opml
+import de.visualdigits.newshomereader.domain.mapper.mergeNewsFeedGroups
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
