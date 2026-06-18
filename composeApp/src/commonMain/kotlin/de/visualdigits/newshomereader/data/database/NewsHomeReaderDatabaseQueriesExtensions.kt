@@ -6,7 +6,7 @@ import de.visualdigits.newshomereader.NewsFeedGroupEntity
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.NewsItemEntity
 import de.visualdigits.newshomereader.SettingsEntity
-import de.visualdigits.newshomereader.data.model.opml.OutlineType
+import de.visualdigits.newshomereader.domain.model.opml.OutlineType
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 
 fun NewsHomeReaderDatabaseQueries.getAllNewsFeedGroups(): List<NewsFeedGroup> {

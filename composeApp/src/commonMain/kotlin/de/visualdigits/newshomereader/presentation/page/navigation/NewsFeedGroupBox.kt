@@ -22,7 +22,7 @@ import de.visualdigits.compose.resources.icon_arrow_drop_down_24px
 import de.visualdigits.compose.resources.icon_arrow_right_24px
 import de.visualdigits.compose.resources.icon_delete_24px
 import de.visualdigits.compose.resources.icon_edit_24px
-import de.visualdigits.newshomereader.data.model.opml.OutlineType
+import de.visualdigits.newshomereader.domain.model.opml.OutlineType
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState

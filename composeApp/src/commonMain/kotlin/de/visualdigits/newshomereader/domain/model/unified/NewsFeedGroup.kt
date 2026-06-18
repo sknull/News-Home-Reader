@@ -1,8 +1,8 @@
 package de.visualdigits.newshomereader.domain.model.unified
 
-import de.visualdigits.newshomereader.data.mapper.mergeNewsFeedGroups
-import de.visualdigits.newshomereader.data.mapper.mergeNewsFeedItems
-import de.visualdigits.newshomereader.data.model.opml.OutlineType
+import de.visualdigits.newshomereader.domain.mapper.mergeNewsFeedGroups
+import de.visualdigits.newshomereader.domain.mapper.mergeNewsFeedItems
+import de.visualdigits.newshomereader.domain.model.opml.OutlineType
 import kotlinx.serialization.Serializable
 
 @Serializable

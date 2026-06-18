@@ -1,6 +1,6 @@
 package de.visualdigits.newshomereader.domain.model.unified
 
-import de.visualdigits.newshomereader.data.model.opml.OutlineType
+import de.visualdigits.newshomereader.domain.model.opml.OutlineType
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.io.File

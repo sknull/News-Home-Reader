@@ -1,4 +1,4 @@
-package de.visualdigits.newshomereader.data.model.opml
+package de.visualdigits.newshomereader.domain.model.opml
 
 enum class OutlineType {
 

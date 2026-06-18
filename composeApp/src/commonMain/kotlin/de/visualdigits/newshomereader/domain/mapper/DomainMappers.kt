@@ -1,7 +1,7 @@
 package de.visualdigits.newshomereader.domain.mapper
 
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
-import de.visualdigits.newshomereader.data.model.opml.OutlineType
+import de.visualdigits.newshomereader.domain.model.opml.OutlineType
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogCategory
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
 import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NC
@@ -9,6 +9,23 @@ import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NewsFee
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 
+
+fun List<NewsFeedGroup>.mergeNewsFeedGroups(other: List<NewsFeedGroup>): List<NewsFeedGroup> {
+    val lookupOther = other.associateBy { sg -> Pair(sg.name, sg.parentGroupName) }
+    val lookup = associateBy { sg -> Pair(sg.name, sg.parentGroupName) }
+    return mapNotNull { nfg -> lookupOther[Pair(nfg.name, nfg.parentGroupName)]?.let { onfg -> nfg.merge(onfg) } } +
+            lookup.filter { (k, v) -> !lookupOther.contains(k) }.values +
+            lookupOther.filter { (k, v) -> !lookup.contains(k) }.values
+
+}
+
+fun List<NewsFeedItem>.mergeNewsFeedItems(other: List<NewsFeedItem>): List<NewsFeedItem> {
+    val lookupOther = other.associateBy { nfi -> Triple(nfi.name, nfi.mainGroupName, nfi.subGroupName) }
+    val lookup = associateBy { nfi -> Triple(nfi.name, nfi.mainGroupName, nfi.subGroupName) }
+    return mapNotNull { nfi -> lookupOther[Triple(nfi.name, nfi.mainGroupName, nfi.subGroupName)]?.let { onfi -> nfi.merge(onfi) } } +
+            lookup.filter { (k, v) -> !lookupOther.contains(k) }.values +
+            lookupOther.filter { (k, v) -> !lookup.contains(k) }.values
+}
 
 fun NewsFeedConfiguration.toNewsFeedItem(): NewsFeedItem {
     val newsFeedItem = NewsFeedItem(

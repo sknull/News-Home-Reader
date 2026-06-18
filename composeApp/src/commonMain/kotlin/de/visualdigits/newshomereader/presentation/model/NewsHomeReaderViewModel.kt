@@ -17,7 +17,7 @@ import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.error_local_wrong_filetype
 import de.visualdigits.generated.AppVersion
-import de.visualdigits.newshomereader.data.model.opml.OutlineType
+import de.visualdigits.newshomereader.domain.model.opml.OutlineType
 import de.visualdigits.newshomereader.domain.mapper.toNewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.mapper.toNewsFeedItem
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem

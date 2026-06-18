@@ -12,7 +12,7 @@ import de.visualdigits.newshomereader.NewsFeedGroupEntity
 import de.visualdigits.newshomereader.NewsItemEntity
 import de.visualdigits.newshomereader.SearchNewsItems
 import de.visualdigits.newshomereader.SettingsEntity
-import de.visualdigits.newshomereader.data.model.opml.OutlineType
+import de.visualdigits.newshomereader.domain.model.opml.OutlineType
 import de.visualdigits.newshomereader.domain.model.applicationjson.AppJson
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum

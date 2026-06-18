@@ -19,7 +19,7 @@ import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_collections_bookmark_24px
 import de.visualdigits.compose.resources.icon_delete_24px
 import de.visualdigits.compose.resources.icon_edit_24px
-import de.visualdigits.newshomereader.data.model.opml.OutlineType
+import de.visualdigits.newshomereader.domain.model.opml.OutlineType
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.util.getFaviconUrl
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
