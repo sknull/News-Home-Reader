@@ -18,7 +18,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import de.visualdigits.common.domain.model.HsvColor
+import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.presentation.components.BindBackHandler
 import de.visualdigits.common.presentation.components.ConnectivityManager

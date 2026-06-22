@@ -2,7 +2,6 @@ package de.visualdigits.newshomereader.domain.model.newsfeedconfiguration
 
 import androidx.compose.runtime.Immutable
 import co.touchlab.kermit.Severity
-import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.AbstractConfiguration
 import de.visualdigits.common.domain.model.configuration.EnumFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.ListFieldDescriptor
@@ -11,6 +10,7 @@ import de.visualdigits.common.domain.model.configuration.StringFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.StringKeyFactory
 import de.visualdigits.common.domain.model.configuration.keyfactory.StringListKeyFactory
+import de.visualdigits.common.domain.model.ui.UiText
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.group_group
 import de.visualdigits.compose.resources.group_name

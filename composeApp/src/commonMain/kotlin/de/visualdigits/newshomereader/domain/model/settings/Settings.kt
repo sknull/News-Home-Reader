@@ -1,7 +1,6 @@
 package de.visualdigits.newshomereader.domain.model.settings
 
 import androidx.compose.runtime.Immutable
-import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.AbstractConfiguration
 import de.visualdigits.common.domain.model.configuration.ColorPickerFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.EnumFieldDescriptor
@@ -10,6 +9,7 @@ import de.visualdigits.common.domain.model.configuration.PasswordFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.StringFieldDescriptor
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.configuration.keyfactory.IntKeyFactory
+import de.visualdigits.common.domain.model.ui.UiText
 import de.visualdigits.common.presentation.components.StudioClockColors
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.group_display_theme

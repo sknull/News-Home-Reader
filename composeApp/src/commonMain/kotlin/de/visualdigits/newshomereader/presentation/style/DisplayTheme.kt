@@ -10,7 +10,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import de.visualdigits.common.domain.model.HsvColor
+import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.presentation.model.PlatformScrollbarStyle
 
 val BACKGROUND_COLOR_DEFAULT: HsvColor = HsvColor.fromComposeColor(Color(0xFFFFFFFF))

@@ -13,8 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.form.EditableListResources
+import de.visualdigits.common.domain.model.ui.UiText
 import de.visualdigits.common.presentation.components.form.ConfigurationEditForm
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.compose.resources.Res

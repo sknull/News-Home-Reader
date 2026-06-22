@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import de.visualdigits.common.domain.model.FileMode
-import de.visualdigits.common.domain.model.HsvColor
+import de.visualdigits.common.domain.model.color.HsvColor
+import de.visualdigits.common.domain.model.ui.FileMode
 import de.visualdigits.common.presentation.components.PlatformFileChooser
 import de.visualdigits.common.presentation.components.PlatformFileSaver
 import de.visualdigits.compose.resources.Res

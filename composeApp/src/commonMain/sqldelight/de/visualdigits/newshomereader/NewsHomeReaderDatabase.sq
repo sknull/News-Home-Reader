@@ -1,4 +1,4 @@
-import de.visualdigits.common.domain.model.EncryptedString;
+import de.visualdigits.common.domain.util.EncryptedString;
 import de.visualdigits.newshomereader.domain.model.applicationjson.AppJson;
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem;
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem;

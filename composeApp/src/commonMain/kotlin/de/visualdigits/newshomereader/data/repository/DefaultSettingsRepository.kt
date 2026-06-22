@@ -1,13 +1,13 @@
 package de.visualdigits.newshomereader.data.repository
 
 import co.touchlab.kermit.Severity
-import de.visualdigits.common.domain.model.CryptoBox
-import de.visualdigits.common.domain.model.EncryptedString
-import de.visualdigits.common.domain.model.HsvColor
+import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.domain.model.configuration.AbstractConfiguration.Companion.valueMap
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
 import de.visualdigits.common.domain.model.errorhandling.Result
+import de.visualdigits.common.domain.util.CryptoBox
+import de.visualdigits.common.domain.util.EncryptedString
 import de.visualdigits.common.presentation.components.StudioClockColors
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.data.database.toSettings

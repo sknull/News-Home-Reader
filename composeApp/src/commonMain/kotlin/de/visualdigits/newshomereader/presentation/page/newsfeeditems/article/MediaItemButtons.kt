@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import de.visualdigits.common.domain.model.HsvColor
+import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_videocam_24px

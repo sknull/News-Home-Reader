@@ -1,8 +1,8 @@
 package de.visualdigits.newshomereader.di
 
 import app.cash.sqldelight.ColumnAdapter
-import de.visualdigits.common.domain.model.CryptoBox
-import de.visualdigits.common.domain.model.EncryptedString
+import de.visualdigits.common.domain.util.CryptoBox
+import de.visualdigits.common.domain.util.EncryptedString
 import de.visualdigits.newshomereader.FullArticleEntity
 import de.visualdigits.newshomereader.NewsFeedEntity
 import de.visualdigits.newshomereader.NewsFeedGroupEntity

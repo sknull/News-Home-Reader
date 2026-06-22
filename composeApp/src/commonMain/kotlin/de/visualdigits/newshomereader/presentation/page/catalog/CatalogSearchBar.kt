@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import de.visualdigits.common.domain.model.UiText
+import de.visualdigits.common.domain.model.ui.UiText
 import de.visualdigits.common.presentation.components.container.FlexibleSearchBar
 import de.visualdigits.common.presentation.components.util.switchBoxColors
 import de.visualdigits.common.presentation.model.CommonAction

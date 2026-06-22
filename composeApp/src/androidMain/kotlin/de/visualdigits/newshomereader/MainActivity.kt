@@ -10,7 +10,7 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import de.visualdigits.common.domain.model.HsvColor
+import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.newshomereader.data.repository.FeedScheduler
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum

@@ -1,7 +1,7 @@
 package de.visualdigits.newshomereader.presentation.model
 
 import androidx.compose.runtime.Immutable
-import de.visualdigits.common.domain.model.KeyValue
+import de.visualdigits.common.domain.model.ui.KeyValue
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
 import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.model.settings.Settings

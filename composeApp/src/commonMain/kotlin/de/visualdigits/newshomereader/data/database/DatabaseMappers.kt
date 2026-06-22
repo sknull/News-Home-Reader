@@ -1,7 +1,7 @@
 package de.visualdigits.newshomereader.data.database
 
 import app.cash.sqldelight.ColumnAdapter
-import de.visualdigits.common.domain.model.HsvColor
+import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.domain.model.configuration.AbstractConfiguration.Companion.valueMap
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.presentation.components.StudioClockColors

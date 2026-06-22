@@ -1,7 +1,7 @@
 package de.visualdigits.newshomereader.di
 
 import de.visualdigits.common.domain.model.AndroidCryptoBox
-import de.visualdigits.common.domain.model.CryptoBox
+import de.visualdigits.common.domain.util.CryptoBox
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.newshomereader.data.database.DriverFactory
 import de.visualdigits.newshomereader.data.http.HttpClientFactory

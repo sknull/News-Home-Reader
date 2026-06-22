@@ -3,13 +3,13 @@ package de.visualdigits.newshomereader.presentation.model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Severity
-import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.common.domain.model.errorhandling.onError
 import de.visualdigits.common.domain.model.errorhandling.onSuccess
 import de.visualdigits.common.domain.model.platform.PlatformType
+import de.visualdigits.common.domain.model.ui.UiText
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.StudioClockColors
 import de.visualdigits.common.presentation.model.CommonAction
@@ -17,7 +17,6 @@ import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.error_local_wrong_filetype
 import de.visualdigits.generated.AppVersion
-import de.visualdigits.newshomereader.domain.model.opml.OutlineType
 import de.visualdigits.newshomereader.domain.mapper.toNewsFeedConfiguration
 import de.visualdigits.newshomereader.domain.mapper.toNewsFeedItem
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
@@ -27,6 +26,7 @@ import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.errorhandling.toUiText
 import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NC
 import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NewsFeedConfiguration
+import de.visualdigits.newshomereader.domain.model.opml.OutlineType
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language

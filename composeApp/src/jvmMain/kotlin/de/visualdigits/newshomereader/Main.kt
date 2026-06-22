@@ -12,7 +12,7 @@ import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import com.formdev.flatlaf.FlatDarculaLaf
 import com.formdev.flatlaf.FlatLightLaf
-import de.visualdigits.common.domain.model.HsvColor
+import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.domain.service.getPlatformLogWriters
 import de.visualdigits.compose.resources.Res

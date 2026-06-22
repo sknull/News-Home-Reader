@@ -1,8 +1,8 @@
 package de.visualdigits.newshomereader.domain.model.type
 
-import de.visualdigits.common.domain.model.StringResourceEnumerable
-import de.visualdigits.common.domain.model.UiText
 import de.visualdigits.common.domain.model.configuration.keyfactory.KeyFactory
+import de.visualdigits.common.domain.model.ui.StringResourceEnumerable
+import de.visualdigits.common.domain.model.ui.UiText
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.flag_de
 import de.visualdigits.compose.resources.flag_en
