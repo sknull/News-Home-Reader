@@ -4,8 +4,8 @@ import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
-import nl.adaptivity.xmlutil.core.impl.multiplatform.InputStream
-import nl.adaptivity.xmlutil.core.impl.multiplatform.OutputStream
+import kotlinx.io.Sink
+import kotlinx.io.Source
 
 interface NewsFeedConfigurationRepository {
 
@@ -14,11 +14,11 @@ interface NewsFeedConfigurationRepository {
     suspend fun getNewsFeedGroupByName(parentGroupName: String?, name: String): Result<NewsFeedGroup?, DataError.Local>
 
     /**
-     * [ins] must represent a stream of OPML.
+     * [source] must represent a stream of OPML.
      */
-    suspend fun setNewsFeedGroups(ins: InputStream): Result<List<NewsFeedGroup>, DataError.Local>
+    suspend fun setNewsFeedGroups(source: Source): Result<List<NewsFeedGroup>, DataError.Local>
 
-    suspend fun saveNewsFeedGroups(outs: OutputStream): Result<Unit, DataError.Local>
+    suspend fun saveNewsFeedGroups(sink: Sink): Result<Unit, DataError.Local>
 
     suspend fun upsertNewsFeedGroup(newsFeedGroup: NewsFeedGroup): Result<List<NewsFeedGroup>, DataError.Local>
 

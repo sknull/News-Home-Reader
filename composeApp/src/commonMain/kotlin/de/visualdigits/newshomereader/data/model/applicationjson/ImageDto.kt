@@ -2,12 +2,12 @@ package de.visualdigits.newshomereader.data.model.applicationjson
 
 
 import androidx.compose.runtime.Immutable
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.newshomereader.data.serializer.ListSerializer
-import de.visualdigits.newshomereader.domain.serializer.OffsetDateTimeHeuristicDeserializer
+import de.visualdigits.newshomereader.domain.serializer.KmpOffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
-import java.time.OffsetDateTime
 
 @Serializable
 @Immutable
@@ -21,7 +21,7 @@ data class ImageDto(
     val author: String? = null,
     val width: Int? = null,
     val height: Int? = null,
-    @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("datePublished") val datePublished: OffsetDateTime = OffsetDateTime.now(),
+    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("datePublished") val datePublished: KmpOffsetDateTime = KmpOffsetDateTime.now(),
     val description: String? = null,
     val inLanguage: String? = null,
 )

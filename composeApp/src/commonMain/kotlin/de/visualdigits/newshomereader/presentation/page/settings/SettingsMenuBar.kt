@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import de.visualdigits.common.domain.model.color.HsvColor
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.common.domain.model.ui.FileMode
 import de.visualdigits.common.presentation.components.PlatformFileChooser
 import de.visualdigits.common.presentation.components.PlatformFileSaver
@@ -27,12 +28,11 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
+import kotlinx.io.files.Path
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun SettingsMenuBar(
@@ -57,10 +57,11 @@ fun SettingsMenuBar(
             fileMode = FileMode.FILES_ONLY,
             buttonColor = buttonColor,
             leadingIcon = painterResource(Res.drawable.icon_download_24px),
-            homeDirectoryPath = homeDirectoryPath,
-        ) { fileName, ins ->
-            onAction(NewsHomeReaderAction.OnOpmlImport(fileName, ins))
-        }
+            startDirectory = Path(homeDirectoryPath, "backup"),
+            onOkSource = { fileName, source ->
+                onAction(NewsHomeReaderAction.OnOpmlImport(fileName, source))
+            }
+        )
 
         PlatformFileSaver(
             label = stringResource(Res.string.label_opml),
@@ -70,13 +71,13 @@ fun SettingsMenuBar(
             title = stringResource(Res.string.dialog_title_export_opml),
             fileMode = FileMode.FILES_ONLY,
             suggestedFileName = "newshomereader-export_${
-                OffsetDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
+                KmpOffsetDateTime.now().format("yyyy-MM-dd_HH-mm-ss")
             }.opml",
             buttonColor = buttonColor,
             leadingIcon = painterResource(Res.drawable.icon_upload_24px),
-            homeDirectoryPath = homeDirectoryPath,
-        ) { fileName, outs ->
-            onAction(NewsHomeReaderAction.OnOpmlExport(fileName, outs))
+            startDirectory = Path(homeDirectoryPath, "backup"),
+        ) { fileName, sink ->
+            onAction(NewsHomeReaderAction.OnOpmlExport(fileName, sink))
         }
 
         PlatformFileChooser(
@@ -87,10 +88,11 @@ fun SettingsMenuBar(
             fileMode = FileMode.FILES_ONLY,
             buttonColor = buttonColor,
             leadingIcon = painterResource(Res.drawable.icon_download_24px),
-            homeDirectoryPath = homeDirectoryPath,
-        ) { fileName, ins ->
-            onAction(NewsHomeReaderAction.OnSettingsImport(fileName, ins))
-        }
+            startDirectory = Path(homeDirectoryPath, "backup"),
+            onOkSource = { fileName, source ->
+                onAction(NewsHomeReaderAction.OnSettingsImport(fileName, source))
+            }
+        )
 
         PlatformFileSaver(
             label = stringResource(Res.string.label_settings),
@@ -100,13 +102,13 @@ fun SettingsMenuBar(
             title = stringResource(Res.string.dialog_title_export_settings),
             fileMode = FileMode.FILES_ONLY,
             suggestedFileName = "newshomereader-settings_${
-                OffsetDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
+                KmpOffsetDateTime.now().format("yyyy-MM-dd_HH-mm-ss")
             }.json",
             buttonColor = buttonColor,
             leadingIcon = painterResource(Res.drawable.icon_upload_24px),
-            homeDirectoryPath = homeDirectoryPath,
-        ) { fileName, outs ->
-            onAction(NewsHomeReaderAction.OnSettingsExport(fileName, outs))
+            startDirectory = Path(homeDirectoryPath, "backup"),
+        ) { fileName, sink ->
+            onAction(NewsHomeReaderAction.OnSettingsExport(fileName, sink))
         }
     }
 }

@@ -1,11 +1,11 @@
 package de.visualdigits.newshomereader.data.model.atom
 
 import androidx.compose.runtime.Immutable
-import de.visualdigits.newshomereader.domain.serializer.OffsetDateTimeHeuristicDeserializer
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
+import de.visualdigits.newshomereader.domain.serializer.KmpOffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
-import java.time.OffsetDateTime
 
 
 @Serializable
@@ -13,8 +13,8 @@ import java.time.OffsetDateTime
 data class Feed(
     @XmlElement(true) @XmlSerialName("title") val title: String? = null,
     @XmlElement(true) @XmlSerialName("subtitle") val subtitle: Text? = null,
-    @XmlElement(true) @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("date") val date: OffsetDateTime = OffsetDateTime.now(),
-    @XmlElement(true) @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("updated") val updated: OffsetDateTime = OffsetDateTime.now(),
+    @XmlElement(true) @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("date") val date: KmpOffsetDateTime = KmpOffsetDateTime.now(),
+    @XmlElement(true) @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("updated") val updated: KmpOffsetDateTime = KmpOffsetDateTime.now(),
     @XmlElement(true) @XmlSerialName("id") val id: String? = null,
     @XmlElement(true) @XmlSerialName("author") val author: Author? = null,
     @XmlElement(true) @XmlSerialName("link") val links: List<Link>? = null,

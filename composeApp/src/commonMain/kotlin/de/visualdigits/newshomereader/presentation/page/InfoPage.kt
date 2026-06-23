@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import be.digitalia.compose.htmlconverter.HtmlStyle
 import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
 import de.visualdigits.common.domain.model.color.HsvColor
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.ok
@@ -27,8 +28,6 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
 import org.jetbrains.compose.resources.stringResource
-import java.time.LocalDate
-import java.time.temporal.ChronoField
 
 
 @Composable
@@ -52,7 +51,7 @@ fun InfoPage(
                         <h1>News Home Reader</h1>
                         <h3>Version ${AppVersion().version}</h3>
                         <br/>
-                        <div>© ${LocalDate.now().get(ChronoField.YEAR)} by <a href=\"mailto.s.knull@t-online.de\">Stephan Knull</a>.<div>
+                        <div>© ${KmpOffsetDateTime.now().year} by <a href=\"mailto.s.knull@t-online.de\">Stephan Knull</a>.<div>
                         """.trimIndent(),
                 style = HtmlStyle(
                     textLinkStyles = TextLinkStyles(style = SpanStyle(color = linkColor)),

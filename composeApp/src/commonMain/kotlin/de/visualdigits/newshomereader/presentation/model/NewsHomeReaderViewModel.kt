@@ -3,6 +3,7 @@ package de.visualdigits.newshomereader.presentation.model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Severity
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
 import de.visualdigits.common.domain.model.errorhandling.Result
@@ -12,6 +13,7 @@ import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.domain.model.ui.UiText
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.StudioClockColors
+import de.visualdigits.common.presentation.components.applyAppLanguage
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.compose.resources.Res
@@ -63,11 +65,9 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.io.InputStream
-import java.io.OutputStream
-import java.time.OffsetDateTime
-import java.time.temporal.ChronoUnit
-import java.util.Locale
+import kotlinx.io.Sink
+import kotlinx.io.Source
+import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
@@ -217,7 +217,7 @@ class NewsHomeReaderViewModel(
             is NewsHomeReaderAction.OnSettingsValueChanged -> {
                 if (action.keyValue.descriptor.key == SK.language) {
                     action.keyValue.value?.also { l ->
-                        Locale.setDefault((l as Language).locale)
+                        applyAppLanguage((l as Language).localeCode)
                     }
                 }
                 _editedSettings.update { current ->
@@ -230,7 +230,7 @@ class NewsHomeReaderViewModel(
 
             is NewsHomeReaderAction.OnEditSettingsCancelClick -> {
                 _state.update { state ->
-                    state.settings?.get<Language>(SK.language)?.also { l -> Locale.setDefault(l.locale) }
+                    state.settings?.get<Language>(SK.language)?.also { l -> applyAppLanguage(l.localeCode) }
                     state.copy(
                         isEditingSettings = false,
                         uiMessage = null,
@@ -244,19 +244,19 @@ class NewsHomeReaderViewModel(
             }
 
             is NewsHomeReaderAction.OnOpmlImport -> {
-                importOpml(action.fileName, action.ins)
+                importOpml(action.fileName, action.source)
             }
 
             is NewsHomeReaderAction.OnOpmlExport -> {
-                exportOpml(action.fileName, action.outs)
+                exportOpml(action.fileName, action.sink)
             }
 
             is NewsHomeReaderAction.OnSettingsImport -> {
-                importSettings(action.fileName, action.ins)
+                importSettings(action.fileName, action.source)
             }
 
             is NewsHomeReaderAction.OnSettingsExport -> {
-                exportSettings(action.fileName, action.outs)
+                exportSettings(action.fileName, action.sink)
             }
 
             is NewsHomeReaderAction.UpdateMaxImageSize -> {
@@ -643,7 +643,7 @@ class NewsHomeReaderViewModel(
             }
 
             is NewsHomeReaderAction.OnLanguageSelected -> {
-                Locale.setDefault(action.language.locale)
+                applyAppLanguage(action.language.localeCode)
                 _state.update {
                     it.copy(
                         language = action.language
@@ -1052,10 +1052,10 @@ class NewsHomeReaderViewModel(
         }
     }
 
-    private fun importSettings(fileName: String, ins: InputStream) = viewModelScope.launch {
+    private fun importSettings(fileName: String, source: Source) = viewModelScope.launch {
         log(Severity.Info, "Importing settings", withTag = "NHR")
         if (fileName.endsWith(".json", ignoreCase = true)) {
-            settingsRepository.importSettings(ins)
+            settingsRepository.importSettings(source)
                 .onSuccess { settings ->
                     _state.update {
                         it.copy(
@@ -1086,12 +1086,12 @@ class NewsHomeReaderViewModel(
         }
     }
 
-    private fun exportSettings(fileName: String, outs: OutputStream) = viewModelScope.launch {
+    private fun exportSettings(fileName: String, sink: Sink) = viewModelScope.launch {
         log(Severity.Info, "Exporting settings", withTag = "NHR")
         if (fileName.endsWith(".json", ignoreCase = true)) {
             val settings = state.value.settings
             if(settings != null) {
-                settingsRepository.exportSettings(settings, outs)
+                settingsRepository.exportSettings(settings, sink)
                     .onSuccess {
                         _state.update {
                             it.copy(
@@ -1121,11 +1121,11 @@ class NewsHomeReaderViewModel(
         }
     }
 
-    private fun importOpml(fileName: String, ins: InputStream) = viewModelScope.launch {
+    private fun importOpml(fileName: String, source: Source) = viewModelScope.launch {
         log(Severity.Info, "Importing opml...", withTag = "NHR")
         val prefetchImages = state.value.settings?.get<BooleanEnum>(SK.prefetchImages)?.booleanValue ?: false
         if (fileName.endsWith(".opml", ignoreCase = true)) {
-            val newFeedConfigurationResult = newsFeedConfigurationRepository.setNewsFeedGroups(ins)
+            val newFeedConfigurationResult = newsFeedConfigurationRepository.setNewsFeedGroups(source)
             if (newFeedConfigurationResult is Result.Success) {
                 val feedResult = newsFeedConfigurationRepository.getNewsFeedGroups()
                 val newsFeedGroups = if (feedResult is Result.Success) {
@@ -1208,10 +1208,10 @@ class NewsHomeReaderViewModel(
         }
     }
 
-    private fun exportOpml(fileName: String, outs: OutputStream) = viewModelScope.launch {
+    private fun exportOpml(fileName: String, sink: Sink) = viewModelScope.launch {
         log(Severity.Info, "Exporting opml...", withTag = "NHR")
         if (fileName.endsWith(".opml", ignoreCase = true)) {
-            newsFeedConfigurationRepository.saveNewsFeedGroups(outs)
+            newsFeedConfigurationRepository.saveNewsFeedGroups(sink)
                 .onSuccess {
                     _state.update {
                         it.copy(
@@ -1407,7 +1407,7 @@ class NewsHomeReaderViewModel(
                 newSettings
             }
 
-            Locale.setDefault(finalSettings.get<Language>(SK.language)?.locale?: Language.EN.locale)
+            applyAppLanguage(finalSettings.get<Language>(SK.language)?.localeCode?: Language.EN.localeCode)
 
             _state.update {
                 it.copy(
@@ -1498,7 +1498,7 @@ log(Severity.Info, "loadFeedItems - SCROLL TO TOP", withTag = "NHR")
     }
 
     private fun markItemsAsRead(days: Long) = viewModelScope.launch {
-        val threshold = OffsetDateTime.now().minus(days, ChronoUnit.DAYS)
+        val threshold = KmpOffsetDateTime.now().minus(days.days)
         val newsItems = state.value.currentNewsItems
             .filter { newsItem -> newsItem.updated.isBefore(threshold) }
             .map { newsItem -> newsItem.copy(isRead = true) }

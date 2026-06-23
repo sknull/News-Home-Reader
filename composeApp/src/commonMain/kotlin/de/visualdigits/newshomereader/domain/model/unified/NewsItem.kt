@@ -1,15 +1,15 @@
 package de.visualdigits.newshomereader.domain.model.unified
 
 import androidx.compose.runtime.Immutable
-import java.time.OffsetDateTime
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 
 @Immutable
 data class NewsItem(
     val id: Long = 0L,
     val feedName: String,
     val identifier: String,
-    val published: OffsetDateTime,
-    val updated: OffsetDateTime,
+    val published: KmpOffsetDateTime,
+    val updated: KmpOffsetDateTime,
     val link: String,
     val title: String,
     val summary: String,

@@ -1,9 +1,9 @@
 package de.visualdigits.newshomereader.domain.model.unified
 
 import androidx.compose.runtime.Immutable
-import de.visualdigits.newshomereader.domain.serializer.OffsetDateTimeHeuristicDeserializer
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
+import de.visualdigits.newshomereader.domain.serializer.KmpOffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.Serializable
-import java.time.OffsetDateTime
 
 @Serializable
 @Immutable
@@ -11,7 +11,7 @@ data class ThumbnailItem(
     val url: List<String> = listOf(),
     val description: String? = null,
     val author: String? = null,
-    @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) val datePublished: OffsetDateTime = OffsetDateTime.now(),
+    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) val datePublished: KmpOffsetDateTime = KmpOffsetDateTime.now(),
     val width: Int? = null,
     val height: Int? = null
 )

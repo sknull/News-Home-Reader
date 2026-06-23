@@ -8,14 +8,8 @@ import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import kotlinx.coroutines.flow.Flow
-import java.io.File
 
 interface FeedRepository {
-
-    suspend fun readFromFile(
-        feedName: String,
-        file: File
-    ): NewsFeed?
 
     suspend fun getAllNewsFeeds(): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote>
 

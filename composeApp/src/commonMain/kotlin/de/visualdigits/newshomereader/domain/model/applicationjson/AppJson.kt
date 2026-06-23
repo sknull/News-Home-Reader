@@ -2,12 +2,12 @@ package de.visualdigits.newshomereader.domain.model.applicationjson
 
 
 import androidx.compose.runtime.Immutable
-import de.visualdigits.newshomereader.domain.serializer.OffsetDateTimeHeuristicDeserializer
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
+import de.visualdigits.newshomereader.domain.serializer.KmpOffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonNames
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
-import java.time.OffsetDateTime
 
 @Serializable
 @Immutable
@@ -22,19 +22,19 @@ data class AppJson(
     val alternateName: List<String> = listOf(),
     val alternativeHeadline: String? = null,
     val articleBody: String? = null,
-    val articleSection: String? = null,
+    val articleSection: List<String> = listOf(),
     val author: List<Author> = listOf(),
     val caption: String? = null,
     val commentCount: Int? = null,
     val contentUrl: String? = null,
     val copyrightHolder: CopyrightHolder? = null,
     val copyrightYear: String? = null,
-    @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("dateModified") val dateModified: OffsetDateTime = OffsetDateTime.now(),
-    @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("datePublished") val datePublished: OffsetDateTime = OffsetDateTime.now(),
+    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("dateModified") val dateModified: KmpOffsetDateTime = KmpOffsetDateTime.now(),
+    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("datePublished") val datePublished: KmpOffsetDateTime = KmpOffsetDateTime.now(),
     val description: String? = null,
     val discussionUrl: String? = null,
     val duration: String? = null,
-    @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("expires") val expires: OffsetDateTime = OffsetDateTime.now(),
+    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("expires") val expires: KmpOffsetDateTime = KmpOffsetDateTime.now(),
     val hasPart: List<HasPart> = listOf(),
     val headline: String? = null,
     val identifier: Long? = null,
@@ -60,7 +60,7 @@ data class AppJson(
     @JsonNames("thumbnailURL", "thumbnailUrl") val thumbnailUrl: List<String> = listOf(),
     val timeRequired: String? = null,
     val transcript: String? = null,
-    @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("uploadDate") val uploadDate: OffsetDateTime = OffsetDateTime.now(),
+    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("uploadDate") val uploadDate: KmpOffsetDateTime = KmpOffsetDateTime.now(),
     val url: String? = null,
     val version: String? = null,
     val width: Int? = null,

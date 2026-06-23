@@ -20,14 +20,12 @@ import de.visualdigits.newshomereader.domain.repository.ArticleRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
+import io.ktor.util.collections.ConcurrentMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
-import java.io.File
-import java.net.URI
-import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.roundToLong
 
 open class DefaultArticleRepository(
@@ -37,14 +35,7 @@ open class DefaultArticleRepository(
 
     val log = Logger.withTag("DefaultArticleRepository")
 
-    private val articleLocks = ConcurrentHashMap<Long, Mutex>()
-
-    override suspend fun readFromFile(
-        newsItem: NewsItem,
-        file: File
-    ): FullArticle = withContext(Dispatchers.IO) {
-        readFromString(newsItem, file.readText())
-    }
+    private val articleLocks = ConcurrentMap<Long, Mutex>()
 
     override suspend fun getFullArticle(itemId: Long): Result<FullArticle?, DataError.Local> {
         return try {
@@ -104,8 +95,12 @@ open class DefaultArticleRepository(
             } catch (e: Exception) {
                 Result.Error(DataError.Remote.SERIALIZATION, throwable = e)
             } finally {
-                if (!lock.isLocked) {
-                    articleLocks.remove(newsItem.id)
+                if (lock.tryLock()) {
+                    try {
+                        articleLocks.remove(newsItem.id)
+                    } finally {
+                        lock.unlock()
+                    }
                 }
             }
         }
@@ -168,7 +163,7 @@ open class DefaultArticleRepository(
                 try {
                     val videoUrl = "https://www.youtube.com/watch?v=${elem.attr("videoid")}"
                     val embedUrl = "https://www.youtube.com/oembed?url=$videoUrl&format=json"
-                    val json = URI(embedUrl).toURL().readText()
+                    val json = httpClient.get(embedUrl).bodyAsText()
                     Json.decodeFromString<OEmbed>(json).toMediaItem(videoUrl)
                 } catch (_: Exception) {
                     null
@@ -180,7 +175,7 @@ open class DefaultArticleRepository(
                 try {
                     val videoUrl = elem.attr("href")
                     val embedUrl = "https://www.youtube.com/oembed?url=$videoUrl&format=json"
-                    val json = URI(embedUrl).toURL().readText()
+                    val json = httpClient.get(embedUrl).bodyAsText()
                     Json.decodeFromString<OEmbed>(json).toMediaItem(videoUrl)
                 } catch (_: Exception) {
                     null

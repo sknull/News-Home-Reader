@@ -1,6 +1,7 @@
 package de.visualdigits.newshomereader.data.util
 
 import co.touchlab.kermit.Logger
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.newshomereader.data.util.CatalogScraper.readUrlAsRawBytes
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalog
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
@@ -8,15 +9,11 @@ import io.ktor.client.HttpClient
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import java.io.File
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
+import kotlin.time.Duration.Companion.days
 
 object CatalogValidator {
 
     private val log = Logger.withTag("CatalogScraper")
-
-    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
     /**
      * Validates a given catalog by parsing all feeds once and
@@ -44,7 +41,7 @@ object CatalogValidator {
         validationOutputFile: File
     ) {
         runBlocking {
-            val thresholdDate = OffsetDateTime.now().minus(90, ChronoUnit.DAYS)
+            val thresholdDate = KmpOffsetDateTime.now().minus(90.days)
             val newsFeedCatalog = Json.decodeFromString(NewsFeedCatalog.serializer(), catalogFile.readText())
             val mainCategories = newsFeedCatalog.categories.mapNotNull { mainCategory ->
                 output(validationOutputFile, mainCategory.name)
@@ -66,7 +63,7 @@ object CatalogValidator {
                                     output(validationOutputFile, "    ${feed.name}: EMPTY FEED")
                                     null
                                 } else {
-                                    output(validationOutputFile, "    ${feed.name}: ${updated.format(formatter)}")
+                                    output(validationOutputFile, "    ${feed.name}: ${updated.format("yyyy-MM-dd HH:mm:ss")}")
                                     feed
                                 }
                             } else {
@@ -111,11 +108,11 @@ object CatalogValidator {
     ) {
         targetFile.writeText("")
         val validationMap = createValidationMap(validationOutputFile)
-        validationMap.toSortedMap().forEach { mainCategory, map ->
+        validationMap.toSortedMap().forEach { (mainCategory, map) ->
             targetFile.appendText("# $mainCategory\n\n")
-            map.toSortedMap().forEach { subCategory, map ->
+            map.toSortedMap().forEach { (subCategory, map) ->
                 targetFile.appendText("## $subCategory\n\n")
-                map.toSortedMap().forEach { feedName, status ->
+                map.toSortedMap().forEach { (feedName, status) ->
                     targetFile.appendText("- $feedName: $status\n")
                 }
                 targetFile.appendText("\n")

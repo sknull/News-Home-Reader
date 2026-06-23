@@ -1,5 +1,6 @@
 package de.visualdigits.newshomereader.domain.repository
 
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.common.domain.model.errorhandling.onError
 import de.visualdigits.common.domain.model.errorhandling.onSuccess
 import de.visualdigits.newshomereader.di.sharedModule
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.extension.RegisterExtension
 import org.koin.test.KoinTest
 import org.koin.test.inject
 import org.koin.test.junit5.KoinTestExtension
-import java.time.OffsetDateTime
 
 @Disabled("Only for local testing")
 class ArticleRepositoryTest : KoinTest {
@@ -24,8 +24,8 @@ class ArticleRepositoryTest : KoinTest {
         link = "",
         feedName = "",
         identifier = "",
-        published = OffsetDateTime.now(),
-        updated = OffsetDateTime.now(),
+        published = KmpOffsetDateTime.now(),
+        updated = KmpOffsetDateTime.now(),
         title = "",
         summary = "",
         content = "",

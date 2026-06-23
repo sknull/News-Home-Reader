@@ -9,8 +9,8 @@ import de.visualdigits.newshomereader.domain.model.type.Language
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
-import nl.adaptivity.xmlutil.core.impl.multiplatform.InputStream
-import nl.adaptivity.xmlutil.core.impl.multiplatform.OutputStream
+import kotlinx.io.Sink
+import kotlinx.io.Source
 
 sealed interface NewsHomeReaderAction {
 
@@ -34,25 +34,25 @@ sealed interface NewsHomeReaderAction {
     @Immutable
     data class OnOpmlImport(
         val fileName: String,
-        val ins: InputStream
+        val source: Source
     ): NewsHomeReaderAction
 
     @Immutable
     data class OnOpmlExport(
         val fileName: String,
-        val outs: OutputStream
+        val sink: Sink
     ): NewsHomeReaderAction
 
     @Immutable
     data class OnSettingsImport(
         val fileName: String,
-        val ins: InputStream
+        val source: Source
     ): NewsHomeReaderAction
 
     @Immutable
     data class OnSettingsExport(
         val fileName: String,
-        val outs: OutputStream
+        val sink: Sink
     ): NewsHomeReaderAction
 
     @Immutable

@@ -1,32 +1,44 @@
 package de.visualdigits.newshomereader.data.model.rss
 
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.common.domain.model.errorhandling.onError
 import de.visualdigits.common.domain.model.errorhandling.onSuccess
 import de.visualdigits.newshomereader.data.database.toNewsFeedEntity
 import de.visualdigits.newshomereader.data.model.applicationjson.AppJsonDto
 import de.visualdigits.newshomereader.di.platformModule
 import de.visualdigits.newshomereader.di.sharedModule
+import de.visualdigits.newshomereader.domain.model.unified.FullArticle
+import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withContext
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertNotNull
+import org.junit.jupiter.api.condition.EnabledIf
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.koin.test.KoinTest
 import org.koin.test.inject
 import org.koin.test.junit5.KoinTestExtension
 import java.io.File
-import java.time.OffsetDateTime
 
+@EnabledIf("isEnabled")
 class RssTest : KoinTest {
 
-    private val feedService: FeedRepository by inject()
-    private val fullArticleService: ArticleRepository by inject()
+    companion object {
+
+        @JvmStatic
+        fun isEnabled(): Boolean = false
+    }
+
+    private val feedRepository: FeedRepository by inject()
+    private val articleRepository: ArticleRepository by inject()
     private val httpClient: HttpClient by inject()
 
     private val newsItem = NewsItem(
@@ -34,8 +46,8 @@ class RssTest : KoinTest {
         link = "",
         feedName = "",
         identifier = "",
-        published = OffsetDateTime.now(),
-        updated = OffsetDateTime.now(),
+        published = KmpOffsetDateTime.now(),
+        updated = KmpOffsetDateTime.now(),
         title = "",
         summary = "",
         content = "",
@@ -56,17 +68,14 @@ class RssTest : KoinTest {
     }
 
     @Test
-    @Disabled("Only for local testing")
-    fun testReadFromUrl() {
-        runBlocking {
-            val response = httpClient.get(urlString = "https://www.focus.de/rss")
-            val xml = response.bodyAsText()
-            println(xml)
-        }
+    @Disabled("produces timeout")
+    fun testReadFromUrl() = runTest {
+        val response = httpClient.get(urlString = "https://www.focus.de/rss")
+        val xml = response.bodyAsText()
+        println(xml)
     }
 
     @Test
-    @Disabled("Only for local testing")
     fun testReadScript() {
         val json = File(ClassLoader.getSystemResource("newsfeed/rdf/script.json").toURI()).readText()
         val appJsonDto = AppJsonDto.decodeFromString(json)
@@ -74,139 +83,156 @@ class RssTest : KoinTest {
     }
 
     @Test
-    @Disabled("Only for local testing")
-    fun testReadFeed() {
-        runBlocking {
-            feedService.refreshNewsFeed(
-                feedName = "test",
-                url = "https://t3n.de/rss.xml",
-                wifiOnly = false,
-                keepReadArticlesInDays = 30,
-                keepUnreadArticlesInDays = 30,
-                1200,
-                loadArticles = false,
-                progress = { _,_ -> }
-            )
-                .onSuccess { (newsFeed, changed) ->
-                    val entity = newsFeed?.toNewsFeedEntity()
-                    println(entity)
-                }
-                .onError { _, throwable ->
-                    throwable?.also { throw it }
-                }
-        }
+    fun testReadFeed() = runTest {
+        feedRepository.refreshNewsFeed(
+            feedName = "test",
+            url = "https://t3n.de/rss.xml",
+            wifiOnly = false,
+            keepReadArticlesInDays = 30,
+            keepUnreadArticlesInDays = 30,
+            1200,
+            loadArticles = false,
+            progress = { _,_ -> }
+        )
+            .onSuccess { (newsFeed, _) ->
+                val entity = newsFeed?.toNewsFeedEntity()
+                println(entity)
+                assertNotNull(entity)
+            }
+            .onError { _, throwable ->
+                throwable?.also { throw it }
+            }
     }
 
     @Test
-    fun testReadArticleFile() {
-        runBlocking {
-            val article = fullArticleService.readFromFile(
-                newsItem,
-                File(ClassLoader.getSystemResource("newsfeed/rdf/focus-story.html").toURI())
-            )
-            println(article)
-        }
+    fun testReadArticleFile() = runTest {
+        val article = readArticleFromFile(
+            newsItem,
+            File(ClassLoader.getSystemResource("newsfeed/rdf/focus-story.html").toURI())
+        )
+        println(article)
+        assertNotNull(article)
     }
 
     @Test
-    @Disabled("Only for local testing")
-    fun testReadArticleUrl() {
-        runBlocking {
-            val response = httpClient.get(urlString = "https://www.spiegel.de/ausland/iran-krieg-us-senat-stimmt-dafuer-befugnisse-von-donald-trump-einzuschraenken-mit-republikaner-stimmen-a-12f9e1fa-16cf-4426-8b6c-39d72e5adcb6#ref=rss")
-            val htmlRaw = response.bodyAsText()
-            val article = fullArticleService.readFromString(
-                rawHtml = htmlRaw
-            )
-            println(article)
-        }
+    @Disabled("url is outdated")
+    fun testReadArticleUrl() = runTest {
+        val response = httpClient.get(urlString = "https://www.spiegel.de/ausland/iran-krieg-us-senat-stimmt-dafuer-befugnisse-von-donald-trump-einzuschraenken-mit-republikaner-stimmen-a-12f9e1fa-16cf-4426-8b6c-39d72e5adcb6#ref=rss")
+        val htmlRaw = response.bodyAsText()
+        val article = articleRepository.readFromString(
+            rawHtml = htmlRaw
+        )
+        println(article)
+        assertNotNull(article)
     }
 
     @Test
-    fun testReadYoutubeVideo() {
-        runBlocking {
-            val article = fullArticleService.readFromFile(
-                newsItem,
-                File(ClassLoader.getSystemResource("newsfeed/rdf/nickyt-story.html").toURI())
-            )
-            println(article)
-        }
+    fun testReadYoutubeVideo() = runTest {
+        val article = readArticleFromFile(
+            newsItem,
+            File(ClassLoader.getSystemResource("newsfeed/rdf/nickyt-story.html").toURI())
+        )
+        println(article)
+        assertNotNull(article)
     }
 
     @Test
-    fun testReadYoutubeVideo2() {
-        runBlocking {
-            val article = fullArticleService.readFromFile(
-                newsItem,
-                File(ClassLoader.getSystemResource("newsfeed/atom/heise-story-4.html").toURI())
-            )
-            println(article)
-        }
+    fun testReadYoutubeVideo2() = runTest {
+        val article = readArticleFromFile(
+            newsItem,
+            File(ClassLoader.getSystemResource("newsfeed/atom/heise-story-4.html").toURI())
+        )
+        println(article)
+        assertNotNull(article)
     }
 
     @Test
     fun testReadArbeitstips() = runTest {
-        val article = fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/rss/arbeitstips-story.html").toURI()))
+        val article = readArticleFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/rss/arbeitstips-story.html").toURI()))
         println(article)
+        assertNotNull(article)
     }
 
     @Test
     fun testReadNdr() = runTest {
-        feedService.readFromFile("ndr", File(ClassLoader.getSystemResource("newsfeed/rdf/ndr.xml").toURI()))
-        fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/rdf/ndr-story.html").toURI()))
+        readFeedFromFile("ndr", File(ClassLoader.getSystemResource("newsfeed/rdf/ndr.xml").toURI()))
+        val article = readArticleFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/rdf/ndr-story.html").toURI()))
+        assertNotNull(article)
     }
 
     @Test
     fun testReadNtv() = runTest {
-        feedService.readFromFile("ntv", File(ClassLoader.getSystemResource("newsfeed/rss/ntv.xml").toURI()))
-        fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/rss/ntv-story.html").toURI()))
+        readFeedFromFile("ntv", File(ClassLoader.getSystemResource("newsfeed/rss/ntv.xml").toURI()))
+        val article = readArticleFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/rss/ntv-story.html").toURI()))
+        assertNotNull(article)
     }
 
     @Test
     fun testReadT3n() = runTest {
-        feedService.readFromFile("t3n", File(ClassLoader.getSystemResource("newsfeed/rss/t3n.xml").toURI()))
-        fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/rss/t3n-story.html").toURI()))
+        readFeedFromFile("t3n", File(ClassLoader.getSystemResource("newsfeed/rss/t3n.xml").toURI()))
+        val article = readArticleFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/rss/t3n-story.html").toURI()))
+        assertNotNull(article)
     }
 
     @Test
     fun testReadTOnline() = runTest {
-        feedService.readFromFile("t-online", File(ClassLoader.getSystemResource("newsfeed/rss/t-online.xml").toURI()))
+        val feed = readFeedFromFile("t-online", File(ClassLoader.getSystemResource("newsfeed/rss/t-online.xml").toURI()))
+        assertNotNull(feed)
     }
 
     @Test
     fun testReadTagesschau1() = runTest {
-        feedService.readFromFile("tagesschau", File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau.xml").toURI()))
-        fullArticleService.readFromFile(
+        readFeedFromFile("tagesschau", File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau.xml").toURI()))
+        val article = readArticleFromFile(
             newsItem,
             File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau-story.html").toURI())
         )
+        assertNotNull(article)
     }
 
     @Test
     fun testReadTagesschau2() = runTest {
-        feedService.readFromFile("tagesschau", File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau2.xml").toURI()))
-        fullArticleService.readFromFile(
+        readFeedFromFile("tagesschau", File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau2.xml").toURI()))
+        val article = readArticleFromFile(
             newsItem,
             File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau-story2.html").toURI())
         )
+        assertNotNull(article)
     }
 
     @Test
     fun testReadTagesschau2a() = runTest {
-        feedService.readFromFile("tagesschau", File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau2a.xml").toURI()))
+        readFeedFromFile("tagesschau", File(ClassLoader.getSystemResource("newsfeed/rss/tagesschau2a.xml").toURI()))
     }
 
     @Test
     fun testReadHeise() = runTest {
-        feedService.readFromFile("heise", File(ClassLoader.getSystemResource("newsfeed/atom/heise.xml").toURI()))
-        fullArticleService.readFromFile(
+        readFeedFromFile("heise", File(ClassLoader.getSystemResource("newsfeed/atom/heise.xml").toURI()))
+        val article = readArticleFromFile(
             newsItem,
             File(ClassLoader.getSystemResource("newsfeed/atom/heise-story.html").toURI())
         )
+        assertNotNull(article)
     }
 
     @Test
     fun testReadWdr() = runTest {
-        feedService.readFromFile("wdr", File(ClassLoader.getSystemResource("newsfeed/atom/wdr.xml").toURI()))
-        fullArticleService.readFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/atom/wdr-story.html").toURI()))
+        readFeedFromFile("wdr", File(ClassLoader.getSystemResource("newsfeed/atom/wdr.xml").toURI()))
+        val article = readArticleFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/atom/wdr-story.html").toURI()))
+        assertNotNull(article)
+    }
+
+    private suspend fun readArticleFromFile(
+        newsItem: NewsItem,
+        file: File
+    ): FullArticle = withContext(Dispatchers.IO) {
+        articleRepository.readFromString(newsItem, file.readText())
+    }
+
+    private suspend fun readFeedFromFile(
+        feedName: String,
+        file: File
+    ): NewsFeed? = withContext(Dispatchers.IO) {
+        feedRepository.readFromBytes(feedName, file.readBytes())
     }
 }

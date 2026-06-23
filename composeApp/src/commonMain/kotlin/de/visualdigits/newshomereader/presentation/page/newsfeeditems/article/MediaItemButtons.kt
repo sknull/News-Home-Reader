@@ -39,7 +39,6 @@ import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
 import org.jetbrains.compose.resources.painterResource
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun MediaItemButtons(
@@ -109,7 +108,7 @@ fun MediaItemButtons(
                                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                                     ) {
                                         Text(
-                                            text = "${mediaItem.uploadDate?.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}",
+                                            text = "${mediaItem.uploadDate?.format("dd.MM.yyyy HH:mm")}",
                                             style = MaterialTheme.typography.bodySmall
                                         )
 

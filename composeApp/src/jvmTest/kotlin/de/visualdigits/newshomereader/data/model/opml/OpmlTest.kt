@@ -3,7 +3,7 @@ package de.visualdigits.newshomereader.data.model.opml
 import de.visualdigits.newshomereader.data.mapper.toNewsFeedConfiguration
 import de.visualdigits.newshomereader.data.mapper.toOpml
 import de.visualdigits.newshomereader.domain.mapper.mergeNewsFeedGroups
-import de.visualdigits.newshomereader.domain.util.decodeValue
+import de.visualdigits.newshomereader.domain.util.decodeFromString
 import de.visualdigits.newshomereader.domain.util.encodeToString
 import nl.adaptivity.xmlutil.XmlDeclMode
 import nl.adaptivity.xmlutil.core.XmlVersion
@@ -64,6 +64,11 @@ class OpmlTest {
             .trim()
 
         assertEquals(opmlExpected, opmlActual)
+    }
+
+    private inline fun <reified T : Any> decodeValue(file: File, removeNamespaces: Boolean = true): T {
+        val rawXml = file.readText()
+        return decodeFromString(rawXml, removeNamespaces)
     }
 }
 

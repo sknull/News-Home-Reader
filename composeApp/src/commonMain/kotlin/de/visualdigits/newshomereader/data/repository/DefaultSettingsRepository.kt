@@ -27,12 +27,14 @@ import de.visualdigits.newshomereader.presentation.style.TEXT_COLOR_DEFAULT
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.io.Sink
+import kotlinx.io.Source
+import kotlinx.io.readString
+import kotlinx.io.writeString
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonPrimitive
-import java.io.InputStream
-import java.io.OutputStream
 
 class DefaultSettingsRepository(
     private val dao: NewsHomeReaderDatabaseQueries,
@@ -42,6 +44,13 @@ class DefaultSettingsRepository(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 
     override var webDavUrl: String? = null
+
+    private val jsonMapper = Json {
+        prettyPrint = true
+        ignoreUnknownKeys = true
+        explicitNulls = false
+    }
+
 
     override suspend fun getSettings(): Result<Settings?, DataError .Local> = withContext(dispatcher) {
         try {
@@ -73,14 +82,10 @@ class DefaultSettingsRepository(
         }
     }
 
-    override suspend fun importSettings(ins: InputStream): Result<Settings, DataError.Local> = withContext(dispatcher) {
+    override suspend fun importSettings(source: Source): Result<Settings, DataError.Local> = withContext(dispatcher) {
         try {
-            val jsonMapper = Json {
-                ignoreUnknownKeys = true
-                explicitNulls = false
-            }
-            val json = ins.use { ins ->
-                String(ins.readBytes())
+            val json = source.use { ins ->
+                ins.readString()
             }
 
             val settings = Settings(
@@ -112,15 +117,12 @@ class DefaultSettingsRepository(
         }
     }
 
-    override suspend fun exportSettings(settings: Settings, outs: OutputStream): Result<Unit, DataError.Local> = withContext(dispatcher) {
+    override suspend fun exportSettings(settings: Settings, sink: Sink): Result<Unit, DataError.Local> = withContext(dispatcher) {
         try {
-            val jsonMapper = Json {
-                prettyPrint = true
-            }
             val value = settings.toSettingsRepositoryEntity(cryptoBox)
             val json = jsonMapper.encodeToString(value)
-            outs.writer().use { writer ->
-                writer.write(json)
+            sink.use { writer ->
+                writer.writeString(json)
             }
             Result.Success(Unit)
         } catch (e: Exception) {

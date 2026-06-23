@@ -8,13 +8,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import coil3.compose.AsyncImagePainter
 import coil3.compose.LocalPlatformContext
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
@@ -38,22 +42,17 @@ fun Image(
 ) {
 
     val context = LocalPlatformContext.current
+
     val request = remember(url, maxImageSize) {
-        val builder = ImageRequest
-            .Builder(context)
+        ImageRequest.Builder(context)
             .data(url)
-            .listener(
-                onStart = {},
-                onSuccess = { _, _ -> },
-                onCancel = {}
-            )
             .crossfade(true)
             .diskCachePolicy(CachePolicy.ENABLED)
             .memoryCachePolicy(CachePolicy.ENABLED)
-        maxImageSize
-            ?.also { maxImageSize -> builder.size(maxImageSize) }
-            ?: run { builder.size(Size.ORIGINAL) }
-        builder.build()
+            .apply {
+                if (maxImageSize != null) size(maxImageSize) else size(Size.ORIGINAL)
+            }
+            .build()
     }
 
     Box(
@@ -61,15 +60,7 @@ fun Image(
             .fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
-        if (showLoadingIcon) {
-            Icon(
-                modifier = Modifier
-                    .size(48.dp),
-                painter = painterResource(Res.drawable.icon_hourglass_top_24px),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface
-            )
-        }
+        var isLoading by remember { mutableStateOf(showLoadingIcon) }
 
         AsyncImage(
             modifier = Modifier
@@ -78,7 +69,19 @@ fun Image(
                 .conditional(width == null && height == null) { fillMaxWidth() },
             contentScale = contentScale,
             model = request,
-            contentDescription = contentDescription
+            contentDescription = contentDescription,
+            onState = { state ->
+                isLoading = showLoadingIcon && state is AsyncImagePainter.State.Loading
+            }
         )
+
+        if (isLoading) {
+            Icon(
+                modifier = Modifier.size(48.dp),
+                painter = painterResource(Res.drawable.icon_hourglass_top_24px),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurface
+            )
+        }
     }
 }

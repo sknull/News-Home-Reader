@@ -3,7 +3,6 @@ package de.visualdigits.newshomereader.domain.model.unified
 import de.visualdigits.newshomereader.domain.model.opml.OutlineType
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import java.io.File
 
 @Serializable
 data class NewsFeedItem(
@@ -25,10 +24,6 @@ data class NewsFeedItem(
 
         fun decodeFromString(json: String): NewsFeedItem {
             return mapper.decodeFromString(json)
-        }
-
-        fun decodeValue(file: File): NewsFeedItem {
-            return mapper.decodeFromString(file.readText())
         }
     }
 

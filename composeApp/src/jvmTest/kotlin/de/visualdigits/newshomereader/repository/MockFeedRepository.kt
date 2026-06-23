@@ -27,7 +27,7 @@ class MockFeedRepository(
     private val httpClient: HttpClient,
 ) : FeedRepository {
 
-    override suspend fun readFromFile(
+    suspend fun readFromFile(
         feedName: String,
         file: File
     ): NewsFeed? {

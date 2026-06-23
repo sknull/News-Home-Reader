@@ -24,8 +24,10 @@ import de.visualdigits.newshomereader.domain.util.encodeToString
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import nl.adaptivity.xmlutil.core.impl.multiplatform.InputStream
-import nl.adaptivity.xmlutil.core.impl.multiplatform.OutputStream
+import kotlinx.io.Sink
+import kotlinx.io.Source
+import kotlinx.io.readString
+import kotlinx.io.writeString
 
 class DefaultNewsFeedConfigurationRepository(
     private val dao: NewsHomeReaderDatabaseQueries
@@ -185,9 +187,12 @@ class DefaultNewsFeedConfigurationRepository(
             ).executeAsOneOrNull()
         }
 
-    override suspend fun setNewsFeedGroups(ins: InputStream): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
+    override suspend fun setNewsFeedGroups(source: Source): Result<List<NewsFeedGroup>, DataError.Local> = withContext(dispatcher) {
         try {
-            val newsFeedGroups = decodeFromString<Opml>(String(ins.readBytes()), false)
+            val xml = source.use { source ->
+                source.readString()
+            }
+            val newsFeedGroups = decodeFromString<Opml>(xml, false)
                 .toNewsFeedConfiguration()
             dao.transaction {
                 val existingNewsFeedGroups = dao.getAllNewsFeedGroups()
@@ -207,12 +212,12 @@ class DefaultNewsFeedConfigurationRepository(
         }
     }
 
-    override suspend fun saveNewsFeedGroups(outs: OutputStream): Result<Unit, DataError.Local> = withContext(dispatcher) {
+    override suspend fun saveNewsFeedGroups(sink: Sink): Result<Unit, DataError.Local> = withContext(dispatcher) {
         try {
             val opml = dao.getAllNewsFeedGroups().toOpml()
             val xml = encodeToString(Opml.serializer(), opml)
-            outs.writer().use { writer ->
-                writer.write(xml)
+            sink.use { writer ->
+                writer.writeString(xml)
             }
             Result.Success(Unit)
         } catch (e: Exception) {

@@ -1,9 +1,9 @@
 package de.visualdigits.newshomereader.domain.model.unified
 
 import androidx.compose.runtime.Immutable
-import de.visualdigits.newshomereader.domain.serializer.OffsetDateTimeHeuristicDeserializer
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
+import de.visualdigits.newshomereader.domain.serializer.KmpOffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.Serializable
-import java.time.OffsetDateTime
 
 @Serializable
 @Immutable
@@ -16,10 +16,10 @@ data class MediaItem(
     val width: Int? = null,
     val height: Int? = null,
     val duration: String? = null,
-    @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) val datePublished: OffsetDateTime? = null,
-    @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) val dateModified: OffsetDateTime? = null,
-    @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) val uploadDate: OffsetDateTime? = null,
-    @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) val expires: OffsetDateTime? = null,
+    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) val datePublished: KmpOffsetDateTime? = null,
+    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) val dateModified: KmpOffsetDateTime? = null,
+    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) val uploadDate: KmpOffsetDateTime? = null,
+    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) val expires: KmpOffsetDateTime? = null,
     val keywords: List<String> = listOf(),
     val thumbnails: List<ThumbnailItem> = listOf(),
     val type: MediaType = MediaType.unknown

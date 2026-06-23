@@ -37,10 +37,13 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.startKoin
 import org.koin.core.qualifier.named
 import java.awt.Window
+import java.util.logging.Level
 import javax.swing.SwingUtilities
 import javax.swing.UIManager
 
 fun main() {
+
+//    java.util.logging.Logger.getLogger("okhttp3.OkHttpClient").level = Level.FINE
 
     val koinApp = startKoin {
         modules(sharedModule, platformModule)

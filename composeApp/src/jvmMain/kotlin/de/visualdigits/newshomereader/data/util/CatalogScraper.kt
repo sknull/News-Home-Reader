@@ -5,6 +5,7 @@ import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Document
 import com.fleeksoft.ksoup.nodes.Element
 import com.fleeksoft.ksoup.nodes.TextNode
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalog
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogCategory
 import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
@@ -17,7 +18,6 @@ import kotlinx.coroutines.delay
 import kotlinx.serialization.json.Json
 import java.io.File
 import java.nio.file.Paths
-import java.time.OffsetDateTime
 import kotlin.time.Duration.Companion.milliseconds
 
 object CatalogScraper {
@@ -37,7 +37,7 @@ object CatalogScraper {
         val newsCategories = scrapeMainCategories(httpClient, baseUrl)
         val newsCatalog = NewsFeedCatalog(
             baseUrl = baseUrl,
-            date = OffsetDateTime.now(),
+            date = KmpOffsetDateTime.now(),
             categories = newsCategories
         )
 

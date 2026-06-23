@@ -1,11 +1,11 @@
 package de.visualdigits.newshomereader.data.model.rdf
 
 import androidx.compose.runtime.Immutable
-import de.visualdigits.newshomereader.domain.serializer.OffsetDateTimeHeuristicDeserializer
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
+import de.visualdigits.newshomereader.domain.serializer.KmpOffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
-import java.time.OffsetDateTime
 
 @Serializable
 @Immutable
@@ -16,8 +16,8 @@ data class Channel(
     @XmlElement(true) @XmlSerialName("description") val description: String? = null,
     @XmlElement(true) @XmlSerialName("language") val language: String? = null,
     @XmlElement(true) @XmlSerialName("copyright") val copyright: String? = null,
-    @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("lastBuildDate") @XmlElement(true) val lastBuildDate: OffsetDateTime = OffsetDateTime.now(),
-    @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("pubDate") @XmlElement(true) val pubDate: OffsetDateTime = OffsetDateTime.now(),
+    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("lastBuildDate") @XmlElement(true) val lastBuildDate: KmpOffsetDateTime = KmpOffsetDateTime.now(),
+    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("pubDate") @XmlElement(true) val pubDate: KmpOffsetDateTime = KmpOffsetDateTime.now(),
     @XmlElement(true) @XmlSerialName("ttl") val ttl: Int? = null,
     @XmlElement(true) @XmlSerialName("image") val image: Image? = null,
     @XmlElement(true) @XmlSerialName("publisher") val publisher: String? = null,

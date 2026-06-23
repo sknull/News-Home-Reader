@@ -1,13 +1,13 @@
 package de.visualdigits.newshomereader.data.mapper
 
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.newshomereader.data.model.rss.Item
 import de.visualdigits.newshomereader.data.model.rss.Rss
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.util.extractImage
-import java.io.File
-import java.net.URI
-import java.time.OffsetDateTime
+import io.ktor.http.Url
+import io.ktor.http.fullPath
 
 
 fun Item.toNewsItem(feedName: String): NewsItem {
@@ -18,9 +18,9 @@ fun Item.toNewsItem(feedName: String): NewsItem {
 
     return NewsItem(
         feedName = feedName,
-        identifier = identifier ?: id ?: link?.let { l -> File(URI(l).path).nameWithoutExtension } ?: "${feedName}_${title}_$pubDate",
-        published = date ?: pubDate ?: OffsetDateTime.MIN,
-        updated = pubDate ?: OffsetDateTime.MIN,
+        identifier = identifier ?: id ?: link?.let { l -> Url(l).fullPath.substringAfterLast('/').substringBeforeLast('.') } ?: "${feedName}_${title}_$pubDate",
+        published = date ?: pubDate ?: KmpOffsetDateTime.MIN,
+        updated = pubDate ?: KmpOffsetDateTime.MIN,
         link = link ?: "",
         title = title?.trim() ?: "",
         summary = description?.trim() ?: "",
@@ -43,7 +43,7 @@ fun Rss.toNewsFeed(feedName: String): NewsFeed {
         image = channel?.image?.url ?: "",
         imageTitle = channel?.image?.title ?: "",
         imageCaption = channel?.image?.caption ?: "",
-        updated = channel?.lastBuildDate ?: OffsetDateTime.MIN,
+        updated = channel?.lastBuildDate ?: KmpOffsetDateTime.MIN,
         rights = channel?.rights ?: "",
         language = channel?.language ?: "",
         items = (items?.map { item -> item.toNewsItem(feedName) }

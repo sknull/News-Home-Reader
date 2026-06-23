@@ -6,7 +6,6 @@ import nl.adaptivity.xmlutil.XmlDeclMode
 import nl.adaptivity.xmlutil.core.XmlVersion
 import nl.adaptivity.xmlutil.serialization.DefaultXmlSerializationPolicy
 import nl.adaptivity.xmlutil.serialization.XML
-import java.io.File
 
 @OptIn(ExperimentalXmlUtilApi::class)
 object XmlUtil {
@@ -44,11 +43,6 @@ fun String.removeNamespaces(): String {
         .replace("[a-zA-Z]+?:([a-zA-Z]+?)=".toRegex(), { match ->
             "${match.groups[1]?.value}="
         })
-}
-
-inline fun <reified T : Any> decodeValue(file: File, removeNamespaces: Boolean = true): T {
-    val rawXml = file.readText()
-    return decodeFromString(rawXml, removeNamespaces)
 }
 
 @OptIn(ExperimentalXmlUtilApi::class)

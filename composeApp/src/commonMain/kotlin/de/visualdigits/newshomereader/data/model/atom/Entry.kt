@@ -2,11 +2,11 @@ package de.visualdigits.newshomereader.data.model.atom
 
 
 import androidx.compose.runtime.Immutable
-import de.visualdigits.newshomereader.domain.serializer.OffsetDateTimeHeuristicDeserializer
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
+import de.visualdigits.newshomereader.domain.serializer.KmpOffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
-import java.time.OffsetDateTime
 
 @Serializable
 @Immutable
@@ -14,9 +14,9 @@ data class Entry(
     @XmlElement(true) @XmlSerialName("title") val title: String? = null,
     @XmlElement(true) @XmlSerialName("id") val id: String? = null,
     @XmlElement(true) @XmlSerialName("type") val type: String? = null,
-    @XmlElement(true) @XmlSerialName("date") @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) val date: OffsetDateTime = OffsetDateTime.now(),
-    @XmlElement(true) @XmlSerialName("updated") @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) val updated: OffsetDateTime = OffsetDateTime.now(),
-    @XmlElement(true) @XmlSerialName("published") @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) val published: OffsetDateTime = OffsetDateTime.now(),
+    @XmlElement(true) @XmlSerialName("date") @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) val date: KmpOffsetDateTime = KmpOffsetDateTime.now(),
+    @XmlElement(true) @XmlSerialName("updated") @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) val updated: KmpOffsetDateTime = KmpOffsetDateTime.now(),
+    @XmlElement(true) @XmlSerialName("published") @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) val published: KmpOffsetDateTime = KmpOffsetDateTime.now(),
     @XmlElement(true) @XmlSerialName("link") val link: Link? = null,
     @XmlElement(true) @XmlSerialName("author") val author: Author? = null,
     @XmlElement(true) @XmlSerialName("creator") val creator: String? = null,

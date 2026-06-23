@@ -1,7 +1,7 @@
 package de.visualdigits.newshomereader.domain.model.unified
 
 import androidx.compose.runtime.Immutable
-import java.time.OffsetDateTime
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 
 @Immutable
 data class NewsFeed(
@@ -14,7 +14,7 @@ data class NewsFeed(
     val image: String,
     val imageTitle: String,
     val imageCaption: String,
-    val updated: OffsetDateTime,
+    val updated: KmpOffsetDateTime,
     val rights: String,
     val language: String,
     val keywords: List<String> = listOf(),

@@ -5,7 +5,6 @@ import de.visualdigits.newshomereader.data.model.atom.Feed
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.util.extractImage
-import java.time.OffsetDateTime
 
 
 fun Entry.toNewsItem(feedName: String): NewsItem {
@@ -14,8 +13,8 @@ fun Entry.toNewsItem(feedName: String): NewsItem {
     return NewsItem(
         feedName = feedName,
         identifier = id ?: "",
-        published = published ?: OffsetDateTime.MIN,
-        updated = updated ?: OffsetDateTime.MIN,
+        published = published,
+        updated = updated,
         link = link?.href ?: "",
         title = title?.trim() ?: "",
         summary = summary?.trim() ?: "",
@@ -37,7 +36,7 @@ fun Feed.toNewsFeed(feedName: String): NewsFeed {
         image = "",
         imageTitle = "",
         imageCaption = "",
-        updated = updated ?: OffsetDateTime.MIN,
+        updated = updated,
         rights = rights ?: "",
         language = "",
         keywords = keywords ?: listOf(),

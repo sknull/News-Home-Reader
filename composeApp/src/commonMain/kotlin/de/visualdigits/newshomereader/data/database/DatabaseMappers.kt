@@ -2,6 +2,7 @@ package de.visualdigits.newshomereader.data.database
 
 import app.cash.sqldelight.ColumnAdapter
 import de.visualdigits.common.domain.model.color.HsvColor
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.common.domain.model.configuration.AbstractConfiguration.Companion.valueMap
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.presentation.components.StudioClockColors
@@ -12,10 +13,10 @@ import de.visualdigits.newshomereader.NewsFeedGroupEntity
 import de.visualdigits.newshomereader.NewsItemEntity
 import de.visualdigits.newshomereader.SearchNewsItems
 import de.visualdigits.newshomereader.SettingsEntity
-import de.visualdigits.newshomereader.domain.model.opml.OutlineType
 import de.visualdigits.newshomereader.domain.model.applicationjson.AppJson
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.RefreshIntervalEnum
+import de.visualdigits.newshomereader.domain.model.opml.OutlineType
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
@@ -30,10 +31,10 @@ import de.visualdigits.newshomereader.presentation.style.BACKGROUND_COLOR_DEFAUL
 import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.TEXT_COLOR_DEFAULT
+import kotlinx.datetime.UtcOffset
+import kotlinx.datetime.asTimeZone
 import kotlinx.serialization.json.Json
-import java.time.Instant
-import java.time.OffsetDateTime
-import java.time.ZoneOffset
+import kotlin.time.Instant
 
 private val mapper = Json {
     ignoreUnknownKeys = true
@@ -128,8 +129,8 @@ fun NewsFeed.toNewsFeedEntity(): NewsFeedEntity {
         image = image,
         imageTitle = imageTitle,
         imageCaption = imageCaption,
-        updatedMillis = updated.toInstant().toEpochMilli(),
-        updatedZone = updated.offset.id,
+        updatedMillis = updated.toInstant().toEpochMilliseconds(),
+        updatedZone = updated.offset.asTimeZone().id,
         rights = rights,
         language = language,
         keywords = keywords
@@ -147,7 +148,7 @@ fun NewsFeedEntity.toNewsFeed(): NewsFeed {
         image = image,
         imageTitle = imageTitle,
         imageCaption = imageCaption,
-        updated = OffsetDateTime.ofInstant(Instant.ofEpochMilli(updatedMillis), ZoneOffset.of(updatedZone)),
+        updated = KmpOffsetDateTime.ofInstant(Instant.fromEpochMilliseconds(updatedMillis), UtcOffset.parse(updatedZone)),
         rights = rights,
         language = language,
         keywords = keywords
@@ -159,11 +160,11 @@ fun NewsItem.toNewsItemEntity(): NewsItemEntity {
         id = id,
         feedName = feedName,
         identifier = identifier,
-        publishedMillis = published.toInstant().toEpochMilli(),
-        publishedZone = published.offset.id,
-        updatedMillis = updated.toInstant().toEpochMilli(),
+        publishedMillis = published.toInstant().toEpochMilliseconds(),
+        publishedZone = published.offset.asTimeZone().id,
+        updatedMillis = updated.toInstant().toEpochMilliseconds(),
         lastSeenMillis = System.currentTimeMillis(),
-        updatedZone = updated.offset.id,
+        updatedZone = updated.offset.asTimeZone().id,
         link = link,
         title = title,
         summary = summary,
@@ -181,8 +182,8 @@ fun NewsItemEntity.toNewsItem(): NewsItem {
         id = id,
         feedName = feedName,
         identifier = identifier,
-        published = OffsetDateTime.ofInstant(Instant.ofEpochMilli(publishedMillis), ZoneOffset.of(publishedZone)),
-        updated = OffsetDateTime.ofInstant(Instant.ofEpochMilli(updatedMillis), ZoneOffset.of(updatedZone)),
+        published = KmpOffsetDateTime.ofInstant(Instant.fromEpochMilliseconds(publishedMillis), UtcOffset.parse(publishedZone)),
+        updated = KmpOffsetDateTime.ofInstant(Instant.fromEpochMilliseconds(updatedMillis), UtcOffset.parse(updatedZone)),
         link = link,
         title = title,
         summary = summary,

@@ -9,16 +9,15 @@ import de.visualdigits.compose.resources.flag_en
 import de.visualdigits.compose.resources.language_de
 import de.visualdigits.compose.resources.language_en
 import org.jetbrains.compose.resources.DrawableResource
-import java.util.Locale
 
 enum class Language(
     override val uiText: UiText,
     override val drawableResourceId: DrawableResource?,
-    val locale: Locale
+    val localeCode: String
 ) : StringResourceEnumerable<Language> {
 
-    DE(UiText.StringResourceId(Res.string.language_de), Res.drawable.flag_de, Locale.GERMANY),
-    EN(UiText.StringResourceId(Res.string.language_en), Res.drawable.flag_en, Locale.US),
+    DE(UiText.StringResourceId(Res.string.language_de), Res.drawable.flag_de, "de"),
+    EN(UiText.StringResourceId(Res.string.language_en), Res.drawable.flag_en, "en"),
     ;
 
     companion object : KeyFactory<Language> {
@@ -26,14 +25,13 @@ enum class Language(
         override val options: List<Triple<Language, UiText?, DrawableResource?>> = entries.map { e -> Triple(e, e.uiText, e.drawableResourceId) }
 
         override fun fromString(value: String?): Language? {
-            return entries.find { e -> e.name == value }
+            return entries.find { e -> e.localeCode == value }
         }
 
         override fun fromValue(value: Any?): Language? {
             return when (value) {
                 is String -> fromString(value)
                 is Language -> value
-                is Locale -> Language.entries.find { e -> e.locale == value }
                 else -> null
             }
         }

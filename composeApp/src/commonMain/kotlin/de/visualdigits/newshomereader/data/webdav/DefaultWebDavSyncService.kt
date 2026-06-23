@@ -2,6 +2,7 @@ package de.visualdigits.newshomereader.data.webdav
 
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
@@ -17,7 +18,6 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
-import java.time.OffsetDateTime
 
 class DefaultWebDavSyncService(
     private val httpClient: HttpClient,
@@ -39,18 +39,18 @@ class DefaultWebDavSyncService(
                         if (response.status.isSuccess()) {
                             response.body<SyncState>()
                         } else {
-                            SyncState(OffsetDateTime.now().toInstant().toEpochMilli(), emptySet())
+                            SyncState(KmpOffsetDateTime.now().toInstant().toEpochMilliseconds(), emptySet())
                         }
                     } catch (_: Exception) {
                         log(Severity.Warn, "Something went wrong while fetching sync file - falling back to empty sync file", withTag = "NHR")
-                        SyncState(OffsetDateTime.now().toInstant().toEpochMilli(), emptySet())
+                        SyncState(KmpOffsetDateTime.now().toInstant().toEpochMilliseconds(), emptySet())
                     }
 
                     val mergedIds = remoteState.readNewsItemIds + localReadIds
 
                     if (mergedIds.size > remoteState.readNewsItemIds.size || mergedIds.size > localReadIds.size) {
                         val newState = SyncState(
-                            lastUpdated = OffsetDateTime.now().toInstant().toEpochMilli(),
+                            lastUpdated = KmpOffsetDateTime.now().toInstant().toEpochMilliseconds(),
                             readNewsItemIds = mergedIds
                         )
 

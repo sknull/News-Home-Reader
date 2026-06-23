@@ -55,7 +55,6 @@ import de.visualdigits.newshomereader.presentation.style.textLinkStyles
 import de.visualdigits.newshomereader.presentation.util.highlightQuery
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
 import org.jetbrains.compose.resources.painterResource
-import java.time.format.DateTimeFormatter
 
 
 @Composable
@@ -175,7 +174,7 @@ fun NewsItemCard(
 
                         // updated date
                         Text(
-                            text = "${newsItem.updated.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}",
+                            text = newsItem.updated.format("dd.MM.yyyy HH:mm"),
                             style = MaterialTheme.typography.bodySmall
                         )
 

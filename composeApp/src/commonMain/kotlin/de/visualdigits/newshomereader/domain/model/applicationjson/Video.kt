@@ -1,9 +1,9 @@
 package de.visualdigits.newshomereader.domain.model.applicationjson
 
-import de.visualdigits.newshomereader.domain.serializer.OffsetDateTimeHeuristicDeserializer
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
+import de.visualdigits.newshomereader.domain.serializer.KmpOffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.time.OffsetDateTime
 
 @Serializable
 data class Video(
@@ -14,6 +14,6 @@ data class Video(
     val duration: String? = null,
     val thumbnailUrl: List<String> = listOf(),
     val contentUrl: List<String> = listOf(),
-    @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @SerialName("uploadDate") val uploadDate: OffsetDateTime? = null,
+    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) @SerialName("uploadDate") val uploadDate: KmpOffsetDateTime? = null,
     val publisher: Publisher? = null
 )

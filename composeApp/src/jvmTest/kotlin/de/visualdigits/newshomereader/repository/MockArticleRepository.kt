@@ -19,7 +19,7 @@ class MockArticleRepository(
     dao = dao
 ) {
 
-    override suspend fun readFromFile(
+    suspend fun readFromFile(
         newsItem: NewsItem,
         file: File
     ): FullArticle {

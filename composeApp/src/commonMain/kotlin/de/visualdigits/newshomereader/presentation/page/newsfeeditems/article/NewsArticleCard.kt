@@ -69,8 +69,6 @@ import de.visualdigits.newshomereader.presentation.util.highlightQuery
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
 import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.painterResource
-import java.time.format.DateTimeFormatter
-
 
 @Composable
 fun NewsArticleCard(
@@ -231,7 +229,7 @@ fun NewsArticleCard(
                     Pair("updated", @Composable {
                         Text(
                             modifier = Modifier,
-                            text = "${newsItem.updated.format(DateTimeFormatter.ofPattern("EEE, dd. MMMM yyyy HH:mm"))}",
+                            text = newsItem.updated.format("EEE, dd. MMMM yyyy HH:mm"),
                             style = MaterialTheme.typography.headlineSmall
                         )
                     }),

@@ -6,6 +6,7 @@ import app.cash.sqldelight.coroutines.mapToOneOrNull
 import co.touchlab.kermit.Severity
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.parser.Parser
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
@@ -47,12 +48,12 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
-import java.io.File
-import java.time.Duration
-import java.time.OffsetDateTime
-import java.time.temporal.ChronoUnit
-import java.util.concurrent.atomic.AtomicInteger
+import kotlin.concurrent.atomics.AtomicInt
+import kotlin.concurrent.atomics.ExperimentalAtomicApi
+import kotlin.concurrent.atomics.incrementAndFetch
+import kotlin.time.Duration.Companion.days
 
+@OptIn(ExperimentalAtomicApi::class)
 class DefaultFeedRepository(
     private val httpClient: HttpClient,
     private val dao: NewsHomeReaderDatabaseQueries,
@@ -236,14 +237,14 @@ class DefaultFeedRepository(
         }
     }
 
-    private val currentStep = AtomicInteger(0)
+    private val currentStep = AtomicInt(0)
 
     override suspend fun refreshNewsFeeds(
         newsFeedItems: List<NewsFeedItem>,
         progress: (Float, ProgressStage) -> Unit
     ): Result<Pair<List<NewsFeed>, List<NewsItem>>, DataError.Remote> = withContext(Dispatchers.IO) {
         val totalSteps1 = newsFeedItems.size
-        currentStep.set(0)
+        currentStep.store(0)
         val newsFeeds = newsFeedItems.mapNotNull { newsFeedItem ->
             log(
                 Severity.Info,
@@ -253,7 +254,7 @@ class DefaultFeedRepository(
             try {
                 val response = newsFeedItem.url?.let { u -> httpClient.get(urlString = u) }
                 val newsFeed = readFromBytes(newsFeedItem.name, response?.readRawBytes())
-                val done = currentStep.incrementAndGet()
+                val done = currentStep.incrementAndFetch()
                 progress(done.toFloat() / totalSteps1, ProgressStage.LOAD_FEEDS)
                 newsFeed
             } catch (e: Exception) {
@@ -278,7 +279,7 @@ class DefaultFeedRepository(
     ): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> = withContext(Dispatchers.IO) {
         try {
             val totalSteps2 = newsFeeds.size + newsItems.size * (if (loadArticles) 2 else 1)
-            currentStep.set(0)
+            currentStep.store(0)
 
             val (persistedItems, _) = dao.transactionWithResult {
                 val persistedNewsFeeds = newsFeeds.map { newsFeed ->
@@ -291,8 +292,8 @@ class DefaultFeedRepository(
                 } else {
                     Pair(listOf(), false)
                 }
-                dao.cleanupOldReadNewsItems(OffsetDateTime.now().minus(Duration.of(keepReadArticlesInDays, ChronoUnit.DAYS)).toInstant().toEpochMilli())
-                dao.cleanupOldUnreadNewsItems(OffsetDateTime.now().minus(Duration.of(keepUnreadArticlesInDays, ChronoUnit.DAYS)).toInstant().toEpochMilli())
+                dao.cleanupOldReadNewsItems(KmpOffsetDateTime.now().minus(keepReadArticlesInDays.days).toInstant().toEpochMilliseconds())
+                dao.cleanupOldUnreadNewsItems(KmpOffsetDateTime.now().minus(keepUnreadArticlesInDays.days).toInstant().toEpochMilliseconds())
                 result
             }
 
@@ -340,12 +341,12 @@ class DefaultFeedRepository(
 
             val totalItems = (newsFeed?.items?.size?:0) + 1
             val totalSteps = totalItems * (if (loadArticles) 2 else 1)
-            currentStep.set(0)
+            currentStep.store(0)
 
             val (persistedItems, changedNewsItems) = dao.transactionWithResult {
                 val newsItems = persistNewsFeed(newsFeed, totalSteps, progress)
-                dao.cleanupOldReadNewsItems(OffsetDateTime.now().minus(Duration.of(keepReadArticlesInDays, ChronoUnit.DAYS)).toInstant().toEpochMilli())
-                dao.cleanupOldUnreadNewsItems(OffsetDateTime.now().minus(Duration.of(keepUnreadArticlesInDays, ChronoUnit.DAYS)).toInstant().toEpochMilli())
+                dao.cleanupOldReadNewsItems(KmpOffsetDateTime.now().minus(keepReadArticlesInDays.days).toInstant().toEpochMilliseconds())
+                dao.cleanupOldUnreadNewsItems(KmpOffsetDateTime.now().minus(keepUnreadArticlesInDays.days).toInstant().toEpochMilliseconds())
                 newsItems
             }
 
@@ -389,10 +390,10 @@ class DefaultFeedRepository(
         val urls = (feedUrls + itemUrls + articleUrls).distinct()
         val totalSteps = urls.size
         if (totalSteps > 0) {
-            currentStep.set(0)
+            currentStep.store(0)
             log(Severity.Info, "Prefetching ${feedUrls.size} feed images, ${itemUrls.size} item images, ${articleUrls.size} article images = ${urls.size} distinct images", withTag = "NHR")
             imageCache.prefetchImages(urls) {
-                val done = currentStep.incrementAndGet()
+                val done = currentStep.incrementAndFetch()
                 progress(done.toFloat() / totalSteps, ProgressStage.LOAD_IMAGES)
             }
         }
@@ -409,12 +410,12 @@ class DefaultFeedRepository(
         return if (newsFeed != null) {
             val changedFeed = dao.upsertNewsFeed(newsFeed.toNewsFeedEntity())
             var changedItems = false
-            val done = currentStep.incrementAndGet()
+            val done = currentStep.incrementAndFetch()
             progress(done.toFloat() / totalSteps, ProgressStage.LOAD_ARTICLES)
             val persistedNewsItems = newsFeed.items.map { newsItem ->
                 val (insertedItem, changedItem) = dao.upsertNewsItem(newsItem.toNewsItemEntity())
                 changedItems = changedItems || changedItem
-                val done = currentStep.incrementAndGet()
+                val done = currentStep.incrementAndFetch()
                 progress(done.toFloat() / totalSteps, ProgressStage.LOAD_ARTICLES)
                 insertedItem.toNewsItem().copy(newsFeed = newsFeed, isChanged = changedItem)
             }
@@ -455,7 +456,7 @@ class DefaultFeedRepository(
                                 }
                             }
 
-                            val done = currentStep.incrementAndGet()
+                            val done = currentStep.incrementAndFetch()
                             progress(done.toFloat() / totalSteps, ProgressStage.LOAD_ARTICLES)
                             item
                         }
@@ -473,13 +474,6 @@ class DefaultFeedRepository(
         }
 
         return Pair(newsItemsWithArticles, changed)
-    }
-
-    override suspend fun readFromFile(
-        feedName: String,
-        file: File
-    ): NewsFeed? = withContext(Dispatchers.IO) {
-        readFromBytes(feedName, file.readBytes())
     }
 
     override suspend fun readFromBytes(

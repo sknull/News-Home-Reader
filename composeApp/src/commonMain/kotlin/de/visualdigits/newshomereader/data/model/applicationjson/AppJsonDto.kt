@@ -2,19 +2,18 @@ package de.visualdigits.newshomereader.data.model.applicationjson
 
 
 import androidx.compose.runtime.Immutable
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.newshomereader.data.serializer.ListSerializer
 import de.visualdigits.newshomereader.data.serializer.MainEntityOfPageSerializer
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem
 import de.visualdigits.newshomereader.domain.model.unified.ThumbnailItem
-import de.visualdigits.newshomereader.domain.serializer.OffsetDateTimeHeuristicDeserializer
+import de.visualdigits.newshomereader.domain.serializer.KmpOffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNames
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
-import java.io.File
-import java.time.OffsetDateTime
 
 @Serializable
 @Immutable
@@ -29,19 +28,19 @@ data class AppJsonDto @OptIn(ExperimentalSerializationApi::class, ExperimentalSe
     @Serializable(with = ListSerializer::class) val alternateName: List<String> = listOf(),
     val alternativeHeadline: String? = null,
     val articleBody: String? = null,
-    val articleSection: String? = null,
+    @Serializable(with = ListSerializer::class) val articleSection: List<String> = listOf(),
     val author: AuthorWrapper? = null,
     val caption: String? = null,
     val commentCount: Int? = null,
     val contentUrl: String? = null,
     val copyrightHolder: CopyrightHolderDto? = null,
     val copyrightYear: String? = null,
-    @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("dateModified") val dateModified: OffsetDateTime = OffsetDateTime.now(),
-    @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("datePublished") val datePublished: OffsetDateTime = OffsetDateTime.now(),
+    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("dateModified") val dateModified: KmpOffsetDateTime = KmpOffsetDateTime.now(),
+    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("datePublished") val datePublished: KmpOffsetDateTime = KmpOffsetDateTime.now(),
     val description: String? = null,
     val discussionUrl: String? = null,
     val duration: String? = null,
-    @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("expires") val expires: OffsetDateTime = OffsetDateTime.now(),
+    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("expires") val expires: KmpOffsetDateTime = KmpOffsetDateTime.now(),
     @Serializable(with = ListSerializer::class) val hasPart: List<HasPartDto> = listOf(),
     val headline: String? = null,
     val identifier: Long? = null,
@@ -67,7 +66,7 @@ data class AppJsonDto @OptIn(ExperimentalSerializationApi::class, ExperimentalSe
     @JsonNames("thumbnailURL", "thumbnailUrl") @Serializable(with = ListSerializer::class) val thumbnailUrl: List<String> = listOf(),
     val timeRequired: String? = null,
     val transcript: String? = null,
-    @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("uploadDate") val uploadDate: OffsetDateTime = OffsetDateTime.now(),
+    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("uploadDate") val uploadDate: KmpOffsetDateTime = KmpOffsetDateTime.now(),
     val url: String? = null,
     val version: String? = null,
     val width: Int? = null,
@@ -86,10 +85,6 @@ data class AppJsonDto @OptIn(ExperimentalSerializationApi::class, ExperimentalSe
 
         fun decodeFromString(json: String): AppJsonDto {
             return mapper.decodeFromString(json)
-        }
-
-        fun decodeValue(file: File): AppJsonDto {
-            return mapper.decodeFromString(file.readText())
         }
     }
 

@@ -3,8 +3,8 @@ package de.visualdigits.newshomereader.domain.repository
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.settings.Settings
-import java.io.InputStream
-import java.io.OutputStream
+import kotlinx.io.Sink
+import kotlinx.io.Source
 
 interface SettingsRepository {
 
@@ -14,7 +14,7 @@ interface SettingsRepository {
 
     suspend fun setSettings(settings: Settings): Result<Unit, DataError.Local>
 
-    suspend fun importSettings(ins: InputStream): Result<Settings, DataError.Local>
+    suspend fun importSettings(source: Source): Result<Settings, DataError.Local>
 
-    suspend fun exportSettings(settings: Settings, outs: OutputStream): Result<Unit, DataError.Local>
+    suspend fun exportSettings(settings: Settings, sink: Sink): Result<Unit, DataError.Local>
 }

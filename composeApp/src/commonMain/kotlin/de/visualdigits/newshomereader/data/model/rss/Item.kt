@@ -1,12 +1,12 @@
 package de.visualdigits.newshomereader.data.model.rss
 
 import androidx.compose.runtime.Immutable
-import de.visualdigits.newshomereader.domain.serializer.OffsetDateTimeHeuristicDeserializer
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
+import de.visualdigits.newshomereader.domain.serializer.KmpOffsetDateTimeHeuristicDeserializer
 import de.visualdigits.newshomereader.domain.util.StringEscapeUtils
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
-import java.time.OffsetDateTime
 
 @Serializable
 @Immutable
@@ -15,8 +15,8 @@ data class Item(
     @XmlElement(true) val identifier: String? = null,
     @XmlElement(true) val id: String? = null,
 
-    @XmlElement(true) @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("date") val date: OffsetDateTime? = null, // first publish date time
-    @XmlElement(true) @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("pubDate") val pubDate: OffsetDateTime? = null, // update date time or first publish date time when date is empty
+    @XmlElement(true) @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("date") val date: KmpOffsetDateTime? = null, // first publish date time
+    @XmlElement(true) @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("pubDate") val pubDate: KmpOffsetDateTime? = null, // update date time or first publish date time when date is empty
 
     @XmlElement(true) val about: String? = null,
     @XmlElement(true) val creator: String? = null,

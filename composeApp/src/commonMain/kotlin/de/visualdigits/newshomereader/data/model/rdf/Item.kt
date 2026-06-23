@@ -1,12 +1,12 @@
 package de.visualdigits.newshomereader.data.model.rdf
 
 import androidx.compose.runtime.Immutable
-import de.visualdigits.newshomereader.domain.serializer.OffsetDateTimeHeuristicDeserializer
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
+import de.visualdigits.newshomereader.domain.serializer.KmpOffsetDateTimeHeuristicDeserializer
 import de.visualdigits.newshomereader.domain.util.StringEscapeUtils
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
-import java.time.OffsetDateTime
 
 @Serializable
 @Immutable
@@ -16,10 +16,10 @@ data class Item(
     @XmlElement(true) @XmlSerialName("link") val link: String? = null,
     @XmlElement(true) @XmlSerialName("language") val language: String? = null,
     @XmlElement(true) @XmlSerialName("description") val description: String? = null,
-    @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlElement(true) @XmlSerialName("pubDate") val pubDate: OffsetDateTime = OffsetDateTime.now(), // update date time or first publish date time when date is empty
+    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) @XmlElement(true) @XmlSerialName("pubDate") val pubDate: KmpOffsetDateTime = KmpOffsetDateTime.now(), // update date time or first publish date time when date is empty
     @XmlElement(true) @XmlSerialName("guid") val guid: String? = null,
     @XmlElement(true) @XmlSerialName("image") val images: List<Image> = listOf(),
-    @Serializable(with = OffsetDateTimeHeuristicDeserializer::class) @XmlElement(true) @XmlSerialName("date") val date: OffsetDateTime = OffsetDateTime.now(), // first publish date time
+    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) @XmlElement(true) @XmlSerialName("date") val date: KmpOffsetDateTime = KmpOffsetDateTime.now(), // first publish date time
     @XmlElement(true) @XmlSerialName("encoded") var encoded: String? = null,
     @XmlElement(true) @XmlSerialName("format") val format: String? = null,
     @XmlElement(true) @XmlSerialName("rights") val rights: String? = null,
