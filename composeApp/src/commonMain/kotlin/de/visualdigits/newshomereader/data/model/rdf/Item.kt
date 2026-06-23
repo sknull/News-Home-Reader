@@ -2,7 +2,7 @@ package de.visualdigits.newshomereader.data.model.rdf
 
 import androidx.compose.runtime.Immutable
 import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
-import de.visualdigits.newshomereader.domain.serializer.KmpOffsetDateTimeHeuristicDeserializer
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTimeHeuristicDeserializer
 import de.visualdigits.newshomereader.domain.util.StringEscapeUtils
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement

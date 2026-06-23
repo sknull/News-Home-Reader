@@ -5,7 +5,7 @@ import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.newshomereader.data.serializer.ListSerializer
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem
 import de.visualdigits.newshomereader.domain.model.unified.ThumbnailItem
-import de.visualdigits.newshomereader.domain.serializer.KmpOffsetDateTimeHeuristicDeserializer
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
