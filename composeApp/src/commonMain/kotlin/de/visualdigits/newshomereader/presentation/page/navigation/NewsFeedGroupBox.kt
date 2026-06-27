@@ -1,5 +1,8 @@
 package de.visualdigits.newshomereader.presentation.page.navigation
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,26 +43,12 @@ fun NewsFeedGroupBox(
     state: NewsHomeReaderState,
     maxImageSize: Int?
 ) {
-    val edgeColor = MaterialTheme.colorScheme.onSurface
     val collapsibleState = state.collapsibleState["group_${newsFeedGroup.name}"]
     val isRootGroup = newsFeedGroup.outlineType == OutlineType.root
     VerticalCollapsibleBox(
         modifier = modifier
             .fillMaxWidth()
-            .conditional(
-                newsFeedGroup.parentGroupName == null
-            ) {
-                drawBehind() {
-                    val strokeWidth = 1.dp.toPx()
-                    drawLine(
-                        color = edgeColor,
-                        start = Offset(0f, size.height - strokeWidth / 2),
-                        end = Offset(size.width, size.height - strokeWidth / 2),
-                        strokeWidth = strokeWidth
-                    )
-                }
-            }
-            .padding(start = if (newsFeedGroup.parentGroupName != null) 20.dp else 0.dp),
+            .padding(start = if (newsFeedGroup.parentGroupName != null) 20.dp else 0.dp), // indent
         enabled = !isRootGroup,
         isTitleHoverable = true,
         titleHoverColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
@@ -67,7 +56,7 @@ fun NewsFeedGroupBox(
             IndicatorButton(
                 isHoverable = false,
                 width = 180.dp - MaterialTheme.shapes.gap * 2,
-                height = 50.dp,
+                height = 40.dp,
                 indicatorPosition = Alignment.CenterStart,
                 indicatorColor = MaterialTheme.colorScheme.onSurface,
                 text = newsFeedGroup.name,
@@ -118,6 +107,7 @@ fun NewsFeedGroupBox(
         Column(
             modifier = Modifier
                 .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
         ) {
             newsFeedGroup.subGroups
                 .sortedBy { sg -> sg.name }

@@ -1,6 +1,7 @@
 package de.visualdigits.newshomereader.presentation.page.navigation
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,15 +39,16 @@ fun NewsFeedItems(
     state: NewsHomeReaderState,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
-    FlowRow(
+    Column(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
     ) {
         newsFeedGroup.newsFeeds
             .sortedBy { nf -> nf.name }
             .forEach { newsFeedItem ->
             Row(
-                modifier = Modifier,
+                modifier = Modifier
+                    .fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
                 verticalAlignment = Alignment.CenterVertically
             ) {

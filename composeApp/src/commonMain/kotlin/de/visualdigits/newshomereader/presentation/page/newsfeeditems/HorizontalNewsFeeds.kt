@@ -123,7 +123,7 @@ fun HorizontalNewsFeeds(
                             scrollbarId = "newsfeed_navigation",
                             scrollPosition = scrollPosition,
                             onCommonAction = onCommonAction,
-                            verticalArrangementGap = 0.dp
+                            verticalArrangementGap = MaterialTheme.shapes.gap
                         ) {
                             state.newsFeedGroups
                                 .map { newsFeedGroup ->
