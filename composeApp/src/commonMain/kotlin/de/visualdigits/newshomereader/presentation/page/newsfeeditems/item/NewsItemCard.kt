@@ -38,6 +38,8 @@ import be.digitalia.compose.htmlconverter.HtmlStyle
 import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
 import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.presentation.components.util.conditional
+import de.visualdigits.common.presentation.util.highlightQuery
+import de.visualdigits.common.presentation.util.openUriSafely
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_paid_24px
 import de.visualdigits.compose.resources.icon_videocam_24px
@@ -52,7 +54,6 @@ import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.textLinkStyles
-import de.visualdigits.newshomereader.presentation.util.highlightQuery
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
 import org.jetbrains.compose.resources.painterResource
 
@@ -216,7 +217,7 @@ fun NewsItemCard(
                             makeUrlAbsolute(
                                 newsItem.link,
                                 (linkAnnotation as LinkAnnotation.Url).url
-                            ).let { uriHandler.openUri(it) }
+                            ).let { uriHandler.openUriSafely(it) }
                         }
                     )
                     val highlightedTitle = remember(annotatedTitle, state.newsItemSearchText) {
@@ -243,7 +244,7 @@ fun NewsItemCard(
                                 makeUrlAbsolute(
                                     newsItem.link,
                                     (linkAnnotation as LinkAnnotation.Url).url
-                                ).let { uriHandler.openUri(it) }
+                                ).let { uriHandler.openUriSafely(it) }
                             }
                         )
                         val highlightedSummary = remember(annotatedSummary, state.newsItemSearchText) {

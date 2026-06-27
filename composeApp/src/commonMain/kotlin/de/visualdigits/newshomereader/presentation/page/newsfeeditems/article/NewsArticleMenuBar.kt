@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.presentation.components.button.IndicatorButton
+import de.visualdigits.common.presentation.util.openUriSafely
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_arrow_back_24px
 import de.visualdigits.compose.resources.icon_chat_24px
@@ -62,7 +63,7 @@ fun NewsArticleMenuBar(
                 leadingIconTint = MaterialTheme.colorScheme.onSurface,
                 toolTip = stringResource(Res.string.tooltip_open_chat),
             ) {
-                uriHandler.openUri(
+                uriHandler.openUriSafely(
                     makeUrlAbsolute(
                         newsItem.link,
                         link

@@ -34,6 +34,7 @@ import de.visualdigits.common.presentation.components.container.VerticalCollapsi
 import de.visualdigits.common.presentation.components.util.switchBoxColors
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.common.presentation.model.ScrollIntent
+import de.visualdigits.common.presentation.util.openUriSafely
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_arrow_drop_down_24px
 import de.visualdigits.compose.resources.icon_arrow_right_24px
@@ -171,7 +172,7 @@ fun NewsFeedCatalog(
                                                         .pointerHoverIcon(PointerIcon.Hand)
                                                         .hoverable(interactionSource)
                                                         .clickable {
-                                                            uriHandler.openUri(feed.url)
+                                                            uriHandler.openUriSafely(feed.url)
                                                         },
                                                     text = feed.name,
                                                     color = if (isHovered) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onSurface,

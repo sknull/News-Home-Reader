@@ -48,6 +48,8 @@ import de.visualdigits.common.presentation.components.modifier.angledInnerShadow
 import de.visualdigits.common.presentation.components.modifier.tintedBackgroundImage
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.common.presentation.model.ScrollIntent
+import de.visualdigits.common.presentation.util.highlightQuery
+import de.visualdigits.common.presentation.util.openUriSafely
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.circuit_board_squared
 import de.visualdigits.compose.resources.icon_paid_24px
@@ -65,7 +67,6 @@ import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import de.visualdigits.newshomereader.presentation.style.textLinkStyles
-import de.visualdigits.newshomereader.presentation.util.highlightQuery
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
 import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.painterResource
@@ -171,7 +172,7 @@ fun NewsArticleCard(
                                         .pointerHoverIcon(PointerIcon.Hand)
                                         .hoverable(interactionSource)
                                         .clickable {
-                                            uriHandler.openUri(feedUrl?:newsItem.newsFeed.link)
+                                            uriHandler.openUriSafely(feedUrl?:newsItem.newsFeed.link)
                                         },
                                     text = fn,
                                     color = if (isHovered) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onBackground,
@@ -216,7 +217,7 @@ fun NewsArticleCard(
                                     .pointerHoverIcon(PointerIcon.Hand)
                                     .hoverable(interactionSource)
                                     .clickable {
-                                        uriHandler.openUri(newsItem.link)
+                                        uriHandler.openUriSafely(newsItem.link)
                                     },
                                 text = highlightedTitle,
                                 color = if (isHovered) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onBackground,
@@ -282,7 +283,7 @@ fun NewsArticleCard(
                                     makeUrlAbsolute(
                                         newsItem.link,
                                         (linkAnnotation as LinkAnnotation.Url).url
-                                    ).let { uriHandler.openUri(it) }
+                                    ).let { uriHandler.openUriSafely(it) }
                                 }
                             )
                             val highlightedSummary = remember(annotatedSummary, state.newsItemSearchText) {
@@ -315,7 +316,7 @@ fun NewsArticleCard(
                                 makeUrlAbsolute(
                                     newsItem.link,
                                     (linkAnnotation as LinkAnnotation.Url).url
-                                ).let { uriHandler.openUri(it) }
+                                ).let { uriHandler.openUriSafely(it) }
                             }
                         )
                         val highlightedText = remember(annotatedText, state.newsItemSearchText) {

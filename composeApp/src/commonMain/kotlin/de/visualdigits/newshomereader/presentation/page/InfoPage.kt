@@ -19,6 +19,7 @@ import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
 import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.common.presentation.components.button.IndicatorButton
+import de.visualdigits.common.presentation.util.openUriSafely
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.ok
 import de.visualdigits.generated.AppVersion
@@ -57,7 +58,7 @@ fun InfoPage(
                     textLinkStyles = TextLinkStyles(style = SpanStyle(color = linkColor)),
                     isTextColorEnabled = true
                 ),
-                linkInteractionListener = { linkAnnotation -> uriHandler.openUri((linkAnnotation as LinkAnnotation.Url).url) }
+                linkInteractionListener = { linkAnnotation -> uriHandler.openUriSafely((linkAnnotation as LinkAnnotation.Url).url) }
             )
         }
 

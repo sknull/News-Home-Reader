@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.presentation.components.button.IndicatorButton
+import de.visualdigits.common.presentation.util.openUriSafely
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_videocam_24px
 import de.visualdigits.compose.resources.icon_volume_up_24px
@@ -141,7 +142,7 @@ fun MediaItemButtons(
                                 }
                             }
                         ) {
-                            uriHandler.openUri(
+                            uriHandler.openUriSafely(
                                 makeUrlAbsolute(
                                     newsItem.link,
                                     mediaItem.url
