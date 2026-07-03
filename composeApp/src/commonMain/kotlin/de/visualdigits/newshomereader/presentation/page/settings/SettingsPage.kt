@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.form.EditableListResources
+import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.domain.model.ui.UiText
 import de.visualdigits.common.presentation.components.form.ConfigurationEditForm
 import de.visualdigits.common.presentation.model.CommonAction
@@ -51,6 +52,7 @@ import org.jetbrains.compose.resources.stringResource
 fun SettingsPage(
     viewModel: NewsHomeReaderViewModel,
     state: NewsHomeReaderState,
+    platformType: PlatformType,
     scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     onCommonAction: (CommonAction) -> Unit,
     onAction: (NewsHomeReaderAction) -> Unit
@@ -123,7 +125,8 @@ fun SettingsPage(
                     NewsHomeReaderAction.OnSaveSettingsClick()
                 )
             },
-            onCommonAction = onCommonAction
+            onCommonAction = onCommonAction,
+            platformType = platformType
         ) {
             Spacer(Modifier.height(16.dp))
 

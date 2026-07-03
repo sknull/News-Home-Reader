@@ -154,6 +154,7 @@ fun MainPage(
                             SettingsPage(
                                 viewModel = viewModel,
                                 state = state,
+                                platformType = platformType,
                                 scrollPosition = viewModel.scrollPosition,
                                 onCommonAction = viewModel::onCommonAction,
                                 onAction = viewModel::onAction
@@ -161,6 +162,7 @@ fun MainPage(
                         }
                         state.isAddingNewsFeedConfiguration || state.isEditingNewsFeedConfiguration -> {
                             NewsFeedConfigurationPage(
+                                platformType = platformType,
                                 state = state,
                                 viewModel = viewModel,
                                 onCommonAction = viewModel::onCommonAction,

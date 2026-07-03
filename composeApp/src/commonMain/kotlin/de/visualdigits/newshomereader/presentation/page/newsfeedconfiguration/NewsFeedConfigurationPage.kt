@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import de.visualdigits.common.domain.model.form.EditableListResources
+import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.domain.model.ui.UiText
 import de.visualdigits.common.presentation.components.form.ConfigurationEditForm
 import de.visualdigits.common.presentation.model.CommonAction
@@ -43,6 +44,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun NewsFeedConfigurationPage(
+    platformType: PlatformType,
     state: NewsHomeReaderState,
     viewModel: NewsHomeReaderViewModel,
     onCommonAction: (CommonAction) -> Unit,
@@ -119,6 +121,7 @@ fun NewsFeedConfigurationPage(
                 )
             },
             onCommonAction = onCommonAction,
+            platformType = platformType
         )
     }
 }
