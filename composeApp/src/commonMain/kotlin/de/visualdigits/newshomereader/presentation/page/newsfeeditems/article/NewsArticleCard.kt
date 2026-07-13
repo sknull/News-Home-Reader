@@ -41,6 +41,7 @@ import be.digitalia.compose.htmlconverter.HtmlStyle
 import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
 import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
+import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.domain.util.copyFactor
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
@@ -74,6 +75,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun NewsArticleCard(
     modifier: Modifier = Modifier,
+    platformType: PlatformType,
     scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     maxWidth: Dp,
     maxImageSize: Int?,
@@ -132,6 +134,7 @@ fun NewsArticleCard(
             PlatformVerticalScrollbarBox(
                 modifier = Modifier
                     .fillMaxWidth(),
+                platformType = platformType,
                 space = MaterialTheme.shapes.gap,
                 scrollbarModifier = Modifier
                     .clip(MaterialTheme.shapes.small)

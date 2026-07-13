@@ -29,6 +29,7 @@ import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
 import de.visualdigits.common.presentation.components.container.VerticalCollapsibleBox
 import de.visualdigits.common.presentation.components.util.switchBoxColors
@@ -49,6 +50,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun NewsFeedCatalog(
     modifier: Modifier = Modifier,
+    platformType: PlatformType,
     catalog: NewsFeedCatalog?,
     scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     state: NewsHomeReaderState,
@@ -66,6 +68,7 @@ fun NewsFeedCatalog(
     PlatformVerticalScrollbarBox(
         modifier = modifier
             .fillMaxSize(),
+        platformType = platformType,
         scrollbarModifier = Modifier
             .clip(MaterialTheme.shapes.small)
             .width(10.dp)

@@ -16,5 +16,5 @@ data class Publisher(
     val correctionsPolicy: String? = null,
     val diversityPolicy: String? = null,
     val sameAs: List<String> = listOf(),
-    val logo: Logo? = null
+    val logo: List<Logo> = listOf()
 )

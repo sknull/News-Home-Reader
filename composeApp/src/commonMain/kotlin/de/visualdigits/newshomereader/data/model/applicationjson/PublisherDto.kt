@@ -18,5 +18,5 @@ data class PublisherDto(
     val correctionsPolicy: String? = null,
     val diversityPolicy: String? = null,
     @Serializable(with = ListSerializer::class) val sameAs: List<String> = listOf(),
-    @Serializable(with = LogoSerializer::class) val logo: LogoDto? = null
+    @SerialName("logo") val logo: LogoWrapper? = null
 )

@@ -17,7 +17,9 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @Immutable
-data class AppJsonDto @OptIn(ExperimentalSerializationApi::class, ExperimentalSerializationApi::class) constructor(
+data class AppJsonDto @OptIn(ExperimentalSerializationApi::class, ExperimentalSerializationApi::class,
+    ExperimentalSerializationApi::class, ExperimentalSerializationApi::class
+) constructor(
     @SerialName("@id") val id: String? = null,
     @SerialName("@type") val type: String? = null,
     @SerialName("@context") val context: String? = null,
@@ -53,7 +55,7 @@ data class AppJsonDto @OptIn(ExperimentalSerializationApi::class, ExperimentalSe
     @Serializable(with = ListSerializer::class) val itemListElement: List<ItemElementDto> = listOf(),
     val jobTitle: String? = null,
     @Serializable(with = ListSerializer::class) val keywords: List<String> = listOf(),
-    val logo: LogoDto? = null,
+    @SerialName("logo") val logo: LogoWrapper? = null,
     @Serializable(with = MainEntityOfPageSerializer::class) val mainEntityOfPage: MainEntityOfPageDto? = null,
     val name: String? = null,
     @Serializable(with = ListSerializer::class) @SerialName("potentialAction") val potentialActions: List<PotentialActionDto> = listOf(),

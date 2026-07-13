@@ -28,14 +28,8 @@ import org.koin.test.inject
 import org.koin.test.junit5.KoinTestExtension
 import java.io.File
 
-@EnabledIf("isEnabled")
+@Disabled("Only for local testing")
 class RssTest : KoinTest {
-
-    companion object {
-
-        @JvmStatic
-        fun isEnabled(): Boolean = false
-    }
 
     private val feedRepository: FeedRepository by inject()
     private val articleRepository: ArticleRepository by inject()
@@ -105,10 +99,30 @@ class RssTest : KoinTest {
     }
 
     @Test
-    fun testReadArticleFile() = runTest {
+    fun testReadFocusStory() = runTest {
         val article = readArticleFromFile(
             newsItem,
             File(ClassLoader.getSystemResource("newsfeed/rdf/focus-story.html").toURI())
+        )
+        println(article)
+        assertNotNull(article)
+    }
+
+    @Test
+    fun testReadHrStory() = runTest {
+        val article = readArticleFromFile(
+            newsItem,
+            File(ClassLoader.getSystemResource("newsfeed/rdf/hr-story.html").toURI())
+        )
+        println(article)
+        assertNotNull(article)
+    }
+
+    @Test
+    fun testReadT3nStory() = runTest {
+        val article = readArticleFromFile(
+            newsItem,
+            File(ClassLoader.getSystemResource("newsfeed/rdf/t3n-story.html").toURI())
         )
         println(article)
         assertNotNull(article)

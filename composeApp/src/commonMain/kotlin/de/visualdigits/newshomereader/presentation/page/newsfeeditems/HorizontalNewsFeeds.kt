@@ -24,6 +24,8 @@ import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.cheonjaeung.compose.grid.SimpleGridCells
+import com.cheonjaeung.compose.grid.VerticalGrid
 import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.domain.util.copyFactor
@@ -66,10 +68,10 @@ fun HorizontalNewsFeeds(
     scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     connectivityManager: ConnectivityManager,
     maxWidth: Dp,
-    rowData: List<List<NewsItem>>,
+    rowData: List<NewsItem>,
     maxImageSize: Int?,
     uriHandler: UriHandler,
-    chunks: Int,
+    columns: Int,
     onCommonAction: (CommonAction) -> Unit,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
@@ -114,6 +116,7 @@ fun HorizontalNewsFeeds(
                         PlatformVerticalScrollbarBox(
                             modifier = Modifier
                                 .fillMaxWidth(),
+                            platformType = platformType,
                             scrollbarModifier = Modifier
                                 .clip(MaterialTheme.shapes.small)
                                 .width(10.dp)
@@ -220,6 +223,7 @@ fun HorizontalNewsFeeds(
             PlatformVerticalScrollbarBox(
                 modifier = Modifier
                     .fillMaxWidth(),
+                platformType = platformType,
                 scrollbarModifier = Modifier
                     .clip(MaterialTheme.shapes.small)
                     .width(10.dp)
@@ -230,17 +234,18 @@ fun HorizontalNewsFeeds(
                 scrollPosition = scrollPosition,
                 onCommonAction = onCommonAction
             ) {
-                rowData.mapIndexed{ index, rowItems ->
-                    Pair("row_${index}_" + rowItems.joinToString("_") { item -> item.id.toString() }, @Composable {
-                        Row(
+                listOf(
+                    Pair("newsfeed_items", @Composable {
+                        VerticalGrid(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = MaterialTheme.shapes.gap),
-                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                            columns = SimpleGridCells.Fixed(columns),
+                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
+                            verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                         ) {
-                            rowItems.forEach { newsItem ->
+                            rowData.forEach { newsItem ->
                                 NewsItemCard(
-                                    modifier = Modifier.weight(1f),
                                     state = state,
                                     maxImageSize = maxImageSize,
                                     newsItem = newsItem,
@@ -248,12 +253,9 @@ fun HorizontalNewsFeeds(
                                     onAction = onAction
                                 )
                             }
-                            (0 until chunks - rowItems.size).forEach {
-                                Spacer(Modifier.weight(1f))
-                            }
                         }
                     })
-                }
+                )
             }
         }
     }

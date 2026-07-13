@@ -5,12 +5,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -18,11 +16,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.cheonjaeung.compose.grid.SimpleGridCells
+import com.cheonjaeung.compose.grid.VerticalGrid
 import de.visualdigits.common.domain.model.color.HsvColor
+import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.domain.util.copyFactor
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
@@ -34,7 +34,6 @@ import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.circuit_board_squared
 import de.visualdigits.compose.resources.icon_add_notes_24px
-import de.visualdigits.compose.resources.label_keyword_buckets
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
@@ -44,7 +43,6 @@ import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.stringResource
 
 /**
  * Renders the news item card for a given newsfeed
@@ -52,14 +50,15 @@ import org.jetbrains.compose.resources.stringResource
  */
 @Composable
 fun VerticalNewsFeeds(
-    scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     state: NewsHomeReaderState,
+    platformType: PlatformType,
+    scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     connectivityManager: ConnectivityManager,
     maxWidth: Dp,
-    rowData: List<List<NewsItem>>,
+    rowData: List<NewsItem>,
     maxImageSize: Int?,
     uriHandler: UriHandler,
-    chunks: Int,
+    columns: Int,
     onCommonAction: (CommonAction) -> Unit,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
@@ -100,6 +99,7 @@ fun VerticalNewsFeeds(
                     insetColorShadow = MaterialTheme.colorScheme.background.copyFactor(valueFactor = 1f / dimFactor)
                 )
             ,
+            platformType = platformType,
             backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
             scrollbarModifier = Modifier
                 .clip(MaterialTheme.shapes.small)
@@ -152,42 +152,28 @@ fun VerticalNewsFeeds(
                             )
                         }
                     }
-                })
-            ) + rowData.flatMapIndexed { index, rowItems ->
-                listOf(
-                    Pair("row_${index}_" + rowItems.joinToString("_") { item -> item.id.toString() }, @Composable {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = MaterialTheme.shapes.gap),
-                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
-                        ) {
-                            rowItems.forEach { newsItem ->
-                                NewsItemCard(
-                                    modifier = Modifier
-                                        .weight(1f),
-                                    state = state,
-                                    maxImageSize = maxImageSize,
-                                    newsItem = newsItem,
-                                    uriHandler = uriHandler,
-                                    onAction = onAction
-                                )
-                            }
-                            (0 until chunks - rowItems.size).forEach {
-                                Spacer(Modifier.weight(1f))
-                            }
+                }),
+                Pair("newsfeed_items", @Composable {
+                    VerticalGrid(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = MaterialTheme.shapes.gap),
+                        columns = SimpleGridCells.Fixed(columns),
+                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
+                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                    ) {
+                        rowData.forEach { newsItem ->
+                            NewsItemCard(
+                                state = state,
+                                maxImageSize = maxImageSize,
+                                newsItem = newsItem,
+                                uriHandler = uriHandler,
+                                onAction = onAction
+                            )
                         }
-                    })
-                ) + if (index < lastRow) {
-                    listOf(
-                        Pair(
-                            "spacer_${index}_" + rowItems.joinToString("_") { item -> item.id.toString() },
-                            @Composable { Spacer(Modifier.size(MaterialTheme.shapes.gap)) })
-                    )
-                } else {
-                    listOf()
-                }
-            }
+                    }
+                })
+            )
         }
     }
 }

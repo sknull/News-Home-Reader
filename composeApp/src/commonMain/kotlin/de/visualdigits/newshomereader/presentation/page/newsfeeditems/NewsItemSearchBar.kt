@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.domain.model.ui.UiText
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
 import de.visualdigits.common.presentation.components.container.FlexibleSearchBar
@@ -38,6 +39,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun NewsItemSearchBar(
     state: NewsHomeReaderState,
+    platformType: PlatformType,
     screenWidth: Dp,
     onAction: (NewsHomeReaderAction) -> Unit,
     scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
@@ -67,6 +69,7 @@ fun NewsItemSearchBar(
         PlatformVerticalScrollbarBox(
             modifier = Modifier
                 .fillMaxWidth(),
+            platformType = platformType,
             scrollbarModifier = Modifier
                 .clip(MaterialTheme.shapes.small)
                 .width(10.dp)

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.domain.model.ui.UiText
 import de.visualdigits.common.presentation.components.container.FlexibleSearchBar
 import de.visualdigits.common.presentation.components.util.switchBoxColors
@@ -33,6 +34,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun CatalogSearchBar(
     state: NewsHomeReaderState,
+    platformType: PlatformType,
     screenWidth: Dp,
     onAction: (NewsHomeReaderAction) -> Unit,
     viewModel: NewsHomeReaderViewModel,
@@ -58,22 +60,21 @@ fun CatalogSearchBar(
             }
         ) {
             NewsFeedCatalog(
-                modifier = Modifier,
-                scrollPosition = viewModel.scrollPosition,
+                platformType = platformType,
                 catalog = state.filteredCatalog,
+                scrollPosition = viewModel.scrollPosition,
                 state = state,
                 uriHandler = uriHandler,
                 onCommonAction = onCommonAction,
-                onAction = onAction,
-                onSubscriptionChanged = { newsFeedCatalogItem, subscribe ->
-                    onAction(
-                        NewsHomeReaderAction.OnSubscriptionChanged(
-                            newsFeedCatalogItem,
-                            subscribe
-                        )
+                onAction = onAction
+            ) { newsFeedCatalogItem, subscribe ->
+                onAction(
+                    NewsHomeReaderAction.OnSubscriptionChanged(
+                        newsFeedCatalogItem,
+                        subscribe
                     )
-                }
-            )
+                )
+            }
         }
 
         val interactionSource = remember { MutableInteractionSource() }

@@ -38,6 +38,7 @@ fun NewsContent(
     ) {
         if (state.currentNewsArticle != null && state.currentNewsItem != null) {
             NewsArticleCard(
+                platformType = platformType,
                 scrollPosition = viewModel.scrollPosition,
                 maxWidth = maxWidth,
                 maxImageSize = maxImageSize,

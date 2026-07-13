@@ -47,7 +47,7 @@ data class AppJson(
     val itemListElement: List<ItemElement> = listOf(),
     val jobTitle: String? = null,
     val keywords: List<String> = listOf(),
-    val logo: Logo? = null,
+    val logo: List<Logo> = listOf(),
     val mainEntityOfPage: MainEntityOfPage? = null,
     val name: String? = null,
     @SerialName("potentialAction") val potentialActions: List<PotentialAction> = listOf(),

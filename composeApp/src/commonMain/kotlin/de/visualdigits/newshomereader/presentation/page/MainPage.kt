@@ -127,6 +127,7 @@ fun MainPage(
 
                     NewsItemSearchBar(
                         state = state,
+                        platformType = platformType,
                         screenWidth = screenWidth,
                         onAction = viewModel::onAction,
                         scrollPosition = viewModel.scrollPosition,
@@ -172,6 +173,7 @@ fun MainPage(
                         state.isViewingCatalog -> {
                             CatalogPage(
                                 state = state,
+                                platformType = platformType,
                                 screenWidth = screenWidth,
                                 onAction = viewModel::onAction,
                                 viewModel = viewModel,

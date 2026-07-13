@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
@@ -16,6 +17,7 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 @Composable
 fun CatalogPage(
     state: NewsHomeReaderState,
+    platformType: PlatformType,
     screenWidth: Dp,
     onAction: (NewsHomeReaderAction) -> Unit,
     viewModel: NewsHomeReaderViewModel,
@@ -29,6 +31,7 @@ fun CatalogPage(
     ) {
         CatalogSearchBar(
             state = state,
+            platformType = platformType,
             screenWidth = screenWidth,
             onAction = onAction,
             viewModel = viewModel,
@@ -37,16 +40,15 @@ fun CatalogPage(
         )
 
         NewsFeedCatalog(
-            modifier = Modifier,
-            scrollPosition = viewModel.scrollPosition,
+            platformType = platformType,
             catalog = state.newsFeedCatalog,
+            scrollPosition = viewModel.scrollPosition,
             state = state,
             uriHandler = uriHandler,
             onCommonAction = onCommonAction,
-            onAction = onAction,
-            onSubscriptionChanged = { newsFeedCatalogItem, subscribe ->
-                onAction(NewsHomeReaderAction.OnSubscriptionChanged(newsFeedCatalogItem, subscribe))
-            }
-        )
+            onAction = onAction
+        ) { newsFeedCatalogItem, subscribe ->
+            onAction(NewsHomeReaderAction.OnSubscriptionChanged(newsFeedCatalogItem, subscribe))
+        }
     }
 }

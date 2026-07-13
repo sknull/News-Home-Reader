@@ -13,6 +13,7 @@ version-charlex-pdf = "1.0.0-rc01"
 version-essence = "1.2.0-SNAPSHOT"
 version-flatlaf = "3.7.1"
 version-gradle-pdf = "4.0.5"
+version-grid-layout = "2.8.0"
 version-html-converter = "1.1.1"
 version-jetbrains-kotlin = "1.11.1"
 version-kotlinx-coroutines = "1.11.0"
@@ -56,6 +57,7 @@ compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling-preview", v
 essence = { module = "de.visualdigits:essence", version.ref = "version-essence" }
 flatlaf = { module = "com.formdev:flatlaf", version.ref = "version-flatlaf" }
 html-converter = { module = "be.digitalia.compose.htmlconverter:htmlconverter", version.ref="version-html-converter"}
+grid-layout = { module = "com.cheonjaeung.compose.grid:grid", version.ref = "version-grid-layout" }
 jetbrains-compose-navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref= "version-navigation-compose" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "version-junit" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "version-junit" }

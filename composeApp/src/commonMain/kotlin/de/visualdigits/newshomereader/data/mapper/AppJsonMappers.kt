@@ -203,7 +203,7 @@ fun PublisherDto.toPublisher(): Publisher {
         correctionsPolicy = correctionsPolicy,
         diversityPolicy = diversityPolicy,
         sameAs = sameAs,
-        logo = logo?.toLogo()
+        logo = logo?.logos?.map { l -> l.toLogo() }?:listOf()
     )
 }
 
@@ -253,7 +253,7 @@ fun AppJsonDto.toAppJson(): AppJson {
         itemListElement = itemListElement.map { i -> i.toItemElement() },
         jobTitle = jobTitle,
         keywords = keywords,
-        logo = logo?.toLogo(),
+        logo = logo?.logos?.map { l -> l.toLogo() }?:listOf(),
         mainEntityOfPage = mainEntityOfPage?.toMainEntityOfPage(),
         name = name,
         potentialActions = potentialActions.map { a -> a.toPotentialAction() },

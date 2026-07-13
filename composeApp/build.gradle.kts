@@ -158,6 +158,7 @@ kotlin {
 
             implementation(libs.html.converter)
             implementation(libs.charlex.pdf)
+            implementation(libs.grid.layout)
 
             implementation(libs.sqldelight.coroutines)
             implementation(libs.sqlite.bundled)

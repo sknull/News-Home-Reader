@@ -31,11 +31,11 @@ fun NewsFeeds(
     onCommonAction: (CommonAction) -> Unit,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
-    val lastValidRowData = remember { mutableStateOf<List<List<NewsItem>>>(emptyList()) }
+    val lastValidRowData = remember { mutableStateOf<List<NewsItem>>(emptyList()) }
 
     val rowData = remember(state.visibleNewsItems, chunks) {
         if (state.visibleNewsItems.isNotEmpty() || state.allowClearVisibleNewsItems) {
-            val newData = state.visibleNewsItems.chunked(chunks)
+            val newData = state.visibleNewsItems
             lastValidRowData.value = newData
             newData
         } else {
@@ -53,20 +53,21 @@ fun NewsFeeds(
             rowData = rowData,
             maxImageSize = maxImageSize,
             uriHandler = uriHandler,
-            chunks = chunks,
+            columns = chunks,
             onCommonAction = onCommonAction,
             onAction = onAction,
         )
     } else {
         VerticalNewsFeeds(
-            scrollPosition = scrollPosition,
             state = state,
+            platformType = platformType,
+            scrollPosition = scrollPosition,
             connectivityManager = connectivityManager,
             maxWidth = maxWidth,
             rowData = rowData,
             maxImageSize = maxImageSize,
             uriHandler = uriHandler,
-            chunks = chunks,
+            columns = chunks,
             onCommonAction = onCommonAction,
             onAction = onAction
         )
