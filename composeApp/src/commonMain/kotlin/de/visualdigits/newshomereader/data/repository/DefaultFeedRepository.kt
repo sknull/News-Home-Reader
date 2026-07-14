@@ -3,6 +3,7 @@ package de.visualdigits.newshomereader.data.repository
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOneOrNull
+import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.parser.Parser
@@ -172,7 +173,7 @@ class DefaultFeedRepository(
             dao.upsertNewsFeed(newsFeed.toNewsFeedEntity())
             Result.Success(Unit)
         } catch (e: Exception) {
-            log(Severity.Error, "Something went wrong during upserting news feed", e, withTag = "NHR")
+            Logger.e("Something went wrong during upserting news feed", e)
             Result.Error(DataError.Local.UNKNOWN)
         }
     }
@@ -188,7 +189,7 @@ class DefaultFeedRepository(
             }
             Result.Success(Unit)
         } catch (e: Exception) {
-            log(Severity.Error, "Something went wrong during marking news item as read", e, withTag = "NHR")
+            Logger.e("Something went wrong during marking news item as read", e)
             Result.Error(DataError.Local.UNKNOWN)
         }
     }
@@ -217,12 +218,12 @@ class DefaultFeedRepository(
                     }
                 }
             } else if (syncResult is Result.Error) {
-                log(Severity.Error, "Something went wrong while synchronizing read news items with webdav host", syncResult.throwable, withTag = "NHR")
+                Logger.e("Something went wrong while synchronizing read news items with webdav host", syncResult.throwable)
                 Result.Error(DataError.Local.UNKNOWN)
             }
             Result.Success(Unit)
         } catch (e: Exception) {
-            log(Severity.Error, "Something went wrong while synchronizing read news items with webdav host", e, withTag = "NHR")
+            Logger.e("Something went wrong while synchronizing read news items with webdav host", e)
             Result.Error(DataError.Local.UNKNOWN)
         }
     }
@@ -232,7 +233,7 @@ class DefaultFeedRepository(
             val (insertedNewsItemEntity, changed) = dao.upsertNewsItem(newsItem.toNewsItemEntity(), forceUpdate)
             Result.Success(Pair(insertedNewsItemEntity.toNewsItem(), changed))
         } catch (e: Exception) {
-            log(Severity.Error, "Something went wrong during upserting news item", e, withTag = "NHR")
+            Logger.e("Something went wrong during upserting news item", e)
             Result.Error(DataError.Local.UNKNOWN)
         }
     }
@@ -258,7 +259,7 @@ class DefaultFeedRepository(
                 progress(done.toFloat() / totalSteps1, ProgressStage.LOAD_FEEDS)
                 newsFeed
             } catch (e: Exception) {
-                log(Severity.Error, "Could not load feed '${newsFeedItem.name}'", e, withTag = "NHR")
+                Logger.e("Could not load feed '${newsFeedItem.name}'", e)
                 null
             }
         }
@@ -317,7 +318,7 @@ class DefaultFeedRepository(
 
             val finalNewsFeeds = Pair(newsFeedsWithArticles, changedArticles)
 
-            log(Severity.Info, "Refresh finished", withTag = "NHR")
+            Logger.i("Refresh finished")
             Result.Success(finalNewsFeeds)
         } catch (e: Exception) {
             Result.Error(DataError.Remote.SERIALIZATION, e)
@@ -334,7 +335,7 @@ class DefaultFeedRepository(
         loadArticles: Boolean,
         progress: (Float, ProgressStage) -> Unit
     ): Result<Pair<NewsFeed?, Boolean>, DataError.Remote> = withContext(Dispatchers.IO) {
-        log(Severity.Info, "Refreshing newsfeed '$feedName', loadArticles=$loadArticles...", withTag = "NHR")
+        Logger.i("Refreshing newsfeed '$feedName', loadArticles=$loadArticles...")
         try {
             val response = httpClient.get(urlString = url)
             val newsFeed = readFromBytes(feedName, response.readRawBytes())
@@ -391,13 +392,13 @@ class DefaultFeedRepository(
         val totalSteps = urls.size
         if (totalSteps > 0) {
             currentStep.store(0)
-            log(Severity.Info, "Prefetching ${feedUrls.size} feed images, ${itemUrls.size} item images, ${articleUrls.size} article images = ${urls.size} distinct images", withTag = "NHR")
+            Logger.i("Prefetching ${feedUrls.size} feed images, ${itemUrls.size} item images, ${articleUrls.size} article images = ${urls.size} distinct images")
             imageCache.prefetchImages(urls) {
                 val done = currentStep.incrementAndFetch()
                 progress(done.toFloat() / totalSteps, ProgressStage.LOAD_IMAGES)
             }
         }
-        log(Severity.Info, "Finished prefetching", withTag = "NHR")
+        Logger.i("Finished prefetching")
 
         Result.Success(Unit)
     }
@@ -430,7 +431,7 @@ class DefaultFeedRepository(
         totalSteps: Int,
         progress: (Float, ProgressStage) -> Unit
     ): Pair<List<NewsItem>, Boolean> {
-        log(Severity.Info, "Loading articles", withTag = "NHR")
+        Logger.i("Loading articles")
         var changed = false
         val newsItemsWithArticles = coroutineScope {
             val semaphore = Semaphore(5)

@@ -2,10 +2,10 @@ package de.visualdigits.newshomereader.presentation.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
-import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.common.domain.model.errorhandling.onError
 import de.visualdigits.common.domain.model.errorhandling.onSuccess
@@ -90,10 +90,9 @@ class NewsHomeReaderViewModel(
     val editedSettings = _editedSettings.asStateFlow()
 
     init {
-        log(Severity.Info, "Application version ${AppVersion().version} initializing...", withTag = "NHR")
+        Logger.i("Application version ${AppVersion().version} initializing...")
         loadData()
-        log(Severity.Info, "Application started", withTag = "NHR")
-        log(Severity.Debug, "Settings: ${state.value.settings}", withTag = "NHR")
+        Logger.i("Application started")
 
         _state
             .map { SubState(
@@ -342,7 +341,7 @@ class NewsHomeReaderViewModel(
                             )
                         }
                     } else if (upsertResult is Result.Error) {
-                        log(Severity.Error, "Could not add newsfeed item '${newsFeedItem?.name}'", upsertResult.throwable, withTag = "NHR")
+                        Logger.e("Could not add newsfeed item '${newsFeedItem?.name}'", upsertResult.throwable)
                         _state.update {
                             it.copy(
                                 isAddingNewsFeedConfiguration = false,
@@ -394,7 +393,7 @@ class NewsHomeReaderViewModel(
                             }
                         }
                         .onError { _, throwable ->
-                            log(Severity.Error, "Could not add newsfeed configuration '${state.value.deleteNewsFeedItem?.name}'", throwable, withTag = "NHR")
+                            Logger.e("Could not add newsfeed configuration '${state.value.deleteNewsFeedItem?.name}'", throwable)
                         }
                 }
             }
@@ -676,7 +675,7 @@ class NewsHomeReaderViewModel(
                 if (addResult is Result.Success) {
                     addResult.data
                 } else if (addResult is Result.Error) {
-                    log(Severity.Error, "Could not add root group '${mainCategory.name}'", addResult.throwable, withTag = "NHR")
+                    Logger.e("Could not add root group '${mainCategory.name}'", addResult.throwable)
                     null
                 } else {
                     null
@@ -705,7 +704,7 @@ class NewsHomeReaderViewModel(
                 if (addResult is Result.Success) {
                     addResult.data
                 } else if (addResult is Result.Error) {
-                    log(Severity.Error, "Could not add root group '${mainCategory?.name}'", addResult.throwable, withTag = "NHR")
+                    Logger.e("Could not add root group '${mainCategory?.name}'", addResult.throwable)
                     null
                 } else {
                     null
@@ -727,7 +726,7 @@ class NewsHomeReaderViewModel(
                             )
                         }
                     }.onError { error, throwable ->
-                        log(Severity.Error, "Could not get newsfeed groups", throwable, withTag = "NHR")
+                        Logger.e("Could not get newsfeed groups", throwable)
                         _state.update {
                             it.copy(
                                 uiMessage = error.toUiText(),
@@ -736,7 +735,7 @@ class NewsHomeReaderViewModel(
                         }
                     }
                 } else if (result is Result.Error) {
-                    log(Severity.Error, "Could not upsert news feed configuration", result.throwable, withTag = "NHR")
+                    Logger.e("Could not upsert news feed configuration", result.throwable)
                     _state.update {
                         it.copy(
                             uiMessage = result.error.toUiText(),
@@ -755,7 +754,7 @@ class NewsHomeReaderViewModel(
                     }
                 }
                 .onError { error, throwable ->
-                    log(Severity.Error, "Could not delete feed configuration", throwable, withTag = "NHR")
+                    Logger.e("Could not delete feed configuration", throwable)
                     _state.update {
                         it.copy(
                             uiMessage = error.toUiText(),
@@ -789,7 +788,7 @@ class NewsHomeReaderViewModel(
             }
 
             is Result.Error -> {
-                log(Severity.Error, "Could not add newsfeed group '$newsFeedGroupName'", addResult.throwable, withTag = "NHR")
+                Logger.e("Could not add newsfeed group '$newsFeedGroupName'", addResult.throwable)
                 _state.update {
                     it.copy(
                         isAddingNewsFeedGroup = false,
@@ -803,7 +802,7 @@ class NewsHomeReaderViewModel(
     private suspend fun addGroup(
         newsFeedGroup: NewsFeedGroup
     ): Result<NewsFeedGroup?, DataError.Local> {
-        log(Severity.Info, "add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'", withTag = "NHR")
+        Logger.i("add group '${newsFeedGroup.parentGroupName}/${newsFeedGroup.name}'")
         val getResult = newsFeedConfigurationRepository.getNewsFeedGroupByName(newsFeedGroup.parentGroupName, newsFeedGroup.name)
         return if (getResult is Result.Success) {
             if(getResult.data == null) {
@@ -812,7 +811,7 @@ class NewsHomeReaderViewModel(
                 Result.Success(getResult.data)
             }
         } else if (getResult is Result.Error) {
-            log(Severity.Error, "Could not get root category '${newsFeedGroup.name}'", getResult.throwable, withTag = "NHR")
+            Logger.e("Could not get root category '${newsFeedGroup.name}'", getResult.throwable)
             Result.Error(DataError.Local.UNKNOWN, getResult.throwable)
         } else {
             Result.Error(DataError.Local.UNKNOWN)
@@ -836,7 +835,7 @@ class NewsHomeReaderViewModel(
                 )
             }
         } else if (editResult is Result.Error) {
-            log(Severity.Error, "Could not get old newsfeed group '${newsFeedGroup?.name}'", editResult.throwable, withTag = "NHR")
+            Logger.e("Could not get old newsfeed group '${newsFeedGroup?.name}'", editResult.throwable)
             _state.update {
                 it.copy(
                     isAddingNewsFeedGroup = false,
@@ -881,7 +880,7 @@ class NewsHomeReaderViewModel(
                     }
                 }
                 .onError { _, throwable ->
-                    log(Severity.Error, "Could not modify newsfeed configuration from '${oldEntity.name}' to '${newEntity.name}'", throwable, withTag = "NHR")
+                    Logger.e("Could not modify newsfeed configuration from '${oldEntity.name}' to '${newEntity.name}'", throwable)
                 }
         } else {
             _state.update {
@@ -905,7 +904,7 @@ class NewsHomeReaderViewModel(
                     )
                 }
             } else if (deleteResult is Result.Error) {
-                log(Severity.Error, "Could not add newsfeed group '${newsFeedGroup.name}'", deleteResult.throwable, withTag = "NHR")
+                Logger.e("Could not add newsfeed group '${newsFeedGroup.name}'", deleteResult.throwable)
             }
         }
     }
@@ -981,11 +980,11 @@ class NewsHomeReaderViewModel(
                                 }
                             }
                             .onError { _, throwable ->
-                                log(Severity.Error, "Could not prefetch images", throwable, withTag = "NHR")
+                                Logger.e("Could not prefetch images", throwable)
                             }
                     }
                 } else if (feedResult is Result.Error) {
-                    log(Severity.Error, "Could not load feed '$feedName'", feedResult.throwable, withTag = "NHR")
+                    Logger.e("Could not load feed '$feedName'", feedResult.throwable)
                     _state.update {
                         it.copy(
                             currentProgress = 0.0f,
@@ -1037,11 +1036,11 @@ class NewsHomeReaderViewModel(
                             }
                         }
                         .onError { _, throwable ->
-                            log(Severity.Error, "Could not prefetch images", throwable, withTag = "NHR")
+                            Logger.e("Could not prefetch images", throwable)
                         }
                 }
             } else if (newsFeedResult is Result.Error) {
-                log(Severity.Error, "Could not refresh newsfeeds'", newsFeedResult.throwable, withTag = "NHR")
+                Logger.e("Could not refresh newsfeeds'", newsFeedResult.throwable)
                 _state.update {
                     it.copy(
                         currentProgress = 0.0f,
@@ -1053,7 +1052,7 @@ class NewsHomeReaderViewModel(
     }
 
     private fun importSettings(fileName: String, source: Source) = viewModelScope.launch {
-        log(Severity.Info, "Importing settings", withTag = "NHR")
+        Logger.i("Importing settings")
         if (fileName.endsWith(".json", ignoreCase = true)) {
             settingsRepository.importSettings(source)
                 .onSuccess { settings ->
@@ -1066,7 +1065,7 @@ class NewsHomeReaderViewModel(
                     }
                 }
                 .onError { error, throwable ->
-                    log(Severity.Error, "Could not import settings", throwable, withTag = "NHR")
+                    Logger.e("Could not import settings", throwable)
                     _state.update {
                         it.copy(
                             uiMessage = error.toUiText(),
@@ -1087,7 +1086,7 @@ class NewsHomeReaderViewModel(
     }
 
     private fun exportSettings(fileName: String, sink: Sink) = viewModelScope.launch {
-        log(Severity.Info, "Exporting settings", withTag = "NHR")
+        Logger.i("Exporting settings")
         if (fileName.endsWith(".json", ignoreCase = true)) {
             val settings = state.value.settings
             if(settings != null) {
@@ -1100,7 +1099,7 @@ class NewsHomeReaderViewModel(
                         }
                     }
                     .onError { error, throwable ->
-                        log(Severity.Error, "Could not export settings", throwable, withTag = "NHR")
+                        Logger.e("Could not export settings", throwable)
                         _state.update {
                             it.copy(
                                 uiMessage = error.toUiText(),
@@ -1122,7 +1121,7 @@ class NewsHomeReaderViewModel(
     }
 
     private fun importOpml(fileName: String, source: Source) = viewModelScope.launch {
-        log(Severity.Info, "Importing opml...", withTag = "NHR")
+        Logger.i("Importing opml...")
         val prefetchImages = state.value.settings?.get<BooleanEnum>(SK.prefetchImages)?.booleanValue ?: false
         if (fileName.endsWith(".opml", ignoreCase = true)) {
             val newFeedConfigurationResult = newsFeedConfigurationRepository.setNewsFeedGroups(source)
@@ -1166,16 +1165,16 @@ class NewsHomeReaderViewModel(
                                 }
                             }
                             .onError { _, throwable ->
-                                log(Severity.Error, "Could not prefetch images", throwable, withTag = "NHR")
+                                Logger.e("Could not prefetch images", throwable)
                             }
                     }
 
                     val syncResult = feedRepository.synchroniseReadNewsItems()
                     if (syncResult is Result.Error) {
-                        log(Severity.Error, "WebDAV Sync failed", syncResult.throwable, withTag = "NHR")
+                        Logger.e("WebDAV Sync failed", syncResult.throwable)
                     }
                 } else if (newsFeedResult is Result.Error) {
-                    log(Severity.Error, "Could not import OPML", newsFeedResult.throwable, withTag = "NHR")
+                    Logger.e("Could not import OPML", newsFeedResult.throwable)
                     _state.update {
                         it.copy(
                             currentProgress = 0.0f,
@@ -1186,7 +1185,7 @@ class NewsHomeReaderViewModel(
                     }
                 }
             } else if (newFeedConfigurationResult is Result.Error){
-                log(Severity.Error, "Could not import OPML", newFeedConfigurationResult.throwable, withTag = "NHR")
+                Logger.e("Could not import OPML", newFeedConfigurationResult.throwable)
                 _state.update {
                     it.copy(
                         currentProgress = 0.0f,
@@ -1209,7 +1208,7 @@ class NewsHomeReaderViewModel(
     }
 
     private fun exportOpml(fileName: String, sink: Sink) = viewModelScope.launch {
-        log(Severity.Info, "Exporting opml...", withTag = "NHR")
+        Logger.i("Exporting opml...")
         if (fileName.endsWith(".opml", ignoreCase = true)) {
             newsFeedConfigurationRepository.saveNewsFeedGroups(sink)
                 .onSuccess {
@@ -1220,7 +1219,7 @@ class NewsHomeReaderViewModel(
                     }
                 }
                 .onError { error, throwable ->
-                    log(Severity.Error, "Could not export opml", throwable, withTag = "NHR")
+                    Logger.e("Could not export opml", throwable)
                     _state.update {
                         it.copy(
                             uiMessage = error.toUiText(),
@@ -1296,14 +1295,14 @@ class NewsHomeReaderViewModel(
                     }
                 )
             } else if (newsFeedsResult is Result.Error) {
-                log(Severity.Error, "Could not refresh news feeds", newsFeedsResult.throwable, withTag = "NHR")
+                Logger.e("Could not refresh news feeds", newsFeedsResult.throwable)
                 feedRepository.getAllNewsFeeds()
             } else {
-                log(Severity.Info, "Could not get news feeds from remote - fetching newsFeeds from database", withTag = "NHR")
+                Logger.i("Could not get news feeds from remote - fetching newsFeeds from database")
                 feedRepository.getAllNewsFeeds()
             }
         } else {
-            log(Severity.Info, "No free of charge internet connection available - fetching newsFeeds from database", withTag = "NHR")
+            Logger.i("No free of charge internet connection available - fetching newsFeeds from database")
             feedRepository.getAllNewsFeeds()
         }
 
@@ -1333,7 +1332,7 @@ class NewsHomeReaderViewModel(
                 }
             }
             .onError { error, throwable ->
-                log(Severity.Error, "Could not refresh images", throwable, withTag = "NHR")
+                Logger.e("Could not refresh images", throwable)
                 _state.update {
                     it.copy(
                         uiMessage = error.toUiText(),
@@ -1360,7 +1359,7 @@ class NewsHomeReaderViewModel(
                 }
             }
             .onError { _, throwable ->
-                log(Severity.Error, "Could not log catalog", throwable, withTag = "NHR")
+                Logger.e("Could not log catalog", throwable)
                 _state.update {
                     it.copy(
                         isViewingCatalog = false,
@@ -1402,7 +1401,7 @@ class NewsHomeReaderViewModel(
                 ))
                 settingsRepository.setSettings(newSettings)
                     .onError { _, throwable ->
-                        log(Severity.Error, "Could not safe initial settings", throwable, withTag = "NHR")
+                        Logger.e("Could not safe initial settings", throwable)
                     }
                 newSettings
             }
@@ -1422,10 +1421,10 @@ class NewsHomeReaderViewModel(
 
             val syncResult = feedRepository.synchroniseReadNewsItems()
             if (syncResult is Result.Error) {
-                log(Severity.Error, "WebDAV Sync failed", syncResult.throwable, withTag = "NHR")
+                Logger.e("WebDAV Sync failed", syncResult.throwable)
             }
         } else if (result is Result.Error) {
-            log(Severity.Error, "Could not load data", result.throwable, withTag = "NHR")
+            Logger.e("Could not load data", result.throwable)
             _state.update {
                 it.copy(
                     currentProgress = 0.0f,
@@ -1449,7 +1448,7 @@ class NewsHomeReaderViewModel(
                 }
             }
             .onError { _, throwable ->
-                log(Severity.Error, "Could not get settings", throwable, withTag = "NHR")
+                Logger.e("Could not get settings", throwable)
                 _state.update {
                     it.copy(
                         currentProgress = 0.0f,
@@ -1464,13 +1463,13 @@ class NewsHomeReaderViewModel(
     private fun loadFeedItems(
         newsFeedItem: NewsFeedItem
     ) = viewModelScope.launch {
-log(Severity.Info, "loadFeedItems", withTag = "NHR")
+Logger.i("loadFeedItems")
         if ((newsFeedItem.outlineType == OutlineType.newsfeed || newsFeedItem.outlineType == OutlineType.keyword) &&
             ((newsFeedItem.outlineType != OutlineType.keyword && state.value.currentNewsFeedName != newsFeedItem.name) ||
                 (newsFeedItem.outlineType == OutlineType.keyword && state.value.currentKeywordBucket != newsFeedItem.name) ||
                 state.value.previousOutlineType != newsFeedItem.outlineType)
         ) {
-log(Severity.Info, "loadFeedItems - SCROLL TO TOP", withTag = "NHR")
+Logger.i("loadFeedItems - SCROLL TO TOP")
             scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.scrollToStart)
         }
         _state.update {
@@ -1493,7 +1492,7 @@ log(Severity.Info, "loadFeedItems - SCROLL TO TOP", withTag = "NHR")
 
         val syncResult = feedRepository.synchroniseReadNewsItems()
         if (syncResult is Result.Error) {
-            log(Severity.Error, "WebDAV Sync failed", syncResult.throwable, withTag = "NHR")
+            Logger.e("WebDAV Sync failed", syncResult.throwable)
         }
     }
 
@@ -1520,10 +1519,10 @@ log(Severity.Info, "loadFeedItems - SCROLL TO TOP", withTag = "NHR")
 
             val syncResult = feedRepository.synchroniseReadNewsItems()
             if (syncResult is Result.Error) {
-                log(Severity.Error, "WebDAV Sync failed", syncResult.throwable, withTag = "NHR")
+                Logger.e("WebDAV Sync failed", syncResult.throwable)
             }
         } else if (markResult is Result.Error) {
-            log(Severity.Error, "Could not load article", markResult.throwable, withTag = "NHR")
+            Logger.e("Could not load article", markResult.throwable)
             _state.update {
                 it.copy(
                     currentProgress = 0.0f,
@@ -1560,7 +1559,7 @@ log(Severity.Info, "loadFeedItems - SCROLL TO TOP", withTag = "NHR")
                 )
             }
         } else if (articleResult is Result.Error) {
-            log(Severity.Error, "Could not load article", articleResult.throwable, withTag = "NHR")
+            Logger.e("Could not load article", articleResult.throwable)
             _state.update {
                 it.copy(
                     isNewsItemSearchActive = false,
@@ -1576,10 +1575,10 @@ log(Severity.Info, "loadFeedItems - SCROLL TO TOP", withTag = "NHR")
         if (markResult is Result.Success) {
             val syncResult = feedRepository.synchroniseReadNewsItems()
             if (syncResult is Result.Error) {
-                log(Severity.Error, "WebDAV Sync failed", syncResult.throwable, withTag = "NHR")
+                Logger.e("WebDAV Sync failed", syncResult.throwable)
             }
         } else if (markResult is Result.Error) {
-            log(Severity.Error, "Could not mark news item as read", markResult.throwable, withTag = "NHR")
+            Logger.e("Could not mark news item as read", markResult.throwable)
         }
     }
 
@@ -1607,7 +1606,7 @@ log(Severity.Info, "loadFeedItems - SCROLL TO TOP", withTag = "NHR")
                 }
             }
             .onError { error, throwable ->
-                log(Severity.Error, "Could not save settings", throwable, withTag = "NHR")
+                Logger.e("Could not save settings", throwable)
                 _state.update {
                     it.copy(
                         currentProgress = 0.0f,

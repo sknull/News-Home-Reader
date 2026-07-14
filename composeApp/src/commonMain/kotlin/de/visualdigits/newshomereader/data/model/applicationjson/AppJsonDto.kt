@@ -3,11 +3,11 @@ package de.visualdigits.newshomereader.data.model.applicationjson
 
 import androidx.compose.runtime.Immutable
 import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTimeHeuristicDeserializer
 import de.visualdigits.newshomereader.data.serializer.ListSerializer
 import de.visualdigits.newshomereader.data.serializer.MainEntityOfPageSerializer
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem
 import de.visualdigits.newshomereader.domain.model.unified.ThumbnailItem
-import de.visualdigits.common.domain.model.common.KmpOffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

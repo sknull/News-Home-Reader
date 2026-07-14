@@ -10,6 +10,8 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import co.touchlab.kermit.Logger
+import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.newshomereader.data.repository.FeedScheduler
@@ -32,6 +34,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Logger.setTag("NHR")
+        Logger.setMinSeverity(Severity.Debug)
 
         val view = window.decorView
         lifecycleScope.launch {

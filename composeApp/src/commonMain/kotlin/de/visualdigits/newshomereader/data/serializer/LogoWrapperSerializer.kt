@@ -1,7 +1,5 @@
 package de.visualdigits.newshomereader.data.serializer
 
-import de.visualdigits.newshomereader.data.model.applicationjson.ImageDto
-import de.visualdigits.newshomereader.data.model.applicationjson.ImageWrapper
 import de.visualdigits.newshomereader.data.model.applicationjson.LogoDto
 import de.visualdigits.newshomereader.data.model.applicationjson.LogoWrapper
 import kotlinx.serialization.KSerializer

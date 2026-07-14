@@ -1,10 +1,9 @@
 package de.visualdigits.newshomereader.data.repository
 
-import co.touchlab.kermit.Severity
+import co.touchlab.kermit.Logger
 import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.domain.model.configuration.AbstractConfiguration.Companion.valueMap
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
-import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.common.domain.util.CryptoBox
 import de.visualdigits.common.domain.util.EncryptedString
@@ -65,7 +64,7 @@ class DefaultSettingsRepository(
                         }
                 } ?: Result.Success(null)
         } catch (e: Exception) {
-            log(Severity.Error, "Could not load settings", e, withTag = "NHR")
+            Logger.e("Could not load settings", e)
             Result.Error(DataError.Local.UNKNOWN)
         }
     }
@@ -77,7 +76,7 @@ class DefaultSettingsRepository(
             dao.upsertSettings(settingsEntity)
             Result.Success(Unit)
         } catch (e: Exception) {
-            log(Severity.Error, "Could not set settings", e, withTag = "NHR")
+            Logger.e("Could not set settings", e)
             Result.Error(DataError.Local.UNKNOWN)
         }
     }

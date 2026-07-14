@@ -1,8 +1,7 @@
 package de.visualdigits.newshomereader.data.repository
 
-import co.touchlab.kermit.Severity
+import co.touchlab.kermit.Logger
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
-import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.KeepArticlesEnum
@@ -34,7 +33,7 @@ class NewsFeedWorker(
                 val keepUnreadArticles = settings?.get<KeepArticlesEnum>(SK.keepUnreadArticles)?.longValue ?: 30
                 val feedConfigurationResult = newsFeedConfigurationRepository.getNewsFeedGroups()
                 if (feedConfigurationResult is Result.Success) {
-                    log(Severity.Info, "Executing news feed worker", withTag = "NHR")
+                    Logger.i("Executing news feed worker")
                     val newsFeedGroups = feedConfigurationResult.data
                     val newsFeedConfigurations = newsFeedGroups.flatMap { nfg ->
                         nfg.newsFeeds + nfg.subGroups.flatMap { sg -> sg.newsFeeds }
@@ -57,19 +56,19 @@ class NewsFeedWorker(
                                 progress = { _,_ -> }
                             )
                         } else if (newsFeedsResult is Result.Error) {
-                            log(Severity.Error, "Could not refresh news feeds", newsFeedsResult.throwable, withTag = "NHR")
+                            Logger.e("Could not refresh news feeds", newsFeedsResult.throwable)
                             feedRepository.getAllNewsFeeds()
                         } else {
-                            log(Severity.Info, "Could not get news feeds from remote - fetching newsFeeds from database", withTag = "NHR")
+                            Logger.i("Could not get news feeds from remote - fetching newsFeeds from database")
                             feedRepository.getAllNewsFeeds()
                         }
                     } else {
-                        log(Severity.Info, "No free of charge internet connection available - fetching newsFeeds from database", withTag = "NHR")
+                        Logger.i("No free of charge internet connection available - fetching newsFeeds from database")
                         feedRepository.getAllNewsFeeds()
                     }
                     if (result is Result.Success) {
                         if (prefetchImages) {
-                            log(Severity.Info, "News feed worker prefetching images", withTag = "NHR")
+                            Logger.i("News feed worker prefetching images")
                             val (newsFeeds, changed) = result.data
                             if (changed) {
                                 feedRepository.prefetchImages(
@@ -82,16 +81,16 @@ class NewsFeedWorker(
                             }
                         }
                     } else if (result is Result.Error) {
-                        log(Severity.Error, "Could not load news feeds", result.throwable, withTag = "NHR")
+                        Logger.e("Could not load news feeds", result.throwable)
                     }
                 } else if (feedConfigurationResult is Result.Error) {
-                    log(Severity.Error, "Could not load feed configuration", feedConfigurationResult.throwable, withTag = "NHR")
+                    Logger.e("Could not load feed configuration", feedConfigurationResult.throwable)
                 }
             } else if (settingsResult is Result.Error) {
-                log(Severity.Error, "Could not load settings", settingsResult.throwable, withTag = "NHR")
+                Logger.e("Could not load settings", settingsResult.throwable)
             }
         } catch (e: Exception) {
-            log(Severity.Error, "Could not execute news feed worker", e, withTag = "NHR")
+            Logger.e("Could not execute news feed worker", e)
         }
     }
 }

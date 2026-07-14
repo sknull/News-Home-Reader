@@ -37,7 +37,6 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.startKoin
 import org.koin.core.qualifier.named
 import java.awt.Window
-import java.util.logging.Level
 import javax.swing.SwingUtilities
 import javax.swing.UIManager
 
@@ -70,7 +69,7 @@ fun main() {
 
     val writers = getPlatformLogWriters(homeDirectoryPath, "NewsHomeReader.log")
     Logger.setLogWriters(writers)
-    Logger.setTag("NewsHomeReader")
+    Logger.setTag("NHR")
     Logger.setMinSeverity(Severity.Debug)
 
     System.setProperty("flatlaf.useWindowDecorations", "true")

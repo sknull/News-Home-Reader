@@ -5,7 +5,6 @@ import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
-import io.ktor.client.HttpClient
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore

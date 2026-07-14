@@ -1,9 +1,7 @@
 package de.visualdigits.newshomereader.data.webdav
 
 import co.touchlab.kermit.Logger
-import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
-import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.settings.SK
@@ -42,7 +40,7 @@ class DefaultWebDavSyncService(
                             SyncState(KmpOffsetDateTime.now().toInstant().toEpochMilliseconds(), emptySet())
                         }
                     } catch (_: Exception) {
-                        log(Severity.Warn, "Something went wrong while fetching sync file - falling back to empty sync file", withTag = "NHR")
+                        Logger.w("Something went wrong while fetching sync file - falling back to empty sync file")
                         SyncState(KmpOffsetDateTime.now().toInstant().toEpochMilliseconds(), emptySet())
                     }
 
@@ -58,11 +56,11 @@ class DefaultWebDavSyncService(
                             setBody(newState)
                             contentType(ContentType.Application.Json)
                         }
-                        log(Severity.Info, "Synced read item: ${mergedIds.size}", withTag = "NHR")
+                        Logger.i("Synced read item: ${mergedIds.size}")
                     }
                     Result.Success(mergedIds)
                 } else {
-                    log(Severity.Warn, "webDAV URL unset - not syncing remotely", withTag = "NHR")
+                    Logger.w("webDAV URL unset - not syncing remotely")
                     Result.Success(localReadIds)
                 }
 
@@ -72,7 +70,7 @@ class DefaultWebDavSyncService(
                 Result.Error(DataError.Remote.UNKNOWN)
             }
         } catch (e: Exception) {
-            log(Severity.Error, "Something went wrong while syncing read items", e, withTag = "NHR")
+            Logger.e("Something went wrong while syncing read items", e)
             Result.Error(DataError.Remote.SERIALIZATION, e)
         }
     }

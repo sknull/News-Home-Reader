@@ -1,7 +1,6 @@
 package de.visualdigits.newshomereader.data.http
 
-import co.touchlab.kermit.Severity
-import de.visualdigits.common.domain.model.errorhandling.LogMessage.Companion.log
+import co.touchlab.kermit.Logger
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.repository.SettingsRepository
@@ -16,7 +15,6 @@ import io.ktor.client.plugins.compression.ContentEncoding
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.header
 import io.ktor.http.Url
@@ -65,7 +63,7 @@ object HttpClientFactory {
                                     null
                                 }
                             } else if (result is Result.Error) {
-                                log(Severity.Error, "Could not get settings for request", result.throwable, withTag = "NHR")
+                                Logger.e("Could not get settings for request", result.throwable)
                                 null
                             } else {
                                 null
@@ -83,7 +81,7 @@ object HttpClientFactory {
             }
             install(Logging) {
                 level = LogLevel.NONE
-                logger = object : Logger {
+                logger = object : io.ktor.client.plugins.logging.Logger {
                     override fun log(message: String) {
                         log.d(message)
                     }
