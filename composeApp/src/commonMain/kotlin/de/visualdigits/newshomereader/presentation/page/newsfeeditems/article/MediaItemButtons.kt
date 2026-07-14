@@ -35,7 +35,7 @@ import de.visualdigits.newshomereader.domain.model.unified.MediaType
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.util.parseDuration
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
-import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.Image
+import de.visualdigits.newshomereader.presentation.page.newsfeeditems.Image
 import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute

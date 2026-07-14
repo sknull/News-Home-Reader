@@ -30,7 +30,6 @@ import de.visualdigits.compose.resources.warning_no_results
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
-import de.visualdigits.newshomereader.presentation.page.newsfeeditems.item.NewsItemCard
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import org.jetbrains.compose.resources.painterResource
@@ -87,11 +86,9 @@ fun NewsItemSearchBar(
                             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                         ) {
                             newsItems.forEach { newsItem ->
-                                NewsItemCard(
+                                NewsItemCardSimple(
                                     modifier = Modifier.weight(1f),
-                                    simple = true,
                                     state = state,
-                                    maxImageSize = maxImageSize,
                                     newsItem = newsItem,
                                     uriHandler = uriHandler,
                                     onAction = onAction

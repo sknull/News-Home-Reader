@@ -1,4 +1,4 @@
-package de.visualdigits.newshomereader.presentation.page.newsfeeditems.item
+package de.visualdigits.newshomereader.presentation.page.newsfeeditems
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,9 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -28,7 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.unit.DpOffset
@@ -37,7 +34,6 @@ import androidx.compose.ui.unit.em
 import be.digitalia.compose.htmlconverter.HtmlStyle
 import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
 import de.visualdigits.common.domain.model.color.HsvColor
-import de.visualdigits.common.presentation.components.util.conditional
 import de.visualdigits.common.presentation.util.highlightQuery
 import de.visualdigits.common.presentation.util.openUriSafely
 import de.visualdigits.compose.resources.Res
@@ -62,7 +58,6 @@ import org.jetbrains.compose.resources.painterResource
 fun NewsItemCard(
     modifier: Modifier = Modifier,
     state: NewsHomeReaderState,
-    simple: Boolean = false,
     maxImageSize: Int?,
     newsItem: NewsItem,
     uriHandler: UriHandler,
@@ -76,8 +71,7 @@ fun NewsItemCard(
 
     Box(
         modifier = modifier
-            .conditional(simple) { height(100.dp) }
-            .conditional(!simple) { dropShadow(
+            .dropShadow(
                 shape = RoundedCornerShape(8.dp),
                 shadow = Shadow(
                     radius = 4.dp,
@@ -85,7 +79,7 @@ fun NewsItemCard(
                     color = Color.Black.copy(alpha = 0.5f),
                     offset = DpOffset((-5).dp, 5.dp)
                 )
-            )}
+            )
     ) {
         Column(
             modifier = modifier
@@ -106,19 +100,16 @@ fun NewsItemCard(
                     }
                 }
         ) {
-            // teaser image (for non simple layout)
-            if (!simple) {
-                var image = newsItem.image
-                if (image.isEmpty()) {
-                    image = newsItem.newsArticle?.articleImage?:""
-                }
-                if (image.isNotEmpty()) {
-                    Image(
-                        url = image,
-                        contentDescription = newsItem.imageCaption,
-                        maxImageSize = maxImageSize
-                    )
-                }
+            var image = newsItem.image
+            if (image.isEmpty()) {
+                image = newsItem.newsArticle?.articleImage?:""
+            }
+            if (image.isNotEmpty()) {
+                Image(
+                    url = image,
+                    contentDescription = newsItem.imageCaption,
+                    maxImageSize = maxImageSize
+                )
             }
 
             Row(
@@ -126,25 +117,6 @@ fun NewsItemCard(
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
             ) {
-                // teaser image (for simple layout)
-                if (simple) {
-                    var image = newsItem.image
-                    if (image.isEmpty()) {
-                        image = newsItem.newsArticle?.articleImage ?: ""
-                    }
-                    if (image.isNotEmpty()) {
-                        Image(
-                            modifier = Modifier
-                                .weight(0.5f)
-                                .fillMaxHeight(),
-                            url = image,
-                            contentScale = ContentScale.FillHeight,
-                            contentDescription = newsItem.imageCaption,
-                            maxImageSize = 640
-                        )
-                    }
-                }
-
                 // inner column to provide padding for all text content
                 Column(
                     modifier = Modifier
@@ -158,7 +130,7 @@ fun NewsItemCard(
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                     ) {
-                        if (state.currentNewsFeedGroup != null || state.currentKeywordBucket != null || simple) {
+                        if (state.currentNewsFeedGroup != null || state.currentKeywordBucket != null) {
                             state.lookupNewsFeedMap[feedName.trim().lowercase()]?.url?.let { url ->
                                 // favicon
                                 Image(
@@ -234,34 +206,32 @@ fun NewsItemCard(
                         style = MaterialTheme.typography.titleSmall
                     )
 
-                    if (!simple) {
-                        val annotatedSummary = htmlToAnnotatedString(
-                            html = normalizeXml(newsItem.summary),
-                            style = HtmlStyle(
-                                textLinkStyles = textLinkStyles(spotColor)
-                            ),
-                            linkInteractionListener = { linkAnnotation ->
-                                makeUrlAbsolute(
-                                    newsItem.link,
-                                    (linkAnnotation as LinkAnnotation.Url).url
-                                ).let { uriHandler.openUriSafely(it) }
-                            }
-                        )
-                        val highlightedSummary = remember(annotatedSummary, state.newsItemSearchText) {
-                            if (!state.newsItemSearchText.isNullOrBlank()) {
-                                annotatedSummary.highlightQuery(state.newsItemSearchText)
-                            } else if (!state.currentKeywordBucket.isNullOrBlank()){
-                                annotatedSummary.highlightQuery(state.currentKeywordBucket)
-                            } else {
-                                annotatedSummary
-                            }
+                    val annotatedSummary = htmlToAnnotatedString(
+                        html = normalizeXml(newsItem.summary),
+                        style = HtmlStyle(
+                            textLinkStyles = textLinkStyles(spotColor)
+                        ),
+                        linkInteractionListener = { linkAnnotation ->
+                            makeUrlAbsolute(
+                                newsItem.link,
+                                (linkAnnotation as LinkAnnotation.Url).url
+                            ).let { uriHandler.openUriSafely(it) }
                         }
-                        Text(
-                            modifier = Modifier,
-                            text = highlightedSummary,
-                            style = MaterialTheme.typography.bodySmall.copy(lineHeight = 1.2.em)
-                        )
+                    )
+                    val highlightedSummary = remember(annotatedSummary, state.newsItemSearchText) {
+                        if (!state.newsItemSearchText.isNullOrBlank()) {
+                            annotatedSummary.highlightQuery(state.newsItemSearchText)
+                        } else if (!state.currentKeywordBucket.isNullOrBlank()){
+                            annotatedSummary.highlightQuery(state.currentKeywordBucket)
+                        } else {
+                            annotatedSummary
+                        }
                     }
+                    Text(
+                        modifier = Modifier,
+                        text = highlightedSummary,
+                        style = MaterialTheme.typography.bodySmall.copy(lineHeight = 1.2.em)
+                    )
                 }
             }
         }
