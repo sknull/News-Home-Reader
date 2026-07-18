@@ -5,9 +5,12 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -16,8 +19,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.cheonjaeung.compose.grid.SimpleGridCells
-import com.cheonjaeung.compose.grid.VerticalGrid
 import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.domain.util.copyFactor
@@ -51,7 +52,7 @@ fun VerticalNewsFeeds(
     scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     connectivityManager: ConnectivityManager,
     maxWidth: Dp,
-    rowData: List<NewsItem>,
+    rowData: List<List<NewsItem>>,
     maxImageSize: Int?,
     uriHandler: UriHandler,
     columns: Int,
@@ -108,6 +109,7 @@ fun VerticalNewsFeeds(
             onCommonAction = onCommonAction,
             verticalArrangementGap = 0.dp
         ) {
+            val lastRow = rowData.size - 1
             if (state.collapsibleState["group_newsfeeds_navigation"] == true) {
                 listOf(Pair("newsfeed_navigation", @Composable {
                     Column(
@@ -147,28 +149,42 @@ fun VerticalNewsFeeds(
                             )
                         }
                     }
-                }),
-                Pair("newsfeed_items", @Composable {
-                    VerticalGrid(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = MaterialTheme.shapes.gap),
-                        columns = SimpleGridCells.Fixed(columns),
-                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
-                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
-                    ) {
-                        rowData.forEach { newsItem ->
-                            NewsItemCard(
-                                state = state,
-                                maxImageSize = maxImageSize,
-                                newsItem = newsItem,
-                                uriHandler = uriHandler,
-                                onAction = onAction
-                            )
-                        }
-                    }
                 })
-            )
+            ) + rowData.flatMapIndexed { index, rowItems ->
+                listOf(
+                    Pair("row_${index}_" + rowItems.joinToString("_") { item -> item.id.toString() }, @Composable {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = MaterialTheme.shapes.gap),
+                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                        ) {
+                            rowItems.forEach { newsItem ->
+                                NewsItemCard(
+                                    modifier = Modifier
+                                        .weight(1f),
+                                    state = state,
+                                    maxImageSize = maxImageSize,
+                                    newsItem = newsItem,
+                                    uriHandler = uriHandler,
+                                    onAction = onAction
+                                )
+                            }
+                            (0 until columns - rowItems.size).forEach {
+                                Spacer(Modifier.weight(1f))
+                            }
+                        }
+                    })
+                ) + if (index < lastRow) {
+                    listOf(
+                        Pair(
+                            "spacer_${index}_" + rowItems.joinToString("_") { item -> item.id.toString() },
+                            @Composable { Spacer(Modifier.size(MaterialTheme.shapes.gap)) })
+                    )
+                } else {
+                    listOf()
+                }
+            }
         }
     }
 }

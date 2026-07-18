@@ -24,8 +24,6 @@ import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.cheonjaeung.compose.grid.SimpleGridCells
-import com.cheonjaeung.compose.grid.VerticalGrid
 import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.domain.util.copyFactor
@@ -67,7 +65,7 @@ fun HorizontalNewsFeeds(
     scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     connectivityManager: ConnectivityManager,
     maxWidth: Dp,
-    rowData: List<NewsItem>,
+    rowData: List<List<NewsItem>>,
     maxImageSize: Int?,
     uriHandler: UriHandler,
     columns: Int,
@@ -221,7 +219,7 @@ fun HorizontalNewsFeeds(
 
             PlatformVerticalScrollbarBox(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxSize(),
                 platformType = platformType,
                 scrollbarModifier = Modifier
                     .clip(MaterialTheme.shapes.small)
@@ -233,18 +231,17 @@ fun HorizontalNewsFeeds(
                 scrollPosition = scrollPosition,
                 onCommonAction = onCommonAction
             ) {
-                listOf(
-                    Pair("newsfeed_items", @Composable {
-                        VerticalGrid(
+                rowData.mapIndexed{ index, rowItems ->
+                    Pair("row_${index}_" + rowItems.joinToString("_") { item -> item.id.toString() }, @Composable {
+                        Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = MaterialTheme.shapes.gap),
-                            columns = SimpleGridCells.Fixed(columns),
-                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
-                            verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                         ) {
-                            rowData.forEach { newsItem ->
+                            rowItems.forEach { newsItem ->
                                 NewsItemCard(
+                                    modifier = Modifier.weight(1f),
                                     state = state,
                                     maxImageSize = maxImageSize,
                                     newsItem = newsItem,
@@ -252,9 +249,12 @@ fun HorizontalNewsFeeds(
                                     onAction = onAction
                                 )
                             }
+                            (0 until columns - rowItems.size).forEach {
+                                Spacer(Modifier.weight(1f))
+                            }
                         }
                     })
-                )
+                }
             }
         }
     }

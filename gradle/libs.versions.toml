@@ -6,32 +6,31 @@ android-targetSdk = "35" # DO NOT UPGRADE FOR NOW
 tvMaterial = "1.1.0"
 
 version-androidx-activityCompose = "1.13.0"
-version-androidx-lifecycle = "2.10.0"
+version-androidx-lifecycle = "2.10.0" # DO NOT UPGRADE FOR NOW
 version-androidx-work = "2.11.2"
-version-coil3 = "3.4.0"
+version-coil3 = "3.5.0"
 version-charlex-pdf = "1.0.0-rc01"
 version-essence = "1.2.0-SNAPSHOT"
-version-flatlaf = "3.7.1"
+version-flatlaf = "3.7.2"
 version-gradle-pdf = "4.0.5"
-version-grid-layout = "2.8.0"
 version-html-converter = "1.1.1"
 version-jetbrains-kotlin = "1.11.1"
 version-kotlinx-coroutines = "1.11.0"
-version-junit = "6.1.0"
+version-junit = "6.1.2"
 version-kermit = "2.1.0"
 version-ksoup = "0.2.6"
-version-koin = "4.2.1"
+version-koin = "4.2.2"
 version-kotlin = "2.3.20" # DO NOT UPGRADE FOR NOW
-version-kotlin-xml-util = "0.91.3"
+version-kotlin-xml-util = "0.91.3" # DO NOT UPGRADE FOR NOW
 version-kotlinx-datetime = "0.8.0"
-version-kotlinx-io-core = "0.9.0"
-version-ktor = "3.5.0"
+version-kotlinx-io-core = "0.9.1"
+version-ktor = "3.5.1"
 version-material3 = "1.9.0"
 version-navigation-compose = "2.9.2"
 version-proguardGradle = "7.9.1"
 version-skikoAwtRuntimeWindowsX64 = "0.9.47" # DO NOT UPGRADE FOR NOW
 version-sqldelight = "2.3.2"
-version-sqlite = "2.6.2"
+version-sqlite = "2.7.0"
 version-stephans-kmp-components = "1.0.0"
 
 [libraries]
@@ -57,7 +56,6 @@ compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling-preview", v
 essence = { module = "de.visualdigits:essence", version.ref = "version-essence" }
 flatlaf = { module = "com.formdev:flatlaf", version.ref = "version-flatlaf" }
 html-converter = { module = "be.digitalia.compose.htmlconverter:htmlconverter", version.ref="version-html-converter"}
-grid-layout = { module = "com.cheonjaeung.compose.grid:grid", version.ref = "version-grid-layout" }
 jetbrains-compose-navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref= "version-navigation-compose" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "version-junit" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "version-junit" }

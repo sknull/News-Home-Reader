@@ -80,7 +80,7 @@ fun MainPage(
             else -> 1.0f
         }
 
-        val chunks = when {
+        val columns = when {
             maxWidth > 1500.dp -> 4
             maxWidth > 1000.dp -> 3
             maxWidth > 500.dp -> 2
@@ -91,7 +91,7 @@ fun MainPage(
         val rowDataFiltered = remember(filteredNewsItems) {
             filteredNewsItems
                 .sortedByDescending { newsItem -> newsItem.updated }
-                .chunked(chunks)
+                .chunked(columns)
         }
 
         MaterialTheme(
@@ -187,7 +187,7 @@ fun MainPage(
                             NewsContent(
                                 state = state,
                                 platformType = platformType,
-                                chunks = chunks,
+                                columns = columns,
                                 viewModel = viewModel,
                                 maxWidth = screenWidth,
                                 maxHeight = screenHeight,

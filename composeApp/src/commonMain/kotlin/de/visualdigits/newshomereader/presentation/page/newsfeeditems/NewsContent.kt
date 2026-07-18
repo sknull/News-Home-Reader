@@ -21,7 +21,7 @@ import de.visualdigits.newshomereader.presentation.style.gap
 fun NewsContent(
     state: NewsHomeReaderState,
     platformType: PlatformType,
-    chunks: Int,
+    columns: Int,
     viewModel: NewsHomeReaderViewModel,
     maxWidth: Dp,
     maxHeight: Dp,
@@ -57,7 +57,7 @@ fun NewsContent(
                 state = state,
                 platformType = platformType,
                 scrollPosition = viewModel.scrollPosition,
-                chunks = chunks,
+                columns = columns,
                 maxWidth = maxWidth,
                 maxHeight = maxHeight,
                 maxImageSize = maxImageSize,

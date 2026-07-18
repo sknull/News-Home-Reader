@@ -1,7 +1,9 @@
 package de.visualdigits.newshomereader.presentation.page.newsfeeditems
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -23,7 +25,7 @@ fun NewsFeeds(
     state: NewsHomeReaderState,
     platformType: PlatformType,
     scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
-    chunks: Int,
+    columns: Int,
     maxWidth: Dp,
     maxHeight: Dp,
     maxImageSize: Int?,
@@ -32,7 +34,12 @@ fun NewsFeeds(
     onCommonAction: (CommonAction) -> Unit,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
-    val rowData by viewModel.visibleNewsItems.collectAsStateWithLifecycle()
+    val visibleNewsItems by viewModel.visibleNewsItems.collectAsStateWithLifecycle()
+    val rowData by remember(visibleNewsItems, columns) {
+        derivedStateOf {
+            visibleNewsItems.chunked(columns)
+        }
+    }
 
     if (maxWidth > maxHeight && maxWidth > 600.dp) {
         HorizontalNewsFeeds(
@@ -44,7 +51,7 @@ fun NewsFeeds(
             rowData = rowData,
             maxImageSize = maxImageSize,
             uriHandler = uriHandler,
-            columns = chunks,
+            columns = columns,
             onCommonAction = onCommonAction,
             onAction = onAction,
         )
@@ -58,7 +65,7 @@ fun NewsFeeds(
             rowData = rowData,
             maxImageSize = maxImageSize,
             uriHandler = uriHandler,
-            columns = chunks,
+            columns = columns,
             onCommonAction = onCommonAction,
             onAction = onAction
         )
