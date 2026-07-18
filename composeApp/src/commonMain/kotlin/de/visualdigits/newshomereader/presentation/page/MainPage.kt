@@ -138,6 +138,7 @@ fun MainPage(
                     )
 
                     MainMenuBar(
+                        viewModel = viewModel,
                         state = state,
                         onAction = viewModel::onAction,
                         connectivityManager = connectivityManager

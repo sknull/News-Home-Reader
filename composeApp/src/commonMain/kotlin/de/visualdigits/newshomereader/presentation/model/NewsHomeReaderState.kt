@@ -56,9 +56,6 @@ data class NewsHomeReaderState(
     val uiMessage: UiText? = null,
     val uiMessageSeverity: Severity? = null,
 
-    val currentProgress: Float = 0.0f,
-    val progressStage: ProgressStage = ProgressStage.NONE,
-
     val collapsibleState: Map<String, Boolean> = mapOf(),
 
     val isEditMode: Boolean = false,

@@ -30,6 +30,9 @@ import de.visualdigits.newshomereader.domain.repository.NewsFeedConfigurationRep
 import de.visualdigits.newshomereader.domain.repository.SettingsRepository
 import de.visualdigits.newshomereader.domain.webdav.WebDavSyncService
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
@@ -43,6 +46,8 @@ expect val homeDirectory: String
 val sharedModule = module {
 
     single(named("homeDirectory")) { homeDirectory }
+
+    single { CoroutineScope(SupervisorJob() + Dispatchers.Default) }
 
     singleOf(::NewsHomeReaderViewModel)
 

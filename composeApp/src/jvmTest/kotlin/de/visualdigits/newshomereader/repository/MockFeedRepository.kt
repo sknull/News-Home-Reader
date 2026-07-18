@@ -7,7 +7,6 @@ import de.visualdigits.newshomereader.data.model.atom.Feed
 import de.visualdigits.newshomereader.data.model.rdf.Rdf
 import de.visualdigits.newshomereader.data.model.rss.Rss
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
-import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
@@ -75,8 +74,7 @@ class MockFeedRepository(
     }
 
     override suspend fun refreshNewsFeeds(
-        newsFeedItems: List<NewsFeedItem>,
-        progress: (Float, ProgressStage) -> Unit
+        newsFeedItems: List<NewsFeedItem>
     ): Result<Pair<List<NewsFeed>, List<NewsItem>>, DataError.Remote> {
         return Result.Success(Pair(listOf(), listOf()))
     }
@@ -88,8 +86,7 @@ class MockFeedRepository(
         keepReadArticlesInDays: Long,
         keepUnreadArticlesInDays: Long,
         maxImageSize: Int,
-        loadArticles: Boolean,
-        progress: (Float, ProgressStage) -> Unit
+        loadArticles: Boolean
     ): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> {
         return Result.Success(Pair(listOf(), false))
     }
@@ -101,16 +98,14 @@ class MockFeedRepository(
         keepReadArticlesInDays: Long,
         keepUnreadArticlesInDays: Long,
         maxImageSize: Int,
-        loadArticles: Boolean,
-        progress: (Float, ProgressStage) -> Unit
+        loadArticles: Boolean
     ): Result<Pair<NewsFeed?, Boolean>, DataError.Remote> {
         val response = httpClient.get(urlString = url)
         return Result.Success(Pair(readFromBytes(feedName, response.readRawBytes()), false))
     }
 
     override suspend fun prefetchImages(
-        newsFeeds: List<NewsFeed>,
-        progress: (Float, ProgressStage) -> Unit
+        newsFeeds: List<NewsFeed>
     ): Result<Unit, DataError.Remote> {
         return Result.Success(Unit)
     }

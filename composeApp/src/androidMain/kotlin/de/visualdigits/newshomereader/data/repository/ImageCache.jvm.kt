@@ -26,7 +26,7 @@ actual class ImageCache(
 
     actual fun getImageLoader(): ImageLoader = sharedImageLoader
 
-    actual suspend fun prefetchImages(urls: List<String>, onImageDone: suspend () -> Unit) {
+    actual suspend fun prefetchImages(urls: List<String>) {
         coroutineScope {
             urls.forEach { url ->
                 val request = ImageRequest.Builder(context)
@@ -36,8 +36,8 @@ actual class ImageCache(
                     .build()
                 try {
                     sharedImageLoader.execute(request)
-                } finally {
-                    onImageDone()
+                } catch (e: Exception) {
+                    Logger.e("Could not fetch image '$url'", e)
                 }
             }
         }

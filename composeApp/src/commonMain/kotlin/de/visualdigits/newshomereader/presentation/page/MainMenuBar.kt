@@ -9,24 +9,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import de.visualdigits.common.domain.model.color.HsvColor
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.compose.resources.Res
-import de.visualdigits.compose.resources.icon_article_24px
-import de.visualdigits.compose.resources.icon_breaking_news_alt_1_24px
 import de.visualdigits.compose.resources.icon_edit_24px
-import de.visualdigits.compose.resources.icon_image_24px
+import de.visualdigits.compose.resources.icon_hourglass_top_24px
 import de.visualdigits.compose.resources.icon_info_24px
 import de.visualdigits.compose.resources.icon_library_books_24px
 import de.visualdigits.compose.resources.icon_menu_24px
@@ -34,21 +30,21 @@ import de.visualdigits.compose.resources.icon_refresh_24px
 import de.visualdigits.compose.resources.icon_settings_24px
 import de.visualdigits.compose.resources.tooltip_refresh_newsfeed
 import de.visualdigits.newshomereader.domain.model.settings.SK
-import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
-import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.style.gap
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MainMenuBar(
+    viewModel: NewsHomeReaderViewModel,
     state: NewsHomeReaderState,
     onAction: (NewsHomeReaderAction) -> Unit,
     connectivityManager: ConnectivityManager
 ) {
-    val buttonColor = remember { (state.settings?.get<HsvColor>(SK.buttonColor) ?: BUTTON_COLOR_DEFAULT).toComposeColor() }
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
     Row(
         modifier = Modifier
@@ -98,41 +94,14 @@ fun MainMenuBar(
         Box(
             contentAlignment = Alignment.Center
         ) {
-            if (state.currentProgress > 0.0f) {
-                CircularProgressIndicator(
-                    progress = { state.currentProgress },
+            if (isLoading) {
+                Icon(
                     modifier = Modifier
                         .size(24.dp),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    strokeWidth = ProgressIndicatorDefaults.CircularStrokeWidth,
-                    trackColor = buttonColor,
-                    strokeCap = ProgressIndicatorDefaults.CircularDeterminateStrokeCap,
-                )
-            }
-
-            when (state.progressStage) {
-                ProgressStage.LOAD_FEEDS -> Icon(
-                    modifier = Modifier
-                        .size(14.dp),
-                    painter = painterResource(Res.drawable.icon_breaking_news_alt_1_24px),
+                    painter = painterResource(Res.drawable.icon_hourglass_top_24px),
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onBackground,
+                    tint = MaterialTheme.colorScheme.onSurface,
                 )
-                ProgressStage.LOAD_ARTICLES -> Icon(
-                    modifier = Modifier
-                        .size(14.dp),
-                    painter = painterResource(Res.drawable.icon_article_24px),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onBackground,
-                )
-                ProgressStage.LOAD_IMAGES -> Icon(
-                    modifier = Modifier
-                        .size(14.dp),
-                    painter = painterResource(Res.drawable.icon_image_24px),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onBackground
-                )
-                else -> {}
             }
         }
 

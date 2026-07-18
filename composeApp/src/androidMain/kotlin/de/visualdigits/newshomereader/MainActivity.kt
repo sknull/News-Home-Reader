@@ -10,6 +10,7 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.work.WorkManager
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import de.visualdigits.common.domain.model.color.HsvColor
@@ -19,11 +20,13 @@ import de.visualdigits.newshomereader.domain.model.configuration.keyfactory.Refr
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.style.BACKGROUND_COLOR_DEFAULT
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
@@ -33,6 +36,13 @@ class MainActivity : ComponentActivity() {
     private val viewModel: NewsHomeReaderViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // SCHRITT 1: Sofortige Zwangspause für den WorkManager beim allerersten Starten
+        try {
+            WorkManager.getInstance(applicationContext).cancelUniqueWork("FeedUpdateWorker")
+        } catch (_: Exception) {
+            Logger.i("Workmanager not initialized yet")
+            // Falls WorkManager noch nicht initialisiert sein sollte
+        }
         super.onCreate(savedInstanceState)
 
         Logger.setTag("NHR")
@@ -63,25 +73,39 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-
         lifecycleScope.launch {
-            combine(
-                viewModel.state
-                    .map { it.settings?.get<RefreshIntervalEnum>(SK.refreshInterval)?.longValue }
-                    .distinctUntilChanged(),
-                viewModel.state
-                    .map { it.maxImageSize }
-                    .distinctUntilChanged() // Verhindert unnötige Trigger bei gleichem Wert
-                    .filterNotNull()
-            ) { interval, maxImageSize ->
-                interval to maxImageSize
-            }.collect { (interval, maxImageSize) ->
-                scheduler.scheduleEvery(interval ?: 60, maxImageSize)
+            repeatOnLifecycle(Lifecycle.State.RESUMED) { // Läuft NUR, wenn die App aktiv im Vordergrund ist!
+                combine(
+                    viewModel.state
+                        .map { it.settings?.get<RefreshIntervalEnum>(SK.refreshInterval)?.longValue }
+                        .distinctUntilChanged(),
+                    viewModel.state
+                        .map { it.maxImageSize }
+                        .distinctUntilChanged()
+                        .filterNotNull()
+                ) { interval, maxImageSize ->
+                    interval to maxImageSize
+                }
+                    .distinctUntilChanged() // WICHTIG: Verhindert Trigger, wenn sich ANDERE State-Felder ändern!
+                    .collect { (interval, maxImageSize) ->
+                        // Auf einen Hintergrund-Thread auslagern, damit die UI nicht blockiert
+                        scheduler.cancel()
+                        withContext(Dispatchers.Default) {
+                            scheduler.scheduleEvery(interval ?: 60, maxImageSize)
+                        }
+                    }
             }
         }
 
         setContent {
             App(PlatformType.android)
         }
+    }
+
+    // 3. ERGÄNZUNG: Wenn die App minimiert wird, den In-App-Scheduler pausieren!
+    override fun onStop() {
+        Logger.i("Stopping app")
+        super.onStop()
+        scheduler.cancel()
     }
 }

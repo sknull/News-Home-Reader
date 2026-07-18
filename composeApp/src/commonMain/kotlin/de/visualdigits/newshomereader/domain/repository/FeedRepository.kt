@@ -2,7 +2,6 @@ package de.visualdigits.newshomereader.domain.repository
 
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
-import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
@@ -41,8 +40,7 @@ interface FeedRepository {
     ): Result<Pair<NewsItem, Boolean>, DataError.Local>
 
     suspend fun refreshNewsFeeds(
-        newsFeedItems: List<NewsFeedItem>,
-        progress: (Float, ProgressStage) -> Unit
+        newsFeedItems: List<NewsFeedItem>
     ): Result<Pair<List<NewsFeed>, List<NewsItem>>, DataError.Remote>
 
     suspend fun refreshNewsFeedItems(
@@ -52,8 +50,7 @@ interface FeedRepository {
         keepReadArticlesInDays: Long,
         keepUnreadArticlesInDays: Long,
         maxImageSize: Int,
-        loadArticles: Boolean,
-        progress: (Float, ProgressStage) -> Unit,
+        loadArticles: Boolean
     ): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote>
 
     suspend fun refreshNewsFeed(
@@ -63,13 +60,11 @@ interface FeedRepository {
         keepReadArticlesInDays: Long,
         keepUnreadArticlesInDays: Long,
         maxImageSize: Int,
-        loadArticles: Boolean,
-        progress: (Float, ProgressStage) -> Unit,
+        loadArticles: Boolean
     ): Result<Pair<NewsFeed?, Boolean>, DataError.Remote>
 
     suspend fun prefetchImages(
-        newsFeeds: List<NewsFeed>,
-        progress: (Float, ProgressStage) -> Unit
+        newsFeeds: List<NewsFeed>
     ): Result<Unit, DataError.Remote>
 
     suspend fun readFromBytes(

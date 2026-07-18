@@ -40,8 +40,7 @@ class NewsFeedWorker(
                     }.filter { nfi -> nfi.outlineType != OutlineType.keyword }
                     val result = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                         val newsFeedsResult = feedRepository.refreshNewsFeeds(
-                            newsFeedItems = newsFeedConfigurations,
-                            progress = { _,_ -> }
+                            newsFeedItems = newsFeedConfigurations
                         )
                         if (newsFeedsResult is Result.Success) {
                             val (newsFeeds, newsItems) = newsFeedsResult.data
@@ -52,8 +51,7 @@ class NewsFeedWorker(
                                 keepReadArticlesInDays = keepReadArticles,
                                 keepUnreadArticlesInDays = keepUnreadArticles,
                                 maxImageSize = maxImageSize,
-                                loadArticles = loadArticles,
-                                progress = { _,_ -> }
+                                loadArticles = loadArticles
                             )
                         } else if (newsFeedsResult is Result.Error) {
                             Logger.e("Could not refresh news feeds", newsFeedsResult.throwable)
@@ -73,7 +71,7 @@ class NewsFeedWorker(
                             if (changed) {
                                 feedRepository.prefetchImages(
                                     newsFeeds = newsFeeds
-                                ) { _, _ -> }
+                                )
                                 val sc = settings.copy(SK.feedsChanged, BooleanEnum.TRUE)
                                 CoroutineScope(Dispatchers.Default).launch {
                                     settingsRepository.setSettings(sc)

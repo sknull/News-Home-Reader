@@ -21,7 +21,6 @@ import kotlinx.coroutines.withContext
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNotNull
-import org.junit.jupiter.api.condition.EnabledIf
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.koin.test.KoinTest
 import org.koin.test.inject
@@ -85,8 +84,7 @@ class RssTest : KoinTest {
             keepReadArticlesInDays = 30,
             keepUnreadArticlesInDays = 30,
             1200,
-            loadArticles = false,
-            progress = { _,_ -> }
+            loadArticles = false
         )
             .onSuccess { (newsFeed, _) ->
                 val entity = newsFeed?.toNewsFeedEntity()
