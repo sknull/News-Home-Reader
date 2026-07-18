@@ -61,7 +61,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.transformLatest
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
@@ -107,6 +107,7 @@ class NewsHomeReaderViewModel(
         Logger.i("Application started")
 
         val articleSemaphore = Semaphore(3)
+        val enrichedCache = mutableMapOf<String, NewsItem>()
 
         _state
             .map { SubState(
@@ -130,44 +131,62 @@ class NewsHomeReaderViewModel(
                     else -> flowOf(emptyList())
                 }
 
-                sourceFlow.transformLatest { items ->
-                    val enriched = coroutineScope {
-                        items.map { newsItem ->
-                            async(Dispatchers.IO) {
-                                articleSemaphore.withPermit {
-                                    if (newsItem.newsArticle != null) return@async newsItem
-                                    val articleResult = articleRepository.getFullArticle(newsItem.id)
-                                    if (articleResult is Result.Success) {
-                                        newsItem.copy(newsArticle = articleResult.data)
-                                    } else {
+                sourceFlow
+                    .distinctUntilChanged()
+                    .transform { items ->
+                        if (items.isEmpty() && _currentNewsItems.value.isNotEmpty()) return@transform
+
+                        val enriched = coroutineScope {
+                            items.map { newsItem ->
+                                async(Dispatchers.IO) {
+                                    articleSemaphore.withPermit {
+                                        val cached = enrichedCache[newsItem.uiKey]
+                                        if (cached?.newsArticle != null) {
+                                            return@async cached.copy(id = newsItem.id)
+                                        }
+
+                                        if (newsItem.newsArticle != null) return@async newsItem
+
+                                        if (newsItem.id != 0L) {
+                                            val articleResult = articleRepository.getFullArticle(newsItem.id)
+                                            if (articleResult is Result.Success) {
+                                                val enrichedItem = newsItem.copy(newsArticle = articleResult.data)
+                                                enrichedCache[newsItem.uiKey] = enrichedItem
+                                                return@async enrichedItem
+                                            }
+                                        }
+
                                         newsItem
                                     }
                                 }
-                            }
-                        }.awaitAll()
+                            }.awaitAll()
+                        }
+
+                        if (enriched.size < _currentNewsItems.value.size && _isLoading.value) {
+                            return@transform
+                        }
+
+                        if (isSearching) {
+                            emit(SearchResult(
+                                enriched = enriched,
+                                searchType = SearchType.search
+                            ))
+                        } else {
+                            val currentState = _state.value
+                            val hideRead = currentState.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
+                            val stopWords = group?.let { g -> determineStopWords(g) }
+                                ?: currentState.currentNewsFeedItem?.stopWords?.toSet()
+                                ?: setOf()
+
+                            val visible = calculateVisibleNewsItems(enriched, hideRead, stopWords)
+
+                            emit(SearchResult(
+                                enriched = enriched,
+                                visible = visible,
+                                searchType = if (isKeyword) SearchType.keyword else SearchType.standard
+                            ))
+                        }
                     }
-
-                    if (isSearching) {
-                        emit(SearchResult(
-                            enriched = enriched,
-                            searchType = SearchType.search
-                        ))
-                    } else {
-                        val currentState = _state.value
-                        val hideRead = currentState.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
-                        val stopWords = group?.let { g -> determineStopWords(g) }
-                            ?: currentState.currentNewsFeedItem?.stopWords?.toSet()
-                            ?: setOf()
-
-                        val visible = calculateVisibleNewsItems(enriched, hideRead, stopWords)
-
-                        emit(SearchResult(
-                            enriched = enriched,
-                            visible = visible,
-                            searchType = if (isKeyword) SearchType.keyword else SearchType.standard
-                        ))
-                    }
-                }
             }
             .flowOn(Dispatchers.Default)
             .onEach { result ->
@@ -870,14 +889,6 @@ class NewsHomeReaderViewModel(
                 newNewsFeedItem = newEntity
             )
                 .onSuccess { newsFeedGroups ->
-                    _visibleNewsItems.update {
-                        calculateVisibleNewsItems(
-                            newsItems = _currentNewsItems.value,
-                            hideRead = state.value.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-                            stopWords = newNewsFeedConfiguration.get<List<String>>(NC.stopWords)?.toSet() ?: setOf()
-                        )
-                    }
-
                     _state.update {
                         it.copy(
                             currentNewsFeedItem = newEntity,
@@ -956,15 +967,6 @@ class NewsHomeReaderViewModel(
                     if (feedResult is Result.Success) {
                         val (newsFeed, changed) = feedResult.data
                         _isLoading.update { false }
-                        _currentNewsItems.update { newsFeed?.items?.toList() ?: listOf() }  // force repaint
-                        _visibleNewsItems.update {
-                            calculateVisibleNewsItems(
-                                newsItems = newsFeed?.items ?: listOf(),
-                                hideRead = state.value.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-                                stopWords = state.value.currentNewsFeedGroup?.let { g -> determineStopWords(g) }
-                                    ?: state.value.currentNewsFeedItem?.stopWords?.toSet() ?: setOf()
-                            )
-                        }
                         _state.update {
                             it.copy(
                                 currentNewsFeedName = fn,
@@ -1011,18 +1013,6 @@ class NewsHomeReaderViewModel(
                     val (newsFeeds, changed) = newsFeedResult.data
                     _isLoading.update { false }
                     _state.update {
-                        val currentNewsItems =
-                            newsFeeds.find { nf -> nf.feedName == it.currentNewsFeedName }?.items ?: listOf()
-                        it.currentNewsFeedGroup
-                        _currentNewsItems.update { currentNewsItems }
-                        _visibleNewsItems.update {
-                            calculateVisibleNewsItems(
-                                newsItems = currentNewsItems,
-                                hideRead = state.value.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-                                stopWords = state.value.currentNewsFeedGroup?.let { g -> determineStopWords(g) }
-                                    ?: state.value.currentNewsFeedItem?.stopWords?.toSet() ?: setOf()
-                            )
-                        }
                         it.copy(
                             isEditingSettings = false,
                             newsFeedGroups = newsFeedGroups
@@ -1130,17 +1120,7 @@ class NewsHomeReaderViewModel(
                 val newsFeedResult = refreshNewsFeeds(newsFeedGroups, newsFeedConfigurations)
                 if (newsFeedResult is Result.Success) {
                     val (newsFeeds, changed) = newsFeedResult.data
-                    val currentNewsItems = newsFeeds.find { nf -> nf.feedName == state.value.currentNewsFeedName }?.items ?: listOf()
                     _isLoading.update { false }
-                    _currentNewsItems.update { currentNewsItems }
-                    _visibleNewsItems.update {
-                        calculateVisibleNewsItems(
-                            newsItems = currentNewsItems,
-                            hideRead = state.value.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-                            stopWords = state.value.currentNewsFeedGroup?.let { g -> determineStopWords(g) }
-                                ?: state.value.currentNewsFeedItem?.stopWords?.toSet() ?: setOf()
-                        )
-                    }
                     _state.update {
                         it.copy(
                             isEditingSettings = false,
@@ -1247,15 +1227,6 @@ class NewsHomeReaderViewModel(
             when (newsFeedsResult) {
                 is Result.Success -> {
                     val (newsFeeds, newsItems) = newsFeedsResult.data
-                    _currentNewsItems.update { newsItems }
-                    _visibleNewsItems.update {
-                        calculateVisibleNewsItems(
-                            newsItems = newsItems,
-                            hideRead = state.value.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-                            stopWords = state.value.currentNewsFeedGroup?.let { g -> determineStopWords(g) }
-                                ?: state.value.currentNewsFeedItem?.stopWords?.toSet() ?: setOf()
-                        )
-                    }
                     _state.update {
                         it.copy(
                             newsFeedGroups = newsFeedGroups,
@@ -1457,15 +1428,6 @@ Logger.i("loadFeedItems - SCROLL TO TOP")
         val markResult = feedRepository.markNewsItemsAsRead(newsItems)
         if (markResult is Result.Success) {
             _isLoading.update { false }
-            _currentNewsItems.update { newsItems }
-            _visibleNewsItems.update {
-                calculateVisibleNewsItems(
-                    newsItems = newsItems,
-                    hideRead = state.value.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-                    stopWords = state.value.currentNewsFeedGroup?.let { g -> determineStopWords(g) }
-                        ?: state.value.currentNewsFeedItem?.stopWords?.toSet() ?: setOf()
-                )
-            }
 
             val syncResult = feedRepository.synchroniseReadNewsItems()
             if (syncResult is Result.Error) {
@@ -1488,19 +1450,7 @@ Logger.i("loadFeedItems - SCROLL TO TOP")
         if (articleResult is Result.Success) {
             val copy = newsItem.copy(newsArticle = articleResult.data.first)
             _isLoading.update { false }
-            _currentNewsItems.update { _currentNewsItems.value }
-            _visibleNewsItems.update {
-                calculateVisibleNewsItems(
-                    newsItems = _currentNewsItems.value,
-                    hideRead = state.value.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-                    stopWords = state.value.currentNewsFeedGroup?.let { g -> determineStopWords(g) }
-                        ?: state.value.currentNewsFeedItem?.stopWords?.toSet() ?: setOf()
-                )
-            }
             _state.update {
-                val currentNewsItems = _currentNewsItems.value.map { ni ->
-                    if (ni.id == newsItem.id) copy else ni
-                }
                 it.copy(
                     currentNewsItem = copy,
                     currentNewsArticle = articleResult.data.first,
@@ -1540,15 +1490,6 @@ Logger.i("loadFeedItems - SCROLL TO TOP")
             .onSuccess {
                 _editedSettings.value = null
                 _isLoading.update { false }
-                _currentNewsItems.update { _currentNewsItems.value }
-                _visibleNewsItems.update {
-                    calculateVisibleNewsItems(
-                        newsItems = _currentNewsItems.value,
-                        hideRead = state.value.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false,
-                        stopWords = state.value.currentNewsFeedGroup?.let { g -> determineStopWords(g) }
-                            ?: state.value.currentNewsFeedItem?.stopWords?.toSet() ?: setOf()
-                    )
-                }
                 _state.update {
                     it.copy(
                         settings = editedSettings,

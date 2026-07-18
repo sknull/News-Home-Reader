@@ -24,6 +24,9 @@ data class NewsItem(
     val isChanged: Boolean = false,
 ): Comparable<NewsItem> {
 
+    val uiKey: String
+        get() = "${link.takeIf { it.isNotBlank() } ?: title}_$published"
+
     override fun compareTo(other: NewsItem): Int = compareBy<NewsItem>(
         { it.published }, { it.updated }
     ).compare(this, other)
