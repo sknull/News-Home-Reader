@@ -8,7 +8,6 @@ import de.visualdigits.newshomereader.domain.model.newsfeedconfiguration.NewsFee
 import de.visualdigits.newshomereader.domain.model.opml.OutlineType
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
-import de.visualdigits.newshomereader.domain.model.type.ProgressStage
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedGroup
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem
@@ -28,11 +27,7 @@ data class NewsHomeReaderState(
     val previousOutlineType: OutlineType? = null,
     val previousNewsFeedName: String? = null,
     val currentNewsFeedName: String? = null,
-    val currentNewsItems: List<NewsItem> = listOf(),
-    val visibleNewsItems: List<NewsItem> = listOf(),
-    val allowClearVisibleNewsItems: Boolean = false,
 
-    val filteredNewsItems: List<NewsItem> = listOf(),
     val currentKeywordBucket: String? = null,
     val newsItemSearchText: String? = null,
     val isNewsItemSearchActive: Boolean = false,
@@ -85,78 +80,4 @@ data class NewsHomeReaderState(
             subGroup.newsFeeds.map { it.name?.trim()?.lowercase() to it }
         } + mainGroup.newsFeeds.map { it.name?.trim()?.lowercase() to it }
     }.toMap()
-
-    override fun toString(): String {
-        return buildString {
-        append("NewsHomeReaderState(newsFeedGroups=")
-        append(newsFeedGroups.joinToString(",") { e -> e.name })
-        append(", previousNewsFeedGroup=")
-        append(previousNewsFeedGroup?.name)
-        append(", currentNewsFeedGroup=")
-        append(currentNewsFeedGroup?.name)
-        append(", currentNewsFeedItem=")
-        append(currentNewsFeedItem?.name)
-        append(", currentNewsFeedName=")
-        append(currentNewsFeedName)
-        append(", currentNewsItems [")
-        append(currentNewsItems.size)
-        append("], visibleNewsItems [")
-        append(visibleNewsItems.size)
-        append("], allowClearVisibleNewsItems=")
-        append(allowClearVisibleNewsItems)
-        append(", filteredNewsItems [")
-        append(filteredNewsItems.size)
-        append("], newsItemSearchText=")
-        append(newsItemSearchText)
-        append(", isNewsItemSearchActive=")
-        append(isNewsItemSearchActive)
-        append(", currentNewsItem=")
-        append(currentNewsItem?.id)
-        append(", currentNewsArticle=")
-        append(currentNewsArticle?.id)
-        append(", language=")
-        append(language.name)
-        append(", isShowInfos=")
-        append(isShowInfos)
-        append(", isEditingSettings=")
-        append(isEditingSettings)
-        append(", isViewingCatalog=")
-        append(isViewingCatalog)
-        append(", catalogSearchText='")
-        append(catalogSearchText)
-        append(", uiMessage=")
-        append(uiMessage)
-        append(", uiMessageSeverity=")
-        append(uiMessageSeverity)
-        append(", collapsibleState=")
-        append(collapsibleState)
-        append(", isEditMode=")
-        append(isEditMode)
-        append(", onlySubscribedFeeds=")
-        append(onlySubscribedFeeds)
-        append(", parentNewsFeedGroup=")
-        append(parentNewsFeedGroup?.name)
-        append(", isEditingNewsFeedGroup=")
-        append(isEditingNewsFeedGroup)
-        append(", isAddingNewsFeedGroup=")
-        append(isAddingNewsFeedGroup)
-        append(", isDeletingNewsFeedGroup=")
-        append(isDeletingNewsFeedGroup)
-        append(", currentNewsFeedGroupToDelete=")
-        append(currentNewsFeedGroupToDelete?.name)
-        append(", originalNewsFeedGroup=")
-        append(originalNewsFeedGroup?.name)
-        append(", editedNewsFeedGroup=")
-        append(editedNewsFeedGroup?.name)
-        append(", isEditingNewsFeedConfiguration=")
-        append(isEditingNewsFeedConfiguration)
-        append(", isAddingNewsFeedConfiguration=")
-        append(isAddingNewsFeedConfiguration)
-        append(", isDeletingNewsFeedConfiguration=")
-        append(isDeletingNewsFeedConfiguration)
-        append(", deleteNewsFeedItem=")
-        append(deleteNewsFeedItem?.name)
-        append(")")
-    }
-    }
 }

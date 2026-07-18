@@ -108,7 +108,6 @@ fun VerticalNewsFeeds(
             onCommonAction = onCommonAction,
             verticalArrangementGap = 0.dp
         ) {
-            val lastRow = rowData.size - 1
             if (state.collapsibleState["group_newsfeeds_navigation"] == true) {
                 listOf(Pair("newsfeed_navigation", @Composable {
                     Column(

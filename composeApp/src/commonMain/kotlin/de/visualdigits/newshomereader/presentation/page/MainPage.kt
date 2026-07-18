@@ -87,8 +87,9 @@ fun MainPage(
             else -> 1
         }
 
-        val rowDataFiltered = remember(state.filteredNewsItems) {
-            state.filteredNewsItems
+        val filteredNewsItems by viewModel.filteredNewsItems.collectAsStateWithLifecycle()
+        val rowDataFiltered = remember(filteredNewsItems) {
+            filteredNewsItems
                 .sortedByDescending { newsItem -> newsItem.updated }
                 .chunked(chunks)
         }

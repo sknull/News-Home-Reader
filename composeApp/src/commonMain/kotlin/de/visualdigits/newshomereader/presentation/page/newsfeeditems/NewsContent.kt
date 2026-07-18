@@ -53,6 +53,7 @@ fun NewsContent(
             )
         } else {
             NewsFeeds(
+                viewModel = viewModel,
                 state = state,
                 platformType = platformType,
                 scrollPosition = viewModel.scrollPosition,
