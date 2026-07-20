@@ -53,14 +53,13 @@ fun main() {
 
     CoroutineScope(Dispatchers.Default).launch {
         combine(
-            viewModel.state
-                .map { it.settings?.get<RefreshIntervalEnum>(SK.refreshInterval)?.longValue }
-                .distinctUntilChanged(),
+            viewModel.settings,
             viewModel.state
                 .map { it.maxImageSize }
                 .distinctUntilChanged() // Verhindert unnötige Trigger bei gleichem Wert
                 .filterNotNull()
-        ) { interval, maxImageSize ->
+        ) { settings, maxImageSize ->
+            val interval = settings?.get<RefreshIntervalEnum>(SK.refreshInterval)?.longValue
             interval to maxImageSize
         }.collect { (interval, maxImageSize) ->
             scheduler.scheduleEvery(interval ?: 60, maxImageSize)
@@ -84,7 +83,7 @@ fun main() {
 
         LaunchedEffect(viewModel) {
             viewModel.state.collect { state ->
-                val backgroundColorValue = (state.settings?.get<HsvColor>(SK.backgroundColor) ?: BACKGROUND_COLOR_DEFAULT).value
+                val backgroundColorValue = (viewModel.settings.value?.get<HsvColor>(SK.backgroundColor) ?: BACKGROUND_COLOR_DEFAULT).value
                 val laf = if (backgroundColorValue < 0.5f) FlatDarculaLaf() else FlatLightLaf()
                 withContext(Dispatchers.Main) {
                     try {

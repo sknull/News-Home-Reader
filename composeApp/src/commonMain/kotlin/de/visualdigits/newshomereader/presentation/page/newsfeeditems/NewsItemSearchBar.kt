@@ -30,6 +30,7 @@ import de.visualdigits.compose.resources.warning_no_results
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import org.jetbrains.compose.resources.painterResource
@@ -37,6 +38,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun NewsItemSearchBar(
+    viewModel: NewsHomeReaderViewModel,
     state: NewsHomeReaderState,
     platformType: PlatformType,
     screenWidth: Dp,
@@ -88,6 +90,7 @@ fun NewsItemSearchBar(
                             newsItems.forEach { newsItem ->
                                 NewsItemCardSimple(
                                     modifier = Modifier.weight(1f),
+                                    viewModel = viewModel,
                                     state = state,
                                     newsItem = newsItem,
                                     uriHandler = uriHandler,

@@ -43,6 +43,7 @@ fun NewsFeeds(
 
     if (maxWidth > maxHeight && maxWidth > 600.dp) {
         NewsFeedsLandscape(
+            viewModel = viewModel,
             state = state,
             platformType = platformType,
             scrollPosition = scrollPosition,
@@ -57,6 +58,7 @@ fun NewsFeeds(
         )
     } else {
         NewsFeedsPortrait(
+            viewModel = viewModel,
             state = state,
             platformType = platformType,
             scrollPosition = scrollPosition,

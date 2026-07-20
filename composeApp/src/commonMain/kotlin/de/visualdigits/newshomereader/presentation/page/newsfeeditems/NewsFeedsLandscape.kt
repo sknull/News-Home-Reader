@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,6 +25,7 @@ import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.domain.util.copyFactor
@@ -47,6 +49,7 @@ import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.page.navigation.NewsFeedGroupBox
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
@@ -60,6 +63,7 @@ import org.jetbrains.compose.resources.painterResource
  */
 @Composable
 fun NewsFeedsLandscape(
+    viewModel: NewsHomeReaderViewModel,
     state: NewsHomeReaderState,
     platformType: PlatformType,
     scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
@@ -72,6 +76,7 @@ fun NewsFeedsLandscape(
     onCommonAction: (CommonAction) -> Unit,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
+    val settings by viewModel.settings.collectAsStateWithLifecycle()
     val backgroundColorValue = HsvColor.fromComposeColor(MaterialTheme.colorScheme.background).value
     val dimFactor = if (backgroundColorValue < 0.5f) 1.5f else 1.25f
 
@@ -174,7 +179,7 @@ fun NewsFeedsLandscape(
                         showSeconds = false,
                         showDate = true,
                         showYear = true,
-                        colors = state.settings?.get<HsvColor>(SK.clockColor)
+                        colors = settings?.get<HsvColor>(SK.clockColor)
                             ?.let { sc -> studioClockColors(sc) }
                             ?: studioClockColors(StudioClockColors.STUDIO_CLOCK_COLOR_DEFAULT)
                     )
@@ -209,6 +214,7 @@ fun NewsFeedsLandscape(
                 NewsListMenuBar(
                     modifier = Modifier
                         .background(MaterialTheme.colorScheme.background),
+                    viewModel = viewModel,
                     connectivityManager = connectivityManager,
                     state = state,
                     maxWidth = maxWidth,
@@ -242,6 +248,7 @@ fun NewsFeedsLandscape(
                             rowItems.forEach { newsItem ->
                                 NewsItemCard(
                                     modifier = Modifier.weight(1f),
+                                    viewModel = viewModel,
                                     state = state,
                                     maxImageSize = maxImageSize,
                                     newsItem = newsItem,

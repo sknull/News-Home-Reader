@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -18,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,6 +28,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import be.digitalia.compose.htmlconverter.HtmlStyle
 import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
 import de.visualdigits.common.domain.model.color.HsvColor
@@ -43,6 +44,7 @@ import de.visualdigits.newshomereader.domain.util.StringEscapeUtils.normalizeXml
 import de.visualdigits.newshomereader.domain.util.getFaviconUrl
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
@@ -54,16 +56,18 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun NewsItemCardSimple(
     modifier: Modifier = Modifier,
+    viewModel: NewsHomeReaderViewModel,
     state: NewsHomeReaderState,
     newsItem: NewsItem,
     uriHandler: UriHandler,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
+    val settings by viewModel.settings.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
-    val buttonColor = remember { (state.settings?.get<HsvColor>(SK.buttonColor) ?: BUTTON_COLOR_DEFAULT).toComposeColor() }
+    val buttonColor = remember { (settings?.get<HsvColor>(SK.buttonColor) ?: BUTTON_COLOR_DEFAULT).toComposeColor() }
 
     val feedName = newsItem.newsFeed?.feedName?:newsItem.feedName
-    val spotColor = state.settings?.get<HsvColor>(SK.spotColor)?: SPOT_COLOR_DEFAULT
+    val spotColor = settings?.get<HsvColor>(SK.spotColor)?: SPOT_COLOR_DEFAULT
 
     Column(
         modifier = modifier

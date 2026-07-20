@@ -48,11 +48,12 @@ fun MainPage(
     platformType: PlatformType,
     connectivityManager: ConnectivityManager
 ) {
+    val settings by viewModel.settings.collectAsStateWithLifecycle()
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val backgroundColor = state.settings?.get<HsvColor>(SK.backgroundColor)?: BACKGROUND_COLOR_DEFAULT
-    val textColor = state.settings?.get<HsvColor>(SK.textColor) ?: TEXT_COLOR_DEFAULT
-    val spotColor = state.settings?.get<HsvColor>(SK.spotColor) ?: SPOT_COLOR_DEFAULT
-    val maxImageSize = state.settings?.get<Int>(SK.maxImageSize) ?: 1200
+    val backgroundColor = settings?.get<HsvColor>(SK.backgroundColor)?: BACKGROUND_COLOR_DEFAULT
+    val textColor = settings?.get<HsvColor>(SK.textColor) ?: TEXT_COLOR_DEFAULT
+    val spotColor = settings?.get<HsvColor>(SK.spotColor) ?: SPOT_COLOR_DEFAULT
+    val maxImageSize = settings?.get<Int>(SK.maxImageSize) ?: 1200
 
     val uriHandler = LocalUriHandler.current
 
@@ -106,7 +107,7 @@ fun MainPage(
                 // Umrechnung von Dp in Pixel für Coil
                 val wPx = with(density) { screenWidth.roundToPx() }
                 val hPx = with(density) { screenHeight.roundToPx() }
-                viewModel.onAction(NewsHomeReaderAction.UpdateMaxImageSize(state.settings, max(wPx, hPx)))
+                viewModel.onAction(NewsHomeReaderAction.UpdateMaxImageSize(settings, max(wPx, hPx)))
             }
 
             Box(
@@ -127,6 +128,7 @@ fun MainPage(
                     )
 
                     NewsItemSearchBar(
+                        viewModel = viewModel,
                         state = state,
                         platformType = platformType,
                         screenWidth = screenWidth,
@@ -148,7 +150,7 @@ fun MainPage(
                     when {
                         state.isShowInfos -> {
                             InfoPage(
-                                state = state,
+                                viewModel = viewModel,
                                 uriHandler = uriHandler,
                                 onAction = viewModel::onAction
                             )
@@ -156,7 +158,6 @@ fun MainPage(
                         state.isEditingSettings -> {
                             SettingsPage(
                                 viewModel = viewModel,
-                                state = state,
                                 platformType = platformType,
                                 scrollPosition = viewModel.scrollPosition,
                                 onCommonAction = viewModel::onCommonAction,
@@ -185,10 +186,10 @@ fun MainPage(
                         }
                         else -> {
                             NewsContent(
+                                viewModel = viewModel,
                                 state = state,
                                 platformType = platformType,
                                 columns = columns,
-                                viewModel = viewModel,
                                 maxWidth = screenWidth,
                                 maxHeight = screenHeight,
                                 maxImageSize = maxImageSize,

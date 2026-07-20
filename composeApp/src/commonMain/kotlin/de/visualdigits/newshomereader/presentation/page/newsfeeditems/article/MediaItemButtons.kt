@@ -13,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +24,7 @@ import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.common.presentation.util.openUriSafely
@@ -34,7 +36,7 @@ import de.visualdigits.newshomereader.domain.model.unified.MediaItem
 import de.visualdigits.newshomereader.domain.model.unified.MediaType
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.util.parseDuration
-import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.Image
 import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
@@ -43,13 +45,14 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun MediaItemButtons(
-    state: NewsHomeReaderState,
+    viewModel: NewsHomeReaderViewModel,
     modifier: Modifier = Modifier,
     mediaItems: List<MediaItem>,
     uriHandler: UriHandler,
     newsItem: NewsItem
 ) {
-    val buttonColor = remember { (state.settings?.get<HsvColor>(SK.buttonColor) ?: BUTTON_COLOR_DEFAULT).toComposeColor() }
+    val settings by viewModel.settings.collectAsStateWithLifecycle()
+    val buttonColor = remember { (settings?.get<HsvColor>(SK.buttonColor) ?: BUTTON_COLOR_DEFAULT).toComposeColor() }
 
     FlowRow(
         modifier = modifier

@@ -63,6 +63,7 @@ import de.visualdigits.newshomereader.domain.util.StringEscapeUtils.normalizeXml
 import de.visualdigits.newshomereader.domain.util.getFaviconUrl
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.Image
 import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
@@ -75,6 +76,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun NewsArticleCard(
     modifier: Modifier = Modifier,
+    viewModel: NewsHomeReaderViewModel,
     platformType: PlatformType,
     scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     maxWidth: Dp,
@@ -88,7 +90,7 @@ fun NewsArticleCard(
     onAction: (NewsHomeReaderAction) -> Unit,
     connectivityManager: ConnectivityManager
 ) {
-    val spotColor = state.settings?.get<HsvColor>(SK.spotColor)?: SPOT_COLOR_DEFAULT
+    val spotColor = settings?.get<HsvColor>(SK.spotColor)?: SPOT_COLOR_DEFAULT
     val backgroundColorValue = HsvColor.fromComposeColor(MaterialTheme.colorScheme.background).value
     val dimFactor = if (backgroundColorValue < 0.5f) 1.5f else 1.25f
 
@@ -267,7 +269,7 @@ fun NewsArticleCard(
                         val wifiOnly = settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
                         if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                             MediaItemButtons(
-                                state = state,
+                                viewModel = viewModel,
                                 mediaItems = newsArticle.videoItems + newsArticle.audioItems,
                                 uriHandler = uriHandler,
                                 newsItem = newsItem

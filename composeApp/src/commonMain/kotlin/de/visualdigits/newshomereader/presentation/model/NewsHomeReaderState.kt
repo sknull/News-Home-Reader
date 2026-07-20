@@ -35,8 +35,6 @@ data class NewsHomeReaderState(
     val currentNewsItem: NewsItem? = null,
     val currentNewsArticle: FullArticle? = null,
 
-    val settings: Settings? = null,
-
     val language: Language = Language.EN,
 
     val isShowInfos: Boolean = false,

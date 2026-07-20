@@ -44,6 +44,7 @@ fun MainMenuBar(
     onAction: (NewsHomeReaderAction) -> Unit,
     connectivityManager: ConnectivityManager
 ) {
+    val settings by viewModel.settings.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
     Row(
@@ -105,7 +106,7 @@ fun MainMenuBar(
             }
         }
 
-        val wifiOnly = state.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
+        val wifiOnly = settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
         if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
             IndicatorButton(
                 modifier = Modifier,

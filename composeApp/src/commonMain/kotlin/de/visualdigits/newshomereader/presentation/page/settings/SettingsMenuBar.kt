@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.common.domain.model.ui.FileMode
@@ -25,7 +27,7 @@ import de.visualdigits.compose.resources.label_settings
 import de.visualdigits.compose.resources.save
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
-import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
 import kotlinx.io.files.Path
@@ -36,10 +38,11 @@ import org.koin.core.qualifier.named
 
 @Composable
 fun SettingsMenuBar(
-    state: NewsHomeReaderState,
+    viewModel: NewsHomeReaderViewModel,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
-    val buttonColor = remember { (state.settings?.get<HsvColor>(SK.buttonColor) ?: BUTTON_COLOR_DEFAULT).toComposeColor() }
+    val settings by viewModel.settings.collectAsStateWithLifecycle()
+    val buttonColor = remember { (settings?.get<HsvColor>(SK.buttonColor) ?: BUTTON_COLOR_DEFAULT).toComposeColor() }
 
     val homeDirectoryPath: String = koinInject(qualifier = named("homeDirectory"))
 

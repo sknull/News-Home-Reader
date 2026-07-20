@@ -90,9 +90,14 @@ class NewsHomeReaderViewModel(
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
+    
+    private val _settings = MutableStateFlow<Settings?>(null)
+    val settings = _settings.asStateFlow()
+    
     private val _editedSettings = MutableStateFlow<Settings?>(null)
     val editedSettings = _editedSettings.asStateFlow()
 
+    
     private val _currentNewsItems =  MutableStateFlow<List<NewsItem>>(emptyList())
 
     private val _filteredNewsItems = MutableStateFlow<List<NewsItem>>(emptyList())
@@ -173,7 +178,7 @@ class NewsHomeReaderViewModel(
                             ))
                         } else {
                             val currentState = _state.value
-                            val hideRead = currentState.settings?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
+                            val hideRead = _settings.value?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
                             val stopWords = group?.let { g -> determineStopWords(g) }
                                 ?: currentState.currentNewsFeedItem?.stopWords?.toSet()
                                 ?: setOf()
@@ -223,7 +228,7 @@ class NewsHomeReaderViewModel(
             // Settings
             //
             is NewsHomeReaderAction.OnEditSettingsClick -> {
-                _editedSettings.value = state.value.settings
+                _editedSettings.value = _settings.value
                 _state.update {
                     it.copy(
                         isEditingSettings = action.isEditingSettings,
@@ -250,7 +255,7 @@ class NewsHomeReaderViewModel(
 
             is NewsHomeReaderAction.OnEditSettingsCancelClick -> {
                 _state.update { state ->
-                    state.settings?.get<Language>(SK.language)?.also { l -> applyAppLanguage(l.localeCode) }
+                    _settings.value?.get<Language>(SK.language)?.also { l -> applyAppLanguage(l.localeCode) }
                     state.copy(
                         isEditingSettings = false,
                         uiMessage = null,
@@ -945,12 +950,12 @@ class NewsHomeReaderViewModel(
         _isLoading.update { true }
         viewModelScope.launch {
             //        scrollPosition["newsfeed_items"] = Triple(0, 0, ScrollIntent.scrollToStart)
-            val wifiOnly = state.value.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
-            val loadArticles = state.value.settings?.get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false
-            val prefetchImages = state.value.settings?.get<BooleanEnum>(SK.prefetchImages)?.booleanValue ?: false
-            val keepReadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue ?: 30
-            val keepUnreadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepUnreadArticles)?.longValue ?: 30
-            val maxImageSize = state.value.settings?.get<Int>(SK.maxImageSize) ?: 1200
+            val wifiOnly = _settings.value?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
+            val loadArticles = _settings.value?.get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false
+            val prefetchImages = _settings.value?.get<BooleanEnum>(SK.prefetchImages)?.booleanValue ?: false
+            val keepReadArticles = _settings.value?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue ?: 30
+            val keepUnreadArticles = _settings.value?.get<KeepArticlesEnum>(SK.keepUnreadArticles)?.longValue ?: 30
+            val maxImageSize = _settings.value?.get<Int>(SK.maxImageSize) ?: 1200
             feedName?.also { fn ->
                 url?.also { u ->
                     val feedResult = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
@@ -1003,7 +1008,7 @@ class NewsHomeReaderViewModel(
     private fun refreshNewsFeeds() {
         _isLoading.update { true }
         viewModelScope.launch {
-            val prefetchImages = state.value.settings?.get<BooleanEnum>(SK.prefetchImages)?.booleanValue ?: false
+            val prefetchImages = _settings.value?.get<BooleanEnum>(SK.prefetchImages)?.booleanValue ?: false
             val result = newsFeedConfigurationRepository.getNewsFeedGroups()
             if (result is Result.Success) {
                 val newsFeedGroups = result.data
@@ -1042,9 +1047,9 @@ class NewsHomeReaderViewModel(
         if (fileName.endsWith(".json", ignoreCase = true)) {
             settingsRepository.importSettings(source)
                 .onSuccess { settings ->
+                    _settings.update { settings }
                     _state.update {
                         it.copy(
-                            settings = settings,
                             isEditingSettings = false,
                             uiMessage = null,
                         )
@@ -1073,7 +1078,7 @@ class NewsHomeReaderViewModel(
     private fun exportSettings(fileName: String, sink: Sink) = viewModelScope.launch {
         Logger.i("Exporting settings")
         if (fileName.endsWith(".json", ignoreCase = true)) {
-            val settings = state.value.settings
+            val settings = _settings.value
             if(settings != null) {
                 settingsRepository.exportSettings(settings, sink)
                     .onSuccess {
@@ -1106,7 +1111,7 @@ class NewsHomeReaderViewModel(
 
     private fun importOpml(fileName: String, source: Source) = viewModelScope.launch {
         Logger.i("Importing opml...")
-        val prefetchImages = state.value.settings?.get<BooleanEnum>(SK.prefetchImages)?.booleanValue ?: false
+        val prefetchImages = _settings.value?.get<BooleanEnum>(SK.prefetchImages)?.booleanValue ?: false
         if (fileName.endsWith(".opml", ignoreCase = true)) {
             val newFeedConfigurationResult = newsFeedConfigurationRepository.setNewsFeedGroups(source)
             if (newFeedConfigurationResult is Result.Success) {
@@ -1214,11 +1219,11 @@ class NewsHomeReaderViewModel(
         newsFeedGroups: List<NewsFeedGroup>,
         newsFeedItems: List<NewsFeedItem>
     ): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> {
-        val wifiOnly = state.value.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
-        val loadArticles = state.value.settings?.get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false
-        val keepReadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue ?: 30
-        val keepUnreadArticles = state.value.settings?.get<KeepArticlesEnum>(SK.keepUnreadArticles)?.longValue ?: 30
-        val maxImageSize = state.value.settings?.get<Int>(SK.maxImageSize) ?: 1200
+        val wifiOnly = _settings.value?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
+        val loadArticles = _settings.value?.get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false
+        val keepReadArticles = _settings.value?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue ?: 30
+        val keepUnreadArticles = _settings.value?.get<KeepArticlesEnum>(SK.keepUnreadArticles)?.longValue ?: 30
+        val maxImageSize = _settings.value?.get<Int>(SK.maxImageSize) ?: 1200
 
 //        scrollPosition["newsfeed_items"] = Triple(0, 0, ScrollIntent.scrollToStart)
 
@@ -1341,9 +1346,9 @@ class NewsHomeReaderViewModel(
             applyAppLanguage(finalSettings.get<Language>(SK.language)?.localeCode?: Language.EN.localeCode)
 
             _isLoading.update { false }
+            _settings.update { settings }
             _state.update {
                 it.copy(
-                    settings = finalSettings,
                     uiMessage = null,
                     uiMessageSeverity = null,
                     collapsibleState = mapOf("newsfeed_items" to true)
@@ -1494,9 +1499,9 @@ Logger.i("loadFeedItems - SCROLL TO TOP")
             .onSuccess {
                 _editedSettings.value = null
                 _isLoading.update { false }
+                _settings.update { editedSettings }
                 _state.update {
                     it.copy(
-                        settings = editedSettings,
                         isEditingSettings = false,
                         uiMessage = null,
                         uiMessageSeverity = null

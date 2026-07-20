@@ -41,7 +41,6 @@ import de.visualdigits.compose.resources.icon_visibility_24px
 import de.visualdigits.compose.resources.ok
 import de.visualdigits.compose.resources.title_settings
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
-import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import org.jetbrains.compose.resources.painterResource
@@ -51,7 +50,6 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun SettingsPage(
     viewModel: NewsHomeReaderViewModel,
-    state: NewsHomeReaderState,
     platformType: PlatformType,
     scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     onCommonAction: (CommonAction) -> Unit,
@@ -130,7 +128,7 @@ fun SettingsPage(
         ) {
             Spacer(Modifier.height(16.dp))
 
-            SettingsMenuBar(state = state, onAction = onAction)
+            SettingsMenuBar(viewModel = viewModel, onAction = onAction)
 
             Spacer(Modifier.height(16.dp))
         }

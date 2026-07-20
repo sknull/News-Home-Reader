@@ -35,6 +35,7 @@ import de.visualdigits.compose.resources.icon_add_notes_24px
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.page.navigation.NewsFeedGroupBox
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
@@ -47,6 +48,7 @@ import org.jetbrains.compose.resources.painterResource
  */
 @Composable
 fun NewsFeedsPortrait(
+    viewModel: NewsHomeReaderViewModel,
     state: NewsHomeReaderState,
     platformType: PlatformType,
     scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
@@ -142,6 +144,7 @@ fun NewsFeedsPortrait(
                             NewsListMenuBar(
                                 modifier = Modifier
                                     .background(MaterialTheme.colorScheme.background),
+                                viewModel = viewModel,
                                 connectivityManager = connectivityManager,
                                 state = state,
                                 maxWidth = maxWidth,
@@ -163,6 +166,7 @@ fun NewsFeedsPortrait(
                                 NewsItemCard(
                                     modifier = Modifier
                                         .weight(1f),
+                                    viewModel = viewModel,
                                     state = state,
                                     maxImageSize = maxImageSize,
                                     newsItem = newsItem,

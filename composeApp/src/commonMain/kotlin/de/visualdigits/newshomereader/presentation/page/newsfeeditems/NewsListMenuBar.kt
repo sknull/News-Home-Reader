@@ -10,11 +10,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.button.IndicatorButton
@@ -31,6 +33,7 @@ import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.util.getFaviconUrl
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
+import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.style.gap
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -38,11 +41,14 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun NewsListMenuBar(
     modifier: Modifier = Modifier,
+    viewModel: NewsHomeReaderViewModel,
     connectivityManager: ConnectivityManager,
     state: NewsHomeReaderState,
     maxWidth: Dp,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
+    val settings by viewModel.settings.collectAsStateWithLifecycle()
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -98,7 +104,7 @@ fun NewsListMenuBar(
                 onAction(NewsHomeReaderAction.OnMarkReadClicked(0))
             }
 
-            val wifiOnly = state.settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
+            val wifiOnly = settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
             if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                 IndicatorButton(
                     modifier = Modifier,

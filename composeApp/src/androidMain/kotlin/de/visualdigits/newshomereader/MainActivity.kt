@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
-                    val backgroundColorValue = (state.settings?.get<HsvColor>(SK.backgroundColor) ?: BACKGROUND_COLOR_DEFAULT).value
+                    val backgroundColorValue = (viewModel.settings.value?.get<HsvColor>(SK.backgroundColor) ?: BACKGROUND_COLOR_DEFAULT).value
                     val isDark = backgroundColorValue < 0.5f
 
                     // for newer device starting with android 14/15
@@ -76,17 +76,15 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) { // Läuft NUR, wenn die App aktiv im Vordergrund ist!
                 combine(
-                    viewModel.state
-                        .map { it.settings?.get<RefreshIntervalEnum>(SK.refreshInterval)?.longValue }
-                        .distinctUntilChanged(),
+                    viewModel.settings,
                     viewModel.state
                         .map { it.maxImageSize }
                         .distinctUntilChanged()
                         .filterNotNull()
-                ) { interval, maxImageSize ->
+                ) { settings, maxImageSize ->
+                    val interval = settings?.get<RefreshIntervalEnum>(SK.refreshInterval)?.longValue
                     interval to maxImageSize
-                }
-                    .distinctUntilChanged() // WICHTIG: Verhindert Trigger, wenn sich ANDERE State-Felder ändern!
+                }.distinctUntilChanged() // WICHTIG: Verhindert Trigger, wenn sich ANDERE State-Felder ändern!
                     .collect { (interval, maxImageSize) ->
                         // Auf einen Hintergrund-Thread auslagern, damit die UI nicht blockiert
                         scheduler.cancel()
