@@ -59,7 +59,7 @@ import org.jetbrains.compose.resources.painterResource
  * in landscape mode.
  */
 @Composable
-fun HorizontalNewsFeeds(
+fun NewsFeedsLandscape(
     state: NewsHomeReaderState,
     platformType: PlatformType,
     scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
@@ -82,7 +82,7 @@ fun HorizontalNewsFeeds(
         //
         // navigation
         //
-        if (state.collapsibleState["group_newsfeeds_navigation"] == true) {
+        if (state.collapsibleState["newsfeed_items"] == true) {
             Box(
                 modifier = Modifier
                     .fillMaxHeight(),

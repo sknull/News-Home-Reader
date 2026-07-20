@@ -42,23 +42,23 @@ class NewsFeedWorker(
                         val newsFeedsResult = feedRepository.refreshNewsFeeds(
                             newsFeedItems = newsFeedConfigurations
                         )
-                        if (newsFeedsResult is Result.Success) {
-                            val (newsFeeds, newsItems) = newsFeedsResult.data
-                            feedRepository.refreshNewsFeedItems(
-                                newsFeeds = newsFeeds,
-                                newsItems = newsItems,
-                                wifiOnly = wifiOnly,
-                                keepReadArticlesInDays = keepReadArticles,
-                                keepUnreadArticlesInDays = keepUnreadArticles,
-                                maxImageSize = maxImageSize,
-                                loadArticles = loadArticles
-                            )
-                        } else if (newsFeedsResult is Result.Error) {
-                            Logger.e("Could not refresh news feeds", newsFeedsResult.throwable)
-                            feedRepository.getAllNewsFeeds()
-                        } else {
-                            Logger.i("Could not get news feeds from remote - fetching newsFeeds from database")
-                            feedRepository.getAllNewsFeeds()
+                        when (newsFeedsResult) {
+                            is Result.Success -> {
+                                val (newsFeeds, newsItems) = newsFeedsResult.data
+                                feedRepository.refreshNewsFeedItems(
+                                    newsFeeds = newsFeeds,
+                                    newsItems = newsItems,
+                                    wifiOnly = wifiOnly,
+                                    keepReadArticlesInDays = keepReadArticles,
+                                    keepUnreadArticlesInDays = keepUnreadArticles,
+                                    maxImageSize = maxImageSize,
+                                    loadArticles = loadArticles
+                                )
+                            }
+                            is Result.Error -> {
+                                Logger.e("Could not refresh news feeds", newsFeedsResult.throwable)
+                                feedRepository.getAllNewsFeeds()
+                            }
                         }
                     } else {
                         Logger.i("No free of charge internet connection available - fetching newsFeeds from database")

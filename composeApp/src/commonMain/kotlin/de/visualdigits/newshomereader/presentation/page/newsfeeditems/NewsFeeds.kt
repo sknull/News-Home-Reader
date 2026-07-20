@@ -42,7 +42,7 @@ fun NewsFeeds(
     }
 
     if (maxWidth > maxHeight && maxWidth > 600.dp) {
-        HorizontalNewsFeeds(
+        NewsFeedsLandscape(
             state = state,
             platformType = platformType,
             scrollPosition = scrollPosition,
@@ -56,7 +56,7 @@ fun NewsFeeds(
             onAction = onAction,
         )
     } else {
-        VerticalNewsFeeds(
+        NewsFeedsPortrait(
             state = state,
             platformType = platformType,
             scrollPosition = scrollPosition,

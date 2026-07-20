@@ -591,8 +591,10 @@ class NewsHomeReaderViewModel(
             //
             //
             is NewsHomeReaderAction.OnCollapsibleStateChange -> {
-                if (action.id == "group_newsfeeds_navigation") {
+                if (action.id == "newsfeed_items" && action.isExpanded) {
                     scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.scrollToStart)
+                } else {
+                    scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.standard)
                 }
                 _state.update {
                     it.copy(
@@ -1344,7 +1346,7 @@ class NewsHomeReaderViewModel(
                     settings = finalSettings,
                     uiMessage = null,
                     uiMessageSeverity = null,
-                    collapsibleState = mapOf("group_newsfeeds_navigation" to true)
+                    collapsibleState = mapOf("newsfeed_items" to true)
                 )
             }
 
@@ -1397,6 +1399,8 @@ Logger.i("loadFeedItems")
         ) {
 Logger.i("loadFeedItems - SCROLL TO TOP")
             scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.scrollToStart)
+        } else {
+            scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.standard)
         }
         _isLoading.update { false }
         _state.update {

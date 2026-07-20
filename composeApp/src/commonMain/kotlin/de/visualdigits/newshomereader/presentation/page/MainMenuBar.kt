@@ -63,8 +63,8 @@ fun MainMenuBar(
             leadingIcon = painterResource(Res.drawable.icon_menu_24px),
             leadingIconTint = MaterialTheme.colorScheme.onSurface
         ) {
-            val isExpanded = state.collapsibleState["group_newsfeeds_navigation"] == true
-            onAction(NewsHomeReaderAction.OnCollapsibleStateChange("group_newsfeeds_navigation", !isExpanded))
+            val isExpanded = state.collapsibleState["newsfeed_items"] == true
+            onAction(NewsHomeReaderAction.OnCollapsibleStateChange("newsfeed_items", !isExpanded))
         }
 
         IndicatorButton(

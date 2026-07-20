@@ -46,7 +46,7 @@ import org.jetbrains.compose.resources.painterResource
  * in portrait mode.
  */
 @Composable
-fun VerticalNewsFeeds(
+fun NewsFeedsPortrait(
     state: NewsHomeReaderState,
     platformType: PlatformType,
     scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
@@ -110,7 +110,7 @@ fun VerticalNewsFeeds(
             verticalArrangementGap = 0.dp
         ) {
             val lastRow = rowData.size - 1
-            if (state.collapsibleState["group_newsfeeds_navigation"] == true) {
+            if (state.collapsibleState["newsfeed_items"] == true) {
                 listOf(Pair("newsfeed_navigation", @Composable {
                     Column(
                         modifier = Modifier
