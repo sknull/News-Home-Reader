@@ -35,6 +35,7 @@ import io.ktor.client.request.get
 import io.ktor.client.statement.readRawBytes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -245,11 +246,13 @@ class DefaultFeedRepository(
                 withTag = "NHR"
             )
             try {
-                val response = newsFeedItem.url?.let { u -> httpClient.get(urlString = u) }
-                val newsFeed = readFromBytes(newsFeedItem.name, response?.readRawBytes())
+                val newsFeed = withContext(Dispatchers.IO + NonCancellable) {
+                    val response = newsFeedItem.url?.let { u -> httpClient.get(urlString = u) }
+                    readFromBytes(newsFeedItem.name, response?.readRawBytes())
+                }
                 newsFeed
             } catch (e: Exception) {
-                Logger.e("Could not load feed '${newsFeedItem.name}'", e)
+                Logger.e("DefaultFeedRepository: Could not refresh feed '${newsFeedItem.name}'", e)
                 null
             }
         }
@@ -322,8 +325,10 @@ class DefaultFeedRepository(
     ): Result<Pair<NewsFeed?, Boolean>, DataError.Remote> = withContext(Dispatchers.IO) {
         Logger.i("Refreshing newsfeed '$feedName', loadArticles=$loadArticles...")
         try {
-            val response = httpClient.get(urlString = url)
-            val newsFeed = readFromBytes(feedName, response.readRawBytes())
+            val newsFeed = withContext(Dispatchers.IO + NonCancellable) {
+                val response = httpClient.get(urlString = url)
+                readFromBytes(feedName, response.readRawBytes())
+            }
 
             val (persistedItems, changedNewsItems) = dao.transactionWithResult {
                 val newsItems = persistNewsFeed(newsFeed)

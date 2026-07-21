@@ -27,7 +27,7 @@ import org.koin.test.inject
 import org.koin.test.junit5.KoinTestExtension
 import java.io.File
 
-@Disabled("Only for local testing")
+//@Disabled("Only for local testing")
 class RssTest : KoinTest {
 
     private val feedRepository: FeedRepository by inject()
@@ -61,9 +61,9 @@ class RssTest : KoinTest {
     }
 
     @Test
-    @Disabled("produces timeout")
+//    @Disabled("produces timeout")
     fun testReadFromUrl() = runTest {
-        val response = httpClient.get(urlString = "https://www.focus.de/rss")
+        val response = httpClient.get(urlString = "https://t3n.de/rss.xml")
         val xml = response.bodyAsText()
         println(xml)
     }

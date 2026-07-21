@@ -19,7 +19,6 @@ import de.visualdigits.compose.resources.icon_arrow_back_24px
 import de.visualdigits.compose.resources.icon_chat_24px
 import de.visualdigits.compose.resources.tooltip_back
 import de.visualdigits.compose.resources.tooltip_open_chat
-import de.visualdigits.newshomereader.domain.model.unified.FullArticle
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.style.gap
@@ -30,7 +29,6 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun NewsArticleMenuBar(
     newsItem: NewsItem,
-    newsArticle: FullArticle,
     uriHandler: UriHandler,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
@@ -51,10 +49,10 @@ fun NewsArticleMenuBar(
             leadingIconTint = MaterialTheme.colorScheme.onSurface,
             toolTip = stringResource(Res.string.tooltip_back),
         ) {
-            onAction(NewsHomeReaderAction.OnNewsItemBackClicked())
+            onAction(NewsHomeReaderAction.OnNewsItemClosed())
         }
 
-        newsArticle.discussionUrl?.also { link ->
+        newsItem.newsArticle?.discussionUrl?.also { link ->
             IndicatorButton(
                 modifier = Modifier,
                 width = 50.dp,

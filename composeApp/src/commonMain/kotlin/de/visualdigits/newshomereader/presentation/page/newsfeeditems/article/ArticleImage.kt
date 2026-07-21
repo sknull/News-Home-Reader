@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import de.visualdigits.newshomereader.domain.model.unified.FullArticle
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.Image
 import de.visualdigits.newshomereader.presentation.style.gap
@@ -20,10 +19,9 @@ import de.visualdigits.newshomereader.presentation.style.gap
 fun ArticleImage(
     modifier: Modifier = Modifier,
     newsItem: NewsItem,
-    newsArticle: FullArticle?,
     maxImageSize: Int?
 ) {
-    var image = newsArticle?.articleImage
+    var image = newsItem.newsArticle?.articleImage
     if (image == null || image.isEmpty()) {
         image = newsItem.image
     }

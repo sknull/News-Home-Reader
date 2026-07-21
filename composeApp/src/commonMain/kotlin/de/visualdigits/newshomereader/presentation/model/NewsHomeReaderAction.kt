@@ -202,9 +202,6 @@ sealed interface NewsHomeReaderAction {
     ) : NewsHomeReaderAction
 
     @Immutable
-    class OnNewsItemBackClicked : NewsHomeReaderAction
-
-    @Immutable
     data class OnNewsItemSearchExpandStateChanged(
         val expanded: Boolean
     ): NewsHomeReaderAction

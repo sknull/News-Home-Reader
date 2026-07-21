@@ -57,7 +57,7 @@ fun MainPage(
 
     val uriHandler = LocalUriHandler.current
 
-    BindBackHandler(isEnabled = state.currentNewsArticle != null) {
+    BindBackHandler(isEnabled = state.currentNewsItem != null) {
         viewModel.onAction(NewsHomeReaderAction.OnNewsItemClosed())
     }
 

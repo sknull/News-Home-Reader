@@ -45,9 +45,12 @@ import de.visualdigits.newshomereader.presentation.style.BACKGROUND_COLOR_DEFAUL
 import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.TEXT_COLOR_DEFAULT
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -64,8 +67,10 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
+import kotlinx.coroutines.withContext
 import kotlinx.io.Sink
 import kotlinx.io.Source
 import kotlin.time.Duration.Companion.days
@@ -78,7 +83,8 @@ class NewsHomeReaderViewModel(
     private val articleRepository: ArticleRepository,
     private val settingsRepository: SettingsRepository,
     private val newsFeedConfigurationRepository: NewsFeedConfigurationRepository,
-    private val catalogRepository: CatalogRepository
+    private val catalogRepository: CatalogRepository,
+    scope: CoroutineScope
 ) : ViewModel() {
 
     val scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>> = mutableMapOf()
@@ -97,14 +103,13 @@ class NewsHomeReaderViewModel(
     private val _editedSettings = MutableStateFlow<Settings?>(null)
     val editedSettings = _editedSettings.asStateFlow()
 
-    
-    private val _currentNewsItems =  MutableStateFlow<List<NewsItem>>(emptyList())
-
-    private val _filteredNewsItems = MutableStateFlow<List<NewsItem>>(emptyList())
+     private val _filteredNewsItems = MutableStateFlow<List<NewsItem>>(emptyList())
     val filteredNewsItems = _filteredNewsItems.asStateFlow()
 
     private val _visibleNewsItems =  MutableStateFlow<List<NewsItem>>(emptyList())
     val visibleNewsItems = _visibleNewsItems.asStateFlow()
+
+    private val _currentNewsItems = MutableStateFlow<Map<String, NewsItem>>(emptyMap())
 
     init {
         Logger.i("Application version ${AppVersion().version} initializing...")
@@ -112,7 +117,6 @@ class NewsHomeReaderViewModel(
         Logger.i("Application started")
 
         val articleSemaphore = Semaphore(3)
-        val enrichedCache = mutableMapOf<String, NewsItem>()
 
         _state
             .map { SubState(
@@ -141,26 +145,35 @@ class NewsHomeReaderViewModel(
                     .transform { items ->
                         if (items.isEmpty() && _currentNewsItems.value.isNotEmpty()) return@transform
 
-                        val enriched = coroutineScope {
+                        val enriched = supervisorScope {
                             items.map { newsItem ->
                                 async(Dispatchers.IO) {
-                                    articleSemaphore.withPermit {
-                                        val cached = enrichedCache[newsItem.uiKey]
-                                        if (cached?.newsArticle != null) {
-                                            return@async cached.copy(id = newsItem.id)
-                                        }
-
-                                        if (newsItem.newsArticle != null) return@async newsItem
-
-                                        if (newsItem.id != 0L) {
-                                            val articleResult = articleRepository.getFullArticle(newsItem.id)
-                                            if (articleResult is Result.Success) {
-                                                val enrichedItem = newsItem.copy(newsArticle = articleResult.data)
-                                                enrichedCache[newsItem.uiKey] = enrichedItem
-                                                return@async enrichedItem
+                                    try {
+                                        articleSemaphore.withPermit {
+                                            val cached = _currentNewsItems.value[newsItem.uiKey]
+                                            if (cached?.newsArticle != null) {
+                                                return@async cached.copy(id = newsItem.id)
                                             }
-                                        }
 
+                                            if (newsItem.newsArticle != null) return@async newsItem
+
+                                            if (newsItem.id != 0L) {
+                                                val articleResult = withContext(Dispatchers.IO + NonCancellable) {
+                                                    articleRepository.getFullArticle(newsItem.id)
+                                                }
+                                                if (articleResult is Result.Success) {
+                                                    val enrichedItem = newsItem.copy(newsArticle = articleResult.data)
+                                                    _currentNewsItems.update { current -> current + (newsItem.uiKey to enrichedItem) }
+                                                    return@async enrichedItem
+                                                }
+                                            }
+
+                                            newsItem
+                                        }
+                                    } catch (e: CancellationException) {
+                                        throw e
+                                    } catch (e: Exception) {
+                                        Logger.e("Something went wrong while refreshing feeds", e)
                                         newsItem
                                     }
                                 }
@@ -200,12 +213,12 @@ class NewsHomeReaderViewModel(
                         _filteredNewsItems.update { result.enriched }
                     }
                     else -> {
-                        _currentNewsItems.update { result.enriched }
+                        _currentNewsItems.update { result.enriched.associateBy { e -> e.uiKey } }
                         _visibleNewsItems.update { result.visible }
                     }
                 }
             }
-            .launchIn(viewModelScope)
+            .launchIn(scope)
     }
 
 
@@ -228,7 +241,7 @@ class NewsHomeReaderViewModel(
             // Settings
             //
             is NewsHomeReaderAction.OnEditSettingsClick -> {
-                _editedSettings.value = _settings.value
+                _editedSettings.update { _settings.value }
                 _state.update {
                     it.copy(
                         isEditingSettings = action.isEditingSettings,
@@ -552,28 +565,11 @@ class NewsHomeReaderViewModel(
             }
 
             is NewsHomeReaderAction.OnNewsItemClosed -> {
-                _state.update {
-                    it.copy(
-                        currentNewsArticle = null
-                    )
-                }
+                closeNewsItem(state.value.currentNewsItem)
             }
 
             is NewsHomeReaderAction.OnMarkReadClicked -> {
                 markItemsAsRead(action.days)
-            }
-
-            is NewsHomeReaderAction.OnNewsItemBackClicked -> {
-                val current = scrollPosition["newsfeed_items"]
-                scrollPosition["newsfeed_items"] = Triple(current?.first?:0, current?.second, ScrollIntent.standard)
-                _state.update {
-                    it.copy(
-                        currentNewsItem = null,
-                        currentNewsArticle = null,
-                        uiMessage = null,
-                        uiMessageSeverity = null
-                    )
-                }
             }
 
             is NewsHomeReaderAction.OnNewsItemSearchExpandStateChanged -> {
@@ -925,7 +921,7 @@ class NewsHomeReaderViewModel(
                 _state.update {
                     it.copy(
                         isDeletingNewsFeedGroup = false,
-                        currentNewsArticle = null,
+                        currentNewsItem = null,
                         newsFeedGroups = deleteResult.data
                     )
                 }
@@ -987,11 +983,11 @@ class NewsHomeReaderViewModel(
                                     _isLoading.update { false }
                                 }
                                 .onError { _, throwable ->
-                                    Logger.e("Could not prefetch images", throwable)
+                                    Logger.e("NewsHomeReaderViewModel: Could not prefetch images", throwable)
                                 }
                         }
                     } else if (feedResult is Result.Error) {
-                        Logger.e("Could not load feed '$feedName'", feedResult.throwable)
+                        Logger.e("NewsHomeReaderViewModel: Could not load feed '$feedName'", feedResult.throwable)
                         _isLoading.update { false }
                         _state.update {
                             it.copy(
@@ -1219,6 +1215,7 @@ class NewsHomeReaderViewModel(
         newsFeedGroups: List<NewsFeedGroup>,
         newsFeedItems: List<NewsFeedItem>
     ): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> {
+        Logger.i("NewsHomeReaderViewModel: refreshNewsFeeds")
         val wifiOnly = _settings.value?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
         val loadArticles = _settings.value?.get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false
         val keepReadArticles = _settings.value?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue ?: 30
@@ -1417,7 +1414,6 @@ Logger.i("loadFeedItems - SCROLL TO TOP")
                 currentNewsFeedName = newsFeedItem.name,
                 currentNewsFeedGroup = null,
                 currentNewsFeedItem = newsFeedItem,
-                currentNewsArticle = null,
                 uiMessage = null,
                 uiMessageSeverity = null
             )
@@ -1429,11 +1425,30 @@ Logger.i("loadFeedItems - SCROLL TO TOP")
         }
     }
 
+    private fun closeNewsItem(newsItem: NewsItem?) = viewModelScope.launch {
+        newsItem?.also { ni ->
+            val hideRead = _settings.value?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
+            val stopWords = determineStopWords(state.value.currentNewsFeedGroup)
+            _currentNewsItems.update { current -> current + (newsItem.uiKey to newsItem.copy(isRead = true)) }
+            _visibleNewsItems.update { calculateVisibleNewsItems(_currentNewsItems.value.values.toList(), hideRead, stopWords) }
+        }
+        _state.update {
+            it.copy(currentNewsItem = null)
+        }
+        state.value.currentNewsFeedItem?.also { nfi -> loadFeedItems(nfi) }
+    }
+
     private fun markItemsAsRead(days: Long) = viewModelScope.launch {
         val threshold = KmpOffsetDateTime.now().minus(days.days)
-        val newsItems = _currentNewsItems.value
+        val newsItems = _currentNewsItems.value.values
             .filter { newsItem -> newsItem.updated.isBefore(threshold) }
             .map { newsItem -> newsItem.copy(isRead = true) }
+        newsItems.forEach { newsItem ->
+            _currentNewsItems.update { current -> current + (newsItem.uiKey to newsItem.copy(isRead = true)) }
+        }
+        val hideRead = _settings.value?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
+        val stopWords = determineStopWords(state.value.currentNewsFeedGroup)
+        _visibleNewsItems.update { calculateVisibleNewsItems(_currentNewsItems.value.values.toList(), hideRead, stopWords) }
         val markResult = feedRepository.markNewsItemsAsRead(newsItems)
         if (markResult is Result.Success) {
             _isLoading.update { false }
@@ -1455,31 +1470,6 @@ Logger.i("loadFeedItems - SCROLL TO TOP")
     }
 
     private fun loadArticle(newsItem: NewsItem) = viewModelScope.launch {
-        val articleResult = articleRepository.readFullArticle(newsItem)
-        if (articleResult is Result.Success) {
-            val copy = newsItem.copy(newsArticle = articleResult.data.first)
-            _isLoading.update { false }
-            _state.update {
-                it.copy(
-                    currentNewsItem = copy,
-                    currentNewsArticle = articleResult.data.first,
-                    isNewsItemSearchActive = false,
-                    uiMessage = null,
-                    uiMessageSeverity = null
-                )
-            }
-        } else if (articleResult is Result.Error) {
-            Logger.e("Could not load article", articleResult.throwable)
-            _isLoading.update { false }
-            _state.update {
-                it.copy(
-                    isNewsItemSearchActive = false,
-                    newsItemSearchText = null,
-                    uiMessage = articleResult.error.toUiText(),
-                    uiMessageSeverity = Severity.Error
-                )
-            }
-        }
         val markResult = feedRepository.markNewsItemsAsRead(listOf(newsItem))
         if (markResult is Result.Success) {
             val syncResult = feedRepository.synchroniseReadNewsItems()
@@ -1488,6 +1478,14 @@ Logger.i("loadFeedItems - SCROLL TO TOP")
             }
         } else if (markResult is Result.Error) {
             Logger.e("Could not mark news item as read", markResult.throwable)
+        }
+        _state.update {
+            it.copy(
+                currentNewsItem = newsItem,
+                isNewsItemSearchActive = false,
+                uiMessage = null,
+                uiMessageSeverity = null
+            )
         }
     }
 

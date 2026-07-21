@@ -40,7 +40,7 @@ fun NewsContent(
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
     ) {
-        if (state.currentNewsArticle != null && state.currentNewsItem != null) {
+        if (state.currentNewsItem != null) {
             NewsArticleCard(
                 viewModel = viewModel,
                 platformType = platformType,
@@ -48,7 +48,6 @@ fun NewsContent(
                 maxWidth = maxWidth,
                 maxImageSize = maxImageSize,
                 newsItem = state.currentNewsItem,
-                newsArticle = state.currentNewsArticle,
                 settings = settings,
                 uriHandler = uriHandler,
                 state = state,

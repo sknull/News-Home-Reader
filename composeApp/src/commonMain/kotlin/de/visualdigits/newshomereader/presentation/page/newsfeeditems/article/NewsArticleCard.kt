@@ -57,7 +57,6 @@ import de.visualdigits.compose.resources.icon_paid_24px
 import de.visualdigits.compose.resources.icon_timelapse_24px
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.settings.Settings
-import de.visualdigits.newshomereader.domain.model.unified.FullArticle
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.util.StringEscapeUtils.normalizeXml
 import de.visualdigits.newshomereader.domain.util.getFaviconUrl
@@ -82,7 +81,6 @@ fun NewsArticleCard(
     maxWidth: Dp,
     maxImageSize: Int?,
     newsItem: NewsItem,
-    newsArticle: FullArticle,
     settings: Settings?,
     uriHandler: UriHandler,
     state: NewsHomeReaderState,
@@ -128,7 +126,6 @@ fun NewsArticleCard(
         ) {
             NewsArticleMenuBar(
                 newsItem = newsItem,
-                newsArticle = newsArticle,
                 uriHandler = uriHandler,
                 onAction = onAction
             )
@@ -143,7 +140,7 @@ fun NewsArticleCard(
                     .width(10.dp)
                     .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
                 scrollbarStyle = scrollbarStyle(),
-                scrollbarId = "newsarticle_${newsArticle.itemId}",
+                scrollbarId = "newsarticle_${newsItem.newsArticle?.itemId}",
                 scrollPosition = scrollPosition,
                 onCommonAction = onCommonAction
             ) {
@@ -252,7 +249,7 @@ fun NewsArticleCard(
                                 tint = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
-                                text = "${newsArticle.readingTime} Min.",
+                                text = "${newsItem.newsArticle?.readingTime} Min.",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
@@ -261,7 +258,6 @@ fun NewsArticleCard(
                     Pair("image", @Composable {
                         ArticleImage(
                             newsItem = newsItem,
-                            newsArticle = newsArticle,
                             maxImageSize = maxImageSize
                         )
                     }),
@@ -270,7 +266,7 @@ fun NewsArticleCard(
                         if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                             MediaItemButtons(
                                 viewModel = viewModel,
-                                mediaItems = newsArticle.videoItems + newsArticle.audioItems,
+                                mediaItems = (newsItem.newsArticle?.videoItems?:listOf()) + (newsItem.newsArticle?.audioItems?:listOf()),
                                 uriHandler = uriHandler,
                                 newsItem = newsItem
                             )
@@ -313,7 +309,7 @@ fun NewsArticleCard(
                     }),
                     Pair("text", @Composable {
                         val annotatedText = htmlToAnnotatedString(
-                            html = normalizeXml(newsArticle.html),
+                            html = normalizeXml(newsItem.newsArticle?.html?:""),
                             style = HtmlStyle(
                                 textLinkStyles = textLinkStyles(spotColor)
                             ),

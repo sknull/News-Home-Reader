@@ -20,6 +20,9 @@ import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import io.ktor.util.collections.ConcurrentMap
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -51,7 +54,9 @@ open class DefaultArticleRepository(
             try {
                 var fullArticle = dao.getFullArticleByItemId(newsItem.id).executeAsOneOrNull()?.toFullArticle()
                 val changedArticle = if (fullArticle == null || newsItem.isChanged || (fullArticle.html.isEmpty() && fullArticle.retries < 3)) {
-                    val response = httpClient.get(urlString = newsItem.link)
+                    val response = withContext(Dispatchers.IO + NonCancellable) {
+                        httpClient.get(urlString = newsItem.link)
+                    }
                     val readFullArticle = if (response.status.value == 200) {
                         readFromString(newsItem, response.bodyAsText(), newsItem.link)
                     } else {
@@ -156,29 +161,40 @@ open class DefaultArticleRepository(
             .map { ao -> ao.toMediaItem() }
 
         // scrape from inline player
-        val youtubeVideos1 = document.select("lite-youtube")
-            .mapNotNull { elem ->
-                try {
-                    val videoUrl = "https://www.youtube.com/watch?v=${elem.attr("videoid")}"
-                    val embedUrl = "https://www.youtube.com/oembed?url=$videoUrl&format=json"
-                    val json = httpClient.get(embedUrl).bodyAsText()
-                    Json.decodeFromString<OEmbed>(json).toMediaItem(videoUrl)
-                } catch (_: Exception) {
-                    null
-                }
-            }
+        val youtubeVideos1 = withContext(Dispatchers.IO + NonCancellable) {
+            document.select("lite-youtube")
+                .map { elem ->
+                    async {
+                        try {
+                            val videoUrl = "https://www.youtube.com/watch?v=${elem.attr("videoid")}"
+                            val embedUrl = "https://www.youtube.com/oembed?url=$videoUrl&format=json"
+
+                            val json = httpClient.get(embedUrl).bodyAsText()
+                            Json.decodeFromString<OEmbed>(json).toMediaItem(videoUrl)
+                        } catch (_: Exception) {
+                            null
+                        }
+                    }
+                }.awaitAll()
+                .filterNotNull()
+        }
         // scrape from links
-        val youtubeVideos2 = document.select("a[href^=https://www.youtube.com/watch?v=]")
-            .mapNotNull { elem ->
-                try {
-                    val videoUrl = elem.attr("href")
-                    val embedUrl = "https://www.youtube.com/oembed?url=$videoUrl&format=json"
-                    val json = httpClient.get(embedUrl).bodyAsText()
-                    Json.decodeFromString<OEmbed>(json).toMediaItem(videoUrl)
-                } catch (_: Exception) {
-                    null
-                }
-            }
+        val youtubeVideos2 = withContext(Dispatchers.IO + NonCancellable) {
+            document.select("a[href^=https://www.youtube.com/watch?v=]")
+                .map { elem ->
+                    async {
+                        try {
+                            val videoUrl = elem.attr("href")
+                            val embedUrl = "https://www.youtube.com/oembed?url=$videoUrl&format=json"
+                            val json = httpClient.get(embedUrl).bodyAsText()
+                            Json.decodeFromString<OEmbed>(json).toMediaItem(videoUrl)
+                        } catch (_: Exception) {
+                            null
+                        }
+                    }
+                }.awaitAll()
+                .filterNotNull()
+        }
         val videoItems = applicationJson
             .filter { script -> script.type?.lowercase() == "videoobject" }
             .map { vo -> vo.toMediaItem() } +

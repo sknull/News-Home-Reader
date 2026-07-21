@@ -24,8 +24,6 @@ import org.koin.java.KoinJavaComponent.getKoin
 
 object HttpClientFactory {
 
-    private val log = co.touchlab.kermit.Logger.withTag("HttpClientFactory")
-
     fun create(
         engine: HttpClientEngine,
                settingsRepositoryProvider: () -> SettingsRepository
@@ -83,7 +81,7 @@ object HttpClientFactory {
                 level = LogLevel.NONE
                 logger = object : io.ktor.client.plugins.logging.Logger {
                     override fun log(message: String) {
-                        log.d(message)
+                        Logger.i(message)
                     }
                 }
             }

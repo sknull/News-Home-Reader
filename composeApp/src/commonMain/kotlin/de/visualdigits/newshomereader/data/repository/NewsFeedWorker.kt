@@ -10,6 +10,7 @@ import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.repository.FeedRepository
 import de.visualdigits.newshomereader.domain.repository.NewsFeedConfigurationRepository
 import de.visualdigits.newshomereader.domain.repository.SettingsRepository
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,6 +40,7 @@ class NewsFeedWorker(
                         nfg.newsFeeds + nfg.subGroups.flatMap { sg -> sg.newsFeeds }
                     }.filter { nfi -> nfi.outlineType != OutlineType.keyword }
                     val result = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
+                        Logger.i("NewsFeedWorker: refreshNewsFeeds")
                         val newsFeedsResult = feedRepository.refreshNewsFeeds(
                             newsFeedItems = newsFeedConfigurations
                         )
@@ -56,17 +58,17 @@ class NewsFeedWorker(
                                 )
                             }
                             is Result.Error -> {
-                                Logger.e("Could not refresh news feeds", newsFeedsResult.throwable)
+                                Logger.e("NewsFeedWorker: Could not refresh news feeds", newsFeedsResult.throwable)
                                 feedRepository.getAllNewsFeeds()
                             }
                         }
                     } else {
-                        Logger.i("No free of charge internet connection available - fetching newsFeeds from database")
+                        Logger.i("NewsFeedWorker: No free of charge internet connection available - fetching newsFeeds from database")
                         feedRepository.getAllNewsFeeds()
                     }
                     if (result is Result.Success) {
                         if (prefetchImages) {
-                            Logger.i("News feed worker prefetching images")
+                            Logger.i("NewsFeedWorker: News feed worker prefetching images")
                             val (newsFeeds, changed) = result.data
                             if (changed) {
                                 feedRepository.prefetchImages(
@@ -79,16 +81,19 @@ class NewsFeedWorker(
                             }
                         }
                     } else if (result is Result.Error) {
-                        Logger.e("Could not load news feeds", result.throwable)
+                        Logger.e("NewsFeedWorker: Could not load news feeds", result.throwable)
                     }
                 } else if (feedConfigurationResult is Result.Error) {
-                    Logger.e("Could not load feed configuration", feedConfigurationResult.throwable)
+                    Logger.e("NewsFeedWorker: Could not load feed configuration", feedConfigurationResult.throwable)
                 }
             } else if (settingsResult is Result.Error) {
-                Logger.e("Could not load settings", settingsResult.throwable)
+                Logger.e("NewsFeedWorker: Could not load settings", settingsResult.throwable)
             }
+        } catch (e: CancellationException) {
+            Logger.i("NewsFeedWorker: Worker was cancelled by the system/app closing.")
+            throw e
         } catch (e: Exception) {
-            Logger.e("Could not execute news feed worker", e)
+            Logger.e("NewsFeedWorker: Could not execute news feed worker", e)
         }
     }
 }

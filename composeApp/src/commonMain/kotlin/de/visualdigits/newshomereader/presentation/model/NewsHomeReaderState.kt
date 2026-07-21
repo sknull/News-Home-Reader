@@ -33,7 +33,6 @@ data class NewsHomeReaderState(
     val isNewsItemSearchActive: Boolean = false,
 
     val currentNewsItem: NewsItem? = null,
-    val currentNewsArticle: FullArticle? = null,
 
     val language: Language = Language.EN,
 
