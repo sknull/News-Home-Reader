@@ -27,7 +27,7 @@ import org.koin.test.inject
 import org.koin.test.junit5.KoinTestExtension
 import java.io.File
 
-//@Disabled("Only for local testing")
+@Disabled("Only for local testing")
 class RssTest : KoinTest {
 
     private val feedRepository: FeedRepository by inject()
