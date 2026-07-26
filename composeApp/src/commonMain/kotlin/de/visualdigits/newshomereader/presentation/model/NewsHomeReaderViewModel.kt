@@ -53,7 +53,6 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
@@ -130,7 +129,6 @@ class NewsHomeReaderViewModel(
             .flatMapLatest { (group, name, searchText, keyword) ->
                 val isSearching = !searchText.isNullOrBlank()
                 val isKeyword = !keyword.isNullOrBlank()
-
                 val sourceFlow = when {
                     isSearching -> feedRepository.observeNewsFeedItemSearchItems(searchText)
                     isKeyword -> feedRepository.observeNewsFeedItemSearchItems(keyword)
@@ -1344,6 +1342,7 @@ class NewsHomeReaderViewModel(
 
             _isLoading.update { false }
             _settings.update { settings }
+            _editedSettings.update { settings }
             _state.update {
                 it.copy(
                     uiMessage = null,
@@ -1429,7 +1428,7 @@ Logger.i("loadFeedItems - SCROLL TO TOP")
         newsItem?.also { ni ->
             val hideRead = _settings.value?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
             val stopWords = determineStopWords(state.value.currentNewsFeedGroup)
-            _currentNewsItems.update { current -> current + (newsItem.uiKey to newsItem.copy(isRead = true)) }
+            _currentNewsItems.update { current -> current + (ni.uiKey to ni.copy(isRead = true)) }
             _visibleNewsItems.update { calculateVisibleNewsItems(_currentNewsItems.value.values.toList(), hideRead, stopWords) }
         }
         _state.update {

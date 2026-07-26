@@ -18,7 +18,7 @@ fun Item.toNewsItem(feedName: String): NewsItem {
 
     return NewsItem(
         feedName = feedName,
-        identifier = identifier ?: id ?: link?.let { l -> Url(l).fullPath.substringAfterLast('/').substringBeforeLast('.') } ?: "${feedName}_${title}_$pubDate",
+        identifier = identifier ?: id ?: link ?: "${feedName}_${title}_$pubDate",
         published = date ?: pubDate ?: KmpOffsetDateTime.MIN,
         updated = pubDate ?: KmpOffsetDateTime.MIN,
         link = link ?: "",

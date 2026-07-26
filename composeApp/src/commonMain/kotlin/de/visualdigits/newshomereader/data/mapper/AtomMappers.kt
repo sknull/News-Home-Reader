@@ -12,7 +12,7 @@ fun Entry.toNewsItem(feedName: String): NewsItem {
     val (image, imageTitle, imageCaption) = extractImage(content?:"")
     return NewsItem(
         feedName = feedName,
-        identifier = id ?: "",
+        identifier = id ?: link?.href ?: "${feedName}_${title}_$published",
         published = published,
         updated = updated,
         link = link?.href ?: "",

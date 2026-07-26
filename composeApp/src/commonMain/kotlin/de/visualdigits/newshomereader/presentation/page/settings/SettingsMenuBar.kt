@@ -73,7 +73,7 @@ fun SettingsMenuBar(
             buttonTextAlign = TextAlign.Start,
             title = stringResource(Res.string.dialog_title_export_opml),
             fileMode = FileMode.FILES_ONLY,
-            suggestedFileName = "newshomereader-export_${
+            suggestedFileName = "nhr-export_${
                 KmpOffsetDateTime.now().format("yyyy-MM-dd_HH-mm-ss")
             }.opml",
             buttonColor = buttonColor,
@@ -104,7 +104,7 @@ fun SettingsMenuBar(
             buttonTextAlign = TextAlign.Start,
             title = stringResource(Res.string.dialog_title_export_settings),
             fileMode = FileMode.FILES_ONLY,
-            suggestedFileName = "newshomereader-settings_${
+            suggestedFileName = "nhr-settings_${
                 KmpOffsetDateTime.now().format("yyyy-MM-dd_HH-mm-ss")
             }.json",
             buttonColor = buttonColor,
