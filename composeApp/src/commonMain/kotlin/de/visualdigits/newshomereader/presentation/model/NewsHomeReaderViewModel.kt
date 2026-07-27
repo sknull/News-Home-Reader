@@ -1341,8 +1341,8 @@ class NewsHomeReaderViewModel(
             applyAppLanguage(finalSettings.get<Language>(SK.language)?.localeCode?: Language.EN.localeCode)
 
             _isLoading.update { false }
-            _settings.update { settings }
-            _editedSettings.update { settings }
+            _settings.update { finalSettings }
+            _editedSettings.update { finalSettings }
             _state.update {
                 it.copy(
                     uiMessage = null,
