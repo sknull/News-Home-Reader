@@ -1392,16 +1392,14 @@ class NewsHomeReaderViewModel(
     private fun loadFeedItems(
         newsFeedItem: NewsFeedItem
     ) = viewModelScope.launch {
-Logger.i("loadFeedItems")
         if ((newsFeedItem.outlineType == OutlineType.newsfeed || newsFeedItem.outlineType == OutlineType.keyword) &&
             ((newsFeedItem.outlineType != OutlineType.keyword && state.value.currentNewsFeedName != newsFeedItem.name) ||
                 (newsFeedItem.outlineType == OutlineType.keyword && state.value.currentKeywordBucket != newsFeedItem.name) ||
                 state.value.previousOutlineType != newsFeedItem.outlineType)
         ) {
-Logger.i("loadFeedItems - SCROLL TO TOP")
-            scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.scrollToStart)
+            scrollPosition["newsfeed_items"] = Triple(0, 0, ScrollIntent.scrollToStart)
         } else {
-            scrollPosition["newsfeed_items"] = Triple(0,0, ScrollIntent.standard)
+            scrollPosition["newsfeed_items"] = scrollPosition["newsfeed_items"]?.copy(third = ScrollIntent.standard) ?: Triple(0, 0, ScrollIntent.standard)
         }
         _isLoading.update { false }
         _state.update {
