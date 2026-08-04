@@ -32,7 +32,6 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.style.gap
-import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -75,7 +74,6 @@ fun NewsItemSearchBar(
                 .clip(MaterialTheme.shapes.small)
                 .width(10.dp)
                 .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
-            scrollbarStyle = scrollbarStyle(),
             scrollbarId = "newsfeed_searchbar",
             scrollPosition = scrollPosition,
             onCommonAction = onCommonAction

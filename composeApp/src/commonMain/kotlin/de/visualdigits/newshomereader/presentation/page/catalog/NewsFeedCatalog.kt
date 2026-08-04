@@ -44,7 +44,6 @@ import de.visualdigits.newshomereader.domain.model.catalog.NewsFeedCatalogItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.style.gap
-import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -73,7 +72,6 @@ fun NewsFeedCatalog(
             .clip(MaterialTheme.shapes.small)
             .width(10.dp)
             .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
-        scrollbarStyle = scrollbarStyle(),
         scrollbarId = "catalog",
         scrollPosition = scrollPosition,
         onCommonAction = onCommonAction

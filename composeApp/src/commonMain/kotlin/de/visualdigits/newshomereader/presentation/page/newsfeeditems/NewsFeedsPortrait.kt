@@ -38,7 +38,6 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.page.navigation.NewsFeedGroupBox
 import de.visualdigits.newshomereader.presentation.style.gap
-import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.painterResource
 
@@ -105,7 +104,6 @@ fun NewsFeedsPortrait(
                 .width(10.dp)
                 .background(MaterialTheme.colorScheme.background)
                 .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
-            scrollbarStyle = scrollbarStyle(),
             scrollbarId = "newsfeed_items",
             scrollPosition = scrollPosition,
             onCommonAction = onCommonAction,

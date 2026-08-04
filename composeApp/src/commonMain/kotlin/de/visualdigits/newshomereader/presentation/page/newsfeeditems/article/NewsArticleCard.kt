@@ -66,7 +66,6 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.Image
 import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
-import de.visualdigits.newshomereader.presentation.style.scrollbarStyle
 import de.visualdigits.newshomereader.presentation.style.textLinkStyles
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
 import org.jetbrains.compose.resources.imageResource
@@ -139,7 +138,6 @@ fun NewsArticleCard(
                     .clip(MaterialTheme.shapes.small)
                     .width(10.dp)
                     .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
-                scrollbarStyle = scrollbarStyle(),
                 scrollbarId = "newsarticle_${newsItem.newsArticle?.itemId}",
                 scrollPosition = scrollPosition,
                 onCommonAction = onCommonAction

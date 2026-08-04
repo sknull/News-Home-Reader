@@ -33,6 +33,7 @@ import de.visualdigits.newshomereader.presentation.page.newsfeedconfiguration.Ne
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.NewsContent
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.NewsItemSearchBar
 import de.visualdigits.newshomereader.presentation.page.settings.SettingsPage
+import de.visualdigits.newshomereader.presentation.style.AppCompositionProvider
 import de.visualdigits.newshomereader.presentation.style.BACKGROUND_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.MyShapes
 import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
@@ -110,107 +111,109 @@ fun MainPage(
                 viewModel.onAction(NewsHomeReaderAction.UpdateMaxImageSize(settings, max(wPx, hPx)))
             }
 
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background)
-                    .safeDrawingPadding()
-            ) {
-                Column(
+            AppCompositionProvider {
+                Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(end = 4.dp, bottom = 4.dp),
+                        .background(MaterialTheme.colorScheme.background)
+                        .safeDrawingPadding()
                 ) {
-                    ErrorCard(
-                        errorMessage = state.uiMessage,
-                        severity = state.uiMessageSeverity,
-                        shapeContainer = MaterialTheme.shapes.small
-                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(end = 4.dp, bottom = 4.dp),
+                    ) {
+                        ErrorCard(
+                            errorMessage = state.uiMessage,
+                            severity = state.uiMessageSeverity,
+                            shapeContainer = MaterialTheme.shapes.small
+                        )
 
-                    NewsItemSearchBar(
-                        viewModel = viewModel,
-                        state = state,
-                        platformType = platformType,
-                        screenWidth = screenWidth,
-                        onAction = viewModel::onAction,
-                        scrollPosition = viewModel.scrollPosition,
-                        onCommonAction = viewModel::onCommonAction,
-                        rowDataFiltered = rowDataFiltered,
-                        maxImageSize = maxImageSize,
-                        uriHandler = uriHandler
-                    )
+                        NewsItemSearchBar(
+                            viewModel = viewModel,
+                            state = state,
+                            platformType = platformType,
+                            screenWidth = screenWidth,
+                            onAction = viewModel::onAction,
+                            scrollPosition = viewModel.scrollPosition,
+                            onCommonAction = viewModel::onCommonAction,
+                            rowDataFiltered = rowDataFiltered,
+                            maxImageSize = maxImageSize,
+                            uriHandler = uriHandler
+                        )
 
-                    MainMenuBar(
-                        viewModel = viewModel,
-                        state = state,
-                        onAction = viewModel::onAction,
-                        connectivityManager = connectivityManager
-                    )
+                        MainMenuBar(
+                            viewModel = viewModel,
+                            state = state,
+                            onAction = viewModel::onAction,
+                            connectivityManager = connectivityManager
+                        )
 
-                    when {
-                        state.isShowInfos -> {
-                            InfoPage(
-                                viewModel = viewModel,
-                                uriHandler = uriHandler,
-                                onAction = viewModel::onAction
-                            )
-                        }
-                        state.isEditingSettings -> {
-                            SettingsPage(
-                                viewModel = viewModel,
-                                platformType = platformType,
-                                scrollPosition = viewModel.scrollPosition,
-                                onCommonAction = viewModel::onCommonAction,
-                                onAction = viewModel::onAction
-                            )
-                        }
-                        state.isAddingNewsFeedConfiguration || state.isEditingNewsFeedConfiguration -> {
-                            NewsFeedConfigurationPage(
-                                platformType = platformType,
-                                state = state,
-                                viewModel = viewModel,
-                                onCommonAction = viewModel::onCommonAction,
-                                onAction = viewModel::onAction
-                            )
-                        }
-                        state.isViewingCatalog -> {
-                            CatalogPage(
-                                state = state,
-                                platformType = platformType,
-                                screenWidth = screenWidth,
-                                onAction = viewModel::onAction,
-                                viewModel = viewModel,
-                                uriHandler = uriHandler,
-                                onCommonAction = viewModel::onCommonAction
-                            )
-                        }
-                        else -> {
-                            NewsContent(
-                                viewModel = viewModel,
-                                state = state,
-                                platformType = platformType,
-                                columns = columns,
-                                maxWidth = screenWidth,
-                                maxHeight = screenHeight,
-                                maxImageSize = maxImageSize,
-                                uriHandler = uriHandler,
-                                connectivityManager = connectivityManager,
-                                onCommonAction = viewModel::onCommonAction,
-                                onAction = viewModel::onAction
-                            )
+                        when {
+                            state.isShowInfos -> {
+                                InfoPage(
+                                    viewModel = viewModel,
+                                    uriHandler = uriHandler,
+                                    onAction = viewModel::onAction
+                                )
+                            }
+                            state.isEditingSettings -> {
+                                SettingsPage(
+                                    viewModel = viewModel,
+                                    platformType = platformType,
+                                    scrollPosition = viewModel.scrollPosition,
+                                    onCommonAction = viewModel::onCommonAction,
+                                    onAction = viewModel::onAction
+                                )
+                            }
+                            state.isAddingNewsFeedConfiguration || state.isEditingNewsFeedConfiguration -> {
+                                NewsFeedConfigurationPage(
+                                    platformType = platformType,
+                                    state = state,
+                                    viewModel = viewModel,
+                                    onCommonAction = viewModel::onCommonAction,
+                                    onAction = viewModel::onAction
+                                )
+                            }
+                            state.isViewingCatalog -> {
+                                CatalogPage(
+                                    state = state,
+                                    platformType = platformType,
+                                    screenWidth = screenWidth,
+                                    onAction = viewModel::onAction,
+                                    viewModel = viewModel,
+                                    uriHandler = uriHandler,
+                                    onCommonAction = viewModel::onCommonAction
+                                )
+                            }
+                            else -> {
+                                NewsContent(
+                                    viewModel = viewModel,
+                                    state = state,
+                                    platformType = platformType,
+                                    columns = columns,
+                                    maxWidth = screenWidth,
+                                    maxHeight = screenHeight,
+                                    maxImageSize = maxImageSize,
+                                    uriHandler = uriHandler,
+                                    connectivityManager = connectivityManager,
+                                    onCommonAction = viewModel::onCommonAction,
+                                    onAction = viewModel::onAction
+                                )
+                            }
                         }
                     }
+
+                    NewsFeedConfigurationGroupDialog(
+                        state = state,
+                        onAction = viewModel::onAction
+                    )
+
+                    ConfirmDeleteNewsFeedGroupDialog(
+                        state = state,
+                        onAction = viewModel::onAction
+                    )
                 }
-
-                NewsFeedConfigurationGroupDialog(
-                    state = state,
-                    onAction = viewModel::onAction
-                )
-
-                ConfirmDeleteNewsFeedGroupDialog(
-                    state = state,
-                    onAction = viewModel::onAction
-                )
             }
         }
     }
