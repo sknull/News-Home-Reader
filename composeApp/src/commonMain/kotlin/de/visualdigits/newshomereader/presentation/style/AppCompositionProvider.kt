@@ -68,8 +68,6 @@ fun AppCompositionProvider(
     )
     val fileChooserResources = FileChooserResources(
         iconFolder = painterResource(Res.drawable.icon_folder_open_24px),
-        iconTint = MaterialTheme.colorScheme.onSurface,
-        buttonColor =MaterialTheme.colorScheme.surface,
         titleDirectories = "Choose Directory",
         titleFiles = "Choose File",
     )
