@@ -53,10 +53,10 @@ object CatalogValidator {
                             val newsFeed = feedRepository.readFromBytes(feed.name, bytes) // contains logic to read and normalize diverse feeds of type rss, rdf and atom
                             if (newsFeed != null) {
                                 val updated = newsFeed.updated
-                                if (updated.isBefore(thresholdDate)) {
+                                if (updated < thresholdDate) {
                                     output(validationOutputFile, "    ${feed.name}: OUTDATED FEED")
                                     null
-                                } else if (newsFeed.items.maxBy { item -> item.updated }.updated.isBefore(thresholdDate)) {
+                                } else if (newsFeed.items.maxBy { item -> item.updated }.updated < thresholdDate) {
                                     output(validationOutputFile, "    ${feed.name}: OUTDATED NEWS ITEMS")
                                     null
                                 } else if (newsFeed.items.isEmpty()) {

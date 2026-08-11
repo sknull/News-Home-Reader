@@ -1438,7 +1438,7 @@ class NewsHomeReaderViewModel(
     private fun markItemsAsRead(days: Long) = viewModelScope.launch {
         val threshold = KmpOffsetDateTime.now().minus(days.days)
         val newsItems = _currentNewsItems.value.values
-            .filter { newsItem -> newsItem.updated.isBefore(threshold) }
+            .filter { newsItem -> newsItem.updated < threshold }
             .map { newsItem -> newsItem.copy(isRead = true) }
         newsItems.forEach { newsItem ->
             _currentNewsItems.update { current -> current + (newsItem.uiKey to newsItem.copy(isRead = true)) }

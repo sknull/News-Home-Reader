@@ -20,7 +20,7 @@ data class Image(
     val author: String? = null,
     val width: Int? = null,
     val height: Int? = null,
-    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) @XmlSerialName("datePublished") val datePublished: KmpOffsetDateTime = KmpOffsetDateTime.now(),
+    @XmlSerialName("datePublished") val datePublished: KmpOffsetDateTime = KmpOffsetDateTime.now(),
     val description: String? = null,
     val inLanguage: String? = null,
 )

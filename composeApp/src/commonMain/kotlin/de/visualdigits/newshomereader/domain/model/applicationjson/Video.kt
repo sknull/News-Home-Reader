@@ -14,6 +14,6 @@ data class Video(
     val duration: String? = null,
     val thumbnailUrl: List<String> = listOf(),
     val contentUrl: List<String> = listOf(),
-    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) @SerialName("uploadDate") val uploadDate: KmpOffsetDateTime? = null,
+    @SerialName("uploadDate") val uploadDate: KmpOffsetDateTime? = null,
     val publisher: Publisher? = null
 )

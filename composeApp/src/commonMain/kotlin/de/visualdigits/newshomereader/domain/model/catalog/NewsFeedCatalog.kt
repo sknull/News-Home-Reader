@@ -7,6 +7,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class NewsFeedCatalog(
     val baseUrl: String,
-    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) val date: KmpOffsetDateTime,
+    val date: KmpOffsetDateTime,
     val categories: List<NewsFeedCatalogCategory>
 )

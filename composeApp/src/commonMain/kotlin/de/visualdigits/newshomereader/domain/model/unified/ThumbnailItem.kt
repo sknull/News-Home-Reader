@@ -11,7 +11,7 @@ data class ThumbnailItem(
     val url: List<String> = listOf(),
     val description: String? = null,
     val author: String? = null,
-    @Serializable(with = KmpOffsetDateTimeHeuristicDeserializer::class) val datePublished: KmpOffsetDateTime = KmpOffsetDateTime.now(),
+    val datePublished: KmpOffsetDateTime = KmpOffsetDateTime.now(),
     val width: Int? = null,
     val height: Int? = null
 )
