@@ -1,0 +1,21 @@
+= Security Resilience Act
+:doctype: book
+:description: Documentation for News Home Reader
+:keywords: kotlin multiplatform, components
+:icons: font
+:toc:
+:toc-title: Contents
+:toclevels: 10
+
+image::art/NewsHomeReader_Banner.jpg[]
+
+== DISCLAIMER
+
+As a hobby developer I cannot conform to obligations resulting from the CRA of the european union.
+
+Should you want to report a security issue to me without opening a public issue here on github you can do so by sending an email to stephanknull@gmail.com
+
+Kind regards, +
+Stephan Knull
+
+link:README.adoc[BACK]
