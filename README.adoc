@@ -155,12 +155,12 @@ This project is licensed under GPLv3. If you use this code in your app, your ent
 
 ==== What this means for you
 
-You are free to use, modify, and distribute this software.Copyleft: If you use this code in your own project or app, your entire project must also be licensed under GPLv3 and its source code must be made public.This effectively prevents using this code in "closed-source" commercial apps. If you intend to sell an app based on this code without releasing your source code, you are in violation of this license.
+You are free to use, modify, and distribute this software.
 
 ===== Copyleft
 
 If you use this code in your own project or app, your entire project must also be licensed under GPLv3 and its source code must be made public. This effectively prevents using this code in "closed-source" commercial apps. If you intend to sell an app based on this code without releasing your source code, you are in violation of this license.
-Of course, you can always for a commercial license.
+Of course, you can always ask for a commercial license. You may email me to link:mailto:stephanknull@gmail.com?subject=LICENSE-REQUEST%20for%20news-home-reader[stephanknull@gmail.com]
 
 [TIP]
 ====

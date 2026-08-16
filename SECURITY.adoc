@@ -9,11 +9,20 @@
 
 image::art/NewsHomeReader_Banner.jpg[]
 
-== DISCLAIMER
+== Cyber Resilience Act (CRA) Disclaimer
 
-As a hobby developer I cannot conform to obligations resulting from the CRA of the european union.
+This project is developed and maintained purely as a hobby and for personal/educational purposes. There is no commercial activity, monetization, or paid support associated with this repository.
 
-Should you want to report a security issue to me without opening a public issue here on github you can do so by sending an email to stephanknull@gmail.com
+According to the European Union's Cyber Resilience Act (CRA) guidelines, this project falls under the strict exemption for non-commercial Open-Source software. Therefore, CRA obligations for commercial manufacturers do not apply to this repository or its author.
+
+The software is provided "as is", without warranty of any kind, as specified in the GPLv3 license.
+
+== Reporting a Security Issue
+
+Should you discover a security vulnerability and want to report it confidentially without opening a public issue on GitHub, please contact me directly: mailto:stephanknull@gmail.com?subject=SECURITY-VULNERABILITY[stephanknull@gmail.com]
+
+
+Thank you for helping to keep this project safe.
 
 Kind regards, +
 Stephan Knull
