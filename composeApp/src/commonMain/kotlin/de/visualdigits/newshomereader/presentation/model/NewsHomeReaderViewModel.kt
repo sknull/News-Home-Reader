@@ -1467,7 +1467,23 @@ class NewsHomeReaderViewModel(
     }
 
     private fun loadArticle(newsItem: NewsItem) = viewModelScope.launch {
-        val markResult = feedRepository.markNewsItemsAsRead(listOf(newsItem))
+        val loadArticles = _settings.value?.get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false
+        val finalNewsItem = if (loadArticles && newsItem.newsArticle == null) {
+            Logger.i("Trying to fetch full article for newsitem...")
+            val articleResult = articleRepository.readFullArticle(newsItem)
+            when(articleResult) {
+                is Result.Success -> {
+                    newsItem.copy(newsArticle = articleResult.data.first)
+                }
+                is Result.Error -> {
+                    Logger.e("Could not read full article for newsItem", articleResult.throwable)
+                    newsItem
+                }
+            }
+        } else {
+            newsItem
+        }
+        val markResult = feedRepository.markNewsItemsAsRead(listOf(finalNewsItem))
         if (markResult is Result.Success) {
             val syncResult = feedRepository.synchroniseReadNewsItems()
             if (syncResult is Result.Error) {
@@ -1478,7 +1494,7 @@ class NewsHomeReaderViewModel(
         }
         _state.update {
             it.copy(
-                currentNewsItem = newsItem,
+                currentNewsItem = finalNewsItem,
                 isNewsItemSearchActive = false,
                 uiMessage = null,
                 uiMessageSeverity = null

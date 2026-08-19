@@ -40,6 +40,7 @@ import de.visualdigits.common.presentation.util.highlightQuery
 import de.visualdigits.common.presentation.util.openUriSafely
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_paid_24px
+import de.visualdigits.compose.resources.icon_playlist_add_check_24px
 import de.visualdigits.compose.resources.icon_videocam_24px
 import de.visualdigits.compose.resources.icon_volume_up_24px
 import de.visualdigits.newshomereader.domain.model.settings.SK
@@ -156,8 +157,24 @@ fun NewsItemCard(
                             style = MaterialTheme.typography.bodySmall
                         )
 
+                        //
                         // indicators
-                        if (newsItem.newsArticle?.videoItems?.isNotEmpty() == true) {
+                        //
+                        val hasFullArticle = newsItem.newsArticle != null
+                        val hasVideoItems = newsItem.newsArticle?.videoItems?.isNotEmpty() == true
+                        val hasAudioItems = newsItem.newsArticle?.audioItems?.isNotEmpty() == true
+
+                        // only show has article indicator when there is no other indication
+                        if (!hasVideoItems && !hasAudioItems && hasFullArticle) {
+                            Icon(
+                                modifier = Modifier.size(18.dp),
+                                painter = painterResource(Res.drawable.icon_playlist_add_check_24px),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+
+                        if (hasVideoItems) {
                             Icon(
                                 modifier = Modifier.size(18.dp),
                                 painter = painterResource(Res.drawable.icon_videocam_24px),
@@ -166,7 +183,7 @@ fun NewsItemCard(
                             )
                         }
 
-                        if (newsItem.newsArticle?.audioItems?.isNotEmpty() == true) {
+                        if (hasAudioItems) {
                             Icon(
                                 modifier = Modifier.size(18.dp),
                                 painter = painterResource(Res.drawable.icon_volume_up_24px),
