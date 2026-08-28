@@ -14,8 +14,8 @@ data class Item(
     @XmlElement(true) val identifier: String? = null,
     @XmlElement(true) val id: String? = null,
 
-    @XmlElement(true) @XmlSerialName("date") val date: KmpOffsetDateTime? = null, // first publish date time
-    @XmlElement(true) @XmlSerialName("pubDate") val pubDate: KmpOffsetDateTime? = null, // update date time or first publish date time when date is empty
+    @XmlElement(true) @XmlSerialName("date") val date: KmpOffsetDateTime = KmpOffsetDateTime.MIN, // first publish date time
+    @XmlElement(true) @XmlSerialName("pubDate") val pubDate: KmpOffsetDateTime = KmpOffsetDateTime.MIN, // update date time or first publish date time when date is empty
 
     @XmlElement(true) val about: String? = null,
     @XmlElement(true) val creator: String? = null,

@@ -15,10 +15,10 @@ data class Item(
     @XmlElement(true) @XmlSerialName("link") val link: String? = null,
     @XmlElement(true) @XmlSerialName("language") val language: String? = null,
     @XmlElement(true) @XmlSerialName("description") val description: String? = null,
-    @XmlElement(true) @XmlSerialName("pubDate") val pubDate: KmpOffsetDateTime = KmpOffsetDateTime.now(), // update date time or first publish date time when date is empty
+    @XmlElement(true) @XmlSerialName("pubDate") val pubDate: KmpOffsetDateTime = KmpOffsetDateTime.MIN,
     @XmlElement(true) @XmlSerialName("guid") val guid: String? = null,
     @XmlElement(true) @XmlSerialName("image") val images: List<Image> = listOf(),
-    @XmlElement(true) @XmlSerialName("date") val date: KmpOffsetDateTime = KmpOffsetDateTime.now(), // first publish date time
+    @XmlElement(true) @XmlSerialName("date") val date: KmpOffsetDateTime = KmpOffsetDateTime.MIN,
     @XmlElement(true) @XmlSerialName("encoded") var encoded: String? = null,
     @XmlElement(true) @XmlSerialName("format") val format: String? = null,
     @XmlElement(true) @XmlSerialName("rights") val rights: String? = null,

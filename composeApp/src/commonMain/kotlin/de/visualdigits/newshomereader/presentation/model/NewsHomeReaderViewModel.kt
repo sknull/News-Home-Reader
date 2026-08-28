@@ -212,7 +212,7 @@ class NewsHomeReaderViewModel(
                     }
                     else -> {
                         _currentNewsItems.update { result.enriched.associateBy { e -> e.uiKey } }
-                        _visibleNewsItems.update { result.visible }
+                        _visibleNewsItems.update { result.visible.sortedByDescending { item -> item.updated } }
                     }
                 }
             }
@@ -1440,7 +1440,7 @@ class NewsHomeReaderViewModel(
             val hideRead = _settings.value?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
             val stopWords = determineStopWords(state.value.currentNewsFeedGroup)
             _currentNewsItems.update { current -> current + (ni.uiKey to ni.copy(isRead = true)) }
-            _visibleNewsItems.update { calculateVisibleNewsItems(_currentNewsItems.value.values.toList(), hideRead, stopWords) }
+            _visibleNewsItems.update { calculateVisibleNewsItems(_currentNewsItems.value.values.toList().sortedByDescending { item -> item.updated }, hideRead, stopWords) }
         }
         _state.update {
             it.copy(currentNewsItem = null)
@@ -1451,14 +1451,14 @@ class NewsHomeReaderViewModel(
     private fun markItemsAsRead(days: Long) = viewModelScope.launch {
         val threshold = KmpOffsetDateTime.now().minus(days.days)
         val newsItems = _currentNewsItems.value.values
-            .filter { newsItem -> newsItem.updated < threshold }
+            .filter { newsItem -> (newsItem.updated?:KmpOffsetDateTime.MIN) < threshold }
             .map { newsItem -> newsItem.copy(isRead = true) }
         newsItems.forEach { newsItem ->
             _currentNewsItems.update { current -> current + (newsItem.uiKey to newsItem.copy(isRead = true)) }
         }
         val hideRead = _settings.value?.get<BooleanEnum>(SK.hideRead)?.booleanValue ?: false
         val stopWords = determineStopWords(state.value.currentNewsFeedGroup)
-        _visibleNewsItems.update { calculateVisibleNewsItems(_currentNewsItems.value.values.toList(), hideRead, stopWords) }
+        _visibleNewsItems.update { calculateVisibleNewsItems(_currentNewsItems.value.values.toList().sortedByDescending { item -> item.updated }, hideRead, stopWords) }
         val markResult = feedRepository.markNewsItemsAsRead(newsItems)
         if (markResult is Result.Success) {
             _isLoading.update { false }
@@ -1585,7 +1585,6 @@ class NewsHomeReaderViewModel(
                     && item.title.nostop(stopWords)
                     && item.summary.nostop(stopWords)
             }
-            .sortedByDescending { item -> item.updated }
         return sortedByDescending
     }
 }

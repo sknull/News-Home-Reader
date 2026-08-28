@@ -12,8 +12,8 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 data class Feed(
     @XmlElement(true) @XmlSerialName("title") val title: String? = null,
     @XmlElement(true) @XmlSerialName("subtitle") val subtitle: Text? = null,
-    @XmlElement(true) @XmlSerialName("date") val date: KmpOffsetDateTime = KmpOffsetDateTime.now(),
-    @XmlElement(true) @XmlSerialName("updated") val updated: KmpOffsetDateTime = KmpOffsetDateTime.now(),
+    @XmlElement(true) @XmlSerialName("date") val date: KmpOffsetDateTime = KmpOffsetDateTime.MIN,
+    @XmlElement(true) @XmlSerialName("updated") val updated: KmpOffsetDateTime = KmpOffsetDateTime.MIN,
     @XmlElement(true) @XmlSerialName("id") val id: String? = null,
     @XmlElement(true) @XmlSerialName("author") val author: Author? = null,
     @XmlElement(true) @XmlSerialName("link") val links: List<Link>? = null,

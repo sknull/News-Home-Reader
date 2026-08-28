@@ -57,17 +57,17 @@ object CatalogValidator {
                             val newsFeed = feedRepository.readFromBytes(feed.name, bytes) // contains logic to read and normalize diverse feeds of type rss, rdf and atom
                             if (newsFeed != null) {
                                 val updated = newsFeed.updated
-                                if (updated < thresholdDate) {
+                                if ((updated ?: KmpOffsetDateTime.MIN) < thresholdDate) {
                                     output(validationOutputFile, "    ${feed.name}: OUTDATED FEED")
                                     null
-                                } else if (newsFeed.items.maxBy { item -> item.updated }.updated < thresholdDate) {
+                                } else if ((newsFeed.items.maxBy { item -> item.updated ?: KmpOffsetDateTime.MIN }.updated ?: KmpOffsetDateTime.MIN) < thresholdDate) {
                                     output(validationOutputFile, "    ${feed.name}: OUTDATED NEWS ITEMS")
                                     null
                                 } else if (newsFeed.items.isEmpty()) {
                                     output(validationOutputFile, "    ${feed.name}: EMPTY FEED")
                                     null
                                 } else {
-                                    output(validationOutputFile, "    ${feed.name}: ${updated.format("yyyy-MM-dd HH:mm:ss")}")
+                                    output(validationOutputFile, "    ${feed.name}: ${updated?.format("yyyy-MM-dd HH:mm:ss")}")
                                     feed
                                 }
                             } else {

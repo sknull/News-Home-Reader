@@ -17,7 +17,7 @@ data class VideoDto(
     @SerialName("duration") val duration: String? = null,
     @Serializable(with = ListSerializer::class) val thumbnailUrl: List<String> = listOf(),
     @Serializable(with = ListSerializer::class) val contentUrl: List<String> = listOf(),
-    @SerialName("uploadDate") val uploadDate: KmpOffsetDateTime? = null,
+    @SerialName("uploadDate") val uploadDate: KmpOffsetDateTime = KmpOffsetDateTime.MIN,
     @SerialName("publisher") val publisher: PublisherDto? = null
 ) {
 

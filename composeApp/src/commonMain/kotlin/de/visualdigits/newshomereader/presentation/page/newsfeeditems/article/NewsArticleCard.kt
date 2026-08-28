@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.em
 import be.digitalia.compose.htmlconverter.HtmlStyle
 import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
 import de.visualdigits.common.domain.model.color.HsvColor
+import de.visualdigits.common.domain.model.common.format
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.domain.util.copyFactor
@@ -228,11 +229,13 @@ fun NewsArticleCard(
                         }
                     }),
                     Pair("updated", @Composable {
-                        Text(
-                            modifier = Modifier,
-                            text = newsItem.updated.format("EEE, dd. MMMM yyyy HH:mm"),
-                            style = MaterialTheme.typography.headlineSmall
-                        )
+                        newsItem.updated?.toLocalDateTime()?.let { u ->
+                            Text(
+                                modifier = Modifier,
+                                text = u.format("EEE, dd. MMMM yyyy HH:mm"),
+                                style = MaterialTheme.typography.headlineSmall
+                            )
+                        }
                     }),
                     Pair("timeEstimated", @Composable {
                         Row(

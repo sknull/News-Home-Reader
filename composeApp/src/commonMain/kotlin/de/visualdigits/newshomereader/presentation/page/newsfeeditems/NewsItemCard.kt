@@ -36,6 +36,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import be.digitalia.compose.htmlconverter.HtmlStyle
 import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
 import de.visualdigits.common.domain.model.color.HsvColor
+import de.visualdigits.common.domain.model.common.format
 import de.visualdigits.common.presentation.util.highlightQuery
 import de.visualdigits.common.presentation.util.openUriSafely
 import de.visualdigits.compose.resources.Res
@@ -153,10 +154,13 @@ fun NewsItemCard(
                         }
 
                         // updated date
-                        Text(
-                            text = newsItem.updated.format("dd.MM.yyyy HH:mm"),
-                            style = MaterialTheme.typography.bodySmall
-                        )
+                        newsItem.updated?.toLocalDateTime()?.let { u ->
+                            val text = u.format("dd.MM.yyyy HH:mm")
+                            Text(
+                                text = text,
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
 
                         //
                         // indicators

@@ -13,6 +13,6 @@ data class Video(
     @SerialName("duration") val duration: String? = null,
     @SerialName("thumbnailUrl") val thumbnailUrl: List<String> = listOf(),
     @SerialName("contentUrl") val contentUrl: List<String> = listOf(),
-    @SerialName("uploadDate") val uploadDate: KmpOffsetDateTime? = null,
+    @SerialName("uploadDate") val uploadDate: KmpOffsetDateTime = KmpOffsetDateTime.MIN,
     @SerialName("publisher") val publisher: Publisher? = null
 )

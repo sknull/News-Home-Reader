@@ -19,7 +19,7 @@ data class Image(
     @SerialName("author") val author: String? = null,
     @SerialName("width") val width: Int? = null,
     @SerialName("height") val height: Int? = null,
-    @XmlSerialName("datePublished") val datePublished: KmpOffsetDateTime = KmpOffsetDateTime.now(),
+    @XmlSerialName("datePublished") val datePublished: KmpOffsetDateTime = KmpOffsetDateTime.MIN,
     @SerialName("description") val description: String? = null,
     @SerialName("inLanguage") val inLanguage: String? = null,
 )

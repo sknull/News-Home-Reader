@@ -14,7 +14,7 @@ data class NewsFeed(
     val image: String,
     val imageTitle: String,
     val imageCaption: String,
-    val updated: KmpOffsetDateTime,
+    val updated: KmpOffsetDateTime?,
     val rights: String,
     val language: String,
     val keywords: List<String> = listOf(),
