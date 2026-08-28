@@ -17,7 +17,7 @@ interface ArticleRepository {
 
     suspend fun readFromString(
         newsItem: NewsItem? = null,
-        rawHtml: String?,
+        rawHtml: String,
         url: String? = null
     ): FullArticle
 }

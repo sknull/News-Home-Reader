@@ -3,6 +3,7 @@ package de.visualdigits.newshomereader.domain.repository
 import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.common.domain.model.errorhandling.onError
 import de.visualdigits.common.domain.model.errorhandling.onSuccess
+import de.visualdigits.newshomereader.di.platformModule
 import de.visualdigits.newshomereader.di.sharedModule
 import de.visualdigits.newshomereader.di.testModule
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
@@ -14,7 +15,7 @@ import org.koin.test.KoinTest
 import org.koin.test.inject
 import org.koin.test.junit5.KoinTestExtension
 
-@Disabled("Only for local testing")
+//@Disabled("Only for local testing")
 class ArticleRepositoryTest : KoinTest {
 
     private val repository: ArticleRepository by inject()
@@ -41,13 +42,13 @@ class ArticleRepositoryTest : KoinTest {
     @JvmField
     @RegisterExtension
     val koinTestExtension = KoinTestExtension.create {
-        modules(sharedModule, testModule)
+        modules(sharedModule, platformModule)
     }
 
     @Test
     fun testReadArticle() {
         runBlocking {
-            repository.readFullArticle(newsItem.copy(link = "https://www1.wdr.de/nachrichten/olympia-abstimmung-nrw-koeln-rhein-ruhr-ticker-100.html"))
+            repository.readFullArticle(newsItem.copy(link = "https://www.ndr.de/nachrichten/hamburg/a1-in-hamburg-wird-ab-22-uhr-uebers-wochenende-gesperrt,aeins-142.html"))
                 .onSuccess { article ->
                     println(article)
                 }.onError { _, throwable ->

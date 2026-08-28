@@ -264,7 +264,7 @@ fun NewsArticleCard(
                         if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                             MediaItemButtons(
                                 viewModel = viewModel,
-                                mediaItems = (newsItem.newsArticle?.videoItems?:listOf()) + (newsItem.newsArticle?.audioItems?:listOf()),
+                                mediaItems = (newsItem.newsArticle?.videoItems?:listOf()) + (newsItem.newsArticle?.audioItems?:listOf()) + (newsItem.newsArticle?.imageItems?:listOf()),
                                 uriHandler = uriHandler,
                                 newsItem = newsItem
                             )

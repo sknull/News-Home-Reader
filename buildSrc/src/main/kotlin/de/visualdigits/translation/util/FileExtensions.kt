@@ -14,7 +14,7 @@ fun File.writeCsv(keys: List<String>, data: List<List<String>>) {
             char = '\"'
         }
         outputLastLineTerminator = true
-    }.writeAll(listOf(keys) + data.sortedBy { row -> row[0] }, this)
+    }.writeAll(listOf(keys) + data, this)
 }
 
 fun File.readCsv(): Pair<List<String>, List<List<String>>> {

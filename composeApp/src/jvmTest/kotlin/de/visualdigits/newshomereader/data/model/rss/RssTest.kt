@@ -27,7 +27,7 @@ import org.koin.test.inject
 import org.koin.test.junit5.KoinTestExtension
 import java.io.File
 
-@Disabled("Only for local testing")
+//@Disabled("Only for local testing")
 class RssTest : KoinTest {
 
     private val feedRepository: FeedRepository by inject()
@@ -61,7 +61,7 @@ class RssTest : KoinTest {
     }
 
     @Test
-//    @Disabled("produces timeout")
+    @Disabled("uses external resources")
     fun testReadFromUrl() = runTest {
         val response = httpClient.get(urlString = "https://t3n.de/rss.xml")
         val xml = response.bodyAsText()
@@ -76,6 +76,7 @@ class RssTest : KoinTest {
     }
 
     @Test
+    @Disabled("uses external resources")
     fun testReadFeed() = runTest {
         feedRepository.refreshNewsFeed(
             feedName = "test",
@@ -107,10 +108,30 @@ class RssTest : KoinTest {
     }
 
     @Test
+    fun testReadFocusStory4() = runTest {
+        val article = readArticleFromFile(
+            newsItem,
+            File(ClassLoader.getSystemResource("newsfeed/rdf/focus_story-4.html").toURI())
+        )
+        println(article)
+        assertNotNull(article)
+    }
+
+    @Test
     fun testReadHrStory() = runTest {
         val article = readArticleFromFile(
             newsItem,
             File(ClassLoader.getSystemResource("newsfeed/rdf/hr-story.html").toURI())
+        )
+        println(article)
+        assertNotNull(article)
+    }
+
+    @Test
+    fun testReadHrStory2() = runTest {
+        val article = readArticleFromFile(
+            newsItem,
+            File(ClassLoader.getSystemResource("newsfeed/rdf/hr-story-2.html").toURI())
         )
         println(article)
         assertNotNull(article)
@@ -127,7 +148,7 @@ class RssTest : KoinTest {
     }
 
     @Test
-    @Disabled("url is outdated")
+    @Disabled("uses external resources")
     fun testReadArticleUrl() = runTest {
         val response = httpClient.get(urlString = "https://www.spiegel.de/ausland/iran-krieg-us-senat-stimmt-dafuer-befugnisse-von-donald-trump-einzuschraenken-mit-republikaner-stimmen-a-12f9e1fa-16cf-4426-8b6c-39d72e5adcb6#ref=rss")
         val htmlRaw = response.bodyAsText()
@@ -231,6 +252,12 @@ class RssTest : KoinTest {
     fun testReadWdr() = runTest {
         readFeedFromFile("wdr", File(ClassLoader.getSystemResource("newsfeed/atom/wdr.xml").toURI()))
         val article = readArticleFromFile(newsItem, File(ClassLoader.getSystemResource("newsfeed/atom/wdr-story.html").toURI()))
+        assertNotNull(article)
+    }
+
+    @Test
+    fun testReadWdr2() = runTest {
+        val article = articleRepository.readFromString(newsItem, File(ClassLoader.getSystemResource("newsfeed/atom/wdr-story-2.html").toURI()).readText())
         assertNotNull(article)
     }
 

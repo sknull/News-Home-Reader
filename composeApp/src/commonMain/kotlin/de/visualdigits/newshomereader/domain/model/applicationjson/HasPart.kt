@@ -9,8 +9,8 @@ import kotlinx.serialization.Serializable
 data class HasPart(
     @SerialName("@id") val id: String? = null,
     @SerialName("@type") val type: String? = null,
-    val name: String? = null,
-    val startOffset: Double? = null,
-    val endOffset: Double? = null,
-    val url: String? = null
+    @SerialName("name") val name: String? = null,
+    @SerialName("startOffset") val startOffset: Double? = null,
+    @SerialName("endOffset") val endOffset: Double? = null,
+    @SerialName("url") val url: String? = null
 )

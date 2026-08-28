@@ -10,6 +10,6 @@ import kotlinx.serialization.Serializable
 data class About(
     @SerialName("@id") val id: String? = null,
     @SerialName("@type") val type: String? = null,
-    val name: List<String> = listOf(),
-    val sameAs: List<String> = listOf()
+    @SerialName("name") val name: List<String> = listOf(),
+    @SerialName("sameAs") val sameAs: List<String> = listOf()
 )

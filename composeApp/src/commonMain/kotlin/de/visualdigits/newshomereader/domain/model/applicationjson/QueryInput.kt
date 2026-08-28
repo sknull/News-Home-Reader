@@ -10,12 +10,12 @@ import kotlinx.serialization.Serializable
 data class QueryInput(
     @SerialName("@id") val id: String? = null,
     @SerialName("@type") val type: String? = null,
-    val valueRequired: Boolean? = null,
-    val valueName: String? = null,
-    val inLanguage: String? = null,
-    val url: String? = null,
-    val contentUrl: String? = null,
-    val width: Int? = null,
-    val height: Int? = null,
-    val caption: String? = null
+    @SerialName("valueRequired") val valueRequired: Boolean? = null,
+    @SerialName("valueName") val valueName: String? = null,
+    @SerialName("inLanguage") val inLanguage: String? = null,
+    @SerialName("url") val url: String? = null,
+    @SerialName("contentUrl") val contentUrl: String? = null,
+    @SerialName("width") val width: Int? = null,
+    @SerialName("height") val height: Int? = null,
+    @SerialName("caption") val caption: String? = null
 )

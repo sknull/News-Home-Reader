@@ -27,6 +27,9 @@ Falsch.
 Field is not defined.
 Display Thema
 Feed Einstellungen
+Gruppe
+Name
+Einstellungen
 WebDAV
 10 Minuten
 14 Tage
@@ -40,6 +43,8 @@ WebDAV
 60 Tage
 60 Minuten
 7 Tage
+Hintergrund Farbe
+Button Farbe
 Uhr Farbe
 Konfiguration
 Szene löschen
@@ -48,12 +53,15 @@ Feed Name
 Gelesene Verstecken
 Host URL
 Icon URL
+Ist Stichwort Sammlung
 Behalte gelesene Artikel
 Behalte ungelesene Artikel
+Stichworte
 Sprache
 Artikel vorladen
 Gruppen Name
 OPML
+Bilder laden
 Aktualisierungsintervall
 Nur im Wlan aktualisieren.
 Szenen Name
@@ -61,6 +69,7 @@ Einstellungen
 Spot Farbe
 Stop Words
 Untergruppen Name
+Text Farbe
 Feed URL
 WebDAV Unterordner
 WebDAV Passwort
@@ -88,11 +97,12 @@ Gruppe löschen
 Newsfeed bearbeiten
 Gruppe bearbeiten
 Info
-Ist Stichwort Sammlung
 Suchen
 Einstellungen
 Neue Szene...
 Zurück
+Hintergrund Farbe
+Button Farbe
 Basisfarbe der Studio Uhr.
 Szene löschen...
 Definiert wie die Oberfläche angezeigt wird
@@ -111,12 +121,14 @@ Markiert alle Artikel als gelesen, die älter als zwei Tage sind
 Chat in externem Browser öffnen
 Artikel in externem Browser öffnen
 Feed in externem Browser öffnen
+Bilder beim Aktualisieren der Feeds mitladen
 Zeitabstand in Minuten, in dem die Feeds aktualisiert werden
 News Feed neu laden.
 Aktualisiere Feeds nur, wenn eine kostenfreie Verbindung verfügbar ist.
 Szene zurücksetzen
 Die Akzentfarbe für das Basisthema
 News Items containing one of these words will not be shown
+Text Farbe
 Die URL des newsfeeds. # Zur Zeit werden folgende Feedtypen unterstützt: atom, rdf, rss
 Der Unterordner auf dem webdav host. Das Rootdirectory hat keine Schreibrechte. # Du musst einen freigegebenen Ordner angeben.
 Das Passwort zum Einloggen in deinen WebDAV host # (wird verschlüsselt in die Datenbank geschrieben)

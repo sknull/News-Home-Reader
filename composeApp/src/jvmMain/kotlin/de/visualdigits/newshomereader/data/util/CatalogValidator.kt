@@ -15,6 +15,10 @@ object CatalogValidator {
 
     private val log = Logger.withTag("CatalogScraper")
 
+    private val jsonMapper = Json {
+        prettyPrint = true
+    }
+
     /**
      * Validates a given catalog by parsing all feeds once and
      * determining the latest update from the feed itself and
@@ -88,9 +92,6 @@ object CatalogValidator {
                 }
             }
             val validatedCatalog = newsFeedCatalog.copy(categories = mainCategories)
-            val jsonMapper = Json {
-                prettyPrint = true
-            }
             val json = jsonMapper.encodeToString(validatedCatalog)
             targetFile.writeText(json)
         }
@@ -158,9 +159,6 @@ object CatalogValidator {
             }
         }
         val validatedCatalog = newsFeedCatalog.copy(categories = mainCategories.sortedBy { f -> f.name })
-        val jsonMapper = Json {
-            prettyPrint = true
-        }
         val json = jsonMapper.encodeToString(validatedCatalog)
         targetFile.writeText(json)
     }

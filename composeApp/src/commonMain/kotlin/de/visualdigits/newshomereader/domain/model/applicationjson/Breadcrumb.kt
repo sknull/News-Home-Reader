@@ -10,5 +10,5 @@ import kotlinx.serialization.Serializable
 data class Breadcrumb(
     @SerialName("@context") val context: String? = null,
     @SerialName("@type") val type: String? = null,
-    val itemListElement: List<ItemElement> = listOf()
+    @SerialName("itemListElement") val itemListElement: List<ItemElement> = listOf()
 )

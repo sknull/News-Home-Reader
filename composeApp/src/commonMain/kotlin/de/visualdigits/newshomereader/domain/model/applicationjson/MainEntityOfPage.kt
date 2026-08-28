@@ -9,6 +9,6 @@ import kotlinx.serialization.Serializable
 data class MainEntityOfPage(
     @SerialName("@id") val id: String? = null,
     @SerialName("@type") val type: String? = null,
-    val url: String? = null,
-    val breadcrumb: Breadcrumb? = null
+    @SerialName("url") val url: String? = null,
+    @SerialName("breadcrumb") val breadcrumb: Breadcrumb? = null
 )

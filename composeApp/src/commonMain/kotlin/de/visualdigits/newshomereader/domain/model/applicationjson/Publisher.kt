@@ -10,11 +10,11 @@ import kotlinx.serialization.Serializable
 data class Publisher(
     @SerialName("@id") val id: String? = null,
     @SerialName("@type") val type: String? = null,
-    val name: String? = null,
-    val url: String? = null,
-    val alternateName: List<String> = listOf(),
-    val correctionsPolicy: String? = null,
-    val diversityPolicy: String? = null,
-    val sameAs: List<String> = listOf(),
-    val logo: List<Logo> = listOf()
+    @SerialName("name") val name: String? = null,
+    @SerialName("url") val url: String? = null,
+    @SerialName("alternateName") val alternateName: List<String> = listOf(),
+    @SerialName("correctionsPolicy") val correctionsPolicy: String? = null,
+    @SerialName("diversityPolicy") val diversityPolicy: String? = null,
+    @SerialName("sameAs") val sameAs: List<String> = listOf(),
+    @SerialName("logo") val logo: List<Logo> = listOf()
 )

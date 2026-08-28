@@ -29,6 +29,7 @@ import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.common.presentation.util.openUriSafely
 import de.visualdigits.compose.resources.Res
+import de.visualdigits.compose.resources.icon_photo_24px
 import de.visualdigits.compose.resources.icon_videocam_24px
 import de.visualdigits.compose.resources.icon_volume_up_24px
 import de.visualdigits.newshomereader.domain.model.settings.SK
@@ -111,28 +112,34 @@ fun MediaItemButtons(
                                             .padding(5.dp),
                                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                                     ) {
-                                        Text(
-                                            text = "${mediaItem.uploadDate?.format("dd.MM.yyyy HH:mm")}",
-                                            style = MaterialTheme.typography.bodySmall
-                                        )
+                                        mediaItem.uploadDate?.let { ud ->
+                                            Text(
+                                                text = ud.format("dd.MM.yyyy HH:mm"),
+                                                style = MaterialTheme.typography.bodySmall
+                                            )
+                                        }
 
                                         Row(
                                             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
                                             verticalAlignment = Alignment.Top
                                         ) {
-                                            if (mediaItem.type == MediaType.video) {
-                                                Icon(
+                                            when (mediaItem.type) {
+                                                MediaType.video -> Icon(
                                                     painter = painterResource(Res.drawable.icon_videocam_24px),
                                                     contentDescription = null,
                                                     tint = MaterialTheme.colorScheme.onSurface
                                                 )
-
-                                            } else {
-                                                Icon(
+                                                MediaType.audio -> Icon(
                                                     painter = painterResource(Res.drawable.icon_volume_up_24px),
                                                     contentDescription = null,
                                                     tint = MaterialTheme.colorScheme.onSurface
                                                 )
+                                                MediaType.image -> Icon(
+                                                    painter = painterResource(Res.drawable.icon_photo_24px),
+                                                    contentDescription = null,
+                                                    tint = MaterialTheme.colorScheme.onSurface
+                                                )
+                                                else -> {}
                                             }
 
                                             val durationString = mediaItem.duration?.parseDuration()?.let { d -> " [$d]" }?:""

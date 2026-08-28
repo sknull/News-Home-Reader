@@ -554,6 +554,10 @@ class NewsHomeReaderViewModel(
                 refreshNewsFeeds()
             }
 
+            is NewsHomeReaderAction.OnClearNewsItems -> {
+                clearNewsItems()
+            }
+
             is NewsHomeReaderAction.OnNewsFeedClicked -> {
                 loadFeedItems(action.currentFeedItem)
             }
@@ -999,6 +1003,22 @@ class NewsHomeReaderViewModel(
         }
     }
 
+    private fun clearNewsItems() {
+        _isLoading.update { true }
+        viewModelScope.launch {
+            feedRepository.deleteAllNewsItems()
+                .onError { error, throwable ->
+                    _state.update {
+                        it.copy(
+                            isEditingSettings = false,
+                            uiMessage = error.toUiText(),
+                        )
+                    }
+                }
+            _isLoading.update { false }
+        }
+    }
+
     private fun refreshNewsFeeds() {
         _isLoading.update { true }
         viewModelScope.launch {
@@ -1218,32 +1238,25 @@ class NewsHomeReaderViewModel(
         val loadArticles = _settings.value?.get<BooleanEnum>(SK.loadArticles)?.booleanValue ?: false
         val keepReadArticles = _settings.value?.get<KeepArticlesEnum>(SK.keepReadArticles)?.longValue ?: 30
         val keepUnreadArticles = _settings.value?.get<KeepArticlesEnum>(SK.keepUnreadArticles)?.longValue ?: 30
-        val maxImageSize = _settings.value?.get<Int>(SK.maxImageSize) ?: 1200
 
 //        scrollPosition["newsfeed_items"] = Triple(0, 0, ScrollIntent.scrollToStart)
 
         return if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
             val newsFeedsResult = feedRepository.refreshNewsFeeds(
-                newsFeedItems = newsFeedItems
+                newsFeedItems = newsFeedItems,
+                keepReadArticlesInDays = keepReadArticles,
+                keepUnreadArticlesInDays = keepUnreadArticles,
+                loadArticles = loadArticles
             )
             when (newsFeedsResult) {
                 is Result.Success -> {
-                    val (newsFeeds, newsItems) = newsFeedsResult.data
                     _state.update {
                         it.copy(
                             newsFeedGroups = newsFeedGroups,
                             isEditingSettings = false
                         )
                     }
-                    feedRepository.refreshNewsFeedItems(
-                        newsFeeds = newsFeeds,
-                        newsItems = newsItems,
-                        wifiOnly = wifiOnly,
-                        keepReadArticlesInDays = keepReadArticles,
-                        keepUnreadArticlesInDays = keepUnreadArticles,
-                        maxImageSize = maxImageSize,
-                        loadArticles = loadArticles
-                    )
+                    newsFeedsResult
                 }
 
                 is Result.Error -> {

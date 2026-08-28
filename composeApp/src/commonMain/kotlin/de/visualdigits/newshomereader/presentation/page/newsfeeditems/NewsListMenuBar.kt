@@ -17,19 +17,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_counter_1_24px
 import de.visualdigits.compose.resources.icon_counter_2_24px
 import de.visualdigits.compose.resources.icon_done_all_24px
-import de.visualdigits.compose.resources.icon_refresh_24px
 import de.visualdigits.compose.resources.tooltip_mark_read_all
 import de.visualdigits.compose.resources.tooltip_mark_read_older_1
 import de.visualdigits.compose.resources.tooltip_mark_read_older_2
-import de.visualdigits.compose.resources.tooltip_refresh_newsfeed
-import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.util.getFaviconUrl
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
@@ -102,21 +98,6 @@ fun NewsListMenuBar(
                 toolTip = stringResource(Res.string.tooltip_mark_read_all)
             ) {
                 onAction(NewsHomeReaderAction.OnMarkReadClicked(0))
-            }
-
-            val wifiOnly = settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
-            if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
-                IndicatorButton(
-                    modifier = Modifier,
-                    width = 30.dp,
-                    height = 30.dp,
-                    padding = 2.dp,
-                    leadingIcon = painterResource(Res.drawable.icon_refresh_24px),
-                    leadingIconTint = MaterialTheme.colorScheme.onSurface,
-                    toolTip = stringResource(Res.string.tooltip_refresh_newsfeed),
-                ) {
-                    onAction(NewsHomeReaderAction.OnNewsFeedRefresh(state.currentNewsFeedName, state.currentNewsFeedItem?.url))
-                }
             }
 
             if (state.currentNewsFeedName != null) {

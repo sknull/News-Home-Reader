@@ -42,20 +42,14 @@ class NewsFeedWorker(
                     val result = if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                         Logger.i("NewsFeedWorker: refreshNewsFeeds")
                         val newsFeedsResult = feedRepository.refreshNewsFeeds(
-                            newsFeedItems = newsFeedConfigurations
+                            newsFeedItems = newsFeedConfigurations,
+                            keepReadArticlesInDays = keepReadArticles,
+                            keepUnreadArticlesInDays = keepUnreadArticles,
+                            loadArticles = loadArticles,
                         )
                         when (newsFeedsResult) {
                             is Result.Success -> {
-                                val (newsFeeds, newsItems) = newsFeedsResult.data
-                                feedRepository.refreshNewsFeedItems(
-                                    newsFeeds = newsFeeds,
-                                    newsItems = newsItems,
-                                    wifiOnly = wifiOnly,
-                                    keepReadArticlesInDays = keepReadArticles,
-                                    keepUnreadArticlesInDays = keepUnreadArticles,
-                                    maxImageSize = maxImageSize,
-                                    loadArticles = loadArticles
-                                )
+                                newsFeedsResult
                             }
                             is Result.Error -> {
                                 Logger.e("NewsFeedWorker: Could not refresh news feeds", newsFeedsResult.throwable)

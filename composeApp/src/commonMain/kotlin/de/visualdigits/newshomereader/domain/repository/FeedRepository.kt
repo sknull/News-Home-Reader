@@ -40,16 +40,9 @@ interface FeedRepository {
     ): Result<Pair<NewsItem, Boolean>, DataError.Local>
 
     suspend fun refreshNewsFeeds(
-        newsFeedItems: List<NewsFeedItem>
-    ): Result<Pair<List<NewsFeed>, List<NewsItem>>, DataError.Remote>
-
-    suspend fun refreshNewsFeedItems(
-        newsFeeds: List<NewsFeed>,
-        newsItems: List<NewsItem>,
-        wifiOnly: Boolean,
+        newsFeedItems: List<NewsFeedItem>,
         keepReadArticlesInDays: Long,
         keepUnreadArticlesInDays: Long,
-        maxImageSize: Int,
         loadArticles: Boolean
     ): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote>
 
@@ -71,4 +64,6 @@ interface FeedRepository {
         feedName: String?,
         bytes: ByteArray?
     ): NewsFeed?
+
+    suspend fun deleteAllNewsItems(): Result<Unit, DataError.Local>
 }

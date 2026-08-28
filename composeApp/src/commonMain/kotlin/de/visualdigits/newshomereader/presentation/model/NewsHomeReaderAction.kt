@@ -184,6 +184,9 @@ sealed interface NewsHomeReaderAction {
     class OnNewsFeedsRefresh : NewsHomeReaderAction
 
     @Immutable
+    class OnClearNewsItems : NewsHomeReaderAction
+
+    @Immutable
     data class OnNewsFeedClicked(
         val currentFeedItem: NewsFeedItem
     ) : NewsHomeReaderAction

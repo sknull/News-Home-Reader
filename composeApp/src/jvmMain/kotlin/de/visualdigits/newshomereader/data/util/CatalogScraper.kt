@@ -24,6 +24,10 @@ object CatalogScraper {
 
     private val log = Logger.withTag("CatalogScraper")
 
+    private val jsonMapper = Json {
+        prettyPrint = true
+    }
+
     /**
      * Scrape a catalog from https://www.rss-verzeichnis.de
      *
@@ -41,9 +45,6 @@ object CatalogScraper {
             categories = newsCategories
         )
 
-        val jsonMapper = Json {
-            prettyPrint = true
-        }
         val json = jsonMapper.encodeToString(newsCatalog)
 
         val directory = Paths.get(File(".").canonicalPath, "src/commonMain/composeResources/files").toFile()

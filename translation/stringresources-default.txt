@@ -27,6 +27,9 @@ False
 Field is not defined.
 Display Theme
 Feed Settings
+Group
+Name
+Settings
 WebDAV
 10 Minutes
 14 Days
@@ -40,6 +43,8 @@ WebDAV
 60 Days
 60 Minutes
 7 Days
+Background Color
+Button Color
 Clock Color
 Configuration
 Delete Scene
@@ -48,12 +53,15 @@ Feed Name
 Hide Read items
 Host URL
 Image URL
+Is Keyword Bucket
 Keep Read Articles
 Keep Unread Articles
+Keywords
 Language
 Prefetch Articles
 Group Name
 OPML
+Prefetch Images
 Refresh Interval
 Refresh Wifi Only.
 Scene name
@@ -61,6 +69,7 @@ Settings
 Spot Color
 Stop Words
 Sub Group Name
+Text Color
 Feed URL
 WebDAV Directory
 WebDAV Password
@@ -88,11 +97,12 @@ Delete Newsfeed Group
 Edit Newsfeed
 Edit Newsfeed Group
 Info
-Is Keyword Bucket
 Search
 Settings
 Add scene...
 Back
+Background Color
+Button Color
 Basecolor of the studio clock.
 Delete Scene...
 Defines the look and feel of the UI
@@ -111,12 +121,14 @@ Marks all items as read which are older than two days
 Open chat page in external browser
 Open article page in external browser
 Open feed page in external browser
+Prefetch Images
 Interval to refresh all feeds
 Refresh News Feed
 Refresh feeds only when a free of charge connection is available.
 Reset Scene...
 The accent color for the base theme
 News Items containing one of these words will not be shown
+Text Color
 The URL pointing to the actual newsfeed. # Currently supported feeds are atom, rdf, rss
 The directory on the host to use # as it is not allowed to write into the root directory # you must specify this.
 The password required to login to your WebDAV host # (will be encrypted in the database)

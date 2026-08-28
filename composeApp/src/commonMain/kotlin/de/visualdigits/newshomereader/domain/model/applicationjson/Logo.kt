@@ -10,10 +10,10 @@ import kotlinx.serialization.Serializable
 data class Logo(
     @SerialName("@id") val id: String? = null,
     @SerialName("@type") val type: String? = null,
-    val url: String? = null,
-    val caption: String? = null,
-    val contentUrl: String? = null,
-    val inLanguage: String? = null,
-    val width: Int? = null,
-    val height: Int? = null
+    @SerialName("url") val url: String? = null,
+    @SerialName("caption") val caption: String? = null,
+    @SerialName("contentUrl") val contentUrl: String? = null,
+    @SerialName("inLanguage") val inLanguage: String? = null,
+    @SerialName("width") val width: Int? = null,
+    @SerialName("height") val height: Int? = null
 )

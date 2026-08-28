@@ -44,10 +44,12 @@ class DefaultSettingsRepository(
 
     override var webDavUrl: String? = null
 
-    private val jsonMapper = Json {
-        prettyPrint = true
-        ignoreUnknownKeys = true
-        explicitNulls = false
+    companion object {
+        private val jsonMapper = Json {
+            prettyPrint = true
+            ignoreUnknownKeys = true
+            explicitNulls = false
+        }
     }
 
 

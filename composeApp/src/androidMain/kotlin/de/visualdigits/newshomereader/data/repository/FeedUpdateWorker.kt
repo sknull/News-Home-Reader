@@ -43,11 +43,9 @@ class FeedUpdateWorker(
             newsFeedWorker.execute(maxImageSize)
             Result.success()
         } catch (e: CancellationException) {
-            // 🟢 DAS RETTET DIE APP: Reiche den Abbruch ungestört an den WorkManager weiter!
             Logger.i("FeedUpdateWorker was successfully cancelled by the application.")
             throw e
         } catch (e: Exception) {
-            // Nur echte Fehler (Netzwerkausfall, DB-Fehler) führen zu einem Retry
             Logger.e("Something went wrong during refresh news feed", e)
             Result.retry()
         }

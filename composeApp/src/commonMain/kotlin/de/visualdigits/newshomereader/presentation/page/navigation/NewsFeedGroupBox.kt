@@ -44,7 +44,6 @@ fun NewsFeedGroupBox(
         modifier = modifier
             .fillMaxWidth()
             .padding(start = if (newsFeedGroup.parentGroupName != null) 20.dp else 0.dp), // indent
-        enabled = !isRootGroup,
         isTitleHoverable = true,
         titleHoverColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
         titleContent = {

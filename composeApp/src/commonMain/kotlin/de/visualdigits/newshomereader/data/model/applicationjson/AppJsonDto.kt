@@ -72,6 +72,7 @@ data class AppJsonDto @OptIn(ExperimentalSerializationApi::class, ExperimentalSe
     val url: String? = null,
     val version: String? = null,
     val width: Int? = null,
+    val height: Int? = null,
     val wordCount: Int? = null,
 ) {
 
@@ -91,9 +92,32 @@ data class AppJsonDto @OptIn(ExperimentalSerializationApi::class, ExperimentalSe
     }
 
     fun toMediaItem(): MediaItem {
+        val candidates = (image?.images ?: listOf()) + (thumbnail?.images ?: listOf()) + (primaryImageOfPage?.images
+            ?: listOf())
+        val thumbnails = if (candidates.isNotEmpty()) {
+            candidates.map { io ->
+                ThumbnailItem(
+                    url = io.contentUrl?.let { cu -> listOf(cu) } ?: io.url,
+                    description = io.description,
+                    author = io.author,
+                    datePublished = io.datePublished,
+                    width = io.width,
+                    height = io.height
+                )
+            }
+        } else {
+            listOf(ThumbnailItem(
+                url = contentUrl?.let { cu -> listOf(cu) } ?: listOf(),
+                description = headline ?: name,
+                author = author?.autors?.firstOrNull()?.name,
+                datePublished = datePublished,
+                width = width,
+                height = height
+            ))
+        }
         return MediaItem(
             url = contentUrl?:url,
-            headline = headline,
+            headline = headline?:name,
             duration = duration,
             description = description,
             datePublished = datePublished,
@@ -101,16 +125,7 @@ data class AppJsonDto @OptIn(ExperimentalSerializationApi::class, ExperimentalSe
             uploadDate = uploadDate,
             expires = expires,
             keywords = keywords,
-            thumbnails = ((image?.images?:listOf()) + (thumbnail?.images?:listOf()) + (primaryImageOfPage?.images?:listOf())).map { io ->
-                ThumbnailItem(
-                    url = io.contentUrl?.let { cu -> listOf(cu) }?:io.url,
-                    description = io.description,
-                    author = io.author,
-                    datePublished = io.datePublished,
-                    width = io.width,
-                    height = io.height
-                )
-            }?:listOf()
+            thumbnails = thumbnails
         )
     }
 }

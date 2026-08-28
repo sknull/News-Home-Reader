@@ -21,6 +21,7 @@ import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.compose.resources.Res
+import de.visualdigits.compose.resources.icon_delete_24px
 import de.visualdigits.compose.resources.icon_edit_24px
 import de.visualdigits.compose.resources.icon_hourglass_top_24px
 import de.visualdigits.compose.resources.icon_info_24px
@@ -28,6 +29,7 @@ import de.visualdigits.compose.resources.icon_library_books_24px
 import de.visualdigits.compose.resources.icon_menu_24px
 import de.visualdigits.compose.resources.icon_refresh_24px
 import de.visualdigits.compose.resources.icon_settings_24px
+import de.visualdigits.compose.resources.tooltip_clear_newsitems
 import de.visualdigits.compose.resources.tooltip_refresh_newsfeed
 import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
@@ -119,6 +121,18 @@ fun MainMenuBar(
             ) {
                 onAction(NewsHomeReaderAction.OnNewsFeedsRefresh())
             }
+        }
+
+        IndicatorButton(
+            modifier = Modifier,
+            width = 30.dp,
+            height = 30.dp,
+            padding = 2.dp,
+            leadingIcon = painterResource(Res.drawable.icon_delete_24px),
+            leadingIconTint = MaterialTheme.colorScheme.onSurface,
+            toolTip = stringResource(Res.string.tooltip_clear_newsitems),
+        ) {
+            onAction(NewsHomeReaderAction.OnClearNewsItems())
         }
 
         IndicatorButton(

@@ -27,22 +27,12 @@
   <string name="error_unknown_field">Field unknown in configuration.</string>
   <string name="false">False</string>
   <string name="field_unset">Field is not defined.</string>
-  <string name="group_name">Name</string>
-  <string name="group_group">Group</string>
-  <string name="group_settings">Settings</string>
   <string name="group_display_theme">Display Theme</string>
   <string name="group_feed_seetings">Feed Settings</string>
+  <string name="group_group">Group</string>
+  <string name="group_name">Name</string>
+  <string name="group_settings">Settings</string>
   <string name="group_webdav">WebDAV</string>
-
-  <string name="label_prefetch_images">Prefetch Images</string>
-  <string name="tooltip_prefetch_images">Prefetch Images</string>
-  <string name="label_backgroundColor">Background Color</string>
-  <string name="tooltip_backgroundColor">Background Color</string>
-  <string name="label_buttonColor">Button Color</string>
-  <string name="tooltip_buttonColor">Button Color</string>
-  <string name="label_textColor">Text Color</string>
-  <string name="tooltip_textColor">Text Color</string>
-
   <string name="label_10_minutes">10 Minutes</string>
   <string name="label_14_days">14 Days</string>
   <string name="label_15_minutes">15 Minutes</string>
@@ -55,6 +45,8 @@
   <string name="label_60_days">60 Days</string>
   <string name="label_60_minutes">60 Minutes</string>
   <string name="label_7_days">7 Days</string>
+  <string name="label_backgroundColor">Background Color</string>
+  <string name="label_buttonColor">Button Color</string>
   <string name="label_clockColor">Clock Color</string>
   <string name="label_configuration">Configuration</string>
   <string name="label_delete_scene">Delete Scene</string>
@@ -63,6 +55,7 @@
   <string name="label_hide_read">Hide Read items</string>
   <string name="label_hostUrl">Host URL</string>
   <string name="label_imageUrl">Image URL</string>
+  <string name="label_is_keyword_bucket">Is Keyword Bucket</string>
   <string name="label_keep_read_articles">Keep Read Articles</string>
   <string name="label_keep_unread_articles">Keep Unread Articles</string>
   <string name="label_keyword_buckets">Keywords</string>
@@ -70,6 +63,7 @@
   <string name="label_load_articles">Prefetch Articles</string>
   <string name="label_maingroupName">Group Name</string>
   <string name="label_opml">OPML</string>
+  <string name="label_prefetch_images">Prefetch Images</string>
   <string name="label_refresh_interval">Refresh Interval</string>
   <string name="label_refresh_wifi_only">Refresh Wifi Only.</string>
   <string name="label_scene_name">Scene name</string>
@@ -77,6 +71,7 @@
   <string name="label_spotColor">Spot Color</string>
   <string name="label_stopWords">Stop Words</string>
   <string name="label_subgroupName">Sub Group Name</string>
+  <string name="label_textColor">Text Color</string>
   <string name="label_url">Feed URL</string>
   <string name="label_webDavDirectory">WebDAV Directory</string>
   <string name="label_webDavPassword">WebDAV Password</string>
@@ -104,11 +99,13 @@
   <string name="title_edit_newsfeedconfiguration">Edit Newsfeed</string>
   <string name="title_edit_newsfeedgroup">Edit Newsfeed Group</string>
   <string name="title_info">Info</string>
-  <string name="label_is_keyword_bucket">Is Keyword Bucket</string>
   <string name="title_search">Search</string>
   <string name="title_settings">Settings</string>
   <string name="tooltip_add_scene">Add scene...</string>
   <string name="tooltip_back">Back</string>
+  <string name="tooltip_backgroundColor">Background Color</string>
+  <string name="tooltip_buttonColor">Button Color</string>
+  <string name="tooltip_clear_newsitems">Clear all news items.</string>
   <string name="tooltip_clockColor">Basecolor of the studio clock.</string>
   <string name="tooltip_delete_scene">Delete Scene...</string>
   <string name="tooltip_displayTheme">Defines the look and feel of the UI</string>
@@ -127,12 +124,14 @@
   <string name="tooltip_open_chat">Open chat page in external browser</string>
   <string name="tooltip_open_link_article">Open article page in external browser</string>
   <string name="tooltip_open_link_feed">Open feed page in external browser</string>
+  <string name="tooltip_prefetch_images">Prefetch Images</string>
   <string name="tooltip_refresh_interval">Interval to refresh all feeds</string>
   <string name="tooltip_refresh_newsfeed">Refresh News Feed</string>
   <string name="tooltip_refresh_wifi_only">Refresh feeds only when a free of charge connection is available.</string>
   <string name="tooltip_reset_scene">Reset Scene...</string>
   <string name="tooltip_spotColor">The accent color for the base theme</string>
   <string name="tooltip_stopWords">News Items containing one of these words will not be shown</string>
+  <string name="tooltip_textColor">Text Color</string>
   <string name="tooltip_url">The URL pointing to the actual newsfeed.\nCurrently supported feeds are atom, rdf, rss</string>
   <string name="tooltip_webDavDirectory">The directory on the host to use\nas it is not allowed to write into the root directory\nyou must specify this.</string>
   <string name="tooltip_webDavPassword">The password required to login to your WebDAV host\n(will be encrypted in the database)</string>

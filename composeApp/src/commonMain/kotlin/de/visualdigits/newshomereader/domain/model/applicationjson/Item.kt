@@ -10,21 +10,21 @@ import kotlinx.serialization.Serializable
 data class Item(
     @SerialName("@id") val id: String? = null,
     @SerialName("@type") val type: String? = null,
-    val additionalType: String? = null,
-    val abstract: String? = null,
-    val branding: String? = null,
-    val containerId: Long? = null,
-    val headline: String? = null,
+    @SerialName("additionalType") val additionalType: String? = null,
+    @SerialName("abstract") val abstract: String? = null,
+    @SerialName("branding") val branding: String? = null,
+    @SerialName("containerId") val containerId: Long? = null,
+    @SerialName("headline") val headline: String? = null,
     @SerialName("image") val image: List<Image> = listOf(),
-    val isAccessibleForFree: Boolean? = null,
-    val isAlert: Boolean? = null,
-    val isFamilyFriendly: Boolean? = null,
-    val isLive: Boolean? = null,
-    val isUpdate: Boolean? = null,
-    val kicker: String? = null,
-    val name: String? = null,
-    val sourceOrganization: SourceOrganization? = null,
-    val url: String? = null
+    @SerialName("isAccessibleForFree") val isAccessibleForFree: Boolean? = null,
+    @SerialName("isAlert") val isAlert: Boolean? = null,
+    @SerialName("isFamilyFriendly") val isFamilyFriendly: Boolean? = null,
+    @SerialName("isLive") val isLive: Boolean? = null,
+    @SerialName("isUpdate") val isUpdate: Boolean? = null,
+    @SerialName("kicker") val kicker: String? = null,
+    @SerialName("name") val name: String? = null,
+    @SerialName("sourceOrganization") val sourceOrganization: SourceOrganization? = null,
+    @SerialName("url") val url: String? = null
 ) {
 
     constructor(url: String? = null): this(id = null, url = url)

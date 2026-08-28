@@ -2,6 +2,7 @@ package de.visualdigits.newshomereader.data.repository
 
 import co.touchlab.kermit.Logger
 import com.fleeksoft.ksoup.Ksoup
+import com.fleeksoft.ksoup.nodes.Document
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.essence.Essence
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
@@ -11,14 +12,21 @@ import de.visualdigits.newshomereader.data.database.upsertFullArticle
 import de.visualdigits.newshomereader.data.mapper.toAppJson
 import de.visualdigits.newshomereader.data.model.applicationjson.AppJsonWrapper
 import de.visualdigits.newshomereader.data.model.youtube.OEmbed
+import de.visualdigits.newshomereader.domain.model.applicationjson.hrvideoplayer.HrMediaPlayerLoader
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
+import de.visualdigits.newshomereader.domain.model.unified.MediaItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
+import de.visualdigits.newshomereader.domain.model.unified.ThumbnailItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
+import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.Url
 import io.ktor.util.collections.ConcurrentMap
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.async
@@ -37,6 +45,14 @@ open class DefaultArticleRepository(
     val log = Logger.withTag("DefaultArticleRepository")
 
     private val articleLocks = ConcurrentMap<Long, Mutex>()
+
+    companion object {
+        private val jsonMapper = Json {
+            prettyPrint = true
+            ignoreUnknownKeys = true
+            explicitNulls = false
+        }
+    }
 
     override suspend fun getFullArticle(itemId: Long): Result<FullArticle?, DataError.Local> {
         return try {
@@ -111,13 +127,13 @@ open class DefaultArticleRepository(
 
     override suspend fun readFromString(
         newsItem: NewsItem?,
-        rawHtml: String?,
+        rawHtml: String,
         url: String?
     ): FullArticle = withContext(Dispatchers.IO) {
         // extract main text from raw html using essence's heuristics
-        val htmlElement = rawHtml?.let { rh ->
+        val (htmlElement, articleImages) = rawHtml.let { rh ->
             val result = Essence.extract(rh)
-            result.html
+            result.html to result.images
         }
         var html = htmlElement?.html()?:""
 
@@ -125,15 +141,15 @@ open class DefaultArticleRepository(
         val wordCount = words?.size?.toLong() ?: 0L
 
         val applicationJson = try {
-            rawHtml?.let { rh -> Ksoup.parse(rh) }
-                ?.select("script[type=application/ld+json]")
-                ?.flatMap { script ->
+            rawHtml.let { rh -> Ksoup.parse(rh) }
+                .select("script[type=application/ld+json]")
+                .flatMap { script ->
                     val json = script.data()
                     AppJsonWrapper.decodeFromString(json).appJsons.map { appJsonDto ->
                         appJsonDto.clazz = script.attr("class")
                         appJsonDto
                     }
-                }?:listOf()
+                }
         } catch (e: Exception) {
             Logger.e("Could not parse app json for article url: $url", e)
             listOf()
@@ -151,56 +167,81 @@ open class DefaultArticleRepository(
         val discussionUrl = newsArticle?.discussionUrl
         val commentCount = newsArticle?.commentCount?.toLong()?:0L
 
-        val document = Ksoup.parse(html = rawHtml?:"")
+        val document = Ksoup.parse(html = rawHtml)
 
         val imageItems = applicationJson
             .filter { script -> script.type?.lowercase() == "imageobject" }
             .map { ao -> ao.toMediaItem() }
+
+        val articleImageItems = articleImages.mapNotNull { link ->
+            if (link.href.isNotBlank()) {
+                val feedUrl = newsItem?.newsFeed?.link
+                val href = feedUrl
+                    ?.let { feedUrl ->
+                        val makeUrlAbsolute = makeUrlAbsolute(feedUrl, link.href)
+                        makeUrlAbsolute
+                    }
+                    ?: link.href
+                MediaItem(
+                    url = href,
+                    headline = link.text,
+                    description = link.text,
+                    thumbnails = listOf(ThumbnailItem(
+                        url = listOf(link.href),
+                        description = link.text
+                    ))
+                )
+            } else null
+        }
+
+        //
+        // HR On Demand Audios
+        //
+        val hrAudios = scrapeHrMedia(document, "audio/mp3")
+
         val audioItems = applicationJson
             .filter { script -> script.type?.lowercase() == "audioobject" }
             .map { ao -> ao.toMediaItem() }
 
+        //
+        // Youtube Videos
+        //
+
         // scrape from inline player
         val youtubeVideos1 = withContext(Dispatchers.IO + NonCancellable) {
             document.select("lite-youtube")
-                .map { elem ->
-                    async {
-                        try {
-                            val videoUrl = "https://www.youtube.com/watch?v=${elem.attr("videoid")}"
-                            val embedUrl = "https://www.youtube.com/oembed?url=$videoUrl&format=json"
-
-                            val json = httpClient.get(embedUrl).bodyAsText()
-                            Json.decodeFromString<OEmbed>(json).toMediaItem(videoUrl)
-                        } catch (_: Exception) {
-                            null
-                        }
-                    }
+                .mapNotNull { elem ->
+                    val videoId = elem.attr("videoid")
+                    if (videoId.isNotEmpty()) {
+                        scrapeYoutubeVideo("https://www.youtube.com/watch?v=$videoId")
+                    } else null
                 }.awaitAll()
                 .filterNotNull()
         }
+
         // scrape from links
         val youtubeVideos2 = withContext(Dispatchers.IO + NonCancellable) {
             document.select("a[href^=https://www.youtube.com/watch?v=]")
-                .map { elem ->
-                    async {
-                        try {
-                            val videoUrl = elem.attr("href")
-                            val embedUrl = "https://www.youtube.com/oembed?url=$videoUrl&format=json"
-                            val json = httpClient.get(embedUrl).bodyAsText()
-                            Json.decodeFromString<OEmbed>(json).toMediaItem(videoUrl)
-                        } catch (_: Exception) {
-                            null
-                        }
-                    }
+                .mapNotNull { elem ->
+                    scrapeYoutubeVideo(elem.attr("href"))
                 }.awaitAll()
                 .filterNotNull()
         }
+
+        //
+        // HR On Demand Videos
+        //
+        val hrVideos = scrapeHrMedia(document, "video/mp4")
+
+        //
+        // From application json
+        //
         val videoItems = applicationJson
             .filter { script -> script.type?.lowercase() == "videoobject" }
             .map { vo -> vo.toMediaItem() } +
                 applicationJson.flatMap { aj ->
                     aj.video?.videos?.map { video -> video.toMediaItem() }?:listOf()
-                } + youtubeVideos1 + youtubeVideos2
+                }
 
         val imageDto = newsArticle
             ?.image
@@ -221,11 +262,11 @@ open class DefaultArticleRepository(
         FullArticle(
             id = 0L,
             itemId = newsItem?.id?:0L,
-            applicationJson = applicationJson.map { a -> a.toAppJson() }?:listOf(),
+            applicationJson = applicationJson.map { a -> a.toAppJson() },
             html = html,
-            imageItems = imageItems,
-            videoItems = videoItems,
-            audioItems = audioItems,
+            videoItems = videoItems + youtubeVideos1 + youtubeVideos2 + hrVideos,
+            audioItems = audioItems + hrAudios,
+            imageItems = imageItems + articleImageItems,
             articleImage = articleImage,
             discussionUrl = discussionUrl,
             commentCount = commentCount,
@@ -233,5 +274,56 @@ open class DefaultArticleRepository(
             wordCount = wordCount,
             readingTime = kotlin.math.ceil(wordCount.toDouble() / 225.0).roundToLong()
         )
+    }
+
+    private fun CoroutineScope.scrapeYoutubeVideo(videoUrl: String): Deferred<MediaItem?>? = if (videoUrl.isNotEmpty()) {
+        async {
+            try {
+                val embedUrl = "https://www.youtube.com/oembed?url=$videoUrl&format=json"
+                val json = httpClient.get(embedUrl).bodyAsText()
+                Json.decodeFromString<OEmbed>(json).toMediaItem(videoUrl)
+            } catch (_: Exception) {
+                null
+            }
+        }
+    } else null
+
+    private fun scrapeHrMedia(document: Document, mimeType: String): List<MediaItem> {
+        val onDemandVideos = document
+            .select("div[x-show=avStart]")
+            .map {
+                val json = it.attr("data-hr-mediaplayer-loader").replace("&quot", "\"")
+                val config = jsonMapper.decodeFromString<HrMediaPlayerLoader>(json)
+                val url = config.mediaCollection?.streams
+                    ?.flatMap { s ->
+                        s.media
+                            .filter { m -> m.mimeType == mimeType }
+                            .mapNotNull { m -> m.url }
+                            .sortedByDescending { url ->
+                                url
+                                    .substringAfterLast('_')
+                                    .substringBefore('-')
+                                    .substringBefore('x')
+                                    .toInt()
+                            }
+                    }?.firstOrNull()
+                val size = config.playerConfig?.generic?.imageTemplateConfig?.size?.sortedByDescending { size -> size.minWidth }?.firstOrNull()?.value
+                val meta = config.mediaCollection?.meta
+                MediaItem(
+                    url = url,
+                    duration = "${meta?.durationSeconds}S",
+                    headline = meta?.title,
+                    description = meta?.title,
+                    thumbnails = size?.let {
+                        meta?.images?.map { image ->
+                            ThumbnailItem(
+                                url = image.url?.let { url -> listOf(url.replace("{size}", size)) } ?: listOf(),
+                                author = config.playerConfig.pluginData?.trackingPianoall?.avContent?.avContentTheme1,
+                            )
+                        }
+                    }  ?: listOf()
+                )
+            }
+        return onDemandVideos
     }
 }

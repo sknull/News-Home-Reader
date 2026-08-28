@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 data class ItemElement(
     @SerialName("@id") val id: String? = null,
     @SerialName("@type") val type: String? = null,
-    val containerId: String? = null,
-    val position: Int? = null,
-    val item: Item? = null
+    @SerialName("containerId") val containerId: String? = null,
+    @SerialName("position") val position: Int? = null,
+    @SerialName("item") val item: Item? = null
 )

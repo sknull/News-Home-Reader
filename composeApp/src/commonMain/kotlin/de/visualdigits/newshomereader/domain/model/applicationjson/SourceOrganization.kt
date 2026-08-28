@@ -10,6 +10,6 @@ import kotlinx.serialization.Serializable
 data class SourceOrganization(
     @SerialName("@id") val id: String? = null,
     @SerialName("@type") val type: String? = null,
-    val identifier: String? = null,
-    val name: String? = null
+    @SerialName("identifier") val identifier: String? = null,
+    @SerialName("name") val name: String? = null
 )

@@ -33,6 +33,8 @@ import de.visualdigits.newshomereader.domain.webdav.WebDavSyncService
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.readRawBytes
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.NonCancellable
@@ -46,7 +48,9 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import kotlin.concurrent.atomics.ExperimentalAtomicApi
@@ -58,7 +62,8 @@ class DefaultFeedRepository(
     private val dao: NewsHomeReaderDatabaseQueries,
     private val imageCache: ImageCache,
     private val articleRepository: ArticleRepository,
-    private val webDavSyncService: WebDavSyncService
+    private val webDavSyncService: WebDavSyncService,
+    private val scope: CoroutineScope,
 ) : FeedRepository {
 
     override suspend fun getAllNewsFeeds(): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> = withContext(Dispatchers.IO) {
@@ -236,9 +241,45 @@ class DefaultFeedRepository(
         }
     }
 
+    private val refreshMutex = Mutex()
+    private var activeRefreshDeferred: Deferred<Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote>>? = null
+
     override suspend fun refreshNewsFeeds(
-        newsFeedItems: List<NewsFeedItem>
-    ): Result<Pair<List<NewsFeed>, List<NewsItem>>, DataError.Remote> = withContext(Dispatchers.IO) {
+        newsFeedItems: List<NewsFeedItem>,
+        keepReadArticlesInDays: Long,
+        keepUnreadArticlesInDays: Long,
+        loadArticles: Boolean
+    ): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> = withContext(Dispatchers.IO) {
+        val deferredToAwait = refreshMutex.withLock {
+            activeRefreshDeferred ?: coroutineScope {
+                scope.async(Dispatchers.IO) {
+                    try {
+                        executeRefreshNewsFeeds(
+                            newsFeedItems = newsFeedItems,
+                            keepReadArticlesInDays = keepReadArticlesInDays,
+                            keepUnreadArticlesInDays = keepUnreadArticlesInDays,
+                            loadArticles = loadArticles
+                        )
+                    } finally {
+                        refreshMutex.withLock {
+                            activeRefreshDeferred = null
+                        }
+                    }
+                }.also {
+                    activeRefreshDeferred = it
+                }
+            }
+        }
+
+        deferredToAwait.await()
+    }
+
+    private suspend fun executeRefreshNewsFeeds(
+        newsFeedItems: List<NewsFeedItem>,
+        keepReadArticlesInDays: Long,
+        keepUnreadArticlesInDays: Long,
+        loadArticles: Boolean
+    ): Result.Success<Pair<List<NewsFeed>, Boolean>> {
         val newsFeeds = newsFeedItems.mapNotNull { newsFeedItem ->
             log(
                 Severity.Info,
@@ -246,30 +287,30 @@ class DefaultFeedRepository(
                 withTag = "NHR"
             )
             try {
-                val newsFeed = withContext(Dispatchers.IO + NonCancellable) {
+                withContext(Dispatchers.IO + NonCancellable) {
                     val response = newsFeedItem.url?.let { u -> httpClient.get(urlString = u) }
                     readFromBytes(newsFeedItem.name, response?.readRawBytes())
                 }
-                newsFeed
             } catch (e: Exception) {
                 Logger.e("DefaultFeedRepository: Could not refresh feed '${newsFeedItem.name}'", e)
                 null
             }
         }
-        val newsItems = newsFeeds.flatMap { newsFeed -> newsFeed.items }
-
-        Result.Success(Pair(newsFeeds, newsItems))
+        val result = refreshNewsFeedItems(
+            newsFeeds,
+            keepReadArticlesInDays = keepReadArticlesInDays,
+            keepUnreadArticlesInDays = keepUnreadArticlesInDays,
+            loadArticles = loadArticles
+        )
+        return Result.Success(result)
     }
 
-    override suspend fun refreshNewsFeedItems(
+    private suspend fun refreshNewsFeedItems(
         newsFeeds: List<NewsFeed>,
-        newsItems: List<NewsItem>,
-        wifiOnly: Boolean,
         keepReadArticlesInDays: Long,
         keepUnreadArticlesInDays: Long,
-        maxImageSize: Int,
         loadArticles: Boolean
-    ): Result<Pair<List<NewsFeed>, Boolean>, DataError.Remote> = withContext(Dispatchers.IO) {
+    ): Pair<List<NewsFeed>, Boolean> = withContext(Dispatchers.IO) {
         try {
             val (persistedItems, _) = dao.transactionWithResult {
                 val persistedNewsFeeds = newsFeeds.map { newsFeed ->
@@ -282,8 +323,12 @@ class DefaultFeedRepository(
                 } else {
                     Pair(listOf(), false)
                 }
-                dao.cleanupOldReadNewsItems(KmpOffsetDateTime.now().minus(keepReadArticlesInDays.days).toInstant().toEpochMilliseconds())
-                dao.cleanupOldUnreadNewsItems(KmpOffsetDateTime.now().minus(keepUnreadArticlesInDays.days).toInstant().toEpochMilliseconds())
+                dao.cleanupOldReadNewsItems(
+                    KmpOffsetDateTime.now().minus(keepReadArticlesInDays.days).toInstant().toEpochMilliseconds()
+                )
+                dao.cleanupOldUnreadNewsItems(
+                    KmpOffsetDateTime.now().minus(keepUnreadArticlesInDays.days).toInstant().toEpochMilliseconds()
+                )
                 result
             }
 
@@ -305,12 +350,11 @@ class DefaultFeedRepository(
                 }
             }
 
-            val finalNewsFeeds = Pair(newsFeedsWithArticles, changedArticles)
-
             Logger.i("Refresh finished")
-            Result.Success(finalNewsFeeds)
+            Pair(newsFeedsWithArticles, changedArticles)
         } catch (e: Exception) {
-            Result.Error(DataError.Remote.SERIALIZATION, e)
+            Logger.e("Could not refresh news items", e)
+            Pair(newsFeeds, false)
         }
     }
 
@@ -483,6 +527,19 @@ class DefaultFeedRepository(
             else -> {
                 null // Unsupported feed type
             }
+        }
+    }
+
+    override suspend fun deleteAllNewsItems(): Result<Unit, DataError.Local> = withContext(Dispatchers.IO) {
+        try {
+            dao.transaction {
+                dao.deleteAllFullArticles()
+                dao.deleteAllNewsItems()
+            }
+            Result.Success(Unit)
+        } catch (e: Exception) {
+            Logger.e("Could not clear news items", e)
+            Result.Error(DataError.Local.SERIALIZATION)
         }
     }
 }

@@ -10,6 +10,6 @@ import kotlinx.serialization.Serializable
 data class Author(
     @SerialName("@id") val id: String? = null,
     @SerialName("@type") val type: String? = null,
-    val name: String? = null,
-    val url: String? = null
+    @SerialName("name") val name: String? = null,
+    @SerialName("url") val url: String? = null
 )

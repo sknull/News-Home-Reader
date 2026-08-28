@@ -10,6 +10,6 @@ import kotlinx.serialization.Serializable
 data class IsPartOf(
     @SerialName("@id") val id: String? = null,
     @SerialName("@type") val type: List<String> = listOf(),
-    val name: String? = null,
-    val productID: String? = null,
+    @SerialName("name") val name: String? = null,
+    @SerialName("productID") val productID: String? = null,
 )

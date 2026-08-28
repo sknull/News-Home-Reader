@@ -26,13 +26,31 @@ fun String.parseDuration(): String {
     } else {
         val matchMinutes = P_MINUTES.find(s)
         if (matchMinutes != null) {
-            val m = matchMinutes.groups[1]?.value?.padStart(2, '0')?:"00"
-            "$m:00"
+            val m = matchMinutes.groups[1]?.value?.padStart(2, '0')?.toInt()?:0
+            if (m > 60) {
+                val vh = (m / 60).toString().padStart(2, '0')
+                val vm = (m % 60).toString().padStart(2, '0')
+                "$vh:$vm:00"
+            } else {
+                "00:${m.toString().padStart(2, '0')}:00"
+            }
         } else {
             val matchSeconds = P_SECONDS.find(s)
             if (matchSeconds != null) {
-                val s = matchSeconds.groups[1]?.value?.padStart(2, '0')?:"00"
-                "00:$s"
+                val s = matchSeconds.groups[1]?.value?.padStart(2, '0')?.toInt()?:0
+                if (s > 3600) {
+                    val vh = (s / 3600).toString().padStart(2, '0')
+                    val rest = s % 3600
+                    val vm = (rest / 60).toString().padStart(2, '0')
+                    val vs = (rest % 60).toString().padStart(2, '0')
+                    "$vh:$vm:$vs"
+                } else if (s > 60) {
+                    val vm = (s / 60).toString().padStart(2, '0')
+                    val vs = (s % 60).toString().padStart(2, '0')
+                    "00:$vm:$vs"
+                } else {
+                    "00:00:${s.toString().padStart(2, '0')}"
+                }
             } else {
                 ""
             }

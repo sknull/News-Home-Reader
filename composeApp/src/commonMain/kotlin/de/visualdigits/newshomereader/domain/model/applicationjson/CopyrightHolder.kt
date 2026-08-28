@@ -10,5 +10,5 @@ import kotlinx.serialization.Serializable
 data class CopyrightHolder(
     @SerialName("@id") val id: String? = null,
     @SerialName("@type") val type: String? = null,
-    val name: String? = null
+    @SerialName("name") val name: String? = null
 )

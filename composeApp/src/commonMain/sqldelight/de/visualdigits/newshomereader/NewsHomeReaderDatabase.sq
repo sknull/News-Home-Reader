@@ -216,6 +216,9 @@ deleteNewsItemsByFeedName:
 DELETE FROM NewsItemEntity
 WHERE feedName == :feedName;
 
+deleteAllNewsItems:
+DELETE FROM NewsItemEntity;
+
 cleanupOldReadNewsItems:
 DELETE FROM NewsItemEntity
 WHERE lastSeenMillis < :timeStamp AND isRead = 1;
@@ -287,6 +290,9 @@ WHERE LOWER(NewsItemEntity.title) LIKE LOWER('%' || :query || '%')
    OR LOWER(NewsItemEntity.keywords) LIKE LOWER('%' || :query || '%')
    OR LOWER(FullArticleEntity.html) LIKE LOWER('%' || :query || '%')
 ORDER BY NewsItemEntity.publishedMillis DESC;
+
+deleteAllFullArticles:
+DELETE FROM FullArticleEntity;
 
 --
 -- NEWS FEED CONFIGURATION
