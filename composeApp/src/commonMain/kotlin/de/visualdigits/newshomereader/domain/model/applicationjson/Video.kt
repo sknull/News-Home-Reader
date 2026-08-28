@@ -1,7 +1,6 @@
 package de.visualdigits.newshomereader.domain.model.applicationjson
 
 import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
-import de.visualdigits.common.domain.model.common.KmpOffsetDateTimeHeuristicDeserializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -6,8 +6,6 @@ import de.visualdigits.newshomereader.data.model.rss.Rss
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.util.extractImage
-import io.ktor.http.Url
-import io.ktor.http.fullPath
 
 
 fun Item.toNewsItem(feedName: String): NewsItem {

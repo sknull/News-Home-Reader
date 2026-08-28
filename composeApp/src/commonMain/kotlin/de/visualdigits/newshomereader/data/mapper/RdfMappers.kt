@@ -6,8 +6,6 @@ import de.visualdigits.newshomereader.data.model.rdf.Rdf
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.util.extractImage
-import de.visualdigits.newshomereader.domain.util.fileNameWithoutExtension
-import io.ktor.http.Url
 
 
 fun Item.toNewsItem(feedName: String): NewsItem {

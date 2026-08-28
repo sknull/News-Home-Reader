@@ -23,7 +23,6 @@ import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
-import io.ktor.http.Url
 import io.ktor.util.collections.ConcurrentMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred

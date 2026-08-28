@@ -6,7 +6,6 @@ import coil3.ImageLoader
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import coil3.request.bitmapConfig
-import io.ktor.client.HttpClient
 import kotlinx.coroutines.coroutineScope
 import okio.Path.Companion.toPath
 

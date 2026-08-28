@@ -20,9 +20,14 @@ fun String.parseDuration(): String {
     val s = replace("PT", "")
     val matchDuration = P_DURATION.find(s)
     val d = if (matchDuration != null) {
-        val m = matchDuration.groups[1]?.value?.padStart(2, '0')?:"00"
-        val s = matchDuration.groups[2]?.value?.padStart(2, '0')?:"00"
-        "$m:$s"
+        val m = matchDuration.groups[1]?.value?.toInt() ?: 0
+        val s = matchDuration.groups[2]?.value?.toInt() ?: 0
+        val ts = m * 60 + s
+        val vh = (ts / 3600).toString().padStart(2, '0')
+        val rest = ts % 3600
+        val vm = (rest / 60).toString().padStart(2, '0')
+        val vs = (rest % 60).toString().padStart(2, '0')
+        "$vh:$vm:$vs"
     } else {
         val matchMinutes = P_MINUTES.find(s)
         if (matchMinutes != null) {
@@ -52,7 +57,7 @@ fun String.parseDuration(): String {
                     "00:00:${s.toString().padStart(2, '0')}"
                 }
             } else {
-                ""
+                "00:00:00"
             }
         }
     }
