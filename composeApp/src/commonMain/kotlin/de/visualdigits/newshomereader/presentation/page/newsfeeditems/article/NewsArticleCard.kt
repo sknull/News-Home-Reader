@@ -234,7 +234,7 @@ fun NewsArticleCard(
                         newsItem.updated?.toLocalDateTime()?.let { u ->
                             Text(
                                 modifier = Modifier,
-                                text = u.format("dd.MM yyyy HH:mm"),
+                                text = u.format("EEE, dd. MMMM yyyy HH:mm"),
                                 style = MaterialTheme.typography.headlineSmall
                             )
                         }
