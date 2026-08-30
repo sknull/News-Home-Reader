@@ -13,6 +13,7 @@ import de.visualdigits.newshomereader.data.database.DriverFactory
 import de.visualdigits.newshomereader.data.database.applicationJsonAdapter
 import de.visualdigits.newshomereader.data.database.mediaItemAdapter
 import de.visualdigits.newshomereader.data.database.newsFeedsAdapter
+import de.visualdigits.newshomereader.data.database.partsAdapter
 import de.visualdigits.newshomereader.data.database.stringListAdapter
 import de.visualdigits.newshomereader.data.http.HttpClientFactory
 import de.visualdigits.newshomereader.data.repository.DefaultSettingsRepository
@@ -50,6 +51,7 @@ val testModule = module {
                 imageItemsAdapter = mediaItemAdapter,
                 videoItemsAdapter = mediaItemAdapter,
                 audioItemsAdapter = mediaItemAdapter,
+                partsAdapter = partsAdapter
             ),
             NewsFeedEntityAdapter = NewsFeedEntity.Adapter(
                 keywordsAdapter = stringListAdapter

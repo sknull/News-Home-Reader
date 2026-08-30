@@ -15,11 +15,11 @@ import de.visualdigits.newshomereader.data.model.youtube.OEmbed
 import de.visualdigits.newshomereader.domain.model.applicationjson.hrvideoplayer.HrMediaPlayerLoader
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
+import de.visualdigits.newshomereader.domain.model.unified.HtmlElement
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.model.unified.ThumbnailItem
 import de.visualdigits.newshomereader.domain.repository.ArticleRepository
-import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
@@ -34,6 +34,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import kotlin.math.ceil
 import kotlin.math.roundToLong
 
 open class DefaultArticleRepository(
@@ -84,6 +85,7 @@ open class DefaultArticleRepository(
                             fullArticle = fullArticle.copy(
                                 applicationJson = readFullArticle.applicationJson,
                                 html = readFullArticle.html,
+                                parts = readFullArticle.parts,
                                 imageItems = readFullArticle.imageItems,
                                 videoItems = readFullArticle.videoItems,
                                 audioItems = readFullArticle.audioItems,
@@ -130,14 +132,27 @@ open class DefaultArticleRepository(
         url: String?
     ): FullArticle = withContext(Dispatchers.IO) {
         // extract main text from raw html using essence's heuristics
-        val (htmlElement, articleImages) = rawHtml.let { rh ->
+        val (htmlElement, parts) = rawHtml.let { rh ->
             val result = Essence.extract(rh)
-            result.html to result.images
+            result.html to result.parts.mapNotNull { part ->
+                when (part.tagName()) {
+                    "div" -> HtmlElement(
+                        tagName = part.tagName(),
+                        html = part.html()
+                    )
+                    "img" -> HtmlElement(
+                        tagName = part.tagName(),
+                        href = part.attr("src"),
+                        alt = if (part.hasAttr("alt")) part.attr("alt") else part.attr("title")
+                    )
+                    else -> null
+                }
+            }
         }
-        var html = htmlElement?.html()?:""
+        var html = htmlElement.html()
 
-        val words = htmlElement?.text()?.split("\\s+".toRegex())?.filter { it.isNotBlank() }
-        val wordCount = words?.size?.toLong() ?: 0L
+        val words = htmlElement.text().split("\\s+".toRegex()).filter { it.isNotBlank() }
+        val wordCount = words.size.toLong() ?: 0L
 
         val applicationJson = try {
             rawHtml.let { rh -> Ksoup.parse(rh) }
@@ -171,27 +186,6 @@ open class DefaultArticleRepository(
         val imageItems = applicationJson
             .filter { script -> script.type?.lowercase() == "imageobject" }
             .map { ao -> ao.toMediaItem() }
-
-        val articleImageItems = articleImages.mapNotNull { link ->
-            if (link.href.isNotBlank()) {
-                val feedUrl = newsItem?.newsFeed?.link
-                val href = feedUrl
-                    ?.let { feedUrl ->
-                        val makeUrlAbsolute = makeUrlAbsolute(feedUrl, link.href)
-                        makeUrlAbsolute
-                    }
-                    ?: link.href
-                MediaItem(
-                    url = href,
-                    headline = link.text,
-                    description = link.text,
-                    thumbnails = listOf(ThumbnailItem(
-                        url = listOf(link.href),
-                        description = link.text
-                    ))
-                )
-            } else null
-        }
 
         //
         // HR On Demand Audios
@@ -263,15 +257,16 @@ open class DefaultArticleRepository(
             itemId = newsItem?.id?:0L,
             applicationJson = applicationJson.map { a -> a.toAppJson() },
             html = html,
+            parts = parts,
             videoItems = videoItems + youtubeVideos1 + youtubeVideos2 + hrVideos,
             audioItems = audioItems + hrAudios,
-            imageItems = imageItems + articleImageItems,
+            imageItems = imageItems,
             articleImage = articleImage,
             discussionUrl = discussionUrl,
             commentCount = commentCount,
             isPaid = isPaid,
             wordCount = wordCount,
-            readingTime = kotlin.math.ceil(wordCount.toDouble() / 225.0).roundToLong()
+            readingTime = ceil(wordCount.toDouble() / 225.0).roundToLong()
         )
     }
 

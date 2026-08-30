@@ -9,6 +9,7 @@ data class FullArticle(
     val itemId: Long,
     val applicationJson: List<AppJson> = listOf(),
     val html: String,
+    val parts: List<HtmlElement>,
     val imageItems: List<MediaItem> = listOf(),
     val videoItems: List<MediaItem> = listOf(),
     val audioItems: List<MediaItem> = listOf(),
@@ -31,6 +32,7 @@ data class FullArticle(
                 readingTime == other.readingTime &&
                 applicationJson == other.applicationJson &&
                 html == other.html &&
+                parts == other.parts &&
                 imageItems == other.imageItems &&
                 videoItems == other.videoItems &&
                 audioItems == other.audioItems &&

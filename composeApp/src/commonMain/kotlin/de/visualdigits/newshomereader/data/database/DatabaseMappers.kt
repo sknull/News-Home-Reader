@@ -21,6 +21,7 @@ import de.visualdigits.newshomereader.domain.model.settings.SK
 import de.visualdigits.newshomereader.domain.model.settings.Settings
 import de.visualdigits.newshomereader.domain.model.type.Language
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
+import de.visualdigits.newshomereader.domain.model.unified.HtmlElement
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem
 import de.visualdigits.newshomereader.domain.model.unified.MediaType
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
@@ -220,6 +221,7 @@ fun GetAllNewsItemsWithArticles.toNewsItem(): NewsItem {
         itemId = itemId?:0L,
         applicationJson = applicationJson?:listOf(),
         html = html?:"",
+        parts = parts?:listOf(),
         imageItems = imageItems?:listOf(),
         videoItems = videoItems?:listOf(),
         audioItems = audioItems?:listOf(),
@@ -256,6 +258,7 @@ fun SearchNewsItems.toNewsItem(): NewsItem {
         itemId = itemId?:0L,
         applicationJson = applicationJson?:listOf(),
         html = html?:"",
+        parts = parts?:listOf(),
         imageItems = imageItems?:listOf(),
         videoItems = videoItems?:listOf(),
         audioItems = audioItems?:listOf(),
@@ -283,6 +286,14 @@ val newsFeedsAdapter = object : ColumnAdapter<List<NewsFeedItem>, String> {
     }
 }
 
+val partsAdapter = object : ColumnAdapter<List<HtmlElement>, String> {
+    override fun decode(databaseValue: String): List<HtmlElement> =
+        if (databaseValue.isEmpty()) listOf() else mapper.decodeFromString(databaseValue)
+
+    override fun encode(value: List<HtmlElement>): String =
+        mapper.encodeToString(value)
+}
+
 val mediaItemAdapter = object : ColumnAdapter<List<MediaItem>, String> {
     override fun decode(databaseValue: String): List<MediaItem> =
         if (databaseValue.isEmpty()) listOf() else mapper.decodeFromString(databaseValue)
@@ -305,6 +316,7 @@ fun FullArticle.toFullArticleEntity(): FullArticleEntity {
         itemId = itemId,
         applicationJson = applicationJson,
         html = html,
+        parts = parts,
         imageItems = imageItems,
         videoItems = videoItems,
         audioItems = audioItems,
@@ -323,6 +335,7 @@ fun FullArticleEntity.toFullArticle(): FullArticle {
         itemId = itemId,
         applicationJson = applicationJson,
         html = html,
+        parts = parts,
         imageItems = imageItems.map { mi -> mi.copy(type = MediaType.image) },
         videoItems = videoItems.map { mi -> mi.copy(type = MediaType.video) },
         audioItems = audioItems.map { mi -> mi.copy(type = MediaType.audio) },

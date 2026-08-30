@@ -1,5 +1,6 @@
 import de.visualdigits.common.domain.util.EncryptedString;
 import de.visualdigits.newshomereader.domain.model.applicationjson.AppJson;
+import de.visualdigits.newshomereader.domain.model.unified.HtmlElement;
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem;
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeedItem;
 import kotlin.Boolean;
@@ -235,6 +236,7 @@ CREATE TABLE FullArticleEntity (
     itemId INTEGER NOT NULL UNIQUE,
     applicationJson TEXT AS List<AppJson> NOT NULL,
     html TEXT NOT NULL,
+    parts TEXT AS List<HtmlElement> NOT NULL,
     imageItems TEXT AS List<MediaItem> NOT NULL,
     videoItems TEXT AS List<MediaItem> NOT NULL,
     audioItems TEXT AS List<MediaItem> NOT NULL,
@@ -249,16 +251,17 @@ CREATE TABLE FullArticleEntity (
 
 insertFullArticle:
 INSERT INTO FullArticleEntity (
-    itemId, applicationJson, html, imageItems, videoItems,
+    itemId, applicationJson, html, parts, imageItems, videoItems,
     audioItems, articleImage, discussionUrl, commentCount, isPaid, wordCount, readingTime
 )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 updateFullArticle:
 UPDATE FullArticleEntity
 SET id = :id,
     applicationJson = :applicationJson,
     html = :html,
+    parts = :parts,
     imageItems = :imageItems,
     videoItems = :videoItems,
     audioItems = :audioItems,

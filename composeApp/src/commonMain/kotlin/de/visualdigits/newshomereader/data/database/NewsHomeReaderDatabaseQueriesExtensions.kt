@@ -278,6 +278,7 @@ fun NewsHomeReaderDatabaseQueries.insertFullArticle(fullArticleEntity: FullArtic
         itemId = fullArticleEntity.itemId,
         applicationJson = fullArticleEntity.applicationJson,
         html = fullArticleEntity.html,
+        parts = fullArticleEntity.parts,
         imageItems = fullArticleEntity.imageItems,
         videoItems = fullArticleEntity.videoItems,
         audioItems = fullArticleEntity.audioItems,
@@ -295,6 +296,7 @@ fun NewsHomeReaderDatabaseQueries.updateFullArticle(fullArticleEntity: FullArtic
         itemId = fullArticleEntity.itemId,
         applicationJson = fullArticleEntity.applicationJson,
         html = fullArticleEntity.html,
+        parts = fullArticleEntity.parts,
         imageItems = fullArticleEntity.imageItems,
         videoItems = fullArticleEntity.videoItems,
         audioItems = fullArticleEntity.audioItems,
@@ -358,6 +360,7 @@ fun FullArticleEntity.isEqualto(other: FullArticleEntity): Boolean {
     itemId == other.itemId &&
     applicationJson == other.applicationJson &&
     html  == other.html  &&
+    parts  == other.parts  &&
     imageItems == other.imageItems &&
     videoItems == other.videoItems &&
     audioItems == other.audioItems &&

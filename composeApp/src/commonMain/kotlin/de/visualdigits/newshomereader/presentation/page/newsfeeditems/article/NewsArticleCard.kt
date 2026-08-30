@@ -65,6 +65,7 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.Image
+import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.textLinkStyles
@@ -89,6 +90,7 @@ fun NewsArticleCard(
     connectivityManager: ConnectivityManager
 ) {
     val spotColor = settings?.get<HsvColor>(SK.spotColor)?: SPOT_COLOR_DEFAULT
+    val buttonColor = remember { (settings?.get<HsvColor>(SK.buttonColor) ?: BUTTON_COLOR_DEFAULT).toComposeColor() }
     val backgroundColorValue = HsvColor.fromComposeColor(MaterialTheme.colorScheme.background).value
     val dimFactor = if (backgroundColorValue < 0.5f) 1.5f else 1.25f
 
@@ -115,7 +117,7 @@ fun NewsArticleCard(
                     insetColorLight = MaterialTheme.colorScheme.background.copyFactor(valueFactor = dimFactor),
                     insetColorShadow = MaterialTheme.colorScheme.background.copyFactor(valueFactor = 1f / dimFactor)
                 )
-        ) {}
+        )
 
         Column(
             modifier = modifier
@@ -232,7 +234,7 @@ fun NewsArticleCard(
                         newsItem.updated?.toLocalDateTime()?.let { u ->
                             Text(
                                 modifier = Modifier,
-                                text = u.format("EEE, dd. MMMM yyyy HH:mm"),
+                                text = u.format("dd.MM yyyy HH:mm"),
                                 style = MaterialTheme.typography.headlineSmall
                             )
                         }
@@ -309,32 +311,74 @@ fun NewsArticleCard(
                         }
                     }),
                     Pair("text", @Composable {
-                        val annotatedText = htmlToAnnotatedString(
-                            html = normalizeXml(newsItem.newsArticle?.html?:""),
-                            style = HtmlStyle(
-                                textLinkStyles = textLinkStyles(spotColor)
-                            ),
-                            linkInteractionListener = { linkAnnotation ->
-                                makeUrlAbsolute(
-                                    newsItem.link,
-                                    (linkAnnotation as LinkAnnotation.Url).url
-                                ).let { uriHandler.openUriSafely(it) }
-                            }
-                        )
-                        val highlightedText = remember(annotatedText, state.newsItemSearchText) {
-                            if (!state.newsItemSearchText.isNullOrBlank()) {
-                                annotatedText.highlightQuery(state.newsItemSearchText)
-                            } else if (!state.currentKeywordBucket.isNullOrBlank()){
-                                annotatedText.highlightQuery(state.currentKeywordBucket)
-                            } else {
-                                annotatedText
+                        newsItem.newsArticle?.parts?.forEach { part ->
+                            when (part.tagName) {
+                                "div" -> {
+                                    if (part.html != null) {
+                                        val annotatedText = htmlToAnnotatedString(
+                                            html = normalizeXml(part.html),
+                                            style = HtmlStyle(
+                                                textLinkStyles = textLinkStyles(spotColor)
+                                            ),
+                                            linkInteractionListener = { linkAnnotation ->
+                                                makeUrlAbsolute(
+                                                    newsItem.link,
+                                                    (linkAnnotation as LinkAnnotation.Url).url
+                                                ).let { uriHandler.openUriSafely(it) }
+                                            }
+                                        )
+                                        val highlightedText = remember(annotatedText, state.newsItemSearchText) {
+                                            if (!state.newsItemSearchText.isNullOrBlank()) {
+                                                annotatedText.highlightQuery(state.newsItemSearchText)
+                                            } else if (!state.currentKeywordBucket.isNullOrBlank()){
+                                                annotatedText.highlightQuery(state.currentKeywordBucket)
+                                            } else {
+                                                annotatedText
+                                            }
+                                        }
+                                        Text(
+                                            modifier = Modifier
+                                                .padding(vertical = MaterialTheme.shapes.gap),
+                                            text = highlightedText,
+                                            style = MaterialTheme.typography.bodyMedium.copy(lineHeight = 1.5.em)
+                                        )
+                                    }
+                                }
+                                "img" -> {
+                                    if (part.href != null) {
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth(),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Column(
+                                                modifier = Modifier
+                                                    .fillMaxWidth(0.6f)
+                                                    .background(buttonColor, MaterialTheme.shapes.small)
+                                                    .padding(MaterialTheme.shapes.gap),
+                                                verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                                            ) {
+                                                Image(
+                                                    url = part.href,
+                                                    contentDescription = part.alt ?: "",
+                                                    maxImageSize = maxImageSize,
+                                                    showLoadingIcon = true
+                                                )
+                                            }
+                                            part.alt?.let { a ->
+                                                Spacer(Modifier.size(MaterialTheme.shapes.gap))
+                                                Text(
+                                                    modifier = Modifier,
+                                                    text = a,
+                                                    style = MaterialTheme.typography.bodySmall
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                                else -> {}
                             }
                         }
-                        Text(
-                            modifier = Modifier,
-                            text = highlightedText,
-                            style = MaterialTheme.typography.bodyMedium.copy(lineHeight = 1.5.em)
-                        )
                     }),
                 )
             }

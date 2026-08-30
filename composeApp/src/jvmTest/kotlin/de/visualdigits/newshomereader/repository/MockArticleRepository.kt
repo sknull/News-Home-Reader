@@ -27,7 +27,7 @@ class MockArticleRepository(
     }
 
     override suspend fun getFullArticle(itemId: Long): Result<FullArticle?, DataError.Local> {
-        return Result.Success(FullArticle(id = 1234, itemId = 4711, html = ""))
+        return Result.Success(FullArticle(id = 1234, itemId = 4711, html = "", parts = listOf()))
     }
 
     override suspend fun readFullArticle(
