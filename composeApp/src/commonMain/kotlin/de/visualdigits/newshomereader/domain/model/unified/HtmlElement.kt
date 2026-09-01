@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 @Immutable
 data class HtmlElement(
     val tagName: String,
-    val html: String? = null,
+    val html: List<String> = listOf(),
+    val imageType: String? = null,
     val src: String? = null,
 )

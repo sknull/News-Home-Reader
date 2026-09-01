@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.style.TextDecoration
@@ -282,137 +283,77 @@ fun NewsArticleCard(
                                     lineHeight = 1.4.em
                                 )
                             )
-                            Spacer(Modifier.height(16.dp))
+                            Spacer(Modifier.height(MaterialTheme.shapes.gap))
                         }
                     }),
                     Pair("text", @Composable {
                         newsItem.newsArticle?.parts?.forEach { part ->
                             when (part.tagName) {
-                                "paragraph" -> {
-                                    if (part.html != null) {
-                                        val annotatedText = htmlToAnnotatedString(
-                                            html = normalizeXml(part.html),
-                                            style = HtmlStyle(
-                                                textLinkStyles = textLinkStyles(spotColor)
-                                            ),
-                                            linkInteractionListener = { linkAnnotation ->
-                                                makeUrlAbsolute(
-                                                    newsItem.link,
-                                                    (linkAnnotation as LinkAnnotation.Url).url
-                                                ).let { uriHandler.openUriSafely(it) }
-                                            }
-                                        )
-                                        val highlightedText = remember(annotatedText, state.newsItemSearchText) {
-                                            if (!state.newsItemSearchText.isNullOrBlank()) {
-                                                annotatedText.highlightQuery(state.newsItemSearchText)
-                                            } else if (!state.currentKeywordBucket.isNullOrBlank()){
-                                                annotatedText.highlightQuery(state.currentKeywordBucket)
-                                            } else {
-                                                annotatedText
-                                            }
-                                        }
-                                        Text(
-                                            modifier = Modifier
-                                                .padding(vertical = MaterialTheme.shapes.gap),
-                                            text = highlightedText,
-                                            style = MaterialTheme.typography.bodyMedium.copy(lineHeight = 1.5.em)
-                                        )
+                                "paragraph", "headline" -> {
+                                    part.html.forEach { html ->
+                                        HighlightedText(html, spotColor, newsItem, uriHandler, state)
                                     }
                                 }
                                 "div" -> {
-                                    if (part.html != null) {
-                                        val annotatedText = htmlToAnnotatedString(
-                                            html = normalizeXml(part.html),
-                                            style = HtmlStyle(
-                                                textLinkStyles = textLinkStyles(spotColor)
-                                            ),
-                                            linkInteractionListener = { linkAnnotation ->
-                                                makeUrlAbsolute(
-                                                    newsItem.link,
-                                                    (linkAnnotation as LinkAnnotation.Url).url
-                                                ).let { uriHandler.openUriSafely(it) }
-                                            }
-                                        )
-                                        val highlightedText = remember(annotatedText, state.newsItemSearchText) {
-                                            if (!state.newsItemSearchText.isNullOrBlank()) {
-                                                annotatedText.highlightQuery(state.newsItemSearchText)
-                                            } else if (!state.currentKeywordBucket.isNullOrBlank()){
-                                                annotatedText.highlightQuery(state.currentKeywordBucket)
-                                            } else {
-                                                annotatedText
-                                            }
-                                        }
-                                        Spacer(Modifier.height(16.dp))
+                                    if (part.html.isNotEmpty()) {
+                                        Spacer(Modifier.height(MaterialTheme.shapes.gap))
                                         Box(
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .background(buttonColor, MaterialTheme.shapes.small)
                                                 .padding(MaterialTheme.shapes.gap),
                                         ) {
-                                            Text(
-                                                modifier = Modifier
-                                                    .padding(vertical = MaterialTheme.shapes.gap),
-                                                text = highlightedText,
-                                                style = MaterialTheme.typography.bodyMedium.copy(lineHeight = 1.5.em)
-                                            )
+                                            part.html.forEach { html ->
+                                                HighlightedText(html, spotColor, newsItem, uriHandler, state)
+                                            }
                                         }
                                     }
                                 }
                                 "img" -> {
                                     if (part.src != null) {
-                                        Spacer(Modifier.height(16.dp))
-                                        Box(
-                                            modifier = Modifier
-                                                .fillMaxWidth(),
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            Column(
+                                        Spacer(Modifier.height(MaterialTheme.shapes.gap))
+                                        if (part.imageType == "standard") {
+                                            Box(
                                                 modifier = Modifier
-                                                    .conditional(maxWidth > 600.dp) { fillMaxWidth(0.6f) }
-                                                    .conditional(maxWidth <= 600.dp) { fillMaxWidth() }
-                                                    .background(buttonColor, MaterialTheme.shapes.small)
-                                                    .padding(MaterialTheme.shapes.gap),
-                                                verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                                                    .fillMaxWidth(),
+                                                contentAlignment = Alignment.Center
                                             ) {
-                                                Image(
-                                                    url = makeUrlAbsolute(
-                                                        newsItem.link,
-                                                        part.src
-                                                    ),
-                                                    maxImageSize = maxImageSize,
-                                                    showLoadingIcon = true
-                                                )
-
-                                                part.html?.let { html ->
-                                                    val annotatedText = htmlToAnnotatedString(
-                                                        html = normalizeXml(html),
-                                                        style = HtmlStyle(
-                                                            textLinkStyles = textLinkStyles(spotColor)
+                                                Column(
+                                                    modifier = Modifier
+                                                        .conditional(maxWidth > 600.dp) { fillMaxWidth(0.6f) }
+                                                        .conditional(maxWidth <= 600.dp) { fillMaxWidth() }
+                                                        .background(buttonColor, MaterialTheme.shapes.small)
+                                                        .padding(MaterialTheme.shapes.gap),
+                                                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                                                ) {
+                                                    Image(
+                                                        url = makeUrlAbsolute(
+                                                            newsItem.link,
+                                                            part.src
                                                         ),
-                                                        linkInteractionListener = { linkAnnotation ->
-                                                            makeUrlAbsolute(
-                                                                newsItem.link,
-                                                                (linkAnnotation as LinkAnnotation.Url).url
-                                                            ).let { uriHandler.openUriSafely(it) }
-                                                        }
+                                                        maxImageSize = maxImageSize,
+                                                        showLoadingIcon = true
                                                     )
-                                                    val highlightedText = remember(annotatedText, state.newsItemSearchText) {
-                                                        if (!state.newsItemSearchText.isNullOrBlank()) {
-                                                            annotatedText.highlightQuery(state.newsItemSearchText)
-                                                        } else if (!state.currentKeywordBucket.isNullOrBlank()){
-                                                            annotatedText.highlightQuery(state.currentKeywordBucket)
-                                                        } else {
-                                                            annotatedText
+                                                    if (part.html.isNotEmpty()) {
+//                                                        Spacer(Modifier.height(MaterialTheme.shapes.gap))
+                                                        part.html.forEach { html ->
+                                                            HighlightedText(html, spotColor, newsItem, uriHandler, state)
                                                         }
                                                     }
-                                                    Spacer(Modifier.size(MaterialTheme.shapes.gap))
-                                                    Text(
-                                                        modifier = Modifier,
-                                                        text = highlightedText,
-                                                        style = MaterialTheme.typography.bodySmall
-                                                    )
                                                 }
                                             }
+                                        } else if (part.imageType == "icon") {
+                                            Image(
+                                                url = makeUrlAbsolute(
+                                                    newsItem.link,
+                                                    part.src
+                                                ),
+                                                width = 60.dp,
+                                                height = 60.dp,
+                                                contentScale = ContentScale.Inside,
+                                                maxImageSize = maxImageSize,
+                                                showLoadingIcon = true
+                                            )
                                         }
                                     }
                                 }
@@ -424,4 +365,42 @@ fun NewsArticleCard(
             }
         }
     }
+}
+
+@Composable
+private fun HighlightedText(
+    html: String,
+    spotColor: HsvColor,
+    newsItem: NewsItem,
+    uriHandler: UriHandler,
+    state: NewsHomeReaderState
+) {
+    val annotatedText = htmlToAnnotatedString(
+        html = normalizeXml(html),
+        style = HtmlStyle(
+            textLinkStyles = textLinkStyles(spotColor)
+        ),
+        linkInteractionListener = { linkAnnotation ->
+            makeUrlAbsolute(
+                newsItem.link,
+                (linkAnnotation as LinkAnnotation.Url).url
+            ).let { uriHandler.openUriSafely(it) }
+        }
+    )
+    val highlightedText = remember(annotatedText, state.newsItemSearchText) {
+        if (!state.newsItemSearchText.isNullOrBlank()) {
+            annotatedText.highlightQuery(state.newsItemSearchText)
+        } else if (!state.currentKeywordBucket.isNullOrBlank()) {
+            annotatedText.highlightQuery(state.currentKeywordBucket)
+        } else {
+            annotatedText
+        }
+    }
+    val lineHeight = if (html.startsWith("<h")) 2.0.em else 1.5.em
+    Text(
+        modifier = Modifier
+            .padding(vertical = MaterialTheme.shapes.gap),
+        text = highlightedText,
+        style = MaterialTheme.typography.bodyMedium.copy(lineHeight = lineHeight)
+    )
 }

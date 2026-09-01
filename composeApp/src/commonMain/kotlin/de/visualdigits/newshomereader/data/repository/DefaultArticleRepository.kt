@@ -137,18 +137,23 @@ open class DefaultArticleRepository(
             val result = Essence.extract(rh)
             result.html to result.parts.mapNotNull { part ->
                 when (part.elementType) {
+                    ElementType.headline -> HtmlElement(
+                        tagName = "headline",
+                        html = part.html.map { it.outerHtml() }
+                    )
                     ElementType.paragraph -> HtmlElement(
                         tagName = "paragraph",
-                        html = part.html
+                        html = part.html.map { it.outerHtml() }
                     )
                     ElementType.div -> HtmlElement(
                         tagName = "div",
-                        html = part.html
+                        html = part.html.map { it.outerHtml() }
                     )
                     ElementType.image -> HtmlElement(
                         tagName = "img",
-                        src = part.src,
-                        html = part.html
+                        html = part.html.map { it.outerHtml() },
+                        imageType = part.imageType?.name,
+                        src = part.src
                     )
                     else -> null
                 }
@@ -263,9 +268,9 @@ open class DefaultArticleRepository(
             applicationJson = applicationJson.map { a -> a.toAppJson() },
             html = html,
             parts = parts,
-            videoItems = videoItems + youtubeVideos1 + youtubeVideos2 + hrVideos,
-            audioItems = audioItems + hrAudios,
-            imageItems = imageItems,
+            videoItems = (videoItems + youtubeVideos1 + youtubeVideos2 + hrVideos).associateBy { it.url }.values.toList(),
+            audioItems = (audioItems + hrAudios).associateBy { it.url }.values.toList(),
+            imageItems = imageItems.associateBy { it.url }.values.toList(),
             articleImage = articleImage,
             discussionUrl = discussionUrl,
             commentCount = commentCount,
