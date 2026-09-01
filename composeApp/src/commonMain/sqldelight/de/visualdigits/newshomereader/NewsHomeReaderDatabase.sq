@@ -228,6 +228,9 @@ cleanupOldUnreadNewsItems:
 DELETE FROM NewsItemEntity
 WHERE lastSeenMillis < :timeStamp AND isRead = 0;
 
+getNewsItemCount:
+SELECT COUNT(*) FROM NewsItemEntity;
+
 --
 -- FULL ARTICLE
 --
@@ -296,6 +299,9 @@ ORDER BY NewsItemEntity.publishedMillis DESC;
 
 deleteAllFullArticles:
 DELETE FROM FullArticleEntity;
+
+getArticleCount:
+SELECT COUNT(*) FROM FullArticleEntity;
 
 --
 -- NEWS FEED CONFIGURATION

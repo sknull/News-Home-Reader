@@ -30,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.style.TextDecoration
@@ -43,17 +42,14 @@ import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.domain.model.common.format
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.platform.PlatformType
-import de.visualdigits.common.domain.util.copyFactor
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
-import de.visualdigits.common.presentation.components.modifier.angledInnerShadow
-import de.visualdigits.common.presentation.components.modifier.tintedBackgroundImage
+import de.visualdigits.common.presentation.components.util.conditional
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.common.presentation.util.highlightQuery
 import de.visualdigits.common.presentation.util.openUriSafely
 import de.visualdigits.compose.resources.Res
-import de.visualdigits.compose.resources.circuit_board_squared
 import de.visualdigits.compose.resources.icon_paid_24px
 import de.visualdigits.compose.resources.icon_timelapse_24px
 import de.visualdigits.newshomereader.domain.model.settings.SK
@@ -70,7 +66,6 @@ import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.textLinkStyles
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
-import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -94,31 +89,11 @@ fun NewsArticleCard(
     val backgroundColorValue = HsvColor.fromComposeColor(MaterialTheme.colorScheme.background).value
     val dimFactor = if (backgroundColorValue < 0.5f) 1.5f else 1.25f
 
-    Row(
+    Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight()
-                .tintedBackgroundImage(
-                    image = imageResource(Res.drawable.circuit_board_squared),
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    finalAlpha = 0.2f,
-                    contentScale = ContentScale.FillHeight
-                )
-                .angledInnerShadow(
-                    angle = 45f,
-                    distance = 10.dp,
-                    spread = 5.dp,
-                    alpha = 0.5f,
-                    insetSize = 2.dp,
-                    insetColorLight = MaterialTheme.colorScheme.background.copyFactor(valueFactor = dimFactor),
-                    insetColorShadow = MaterialTheme.colorScheme.background.copyFactor(valueFactor = 1f / dimFactor)
-                )
-        )
-
         Column(
             modifier = modifier
                 .fillMaxHeight()
@@ -313,7 +288,7 @@ fun NewsArticleCard(
                     Pair("text", @Composable {
                         newsItem.newsArticle?.parts?.forEach { part ->
                             when (part.tagName) {
-                                "div" -> {
+                                "paragraph" -> {
                                     if (part.html != null) {
                                         val annotatedText = htmlToAnnotatedString(
                                             html = normalizeXml(part.html),
@@ -344,8 +319,48 @@ fun NewsArticleCard(
                                         )
                                     }
                                 }
+                                "div" -> {
+                                    if (part.html != null) {
+                                        val annotatedText = htmlToAnnotatedString(
+                                            html = normalizeXml(part.html),
+                                            style = HtmlStyle(
+                                                textLinkStyles = textLinkStyles(spotColor)
+                                            ),
+                                            linkInteractionListener = { linkAnnotation ->
+                                                makeUrlAbsolute(
+                                                    newsItem.link,
+                                                    (linkAnnotation as LinkAnnotation.Url).url
+                                                ).let { uriHandler.openUriSafely(it) }
+                                            }
+                                        )
+                                        val highlightedText = remember(annotatedText, state.newsItemSearchText) {
+                                            if (!state.newsItemSearchText.isNullOrBlank()) {
+                                                annotatedText.highlightQuery(state.newsItemSearchText)
+                                            } else if (!state.currentKeywordBucket.isNullOrBlank()){
+                                                annotatedText.highlightQuery(state.currentKeywordBucket)
+                                            } else {
+                                                annotatedText
+                                            }
+                                        }
+                                        Spacer(Modifier.height(16.dp))
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .background(buttonColor, MaterialTheme.shapes.small)
+                                                .padding(MaterialTheme.shapes.gap),
+                                        ) {
+                                            Text(
+                                                modifier = Modifier
+                                                    .padding(vertical = MaterialTheme.shapes.gap),
+                                                text = highlightedText,
+                                                style = MaterialTheme.typography.bodyMedium.copy(lineHeight = 1.5.em)
+                                            )
+                                        }
+                                    }
+                                }
                                 "img" -> {
-                                    if (part.href != null) {
+                                    if (part.src != null) {
+                                        Spacer(Modifier.height(16.dp))
                                         Box(
                                             modifier = Modifier
                                                 .fillMaxWidth(),
@@ -353,25 +368,50 @@ fun NewsArticleCard(
                                         ) {
                                             Column(
                                                 modifier = Modifier
-                                                    .fillMaxWidth(0.6f)
+                                                    .conditional(maxWidth > 600.dp) { fillMaxWidth(0.6f) }
+                                                    .conditional(maxWidth <= 600.dp) { fillMaxWidth() }
                                                     .background(buttonColor, MaterialTheme.shapes.small)
                                                     .padding(MaterialTheme.shapes.gap),
                                                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                                             ) {
                                                 Image(
-                                                    url = part.href,
-                                                    contentDescription = part.alt ?: "",
+                                                    url = makeUrlAbsolute(
+                                                        newsItem.link,
+                                                        part.src
+                                                    ),
                                                     maxImageSize = maxImageSize,
                                                     showLoadingIcon = true
                                                 )
-                                            }
-                                            part.alt?.let { a ->
-                                                Spacer(Modifier.size(MaterialTheme.shapes.gap))
-                                                Text(
-                                                    modifier = Modifier,
-                                                    text = a,
-                                                    style = MaterialTheme.typography.bodySmall
-                                                )
+
+                                                part.html?.let { html ->
+                                                    val annotatedText = htmlToAnnotatedString(
+                                                        html = normalizeXml(html),
+                                                        style = HtmlStyle(
+                                                            textLinkStyles = textLinkStyles(spotColor)
+                                                        ),
+                                                        linkInteractionListener = { linkAnnotation ->
+                                                            makeUrlAbsolute(
+                                                                newsItem.link,
+                                                                (linkAnnotation as LinkAnnotation.Url).url
+                                                            ).let { uriHandler.openUriSafely(it) }
+                                                        }
+                                                    )
+                                                    val highlightedText = remember(annotatedText, state.newsItemSearchText) {
+                                                        if (!state.newsItemSearchText.isNullOrBlank()) {
+                                                            annotatedText.highlightQuery(state.newsItemSearchText)
+                                                        } else if (!state.currentKeywordBucket.isNullOrBlank()){
+                                                            annotatedText.highlightQuery(state.currentKeywordBucket)
+                                                        } else {
+                                                            annotatedText
+                                                        }
+                                                    }
+                                                    Spacer(Modifier.size(MaterialTheme.shapes.gap))
+                                                    Text(
+                                                        modifier = Modifier,
+                                                        text = highlightedText,
+                                                        style = MaterialTheme.typography.bodySmall
+                                                    )
+                                                }
                                             }
                                         }
                                     }
@@ -383,26 +423,5 @@ fun NewsArticleCard(
                 )
             }
         }
-
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight()
-                .tintedBackgroundImage(
-                    image = imageResource(Res.drawable.circuit_board_squared),
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    finalAlpha = 0.2f,
-                    contentScale = ContentScale.FillHeight
-                )
-                .angledInnerShadow(
-                    angle = 45f,
-                    distance = 10.dp,
-                    spread = 5.dp,
-                    alpha = 0.5f,
-                    insetSize = 2.dp,
-                    insetColorLight = MaterialTheme.colorScheme.background.copyFactor(valueFactor = dimFactor),
-                    insetColorShadow = MaterialTheme.colorScheme.background.copyFactor(valueFactor = 1f / dimFactor)
-                )
-        ) {}
     }
 }

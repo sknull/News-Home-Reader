@@ -36,7 +36,7 @@ fun Image(
     width: Dp? = null,
     height: Dp? = null,
     contentScale: ContentScale = ContentScale.FillWidth,
-    contentDescription: String,
+    contentDescription: String? = null,
     maxImageSize: Int?,
     showLoadingIcon: Boolean = true
 ) {

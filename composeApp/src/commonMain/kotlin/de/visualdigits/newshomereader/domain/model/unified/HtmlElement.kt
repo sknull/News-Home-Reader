@@ -8,6 +8,5 @@ import kotlinx.serialization.Serializable
 data class HtmlElement(
     val tagName: String,
     val html: String? = null,
-    val href: String? = null,
-    val alt: String? = null
+    val src: String? = null,
 )

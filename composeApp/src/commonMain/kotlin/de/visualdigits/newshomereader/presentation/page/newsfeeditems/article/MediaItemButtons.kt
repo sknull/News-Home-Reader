@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,11 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.dropShadow
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.platform.UriHandler
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.visualdigits.common.domain.model.color.HsvColor
@@ -67,15 +62,6 @@ fun MediaItemButtons(
                 if (mediaItem.url?.isNotEmpty() == true) {
                     Box(
                         modifier = modifier
-                            .dropShadow(
-                                shape = RoundedCornerShape(20.dp),
-                                shadow = Shadow(
-                                    radius = 6.dp,
-                                    spread = 2.dp,
-                                    color = Color.Black.copy(alpha = 0.2f),
-                                    offset = DpOffset((-5).dp, 5.dp)
-                                )
-                            )
                     ) {
                         IndicatorButton(
                             modifier = Modifier

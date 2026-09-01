@@ -281,11 +281,7 @@ class DefaultFeedRepository(
         loadArticles: Boolean
     ): Result.Success<Pair<List<NewsFeed>, Boolean>> {
         val newsFeeds = newsFeedItems.mapNotNull { newsFeedItem ->
-            log(
-                Severity.Info,
-                "Refreshing newsfeed '${newsFeedItem.name}'",
-                withTag = "NHR"
-            )
+            log(Severity.Info, "Refreshing newsfeed '${newsFeedItem.name}'", withTag = "NHR")
             try {
                 withContext(Dispatchers.IO + NonCancellable) {
                     val response = newsFeedItem.url?.let { u -> httpClient.get(urlString = u) }
@@ -447,8 +443,8 @@ class DefaultFeedRepository(
     private suspend fun loadArticles(
         newsItems: List<NewsItem>,
     ): Pair<List<NewsItem>, Boolean> {
-        Logger.i("Loading articles")
         var changed = false
+        log(Severity.Info, "Loading articles", withTag = "NHR")
         val newsItemsWithArticles = coroutineScope {
             val semaphore = Semaphore(5)
             newsItems.map { newsItem ->
@@ -463,12 +459,7 @@ class DefaultFeedRepository(
                                 }
 
                                 is Result.Error -> {
-                                    log(
-                                        Severity.Error,
-                                        "Could not read article [${newsItem.id}]: ${newsItem.link}",
-                                        articleResult.throwable,
-                                        withTag = "NHR"
-                                    )
+                                    log(Severity.Error, "Could not read article [${newsItem.id}]: ${newsItem.link}", articleResult.throwable, withTag = "NHR")
                                     newsItem
                                 }
                             }
@@ -476,17 +467,13 @@ class DefaultFeedRepository(
                             item
                         }
                     } catch (e: Exception) {
-                        log(
-                            Severity.Error,
-                            "Could not fetch article for newsItem [${newsItem.id}] ${newsItem.newsFeed?.feedName}/${newsItem.identifier}",
-                            e,
-                            withTag = "NHR"
-                        )
+                        log(Severity.Error, "Could not fetch article for newsItem [${newsItem.id}] ${newsItem.newsFeed?.feedName}/${newsItem.identifier}", e, withTag = "NHR")
                         newsItem
                     }
                 }
             }.awaitAll()
         }
+        log(Severity.Info, "Finished loading articles", withTag = "NHR")
 
         return Pair(newsItemsWithArticles, changed)
     }
@@ -532,6 +519,9 @@ class DefaultFeedRepository(
 
     override suspend fun deleteAllNewsItems(): Result<Unit, DataError.Local> = withContext(Dispatchers.IO) {
         try {
+            val articleCount = dao.getArticleCount().executeAsOne()
+            val newsItemCount = dao.getNewsItemCount().executeAsOne()
+            Logger.i("Clearing $articleCount articles and $newsItemCount newitems")
             dao.transaction {
                 dao.deleteAllFullArticles()
                 dao.deleteAllNewsItems()

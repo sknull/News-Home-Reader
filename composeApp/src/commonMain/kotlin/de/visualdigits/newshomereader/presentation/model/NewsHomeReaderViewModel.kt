@@ -1012,9 +1012,13 @@ class NewsHomeReaderViewModel(
                         it.copy(
                             isEditingSettings = false,
                             uiMessage = error.toUiText(),
+                            currentNewsItem = null,
+                            currentNewsFeedGroup = null,
                         )
                     }
                 }
+            _visibleNewsItems.update { emptyList() }
+            _currentNewsItems.update { emptyMap() }
             _isLoading.update { false }
         }
     }

@@ -141,7 +141,17 @@ class RssTest : KoinTest {
     fun testReadT3nStory() = runTest {
         val article = readArticleFromFile(
             newsItem,
-            File(ClassLoader.getSystemResource("newsfeed/rdf/t3n-story.html").toURI())
+            File(ClassLoader.getSystemResource("newsfeed/rss/t3n-story.html").toURI())
+        )
+        println(article)
+        assertNotNull(article)
+    }
+
+    @Test
+    fun testReadT3nStory2() = runTest {
+        val article = readArticleFromFile(
+            newsItem,
+            File(ClassLoader.getSystemResource("newsfeed/rss/t3n-story-2.html").toURI())
         )
         println(article)
         assertNotNull(article)

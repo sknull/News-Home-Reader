@@ -5,6 +5,7 @@ import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Document
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.essence.Essence
+import de.visualdigits.essence.model.ElementType
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.data.database.toFullArticle
 import de.visualdigits.newshomereader.data.database.toFullArticleEntity
@@ -135,15 +136,19 @@ open class DefaultArticleRepository(
         val (htmlElement, parts) = rawHtml.let { rh ->
             val result = Essence.extract(rh)
             result.html to result.parts.mapNotNull { part ->
-                when (part.tagName()) {
-                    "div" -> HtmlElement(
-                        tagName = part.tagName(),
-                        html = part.html()
+                when (part.elementType) {
+                    ElementType.paragraph -> HtmlElement(
+                        tagName = "paragraph",
+                        html = part.html
                     )
-                    "img" -> HtmlElement(
-                        tagName = part.tagName(),
-                        href = part.attr("src"),
-                        alt = if (part.hasAttr("alt")) part.attr("alt") else part.attr("title")
+                    ElementType.div -> HtmlElement(
+                        tagName = "div",
+                        html = part.html
+                    )
+                    ElementType.image -> HtmlElement(
+                        tagName = "img",
+                        src = part.src,
+                        html = part.html
                     )
                     else -> null
                 }
@@ -154,20 +159,20 @@ open class DefaultArticleRepository(
         val words = htmlElement.text().split("\\s+".toRegex()).filter { it.isNotBlank() }
         val wordCount = words.size.toLong() ?: 0L
 
-        val applicationJson = try {
-            rawHtml.let { rh -> Ksoup.parse(rh) }
-                .select("script[type=application/ld+json]")
-                .flatMap { script ->
-                    val json = script.data()
+        val applicationJson = rawHtml.let { rh -> Ksoup.parse(rh) }
+            .select("script[type=application/ld+json]")
+            .mapNotNull { script ->
+                val json = script.data()
+                try {
                     AppJsonWrapper.decodeFromString(json).appJsons.map { appJsonDto ->
                         appJsonDto.clazz = script.attr("class")
                         appJsonDto
                     }
+                } catch (e: Exception) {
+                    Logger.w("Could not parse app json for article url: $url")
+                    null
                 }
-        } catch (e: Exception) {
-            Logger.e("Could not parse app json for article url: $url", e)
-            listOf()
-        }
+            }.flatten()
 
         val newsArticle = applicationJson
             .find { script -> script.type?.lowercase()?.contains("newsarticle") == true }

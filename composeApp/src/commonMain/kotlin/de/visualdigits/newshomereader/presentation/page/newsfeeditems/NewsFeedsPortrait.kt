@@ -19,18 +19,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import de.visualdigits.common.domain.model.color.HsvColor
 import de.visualdigits.common.domain.model.platform.PlatformType
-import de.visualdigits.common.domain.util.copyFactor
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
 import de.visualdigits.common.presentation.components.button.IndicatorButton
-import de.visualdigits.common.presentation.components.modifier.angledInnerShadow
-import de.visualdigits.common.presentation.components.modifier.tintedBackgroundImage
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.compose.resources.Res
-import de.visualdigits.compose.resources.circuit_board_squared
 import de.visualdigits.compose.resources.icon_add_notes_24px
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
@@ -38,7 +33,6 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.page.navigation.NewsFeedGroupBox
 import de.visualdigits.newshomereader.presentation.style.gap
-import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.painterResource
 
 /**
@@ -60,9 +54,6 @@ fun NewsFeedsPortrait(
     onCommonAction: (CommonAction) -> Unit,
     onAction: (NewsHomeReaderAction) -> Unit
 ) {
-    val backgroundColorValue = HsvColor.fromComposeColor(MaterialTheme.colorScheme.background).value
-    val dimFactor = if (backgroundColorValue < 0.5f) 1.5f else 1.25f
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -81,22 +72,7 @@ fun NewsFeedsPortrait(
 
         PlatformVerticalScrollbarBox(
             modifier = Modifier
-                .fillMaxSize()
-                .tintedBackgroundImage(
-                    image = imageResource(Res.drawable.circuit_board_squared),
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    finalAlpha = 0.2f
-                )
-                .angledInnerShadow(
-                    angle = 45f,
-                    distance = 20.dp,
-                    spread = 10.dp,
-                    alpha = 0.5f,
-                    insetSize = 2.dp,
-                    insetColorLight = MaterialTheme.colorScheme.background.copyFactor(valueFactor = dimFactor),
-                    insetColorShadow = MaterialTheme.colorScheme.background.copyFactor(valueFactor = 1f / dimFactor)
-                )
-            ,
+                .fillMaxSize(),
             platformType = platformType,
             backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
             scrollbarModifier = Modifier
