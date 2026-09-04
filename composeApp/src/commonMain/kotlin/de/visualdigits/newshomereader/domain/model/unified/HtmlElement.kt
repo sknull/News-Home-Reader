@@ -8,6 +8,6 @@ import kotlinx.serialization.Serializable
 data class HtmlElement(
     val tagName: String,
     val html: List<String> = listOf(),
-    val imageType: String? = null,
-    val src: String? = null,
+    val wordCount: Int,
+    val images: List<ImageElement> = listOf(),
 )

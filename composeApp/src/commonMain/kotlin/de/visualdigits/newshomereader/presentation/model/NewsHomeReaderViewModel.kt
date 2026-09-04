@@ -194,11 +194,9 @@ class NewsHomeReaderViewModel(
                                 ?: currentState.currentNewsFeedItem?.stopWords?.toSet()
                                 ?: setOf()
 
-                            val visible = calculateVisibleNewsItems(enriched, hideRead, stopWords)
-
                             emit(SearchResult(
                                 enriched = enriched,
-                                visible = visible,
+                                visible = calculateVisibleNewsItems(enriched, hideRead, stopWords),
                                 searchType = if (isKeyword) SearchType.keyword else SearchType.standard
                             ))
                         }

@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.em
 import be.digitalia.compose.htmlconverter.HtmlStyle
 import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
 import de.visualdigits.common.domain.model.color.HsvColor
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.common.domain.model.common.format
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.platform.PlatformType
@@ -87,8 +88,6 @@ fun NewsArticleCard(
 ) {
     val spotColor = settings?.get<HsvColor>(SK.spotColor)?: SPOT_COLOR_DEFAULT
     val buttonColor = remember { (settings?.get<HsvColor>(SK.buttonColor) ?: BUTTON_COLOR_DEFAULT).toComposeColor() }
-    val backgroundColorValue = HsvColor.fromComposeColor(MaterialTheme.colorScheme.background).value
-    val dimFactor = if (backgroundColorValue < 0.5f) 1.5f else 1.25f
 
     Box(
         modifier = Modifier
@@ -207,12 +206,14 @@ fun NewsArticleCard(
                         }
                     }),
                     Pair("updated", @Composable {
-                        newsItem.updated?.toLocalDateTime()?.let { u ->
-                            Text(
-                                modifier = Modifier,
-                                text = u.format("EEE, dd. MMMM yyyy HH:mm"),
-                                style = MaterialTheme.typography.headlineSmall
-                            )
+                        newsItem.updated?.let { u ->
+                            if (u > KmpOffsetDateTime.MIN) {
+                                Text(
+                                    modifier = Modifier,
+                                    text = u.toLocalDateTime().format("EEE, dd. MMMM yyyy HH:mm"),
+                                    style = MaterialTheme.typography.headlineSmall
+                                )
+                            }
                         }
                     }),
                     Pair("timeEstimated", @Composable {
@@ -297,11 +298,12 @@ fun NewsArticleCard(
                                 "div" -> {
                                     if (part.html.isNotEmpty()) {
                                         Spacer(Modifier.height(MaterialTheme.shapes.gap))
-                                        Box(
+                                        Column(
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .background(buttonColor, MaterialTheme.shapes.small)
                                                 .padding(MaterialTheme.shapes.gap),
+                                            verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                                         ) {
                                             part.html.forEach { html ->
                                                 HighlightedText(html, spotColor, newsItem, uriHandler, state)
@@ -310,50 +312,62 @@ fun NewsArticleCard(
                                     }
                                 }
                                 "img" -> {
-                                    if (part.src != null) {
+                                    if (part.images.isNotEmpty()) {
                                         Spacer(Modifier.height(MaterialTheme.shapes.gap))
-                                        if (part.imageType == "standard") {
-                                            Box(
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth(),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Column(
                                                 modifier = Modifier
-                                                    .fillMaxWidth(),
-                                                contentAlignment = Alignment.Center
+                                                    .conditional(maxWidth > 600.dp) { fillMaxWidth(0.6f) }
+                                                    .conditional(maxWidth <= 600.dp) { fillMaxWidth() }
+                                                    .background(buttonColor, MaterialTheme.shapes.small)
+                                                    .padding(MaterialTheme.shapes.gap),
+                                                verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                                             ) {
-                                                Column(
-                                                    modifier = Modifier
-                                                        .conditional(maxWidth > 600.dp) { fillMaxWidth(0.6f) }
-                                                        .conditional(maxWidth <= 600.dp) { fillMaxWidth() }
-                                                        .background(buttonColor, MaterialTheme.shapes.small)
-                                                        .padding(MaterialTheme.shapes.gap),
-                                                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
-                                                ) {
-                                                    Image(
-                                                        url = makeUrlAbsolute(
-                                                            newsItem.link,
-                                                            part.src
-                                                        ),
-                                                        maxImageSize = maxImageSize,
-                                                        showLoadingIcon = true
-                                                    )
-                                                    if (part.html.isNotEmpty()) {
-//                                                        Spacer(Modifier.height(MaterialTheme.shapes.gap))
-                                                        part.html.forEach { html ->
-                                                            HighlightedText(html, spotColor, newsItem, uriHandler, state)
+                                                part.images.forEach { img ->
+                                                    if (img.imageType == "standard") {
+                                                        Image(
+                                                            url = makeUrlAbsolute(
+                                                                newsItem.link,
+                                                                img.src
+                                                            ),
+                                                            contentDescription = img.alt,
+                                                            maxImageSize = maxImageSize,
+                                                            showLoadingIcon = true
+                                                        )
+                                                        (img.title?:img.alt)?.let { title ->
+                                                            Text(
+                                                                modifier = Modifier
+                                                                    .padding(vertical = MaterialTheme.shapes.gap),
+                                                                text = title,
+                                                                style = MaterialTheme.typography.bodySmall
+                                                            )
                                                         }
+                                                    } else if (img.imageType == "icon") {
+                                                        Image(
+                                                            url = makeUrlAbsolute(
+                                                                newsItem.link,
+                                                                img.src
+                                                            ),
+                                                            contentDescription = img.alt,
+                                                            width = 60.dp,
+                                                            height = 60.dp,
+                                                            contentScale = ContentScale.Inside,
+                                                            maxImageSize = maxImageSize,
+                                                            showLoadingIcon = true
+                                                        )
+                                                    }
+                                                }
+                                                if (part.html.isNotEmpty()) {
+//                                                        Spacer(Modifier.height(MaterialTheme.shapes.gap))
+                                                    part.html.forEach { html ->
+                                                        HighlightedText(html, spotColor, newsItem, uriHandler, state)
                                                     }
                                                 }
                                             }
-                                        } else if (part.imageType == "icon") {
-                                            Image(
-                                                url = makeUrlAbsolute(
-                                                    newsItem.link,
-                                                    part.src
-                                                ),
-                                                width = 60.dp,
-                                                height = 60.dp,
-                                                contentScale = ContentScale.Inside,
-                                                maxImageSize = maxImageSize,
-                                                showLoadingIcon = true
-                                            )
                                         }
                                     }
                                 }

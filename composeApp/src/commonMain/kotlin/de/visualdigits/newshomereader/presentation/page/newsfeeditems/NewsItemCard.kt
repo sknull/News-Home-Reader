@@ -31,6 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import be.digitalia.compose.htmlconverter.HtmlStyle
 import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
 import de.visualdigits.common.domain.model.color.HsvColor
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.common.domain.model.common.format
 import de.visualdigits.common.presentation.util.highlightQuery
 import de.visualdigits.common.presentation.util.openUriSafely
@@ -52,6 +53,7 @@ import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.textLinkStyles
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
+import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.painterResource
 
 
@@ -140,12 +142,14 @@ fun NewsItemCard(
                         }
 
                         // updated date
-                        newsItem.updated?.toLocalDateTime()?.let { u ->
-                            val text = u.format("dd.MM.yyyy HH:mm")
-                            Text(
-                                text = text,
-                                style = MaterialTheme.typography.bodySmall
-                            )
+                        newsItem.updated?.let { u ->
+                            if (u > KmpOffsetDateTime.MIN) {
+                                val text = u.toLocalDateTime().format("dd.MM.yyyy HH:mm")
+                                Text(
+                                    text = text,
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+                            }
                         }
 
                         //

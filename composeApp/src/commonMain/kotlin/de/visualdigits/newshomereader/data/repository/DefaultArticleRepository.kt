@@ -6,6 +6,8 @@ import com.fleeksoft.ksoup.nodes.Document
 import de.visualdigits.common.domain.model.errorhandling.Result
 import de.visualdigits.essence.Essence
 import de.visualdigits.essence.model.ElementType
+import de.visualdigits.essence.model.HtmlPart
+import de.visualdigits.essence.model.ImagePart
 import de.visualdigits.newshomereader.NewsHomeReaderDatabaseQueries
 import de.visualdigits.newshomereader.data.database.toFullArticle
 import de.visualdigits.newshomereader.data.database.toFullArticleEntity
@@ -17,6 +19,7 @@ import de.visualdigits.newshomereader.domain.model.applicationjson.hrvideoplayer
 import de.visualdigits.newshomereader.domain.model.errorhandling.DataError
 import de.visualdigits.newshomereader.domain.model.unified.FullArticle
 import de.visualdigits.newshomereader.domain.model.unified.HtmlElement
+import de.visualdigits.newshomereader.domain.model.unified.ImageElement
 import de.visualdigits.newshomereader.domain.model.unified.MediaItem
 import de.visualdigits.newshomereader.domain.model.unified.NewsItem
 import de.visualdigits.newshomereader.domain.model.unified.ThumbnailItem
@@ -132,37 +135,51 @@ open class DefaultArticleRepository(
         rawHtml: String,
         url: String?
     ): FullArticle = withContext(Dispatchers.IO) {
-        // extract main text from raw html using essence's heuristics
-        val (htmlElement, parts) = rawHtml.let { rh ->
+        val (html, parts) = rawHtml.let { rh ->
+            // extract main text from raw html using essence's heuristics
             val result = Essence.extract(rh)
             result.html to result.parts.mapNotNull { part ->
-                when (part.elementType) {
-                    ElementType.headline -> HtmlElement(
-                        tagName = "headline",
-                        html = part.html.map { it.outerHtml() }
-                    )
-                    ElementType.paragraph -> HtmlElement(
-                        tagName = "paragraph",
-                        html = part.html.map { it.outerHtml() }
-                    )
-                    ElementType.div -> HtmlElement(
-                        tagName = "div",
-                        html = part.html.map { it.outerHtml() }
-                    )
-                    ElementType.image -> HtmlElement(
-                        tagName = "img",
-                        html = part.html.map { it.outerHtml() },
-                        imageType = part.imageType?.name,
-                        src = part.src
-                    )
+                when (part) {
+                    is HtmlPart -> {
+                        when (part.elementType) {
+                            ElementType.headline -> HtmlElement(
+                                tagName = "headline",
+                                html = part.html.map { it.outerHtml() },
+                                wordCount = part.html.sumOf { elem -> elem.wholeText().split("\\s+".toRegex()).filter { it.isNotBlank() }.size }
+                            )
+                            ElementType.paragraph -> HtmlElement(
+                                tagName = "paragraph",
+                                html = part.html.map { it.outerHtml() },
+                                wordCount = part.html.sumOf { elem -> elem.wholeText().split("\\s+".toRegex()).filter { it.isNotBlank() }.size }
+                            )
+                            ElementType.div -> HtmlElement(
+                                tagName = "div",
+                                html = part.html.map { it.outerHtml() },
+                                wordCount = part.html.sumOf { elem -> elem.wholeText().split("\\s+".toRegex()).filter { it.isNotBlank() }.size }
+                            )
+                        }
+                    }
+                    is ImagePart -> {
+                        HtmlElement(
+                            tagName = "img",
+                            html = part.html.map { it.outerHtml() },
+                            wordCount = part.html.sumOf { elem -> elem.wholeText().split("\\s+".toRegex()).filter { it.isNotBlank() }.size },
+                            images = part.images.map { img ->
+                                ImageElement(
+                                    src = img.src,
+                                    alt = img.alt,
+                                    title = img.title,
+                                    imageType = img.imageType.name
+                                )
+                            }
+                        )
+                    }
                     else -> null
                 }
             }
         }
-        var html = htmlElement.html()
 
-        val words = htmlElement.text().split("\\s+".toRegex()).filter { it.isNotBlank() }
-        val wordCount = words.size.toLong() ?: 0L
+        val wordCount = parts.sumOf { part -> part.wordCount }.toLong()
 
         val applicationJson = rawHtml.let { rh -> Ksoup.parse(rh) }
             .select("script[type=application/ld+json]")
@@ -254,13 +271,6 @@ open class DefaultArticleRepository(
             ?: imageDto?.contentUrl
             ?: imageItems.firstOrNull()?.url
             ?: ""
-
-        // cleanup if possible
-        newsItem?.summary?.also { s ->
-            if (html.contains(s)) {
-                html = html.replace(s, "")
-            }
-        }
 
         FullArticle(
             id = 0L,

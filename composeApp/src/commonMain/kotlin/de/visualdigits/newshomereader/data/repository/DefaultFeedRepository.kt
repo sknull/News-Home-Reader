@@ -459,7 +459,7 @@ class DefaultFeedRepository(
                                 }
 
                                 is Result.Error -> {
-                                    log(Severity.Error, "Could not read article [${newsItem.id}]: ${newsItem.link}", articleResult.throwable, withTag = "NHR")
+                                    log(Severity.Error, "Could not read article [${newsItem.id}]: ${newsItem.link}, ${articleResult.throwable?.message}", withTag = "NHR")
                                     newsItem
                                 }
                             }
@@ -467,7 +467,7 @@ class DefaultFeedRepository(
                             item
                         }
                     } catch (e: Exception) {
-                        log(Severity.Error, "Could not fetch article for newsItem [${newsItem.id}] ${newsItem.newsFeed?.feedName}/${newsItem.identifier}", e, withTag = "NHR")
+                        log(Severity.Error, "Could not fetch article [${newsItem.id}]: ${newsItem.link}, ${e.message}", withTag = "NHR")
                         newsItem
                     }
                 }
