@@ -153,6 +153,9 @@ CREATE TABLE NewsItemEntity (
 
 CREATE INDEX IF NOT EXISTS index_news_item_feedname ON NewsItemEntity(feedName);
 CREATE INDEX IF NOT EXISTS index_news_item_updated ON NewsItemEntity(updatedMillis);
+CREATE INDEX IF NOT EXISTS index_news_item_title ON NewsItemEntity(title);
+CREATE INDEX IF NOT EXISTS index_news_item_summary ON NewsItemEntity(summary);
+CREATE INDEX IF NOT EXISTS index_news_item_keywords ON NewsItemEntity(keywords);
 
 insertNewsItem:
 INSERT INTO NewsItemEntity (
@@ -251,6 +254,8 @@ CREATE TABLE FullArticleEntity (
     readingTime INTEGER NOT NULL,
     FOREIGN KEY(itemId) REFERENCES NewsItemEntity(id) ON DELETE CASCADE
 );
+
+CREATE INDEX IF NOT EXISTS index_full_article_html ON FullArticleEntity(html);
 
 insertFullArticle:
 INSERT INTO FullArticleEntity (
