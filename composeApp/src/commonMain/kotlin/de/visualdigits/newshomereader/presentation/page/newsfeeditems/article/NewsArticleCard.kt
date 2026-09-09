@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.em
 import be.digitalia.compose.htmlconverter.HtmlStyle
 import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
 import de.visualdigits.common.domain.model.color.HsvColor
-import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.common.domain.model.common.format
 import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.platform.PlatformType
@@ -71,6 +70,7 @@ import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.textLinkStyles
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
+import io.ktor.http.Url
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -351,9 +351,19 @@ fun NewsArticleCard(
                                         }
                                     }
                                     "img" -> {
-                                        if (part.images.isNotEmpty()) {
-                                            val images = part.images
-                                                .filter { it.imageType != ImageType.icon.name }
+                                        val articleImages = part.images.map { img ->
+                                            img.copy(src = makeUrlAbsolute(
+                                                newsItem.link,
+                                                img.src
+                                            ))
+                                        }
+                                        if (articleImages.isNotEmpty()) {
+                                            val teaserImageName = newsItem.newsArticle.articleImage?.let { src -> Url(src) }?.encodedPath?.substringAfterLast('/') ?: ""
+                                            val images = articleImages
+                                                .filter { img ->
+                                                    img.imageType != ImageType.icon.name &&
+                                                    Url(img.src).encodedPath.substringAfterLast('/') != teaserImageName
+                                                }
                                             if (images.isNotEmpty()) {
                                                 Box(
                                                     modifier = Modifier
@@ -379,10 +389,7 @@ fun NewsArticleCard(
 //                                                                    .fillMaxWidth(0.4f),
                                                             ) {
                                                                 Image(
-                                                                    url = makeUrlAbsolute(
-                                                                        newsItem.link,
-                                                                        img.src
-                                                                    ),
+                                                                    url = img.src,
                                                                     contentDescription = img.alt,
                                                                     maxImageSize = maxImageSize,
                                                                     contentScale = ContentScale.Inside,
