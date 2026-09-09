@@ -9,6 +9,7 @@ import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -33,6 +34,7 @@ import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -208,13 +210,11 @@ fun NewsArticleCard(
                     }),
                     Pair("updated", @Composable {
                         newsItem.updated?.let { u ->
-                            if (u > KmpOffsetDateTime.MIN) {
-                                Text(
-                                    modifier = Modifier,
-                                    text = u.toLocalDateTime().format("EEE, dd. MMMM yyyy HH:mm"),
-                                    style = MaterialTheme.typography.headlineSmall
-                                )
-                            }
+                            Text(
+                                modifier = Modifier,
+                                text = u.toLocalDateTime().format("EEE, dd. MMMM yyyy HH:mm"),
+                                style = MaterialTheme.typography.headlineSmall
+                            )
                         }
                     }),
                     Pair("timeEstimated", @Composable {
@@ -236,11 +236,45 @@ fun NewsArticleCard(
                             )
                         }
                     }),
-                    Pair("image", @Composable {
-                        ArticleImage(
-                            newsItem = newsItem,
-                            maxImageSize = maxImageSize
-                        )
+                    Pair("teaserImage", @Composable {
+                        var image = newsItem.newsArticle?.articleImage
+                        if (image == null || image.isEmpty()) {
+                            image = newsItem.image
+                        }
+                        if (image.isNotEmpty()) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                            ) {
+                                if (newsItem.imageTitle.isNotEmpty()) {
+                                    Text(
+                                        text = newsItem.imageTitle,
+                                        style = MaterialTheme.typography.titleMedium
+                                    )
+                                }
+
+                                Image(
+                                    modifier = Modifier
+                                        .clip(MaterialTheme.shapes.small),
+                                    url = image,
+                                    contentDescription = newsItem.imageCaption,
+                                    maxImageSize = maxImageSize
+                                )
+
+                                if (newsItem.imageCaption.isNotEmpty() && !newsItem.summary.contains(newsItem.imageCaption)) {
+                                    Text(
+                                        modifier = Modifier
+                                            .fillMaxWidth(),
+                                        text = newsItem.imageCaption,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+
+                                Spacer(Modifier.height(16.dp))
+                            }
+                        }
                     }),
                     Pair("mediaButtons", @Composable {
                         val wifiOnly = settings?.get<BooleanEnum>(SK.refreshWifiOnly)?.booleanValue ?: false
@@ -281,7 +315,6 @@ fun NewsArticleCard(
                                 modifier = Modifier,
                                 text = highlightedSummary,
                                 style = MaterialTheme.typography.titleMedium.copy(
-//                                fontSize = MaterialTheme.typography.titleMedium.fontSize * 1.5f,
                                     lineHeight = 1.4.em
                                 )
                             )
@@ -289,115 +322,100 @@ fun NewsArticleCard(
                         }
                     }),
                     Pair("text", @Composable {
-                        newsItem.newsArticle?.parts?.forEach { part ->
-                            when (part.tagName) {
-                                "paragraph", "headline" -> {
-                                    part.html.forEach { html ->
-                                        HighlightedText(html, spotColor, newsItem, uriHandler, state)
-                                    }
-                                }
-                                "div" -> {
-                                    if (part.html.isNotEmpty()) {
-                                        Spacer(Modifier.height(MaterialTheme.shapes.gap))
-                                        Column(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .background(buttonColor, MaterialTheme.shapes.small)
-                                                .padding(MaterialTheme.shapes.gap),
-                                            verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
-                                        ) {
-                                            part.html.forEach { html ->
-                                                HighlightedText(html, spotColor, newsItem, uriHandler, state)
-                                            }
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                        ) {
+                            newsItem.newsArticle?.parts?.forEach { part ->
+                                when (part.tagName) {
+                                    "paragraph", "headline" -> {
+                                        part.html.forEach { html ->
+                                            HighlightedText(html, spotColor, newsItem, uriHandler, state)
                                         }
                                     }
-                                }
-                                "img" -> {
-                                    if (part.images.isNotEmpty()) {
-                                        val icons = part.images
-                                            .filter { it.imageType == ImageType.icon.name }
-                                        if (icons.isNotEmpty()) {
-                                            Row(
+                                    "div" -> {
+                                        if (part.html.isNotEmpty()) {
+                                            Spacer(Modifier.height(MaterialTheme.shapes.gap))
+                                            Column(
                                                 modifier = Modifier
                                                     .fillMaxWidth()
                                                     .background(buttonColor, MaterialTheme.shapes.small)
                                                     .padding(MaterialTheme.shapes.gap),
-                                                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                                                verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                                             ) {
-                                                icons
-                                                    .forEach { icon ->
-                                                        Image(
-                                                            url = makeUrlAbsolute(
-                                                                newsItem.link,
-                                                                icon.src
-                                                            ),
-                                                            contentDescription = icon.alt,
-                                                            width = 60.dp,
-                                                            height = 60.dp,
-                                                            contentScale = ContentScale.Inside,
-                                                            maxImageSize = maxImageSize,
-                                                            showLoadingIcon = true
-                                                        )
-                                                    }
+                                                part.html.forEach { html ->
+                                                    HighlightedText(html, spotColor, newsItem, uriHandler, state)
+                                                }
                                             }
                                         }
-
-                                        val images = part.images
-                                            .filter { it.imageType != ImageType.icon.name }
-                                        if (images.isNotEmpty()) {
-                                            Box(
-                                                modifier = Modifier
-                                                    .fillMaxWidth(),
-                                                contentAlignment = Alignment.Center
-                                            ) {
-                                                Column(
+                                    }
+                                    "img" -> {
+                                        if (part.images.isNotEmpty()) {
+                                            val images = part.images
+                                                .filter { it.imageType != ImageType.icon.name }
+                                            if (images.isNotEmpty()) {
+                                                Box(
                                                     modifier = Modifier
-                                                        .conditional(maxWidth > 600.dp) { fillMaxWidth(0.6f) }
-                                                        .conditional(maxWidth <= 600.dp) { fillMaxWidth() }
+                                                        .fillMaxWidth()
+                                                        .conditional(images.size == 1 && maxWidth > 600.dp) { fillMaxWidth(0.6f) }
+                                                        .conditional(images.size > 1 || maxWidth <= 600.dp) { fillMaxWidth() }
                                                         .background(buttonColor, MaterialTheme.shapes.small)
                                                         .padding(MaterialTheme.shapes.gap),
-                                                verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                                                    contentAlignment = Alignment.Center
                                                 ) {
-                                                    images.forEach { img ->
-                                                        Column {
-                                                            Image(
-                                                                url = makeUrlAbsolute(
-                                                                    newsItem.link,
-                                                                    img.src
-                                                                ),
-                                                                contentDescription = img.alt,
-                                                                maxImageSize = maxImageSize,
-                                                                showLoadingIcon = true
-                                                            )
-                                                            val title = if (img.title?.isNotBlank() == true) {
-                                                                img.title
-                                                            } else if (img.alt?.isNotBlank() == true) {
-                                                                img.alt
-                                                            } else null
-                                                            title?.let { title ->
-                                                                if (title.trim().isNotBlank()) {
-                                                                    Text(
-                                                                        modifier = Modifier
-                                                                            .padding(vertical = MaterialTheme.shapes.gap / 2),
-                                                                        text = title.trim(),
-                                                                        style = MaterialTheme.typography.bodySmall
-                                                                    )
+                                                    FlowRow(
+                                                        modifier = Modifier
+                                                            .fillMaxWidth()
+                                                            .background(buttonColor, MaterialTheme.shapes.small)
+                                                            .padding(MaterialTheme.shapes.gap),
+                                                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap),
+                                                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
+                                                    ) {
+                                                        images.forEach { img ->
+                                                            Column(
+                                                                modifier = Modifier
+                                                                    .weight(0.5f)
+//                                                                    .fillMaxWidth(0.4f),
+                                                            ) {
+                                                                Image(
+                                                                    url = makeUrlAbsolute(
+                                                                        newsItem.link,
+                                                                        img.src
+                                                                    ),
+                                                                    contentDescription = img.alt,
+                                                                    maxImageSize = maxImageSize,
+                                                                    contentScale = ContentScale.Inside,
+                                                                    showLoadingIcon = true
+                                                                )
+                                                                // do not fall back to alt as this often contains the description for impaired
+                                                                img.title?.let { title ->
+                                                                    if (title.trim().isNotBlank()) {
+                                                                        Text(
+                                                                            modifier = Modifier
+                                                                                .fillMaxWidth()
+                                                                                .padding(top = MaterialTheme.shapes.gap / 2),
+                                                                            text = title.trim(),
+                                                                            style = MaterialTheme.typography.bodySmall,
+                                                                            textAlign = TextAlign.Center
+                                                                        )
+                                                                    }
                                                                 }
                                                             }
                                                         }
                                                     }
                                                 }
                                             }
-                                        }
 
-                                        if (part.html.isNotEmpty()) {
-                                            part.html.forEach { html ->
-                                                HighlightedText(html, spotColor, newsItem, uriHandler, state)
+                                            if (part.html.isNotEmpty()) {
+                                                part.html.forEach { html ->
+                                                    HighlightedText(html, spotColor, newsItem, uriHandler, state)
+                                                }
                                             }
                                         }
                                     }
+                                    else -> {}
                                 }
-                                else -> {}
                             }
                         }
                     }),

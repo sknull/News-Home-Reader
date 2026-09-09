@@ -29,7 +29,9 @@ class DefaultWebDavSyncService(
             if (settingsResult is Result.Success) {
                 val settings = settingsResult.data?:error("No settings provided")
                 val webDavUrl = settings.get<String>(SK.webDavUrl)
-                if (webDavUrl?.isNotEmpty() == true) {
+                val webDavUser = settings.get<String>(SK.webDavUser)
+                val webDavPassword = settings.get<String>(SK.webDavPassword)
+                if (webDavUrl?.isNotEmpty() == true && webDavUser?.isNotEmpty() == true && webDavPassword?.isNotEmpty() == true) {
                     val directory = settings.get<String>(SK.webDavDirectory)?.removePrefix("/")?.removeSuffix("/")
                     val url = "$webDavUrl/$directory/newsHomeReader_syncfile.json"
                     val remoteState = try {
@@ -60,7 +62,7 @@ class DefaultWebDavSyncService(
                     }
                     Result.Success(mergedIds)
                 } else {
-                    Logger.w("webDAV URL unset - not syncing remotely")
+                    Logger.w("webDAV credentials unset - not syncing remotely")
                     Result.Success(localReadIds)
                 }
 

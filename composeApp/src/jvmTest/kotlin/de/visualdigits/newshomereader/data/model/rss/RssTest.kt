@@ -27,7 +27,6 @@ import org.koin.test.inject
 import org.koin.test.junit5.KoinTestExtension
 import java.io.File
 
-@Disabled("Only for local testing")
 class RssTest : KoinTest {
 
     private val feedRepository: FeedRepository by inject()
@@ -250,10 +249,18 @@ class RssTest : KoinTest {
 
     @Test
     fun testReadHeise() = runTest {
-        readFeedFromFile("heise", File(ClassLoader.getSystemResource("newsfeed/atom/heise.xml").toURI()))
         val article = readArticleFromFile(
             newsItem,
             File(ClassLoader.getSystemResource("newsfeed/atom/heise-story.html").toURI())
+        )
+        assertNotNull(article)
+    }
+
+    @Test
+    fun testReadHeise5() = runTest {
+        val article = readArticleFromFile(
+            newsItem,
+            File(ClassLoader.getSystemResource("newsfeed/atom/heise-story-5.html").toURI())
         )
         assertNotNull(article)
     }
@@ -268,6 +275,12 @@ class RssTest : KoinTest {
     @Test
     fun testReadWdr2() = runTest {
         val article = articleRepository.readFromString(newsItem, File(ClassLoader.getSystemResource("newsfeed/atom/wdr-story-2.html").toURI()).readText())
+        assertNotNull(article)
+    }
+
+    @Test
+    fun testReadWdr3() = runTest {
+        val article = articleRepository.readFromString(newsItem, File(ClassLoader.getSystemResource("newsfeed/atom/wdr-story-3.html").toURI()).readText())
         assertNotNull(article)
     }
 

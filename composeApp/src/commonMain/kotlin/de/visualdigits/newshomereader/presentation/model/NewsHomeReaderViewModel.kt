@@ -1417,6 +1417,10 @@ class NewsHomeReaderViewModel(
             scrollPosition["newsfeed_items"] = scrollPosition["newsfeed_items"]?.copy(third = ScrollIntent.standard) ?: Triple(0, 0, ScrollIntent.standard)
         }
         _isLoading.update { false }
+        if (state.value.currentNewsFeedName != newsFeedItem.name) {
+            _visibleNewsItems.update { emptyList() }
+            _currentNewsItems.update { emptyMap() }
+        }
         _state.update {
             it.copy(
                 newsItemSearchText = null,
@@ -1453,7 +1457,7 @@ class NewsHomeReaderViewModel(
     private fun markItemsAsRead(days: Long) = viewModelScope.launch {
         val threshold = KmpOffsetDateTime.now().minus(days.days)
         val newsItems = _currentNewsItems.value.values
-            .filter { newsItem -> (newsItem.updated?:KmpOffsetDateTime.MIN) < threshold }
+            .filter { newsItem -> (newsItem.updated ?: KmpOffsetDateTime.MIN) < threshold }
             .map { newsItem -> newsItem.copy(isRead = true) }
         newsItems.forEach { newsItem ->
             _currentNewsItems.update { current -> current + (newsItem.uiKey to newsItem.copy(isRead = true)) }

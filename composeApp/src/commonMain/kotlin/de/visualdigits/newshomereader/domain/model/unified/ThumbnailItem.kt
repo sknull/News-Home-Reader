@@ -10,7 +10,7 @@ data class ThumbnailItem(
     val url: List<String> = listOf(),
     val description: String? = null,
     val author: String? = null,
-    val datePublished: KmpOffsetDateTime = KmpOffsetDateTime.MIN,
+    val datePublished: KmpOffsetDateTime? = null,
     val width: Int? = null,
     val height: Int? = null
 )

@@ -20,7 +20,7 @@ data class ImageDto(
     val author: String? = null,
     val width: Int? = null,
     val height: Int? = null,
-    @XmlSerialName("datePublished") val datePublished: KmpOffsetDateTime = KmpOffsetDateTime.MIN,
+    @XmlSerialName("datePublished") val datePublished: KmpOffsetDateTime? = null,
     val description: String? = null,
     val inLanguage: String? = null,
 )

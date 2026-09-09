@@ -191,7 +191,7 @@ open class DefaultArticleRepository(
                         appJsonDto
                     }
                 } catch (e: Exception) {
-                    Logger.w("Could not parse app json for article url: $url")
+                    Logger.w("Could not parse app json for article url: $url", e)
                     null
                 }
             }.flatten()

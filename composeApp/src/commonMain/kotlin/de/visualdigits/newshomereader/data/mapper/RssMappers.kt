@@ -1,5 +1,6 @@
 package de.visualdigits.newshomereader.data.mapper
 
+import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.newshomereader.data.model.rss.Item
 import de.visualdigits.newshomereader.data.model.rss.Rss
 import de.visualdigits.newshomereader.domain.model.unified.NewsFeed
@@ -16,8 +17,8 @@ fun Item.toNewsItem(feedName: String): NewsItem {
     return NewsItem(
         feedName = feedName,
         identifier = identifier ?: id ?: link ?: "${feedName}_${title}_$pubDate",
-        published = pubDate ?: date,
-        updated = pubDate ?: date,
+        published = pubDate ?: date ?: KmpOffsetDateTime.MIN,
+        updated = pubDate ?: date ?: KmpOffsetDateTime.MIN,
         link = link ?: "",
         title = title?.trim() ?: "",
         summary = description?.trim() ?: "",
@@ -40,7 +41,7 @@ fun Rss.toNewsFeed(feedName: String): NewsFeed {
         image = channel?.image?.url ?: "",
         imageTitle = channel?.image?.title ?: "",
         imageCaption = channel?.image?.caption ?: "",
-        updated = channel?.lastBuildDate,
+        updated = channel?.lastBuildDate ?: KmpOffsetDateTime.MIN,
         rights = channel?.rights ?: "",
         language = channel?.language ?: "",
         items = (items?.map { item -> item.toNewsItem(feedName) }

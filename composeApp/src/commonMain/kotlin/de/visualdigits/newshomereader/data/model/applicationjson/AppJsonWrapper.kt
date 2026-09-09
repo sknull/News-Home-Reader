@@ -19,6 +19,7 @@ data class AppJsonWrapper(
             coerceInputValues = true
             explicitNulls = false
             encodeDefaults = false
+            allowTrailingComma = true
         }
 
         fun decodeFromString(json: String): AppJsonWrapper {

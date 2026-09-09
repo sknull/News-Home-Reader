@@ -149,7 +149,7 @@ fun NewsFeedEntity.toNewsFeed(): NewsFeed {
         image = image,
         imageTitle = imageTitle,
         imageCaption = imageCaption,
-        updated = KmpOffsetDateTime(Instant.fromEpochMilliseconds(updatedMillis), UtcOffset.parse(updatedZone)),
+        updated = assembleDateTimeComponents(updatedMillis, updatedZone),
         rights = rights,
         language = language,
         keywords = keywords
@@ -183,8 +183,8 @@ fun NewsItemEntity.toNewsItem(): NewsItem {
         id = id,
         feedName = feedName,
         identifier = identifier,
-        published = KmpOffsetDateTime(Instant.fromEpochMilliseconds(publishedMillis), UtcOffset.parse(publishedZone)),
-        updated = KmpOffsetDateTime(Instant.fromEpochMilliseconds(updatedMillis), UtcOffset.parse(updatedZone)),
+        published = assembleDateTimeComponents(publishedMillis, publishedZone),
+        updated = assembleDateTimeComponents(updatedMillis, updatedZone),
         link = link,
         title = title,
         summary = summary,
@@ -346,4 +346,11 @@ fun FullArticleEntity.toFullArticle(): FullArticle {
         wordCount = wordCount,
         readingTime = readingTime
     )
+}
+
+private fun assembleDateTimeComponents(
+    updatedMillis: Long,
+    updatedZone: String
+): KmpOffsetDateTime? {
+    return KmpOffsetDateTime(Instant.fromEpochMilliseconds(updatedMillis), UtcOffset.parse(updatedZone))
 }
