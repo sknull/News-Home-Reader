@@ -7,6 +7,7 @@ import de.visualdigits.newshomereader.data.database.DriverFactory
 import de.visualdigits.newshomereader.data.http.HttpClientFactory
 import de.visualdigits.newshomereader.data.repository.FeedScheduler
 import de.visualdigits.newshomereader.data.repository.ImageCache
+import eu.iamkonstantin.kotlin.gadulka.GadulkaPlayer
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.okhttp.OkHttp
 import org.koin.core.module.Module
@@ -42,6 +43,8 @@ actual val platformModule: Module
             )
         }
 
+
+        single<GadulkaPlayer> { GadulkaPlayer() }
         single { FeedScheduler(get()) }
         single { DriverFactory() }
         single { ConnectivityManager() }

@@ -564,6 +564,26 @@ class NewsHomeReaderViewModel(
                 loadArticle(action.newsItem)
             }
 
+            is NewsHomeReaderAction.OnShowArticleImage -> {
+                _state.update {
+                    it.copy(
+                        currentArticleImageUrl = action.url,
+                        currentArticleImageAlt = action.alt,
+                        currentArticleImageTitle = action.title,
+                    )
+                }
+            }
+
+            is NewsHomeReaderAction.OnNewsArticleImageClosed -> {
+                _state.update {
+                    it.copy(
+                        currentArticleImageUrl = null,
+                        currentArticleImageAlt = null,
+                        currentArticleImageTitle = null,
+                    )
+                }
+            }
+
             is NewsHomeReaderAction.OnNewsItemClosed -> {
                 closeNewsItem(state.value.currentNewsItem)
             }

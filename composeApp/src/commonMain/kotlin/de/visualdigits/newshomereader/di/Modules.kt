@@ -31,6 +31,7 @@ import de.visualdigits.newshomereader.domain.repository.NewsFeedConfigurationRep
 import de.visualdigits.newshomereader.domain.repository.SettingsRepository
 import de.visualdigits.newshomereader.domain.webdav.WebDavSyncService
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
+import eu.iamkonstantin.kotlin.gadulka.GadulkaPlayer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

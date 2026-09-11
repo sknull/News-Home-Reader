@@ -31,6 +31,9 @@ data class NewsHomeReaderState(
     val isNewsItemSearchActive: Boolean = false,
 
     val currentNewsItem: NewsItem? = null,
+    val currentArticleImageUrl: String? = null,
+    val currentArticleImageAlt: String? = null,
+    val currentArticleImageTitle: String? = null,
 
     val language: Language = Language.EN,
 

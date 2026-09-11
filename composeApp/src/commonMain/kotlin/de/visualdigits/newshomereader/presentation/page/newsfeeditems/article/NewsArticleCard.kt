@@ -47,12 +47,14 @@ import de.visualdigits.common.domain.model.configuration.keyfactory.BooleanEnum
 import de.visualdigits.common.domain.model.platform.PlatformType
 import de.visualdigits.common.presentation.components.ConnectivityManager
 import de.visualdigits.common.presentation.components.PlatformVerticalScrollbarBox
+import de.visualdigits.common.presentation.components.button.IndicatorButton
 import de.visualdigits.common.presentation.components.util.conditional
 import de.visualdigits.common.presentation.model.CommonAction
 import de.visualdigits.common.presentation.model.ScrollIntent
 import de.visualdigits.common.presentation.util.highlightQuery
 import de.visualdigits.common.presentation.util.openUriSafely
 import de.visualdigits.compose.resources.Res
+import de.visualdigits.compose.resources.icon_close_24px
 import de.visualdigits.compose.resources.icon_paid_24px
 import de.visualdigits.compose.resources.icon_timelapse_24px
 import de.visualdigits.essence.model.ImageType
@@ -64,12 +66,14 @@ import de.visualdigits.newshomereader.domain.util.getFaviconUrl
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderAction
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
+import de.visualdigits.newshomereader.presentation.page.newsfeeditems.HighlightedText
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.Image
 import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
 import de.visualdigits.newshomereader.presentation.style.textLinkStyles
 import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
+import eu.iamkonstantin.kotlin.gadulka.GadulkaPlayer
 import io.ktor.http.Url
 import org.jetbrains.compose.resources.painterResource
 
@@ -77,17 +81,18 @@ import org.jetbrains.compose.resources.painterResource
 fun NewsArticleCard(
     modifier: Modifier = Modifier,
     viewModel: NewsHomeReaderViewModel,
+    state: NewsHomeReaderState,
+    settings: Settings?,
     platformType: PlatformType,
+    uriHandler: UriHandler,
+    player: GadulkaPlayer,
     scrollPosition: MutableMap<String, Triple<Int, Int?, ScrollIntent>>,
     maxWidth: Dp,
     maxImageSize: Int?,
     newsItem: NewsItem,
-    settings: Settings?,
-    uriHandler: UriHandler,
-    state: NewsHomeReaderState,
+    connectivityManager: ConnectivityManager,
     onCommonAction: (CommonAction) -> Unit,
-    onAction: (NewsHomeReaderAction) -> Unit,
-    connectivityManager: ConnectivityManager
+    onAction: (NewsHomeReaderAction) -> Unit
 ) {
     val spotColor = settings?.get<HsvColor>(SK.spotColor)?: SPOT_COLOR_DEFAULT
     val buttonColor = remember { (settings?.get<HsvColor>(SK.buttonColor) ?: BUTTON_COLOR_DEFAULT).toComposeColor() }
@@ -237,38 +242,67 @@ fun NewsArticleCard(
                         }
                     }),
                     Pair("teaserImage", @Composable {
-                        var image = newsItem.newsArticle?.articleImage
-                        if (image == null || image.isEmpty()) {
-                            image = newsItem.image
+                        val (url, title, caption) = if (state.currentArticleImageUrl != null) {
+                            Triple(state.currentArticleImageUrl, state.currentArticleImageTitle, state.currentArticleImageAlt)
+                        } else {
+                            var u = newsItem.newsArticle?.articleImage
+                            if (u.isNullOrEmpty()) {
+                                u = newsItem.image
+                            }
+                            val t = newsItem.imageTitle
+                            val c = if (newsItem.imageCaption.isNotEmpty() && !newsItem.summary.contains(newsItem.imageCaption)) {
+                                newsItem.imageCaption
+                            } else null
+                            Triple(u, t, c)
                         }
-                        if (image.isNotEmpty()) {
+                        if (url.isNotEmpty()) {
                             Column(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.shapes.gap)
                             ) {
-                                if (newsItem.imageTitle.isNotEmpty()) {
-                                    Text(
-                                        text = newsItem.imageTitle,
-                                        style = MaterialTheme.typography.titleMedium
-                                    )
+                                Row {
+                                    // title
+                                    if (title?.isNotEmpty() == true) {
+                                        Text(
+                                            text = title,
+                                            style = MaterialTheme.typography.titleMedium
+                                        )
+                                    }
+
+                                    // close button
+                                    if (state.currentArticleImageUrl != null) {
+                                        Spacer(Modifier.weight(1f))
+
+                                        IndicatorButton(
+                                            modifier = Modifier,
+                                            buttonColor = buttonColor.copy(alpha = 0.5f),
+                                            width = 30.dp,
+                                            height = 30.dp,
+                                            padding = 3.dp,
+                                            leadingIcon = painterResource(Res.drawable.icon_close_24px),
+                                            leadingIconTint = MaterialTheme.colorScheme.onSurface
+                                        ) {
+                                            onAction(NewsHomeReaderAction.OnNewsArticleImageClosed())
+                                        }
+                                    }
                                 }
 
                                 Image(
                                     modifier = Modifier
                                         .clip(MaterialTheme.shapes.small),
-                                    url = image,
+                                    url = url,
                                     contentDescription = newsItem.imageCaption,
                                     maxImageSize = maxImageSize
                                 )
 
-                                if (newsItem.imageCaption.isNotEmpty() && !newsItem.summary.contains(newsItem.imageCaption)) {
+                                if (caption?.isNotEmpty() == true) {
                                     Text(
                                         modifier = Modifier
                                             .fillMaxWidth(),
-                                        text = newsItem.imageCaption,
+                                        text = caption,
                                         style = MaterialTheme.typography.bodySmall,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Left
                                     )
                                 }
 
@@ -281,9 +315,11 @@ fun NewsArticleCard(
                         if (!wifiOnly || connectivityManager.connectivityMode().isFreeOfCharge) {
                             MediaItemButtons(
                                 viewModel = viewModel,
+                                player = player,
                                 mediaItems = (newsItem.newsArticle?.videoItems?:listOf()) + (newsItem.newsArticle?.audioItems?:listOf()) + (newsItem.newsArticle?.imageItems?:listOf()),
                                 uriHandler = uriHandler,
-                                newsItem = newsItem
+                                newsItem = newsItem,
+                                onAction = onAction
                             )
                             Spacer(Modifier.size(MaterialTheme.shapes.gap * 2))
                         }
@@ -404,7 +440,7 @@ fun NewsArticleCard(
                                                                                 .padding(top = MaterialTheme.shapes.gap / 2),
                                                                             text = title.trim(),
                                                                             style = MaterialTheme.typography.bodySmall,
-                                                                            textAlign = TextAlign.Center
+                                                                            textAlign = TextAlign.Left
                                                                         )
                                                                     }
                                                                 }
@@ -416,7 +452,13 @@ fun NewsArticleCard(
 
                                             if (part.html.isNotEmpty()) {
                                                 part.html.forEach { html ->
-                                                    HighlightedText(html, spotColor, newsItem, uriHandler, state)
+                                                    HighlightedText(
+                                                        html = html,
+                                                        spotColor = spotColor,
+                                                        newsItem = newsItem,
+                                                        uriHandler = uriHandler,
+                                                        state = state
+                                                    )
                                                 }
                                             }
                                         }
@@ -432,40 +474,3 @@ fun NewsArticleCard(
     }
 }
 
-@Composable
-private fun HighlightedText(
-    html: String,
-    spotColor: HsvColor,
-    newsItem: NewsItem,
-    uriHandler: UriHandler,
-    state: NewsHomeReaderState
-) {
-    val annotatedText = htmlToAnnotatedString(
-        html = normalizeXml(html),
-        style = HtmlStyle(
-            textLinkStyles = textLinkStyles(spotColor)
-        ),
-        linkInteractionListener = { linkAnnotation ->
-            makeUrlAbsolute(
-                newsItem.link,
-                (linkAnnotation as LinkAnnotation.Url).url
-            ).let { uriHandler.openUriSafely(it) }
-        }
-    )
-    val highlightedText = remember(annotatedText, state.newsItemSearchText) {
-        if (!state.newsItemSearchText.isNullOrBlank()) {
-            annotatedText.highlightQuery(state.newsItemSearchText)
-        } else if (!state.currentKeywordBucket.isNullOrBlank()) {
-            annotatedText.highlightQuery(state.currentKeywordBucket)
-        } else {
-            annotatedText
-        }
-    }
-    val lineHeight = if (html.startsWith("<h")) 2.0.em else 1.5.em
-    Text(
-        modifier = Modifier
-            .padding(vertical = MaterialTheme.shapes.gap),
-        text = highlightedText,
-        style = MaterialTheme.typography.bodyMedium.copy(lineHeight = lineHeight)
-    )
-}

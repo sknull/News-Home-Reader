@@ -18,17 +18,19 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderState
 import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.page.newsfeeditems.article.NewsArticleCard
 import de.visualdigits.newshomereader.presentation.style.gap
+import eu.iamkonstantin.kotlin.gadulka.GadulkaPlayer
 
 @Composable
 fun NewsContent(
     viewModel: NewsHomeReaderViewModel,
     state: NewsHomeReaderState,
     platformType: PlatformType,
+    uriHandler: UriHandler,
+    player: GadulkaPlayer,
     columns: Int,
     maxWidth: Dp,
     maxHeight: Dp,
     maxImageSize: Int,
-    uriHandler: UriHandler,
     connectivityManager: ConnectivityManager,
     onCommonAction: (CommonAction) -> Unit,
     onAction: (NewsHomeReaderAction) -> Unit
@@ -43,17 +45,18 @@ fun NewsContent(
         if (state.currentNewsItem != null) {
             NewsArticleCard(
                 viewModel = viewModel,
+                state = state,
+                settings = settings,
                 platformType = platformType,
+                uriHandler = uriHandler,
+                player = player,
                 scrollPosition = viewModel.scrollPosition,
                 maxWidth = maxWidth,
                 maxImageSize = maxImageSize,
                 newsItem = state.currentNewsItem,
-                settings = settings,
-                uriHandler = uriHandler,
-                state = state,
+                connectivityManager = connectivityManager,
                 onCommonAction = onCommonAction,
-                onAction = onAction,
-                connectivityManager = connectivityManager
+                onAction = onAction
             )
         } else {
             NewsFeeds(

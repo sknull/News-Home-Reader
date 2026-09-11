@@ -157,7 +157,7 @@ kotlin {
             implementation(libs.ksoup.core)
 
             implementation(libs.html.converter)
-            implementation(libs.charlex.pdf)
+            implementation(libs.gadulka)
 
             implementation(libs.sqldelight.coroutines)
             implementation(libs.sqlite.bundled)
@@ -180,6 +180,25 @@ kotlin {
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.sqldelight.jvm)
             implementation(libs.kotlinx.io.core.jvm)
+
+            val javafxVersion = "21"
+            val osName = System.getProperty("os.name").lowercase()
+            val classifier = when {
+                osName.contains("win") -> "win"
+                osName.contains("mac") -> "mac"
+                else -> "linux"
+            }
+
+            //noinspection UseTomlInstead,NewerVersionAvailable
+            implementation("org.openjfx:javafx-base:$javafxVersion:$classifier")
+            //noinspection UseTomlInstead,NewerVersionAvailable
+            implementation("org.openjfx:javafx-graphics:$javafxVersion:$classifier")
+            //noinspection UseTomlInstead,NewerVersionAvailable
+            implementation("org.openjfx:javafx-controls:$javafxVersion:$classifier")
+            //noinspection UseTomlInstead,NewerVersionAvailable
+            implementation("org.openjfx:javafx-media:$javafxVersion:$classifier")
+            //noinspection UseTomlInstead,NewerVersionAvailable
+            implementation("org.openjfx:javafx-swing:$javafxVersion:$classifier")
         }
 
         jvmTest.dependencies {

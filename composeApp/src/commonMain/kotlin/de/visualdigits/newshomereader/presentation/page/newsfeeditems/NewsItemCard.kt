@@ -8,10 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,25 +20,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.UriHandler
-import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
-import androidx.compose.ui.unit.min
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import be.digitalia.compose.htmlconverter.HtmlStyle
-import be.digitalia.compose.htmlconverter.htmlToAnnotatedString
 import de.visualdigits.common.domain.model.color.HsvColor
-import de.visualdigits.common.domain.model.common.KmpOffsetDateTime
 import de.visualdigits.common.domain.model.common.format
 import de.visualdigits.common.presentation.components.util.conditional
-import de.visualdigits.common.presentation.util.highlightQuery
-import de.visualdigits.common.presentation.util.openUriSafely
 import de.visualdigits.compose.resources.Res
 import de.visualdigits.compose.resources.icon_paid_24px
 import de.visualdigits.compose.resources.icon_photo_24px
@@ -58,9 +44,6 @@ import de.visualdigits.newshomereader.presentation.model.NewsHomeReaderViewModel
 import de.visualdigits.newshomereader.presentation.style.BUTTON_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.gap
-import de.visualdigits.newshomereader.presentation.style.textLinkStyles
-import de.visualdigits.newshomereader.presentation.util.makeUrlAbsolute
-import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.painterResource
 
 
@@ -207,57 +190,20 @@ fun NewsItemCard(
                         }
                     }
 
-                    val annotatedTitle = htmlToAnnotatedString(
+                    HighlightedText(
                         html = normalizeXml(newsItem.title),
-                        style = HtmlStyle(
-                            textLinkStyles = textLinkStyles(spotColor)
-                        ),
-                        linkInteractionListener = { linkAnnotation ->
-                            makeUrlAbsolute(
-                                newsItem.link,
-                                (linkAnnotation as LinkAnnotation.Url).url
-                            ).let { uriHandler.openUriSafely(it) }
-                        }
-                    )
-                    val highlightedTitle = remember(annotatedTitle, state.newsItemSearchText) {
-                        if (!state.newsItemSearchText.isNullOrBlank()) {
-                            annotatedTitle.highlightQuery(state.newsItemSearchText)
-                        } else if (!state.currentKeywordBucket.isNullOrBlank()){
-                            annotatedTitle.highlightQuery(state.currentKeywordBucket)
-                        } else {
-                            annotatedTitle
-                        }
-                    }
-                    Text(
-                        text = highlightedTitle,
-                        style = MaterialTheme.typography.titleSmall
+                        spotColor = spotColor,
+                        newsItem = newsItem,
+                        uriHandler = uriHandler,
+                        state = state
                     )
 
-                    val annotatedSummary = htmlToAnnotatedString(
+                    HighlightedText(
                         html = normalizeXml(newsItem.summary),
-                        style = HtmlStyle(
-                            textLinkStyles = textLinkStyles(spotColor)
-                        ),
-                        linkInteractionListener = { linkAnnotation ->
-                            makeUrlAbsolute(
-                                newsItem.link,
-                                (linkAnnotation as LinkAnnotation.Url).url
-                            ).let { uriHandler.openUriSafely(it) }
-                        }
-                    )
-                    val highlightedSummary = remember(annotatedSummary, state.newsItemSearchText) {
-                        if (!state.newsItemSearchText.isNullOrBlank()) {
-                            annotatedSummary.highlightQuery(state.newsItemSearchText)
-                        } else if (!state.currentKeywordBucket.isNullOrBlank()){
-                            annotatedSummary.highlightQuery(state.currentKeywordBucket)
-                        } else {
-                            annotatedSummary
-                        }
-                    }
-                    Text(
-                        modifier = Modifier,
-                        text = highlightedSummary,
-                        style = MaterialTheme.typography.bodySmall.copy(lineHeight = 1.2.em)
+                        spotColor = spotColor,
+                        newsItem = newsItem,
+                        uriHandler = uriHandler,
+                        state = state
                     )
                 }
             }

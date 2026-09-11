@@ -40,6 +40,8 @@ import de.visualdigits.newshomereader.presentation.style.SPOT_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.TEXT_COLOR_DEFAULT
 import de.visualdigits.newshomereader.presentation.style.theme
 import de.visualdigits.newshomereader.presentation.style.typography
+import eu.iamkonstantin.kotlin.gadulka.GadulkaPlayer
+import org.koin.compose.koinInject
 import kotlin.math.max
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,6 +57,7 @@ fun MainPage(
     val textColor = settings?.get<HsvColor>(SK.textColor) ?: TEXT_COLOR_DEFAULT
     val spotColor = settings?.get<HsvColor>(SK.spotColor) ?: SPOT_COLOR_DEFAULT
     val maxImageSize = settings?.get<Int>(SK.maxImageSize) ?: 1200
+    val player = koinInject<GadulkaPlayer>()
 
     val uriHandler = LocalUriHandler.current
 
@@ -191,11 +194,12 @@ fun MainPage(
                                     viewModel = viewModel,
                                     state = state,
                                     platformType = platformType,
+                                    uriHandler = uriHandler,
+                                    player = player,
                                     columns = columns,
                                     maxWidth = screenWidth,
                                     maxHeight = screenHeight,
                                     maxImageSize = maxImageSize,
-                                    uriHandler = uriHandler,
                                     connectivityManager = connectivityManager,
                                     onCommonAction = viewModel::onCommonAction,
                                     onAction = viewModel::onAction

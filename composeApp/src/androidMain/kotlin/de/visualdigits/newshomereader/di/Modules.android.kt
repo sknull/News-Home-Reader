@@ -9,6 +9,7 @@ import de.visualdigits.newshomereader.data.repository.FeedScheduler
 import de.visualdigits.newshomereader.data.repository.FeedUpdateWorker
 import de.visualdigits.newshomereader.data.repository.ImageCache
 import de.visualdigits.newshomereader.data.repository.NewsFeedWorker
+import eu.iamkonstantin.kotlin.gadulka.GadulkaPlayer
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.okhttp.OkHttp
 import org.koin.android.ext.koin.androidApplication
@@ -57,10 +58,10 @@ actual val platformModule: Module
             settingsRepository = get()
         ) }
         worker { FeedUpdateWorker(context = get(), workerParams = get()) }
-        single { FeedScheduler(context = get()) }
 
+        single<GadulkaPlayer> { GadulkaPlayer() }
+        single { FeedScheduler(context = get()) }
         single { DriverFactory(context = androidApplication()) }
         single { ConnectivityManager(context = get()) }
-
         single { ImageCache(context = get()) }
 }

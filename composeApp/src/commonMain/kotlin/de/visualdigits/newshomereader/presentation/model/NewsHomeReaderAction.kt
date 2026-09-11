@@ -172,7 +172,7 @@ sealed interface NewsHomeReaderAction {
     class OnDeleteNewsfeedGroupCancelClick : NewsHomeReaderAction
 
     //
-    // News
+    // News Feed
     //
     @Immutable
     data class OnNewsFeedRefresh(
@@ -191,9 +191,20 @@ sealed interface NewsHomeReaderAction {
         val currentFeedItem: NewsFeedItem
     ) : NewsHomeReaderAction
 
+    //
+    // News Item
+    //
+
     @Immutable
     data class OnNewsItemClicked(
         val newsItem: NewsItem
+    ) : NewsHomeReaderAction
+
+    @Immutable
+    data class OnShowArticleImage(
+        val url: String,
+        val alt: String? = null,
+        val title: String? = null
     ) : NewsHomeReaderAction
 
     @Immutable
@@ -203,6 +214,13 @@ sealed interface NewsHomeReaderAction {
     data class OnMarkReadClicked(
         val days: Long
     ) : NewsHomeReaderAction
+
+    @Immutable
+    class OnNewsArticleImageClosed : NewsHomeReaderAction
+
+    //
+    // Search
+    //
 
     @Immutable
     data class OnNewsItemSearchExpandStateChanged(
